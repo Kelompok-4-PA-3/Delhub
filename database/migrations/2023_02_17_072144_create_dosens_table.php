@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('dosens', function (Blueprint $table) {
             $table->string('nidn')->primary();
-            $table->foreignId('user_id');
-            $table->foreignId('prodi_id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('prodi_id');
+            $table->foreign('prodi_id')->references('id')->on('prodis')->onUpdate('cascade')->onDelete('cascade');
             $table->string('nama');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('interests', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('nama');
+            $table->text('keterangan');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

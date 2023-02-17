@@ -13,11 +13,8 @@ return new class extends Migration
     {
         Schema::create('krs', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_mk')->unique();
-            $table->foreignId('config_id');
-            $table->foreignId('dosen_mk');
-            $table->foreignId('prodi_id');
-            $table->string('angkatan');
+            $table->string('tahun_aktif');
+            $table->string('semester');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

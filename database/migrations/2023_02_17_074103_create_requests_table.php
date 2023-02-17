@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ruangan_id');
-            $table->foreignId('kelompok_id');
+            $table->unsignedBigInteger('ruangan_id');
+            $table->foreign('ruangan_id')->references('id')->on('interests')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('kelompok_id');
+            $table->foreign('kelompok_id')->references('id')->on('kelompoks')->onUpdate('cascade')->onDelete('cascade');
             $table->text('description');
             $table->datetime('waktu');
             $table->datetime('status');

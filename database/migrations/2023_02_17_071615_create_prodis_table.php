@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('prodis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fakultas_id');
+            $table->unsignedBigInteger('fakultas_id');
+            $table->foreign('fakultas_id')->references('id')->on('fakultas')->onUpdate('cascade')->onDelete('cascade');
             $table->string('nama');
             $table->boolean('status')->default(true);
             $table->timestamps();

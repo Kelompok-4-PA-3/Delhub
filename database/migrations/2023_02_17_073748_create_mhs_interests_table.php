@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kelompoks', function (Blueprint $table) {
+        Schema::create('mhs_interests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('krs_id');
-            $table->string('nama_kelompok');
-            $table->string('topik')->nullable();
+            $table->unsignedBigInteger('interest_id');
+            $table->foreign('interest_id')->references('id')->on('interests')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('nim');
+            $table->foreign('nim')->references('nim')->on('mahasiswas')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kelompoks');
+        Schema::dropIfExists('mhs_interests');
     }
 };

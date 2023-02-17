@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proyeks', function (Blueprint $table) {
+        Schema::create('kelompoks', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('krs_id');
+            $table->foreign('krs_id')->references('id')->on('krs')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('nama_kelompok');
+            $table->string('topik')->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proyeks');
+        Schema::dropIfExists('kelompoks');
     }
 };
