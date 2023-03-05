@@ -387,13 +387,13 @@
                 </a>
             </li>
 
-            <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
+            <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2" data-bs-popup="tooltip" title="{{Auth::user()->nama}}">
                 <a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
                     <div class="status-indicator-container">
                         <img src="../../../assets/images/demo/users/face11.jpg" class="w-32px h-32px rounded-pill" alt="">
                         <span class="status-indicator bg-success"></span>
                     </div>
-                    <span class="d-none d-lg-inline-block mx-lg-2">Victoria</span>
+                    <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->nama}}</span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
@@ -419,9 +419,12 @@
                         <i class="ph-gear me-2"></i>
                         Account settings
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a class="dropdown-item">
                         <i class="ph-sign-out me-2"></i>
-                        Logout
+                        <form action="{{ route('logout') }}" method="post" class="mt-2">
+                            @csrf
+                            <button class="bg-transparent border border-0" type="submit">{{ __('Log Out') }}</button>
+                        </form>
                     </a>
                 </div>
             </li>

@@ -26,7 +26,30 @@
         <!-- Main navigation -->
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
-                
+                <li class="nav-item">
+                    <a href="/users" class="nav-link">
+                        <i class="ph-users"></i>
+                        <span>
+                            Manajemen Pengguna
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/roles" class="nav-link">
+                        <i class="ph-user-list"></i>
+                        <span>
+                            Manajemen Role
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/permission" class="nav-link">
+                        <i class="ph-lock-key"></i>
+                        <span>
+                            Manajemen Permissions
+                        </span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- /main navigation -->
