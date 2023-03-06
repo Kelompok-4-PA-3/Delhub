@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Prodi extends Model
 {
     use HasFactory;
+
+    public function fakultas(){
+        return $this->belongsTo(Fakultas::class);
+    }
 }
+

@@ -17,6 +17,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+
+Route::resource('/prodi', \App\Http\Controllers\ProdiController::class);
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
