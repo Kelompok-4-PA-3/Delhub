@@ -30,9 +30,9 @@ const DatatableAPI = function() {
             columnDefs: [{ 
                 orderable: false,
                 width: 100,
-                targets: [ 5 ]
+                // targets: [ 5 ]
             }],
-            dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+            dom: '<"datatable-header justify-content-start"f<"ms-sm-auto"l><"ms-sm-3"B>><"datatable-scroll-wrap"t><"datatable-footer"ip>',
             language: {
                 search: '<span class="me-3">Filter:</span> <div class="form-control-feedback form-control-feedback-end flex-fill">_INPUT_<div class="form-control-feedback-icon"><i class="ph-magnifying-glass opacity-50"></i></div></div>',
                 searchPlaceholder: 'Type to filter...',
@@ -63,19 +63,50 @@ const DatatableAPI = function() {
 
 
         // Individual column searching with text inputs
-        $('.datatable-column-search-inputs thead tr:eq(1) th').not(':last-child').each(function () {
+        $('.datatable-users thead tr:eq(1) th').not(':last-child').each(function () {
             const title = $(this).text();
-            $(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
+            $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
         });
-        $('.datatable-column-search-inputs').DataTable({
+        $('.datatable-users').DataTable({
             orderCellsTop: true,
+            buttons: {
+                dom: {
+                    button: {
+                        className: 'btn btn-light'
+                    }
+                },
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export to Excel <i class="ph-file-xls ms-2"></i>',
+                        autoFilter: true,
+                        sheetName: 'Sheet 1',
+                        exportOptions: {
+                            columns: 'th:not(:last-child)'
+                         }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="ph-printer me-2"></i> Print table',
+                        className: 'btn btn-light',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="ph-list"></i>',
+                        className: 'btn btn-light btn-icon dropdown-toggle'
+                    }
+                ]
+            },
             initComplete: function () {
                 this.api()
                     .columns()
                     .every(function (index) {
                         const that = this;
      
-                        $('input').on('keyup change clear', function () {
+                        $('.column-search').on('keyup change clear', function () {
                             if (that.search() !== this.value) {
                                 that.column($(this).parent().index() + ':visible').search(this.value).draw();
                             }

@@ -55,15 +55,18 @@
 		{{-- <link href="assets/css/ltr/all.min.css" id="stylesheet" rel="stylesheet" type="text/css"> --}}
 		<!-- /global stylesheets -->
 
+
 		<!-- Core JS files -->
 		{{-- <script src="../../../assets/demo/demo_configurator.js"></script> --}}
 		{{-- <script src="../../../assets/js/bootstrap/bootstrap.bundle.min.js"></script> --}}
 		<!-- /core JS files -->
 
+
 		<!-- Theme JS files -->
 		{{-- <script src="../../../assets/js/jquery/jquery.min.js"></script>
 		<script src="../../../assets/js/vendor/forms/selects/select2.min.js"></script>
 		<script src="../../../assets/demo/pages/form_layouts.js"></script> --}}
+
 
 		{{-- <script src="assets/js/app.js"></script> --}}
 		{{-- <script src="../../../assets/demo/pages/form_layouts.js"></script> --}}
@@ -449,3 +452,4 @@
 	<!-- /demo config -->
 
 </body>
+
