@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('title')
-    <title>Manajemen Pengguna</title>
+    <title>Manajemen Permission</title>
 @endsection
 
 @push('datatable_js')

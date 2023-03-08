@@ -1,0 +1,106 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Mahasiswa;
+use App\Models\User;
+use App\Models\Prodi;
+use Illuminate\Http\Request;
+
+class MahasiswaController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {   
+        $mahasiswa = Mahasiswa::latest()->get();
+        return view('mahasiswa.index',[
+            'mahasiswa' => $mahasiswa,
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $user = User::latest()->get();
+        $prodi = Prodi::latest()->get();
+        return view('mahasiswa.add',[
+            'prodi' => $prodi,
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        // return $request;
+        $data = [
+            'user_id' => 'required',
+            'nim' => 'required|unique:mahasiswas',
+            'prodi_id' => 'required',
+            'angkatan' => 'required'
+        ];
+
+        $validasi = $request->validate($data);
+        mahasiswa::create($validasi);
+
+        return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil ditambahkan');
+
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Mahasiswa $mahasiswa)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Mahasiswa $mahasiswa)
+    {
+        $user = User::latest()->get();
+        $prodi = Prodi::latest()->get();
+        return view('mahasiswa.edit',[
+            'title' => 'Tambah mahasiswa',
+            'user' => $user,
+            'prodi' => $prodi,
+            'mahasiswa' => $mahasiswa,
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Mahasiswa $mahasiswa)
+    {
+        $data = [
+            'user_id' => 'required',
+            'nim' => 'required|numeric|unique:mahasiswas',
+            'prodi_id' => 'required',
+            'angkatan' => 'required'
+        ];
+
+        $validasi = $request->validate($data);
+        // return $mahasiswa->nim;
+        Mahasiswa::where('nim',$mahasiswa->nim)->update($validasi);
+
+        return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil diubah');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Mahasiswa $mahasiswa)
+    {
+        Mahasiswa::where('nim',$mahasiswa->nim)->delete();
+        return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil dihapus');
+    }
+}

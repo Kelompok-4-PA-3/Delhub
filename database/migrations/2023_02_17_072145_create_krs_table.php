@@ -11,17 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dosens', function (Blueprint $table) {
-            $table->string('nidn')->primary();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+        Schema::create('krs', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('mk_id');
+            $table->foreign('mk_id')->references('id')->on('kategoris')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('config_id');
+            $table->foreign('config_id')->references('id')->on('configs')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('dosen_mk');
+            $table->foreign('dosen_mk')->references('nidn')->on('dosens')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('prodi_id');
             $table->foreign('prodi_id')->references('id')->on('prodis')->onUpdate('cascade')->onDelete('cascade');
-            $table->boolean('active')->default(true);
+            $table->integer('angkatan');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->softDeletes($column = 'deleted_at', $precision = 0);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
@@ -31,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dosens');
+        Schema::dropIfExists('krs');
     }
 };

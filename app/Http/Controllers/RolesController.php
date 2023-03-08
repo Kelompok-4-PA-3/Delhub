@@ -25,6 +25,7 @@ class RolesController extends Controller
         $permission = PermissionModel::latest()->get();
         // return $role;
         return view('roles.index',[
+            'title' => 'Manajemen Role',
             'roles' => $role,
             'permission' => $permission,
         ]);

@@ -98,7 +98,7 @@
 
             <div class="page-header-content d-lg-flex border-top">
                 <div class="d-flex">
-                    <div class="breadcrumb py-2">
+                    <div class="py-2">
                         @yield('breadscrumb')
                     </div>
 

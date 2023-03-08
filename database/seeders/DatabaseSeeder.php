@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 // use UserFactory;
+use Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,5 +20,23 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        for($i = 0; $i <= 10; $i++){
+            \App\Models\Kategori::create([
+                'kode_mk' => Str::upper(Str::random(5)),
+                'nama_mk' => Str::random(10),
+                'nama_singkat' =>  Str::random(3,4),
+            ]);
+        }
+
+        
+        \App\Models\Fakultas::create([
+            'nama' => 'Fakultas Vokasi'
+        ]);
+
+        \App\Models\Prodi::create([
+            'nama' => 'D4 Teknologi Rekayasa Perangkat Lunak',
+            'fakultas_id' => 1,
+        ]);
     }
 }

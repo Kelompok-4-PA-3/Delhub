@@ -26,6 +26,62 @@
         <!-- Main navigation -->
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
+                <li class="nav-item-header pt-0">
+                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">MATA KULIAH</div>
+                    <i class="ph-dots-three sidebar-resize-show"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="/kategori" class="nav-link">
+                        <i class="ph-squares-four"></i>
+                        <span>
+                            Manajemen Kategori Mata Kuliah
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/krs" class="nav-link">
+                        <i class="ph-cardholder"></i>
+                        <span>
+                            Manajemen KRS
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/permission" class="nav-link">
+                        <i class="ph-lock-key"></i>
+                        <span>
+                            Manajemen TA
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/permission" class="nav-link">
+                        <i class="ph-lock-key"></i>
+                        <span>
+                            Manajemen KP
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dosen" class="nav-link">
+                        <i class="ph-chalkboard-teacher"></i>
+                        <span>
+                            Manajemen Dosen
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/mahasiswa" class="nav-link">
+                        <i class="ph-student"></i>
+                        <span>
+                            Manajemen Mahasiswa
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item-header pt-0">
+                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">PENGGUNA</div>
+                    <i class="ph-dots-three sidebar-resize-show"></i>
+                </li>
                 <li class="nav-item">
                     <a href="/users" class="nav-link">
                         <i class="ph-users"></i>

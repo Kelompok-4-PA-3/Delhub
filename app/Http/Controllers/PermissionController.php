@@ -16,6 +16,7 @@ class PermissionController extends Controller
     {
         $permission = PermissionModel::latest()->get();
         return view('permission.index',[
+            'title' => 'Manajemen Permission',
             'permission' => $permission
         ]);
     }

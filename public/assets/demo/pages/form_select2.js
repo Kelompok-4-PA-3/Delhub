@@ -30,7 +30,10 @@ var Select2Selects = function() {
         //
 
         // Default initialization
-        $('.select').select2();
+        $('.select').select2({
+            searchable: true,
+            bindEvents: false,
+        });
 
 
         //
@@ -42,7 +45,7 @@ var Select2Selects = function() {
 
         $('.select-multiple-search-disabled').on('select2:opening select2:closing', function( event ) {
             const $searchfield = $(this).parent().find('.select2-search__field');
-            $searchfield.prop('disabled', true);
+            // $searchfield.prop('disabled', false);
         });
 
 
@@ -62,7 +65,7 @@ var Select2Selects = function() {
         // Initialize with options
         $('.select-icons').select2({
             templateResult: iconFormat,
-            minimumResultsForSearch: Infinity,
+            // minimumResultsForSearch: Infinity,
             templateSelection: iconFormat,
             escapeMarkup: function(m) { return m; }
         });
@@ -84,7 +87,7 @@ var Select2Selects = function() {
         // Initialize
         $.fn.select2.amd.require(['select2/compat/matcher'], function (oldMatcher) {
             $('.select-matched-customize').select2({
-                minimumResultsForSearch: Infinity,
+                // minimumResultsForSearch: Infinity,
                 placeholder: 'Select a State',
                 matcher: oldMatcher(matchStart)
             });
@@ -107,7 +110,7 @@ var Select2Selects = function() {
         // Loading array data
         $('.select-data-array').select2({
             placeholder: 'Click to load data',
-            minimumResultsForSearch: Infinity,
+            // minimumResultsForSearch: Infinity,
             data: array_data
         });
 
@@ -186,7 +189,7 @@ var Select2Selects = function() {
 
         // Set/get value
         $('.select-access-value').select2({
-            minimumResultsForSearch: Infinity,
+            // minimumResultsForSearch: Infinity,
             placeholder: 'Select State...'
         });
         $('.access-get').on('click', function () { alert('Selected value is: '+$('.select-access-value').val()); });
@@ -195,7 +198,7 @@ var Select2Selects = function() {
 
         // Open/close menu
         $('.select-access-open').select2({
-            minimumResultsForSearch: Infinity,
+            // minimumResultsForSearch: Infinity,
             placeholder: 'Select State...'
         });
         $('.access-open').on('click', function () { $('.select-access-open').select2('open'); });
@@ -204,7 +207,7 @@ var Select2Selects = function() {
 
         // Enable/disable menu
         $('.select-access-enable').select2({
-            minimumResultsForSearch: Infinity,
+            // minimumResultsForSearch: Infinity,
             placeholder: 'Select State...'
         });
         $('.access-disable').on('click', function () { $('.select-access-enable').prop('disabled', true); });
@@ -214,7 +217,7 @@ var Select2Selects = function() {
         // Destroy/create menu
         function create_menu() {
             $('.select-access-create').select2({
-                minimumResultsForSearch: Infinity,
+                // minimumResultsForSearch: Infinity,
                 placeholder: 'Select State...'
             });
         }
@@ -235,7 +238,7 @@ var Select2Selects = function() {
 
         // Open/close menu
         $('.select-access-multiple-open').select2({
-            minimumResultsForSearch: Infinity
+            // minimumResultsForSearch: Infinity
         });
         $('.access-multiple-open').on('click', function () { $('.select-access-multiple-open').select2('open'); });
         $('.access-multiple-close').on('click', function () { $('.select-access-multiple-open').select2('close'); });
@@ -243,7 +246,7 @@ var Select2Selects = function() {
 
         // Enable/disable menu
         $('.select-access-multiple-enable').select2({
-            minimumResultsForSearch: Infinity
+            // minimumResultsForSearch: Infinity
         });
         $('.access-multiple-disable').on('click', function () { $('.select-access-multiple-enable').prop('disabled', true); });
         $('.access-multiple-enable').on('click', function () { $('.select-access-multiple-enable').prop('disabled', false); });
@@ -252,7 +255,7 @@ var Select2Selects = function() {
         // Destroy/create menu
         function create_menu_multiple() {
             $('.select-access-multiple-create').select2({
-                minimumResultsForSearch: Infinity
+                // minimumResultsForSearch: Infinity
             });
         }
         create_menu_multiple();
@@ -262,7 +265,7 @@ var Select2Selects = function() {
 
         // Clear selection
         $('.select-access-multiple-clear').select2({
-            minimumResultsForSearch: Infinity
+            // minimumResultsForSearch: Infinity
         });
         $('.access-multiple-clear').on('click', function () { $('.select-access-multiple-clear').val(null).trigger('change'); });
     };
