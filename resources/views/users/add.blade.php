@@ -55,7 +55,7 @@
                                         @endforeach
                                     </optgroup>
                                 </select>
-                                @if($roles->count() <= 0) 
+                                @if($roles->count() <= 0)
                                     <div class="p-1">
                                         <small class="text-danger">Tidak ada permission yang tersedia silahkan create permission terlebih dahulu</small>
                                     </div>

@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('title')
-    <title>Manajemen Permission</title>
+    <title>Manajemen Program Studi</title>
 @endsection
 
 @push('datatable_js')
@@ -17,10 +17,10 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <h5 class="mb-0">Daftar Pengguna</h5>
+            <h5 class="mb-0">Daftar Program Studi</h5>
             <div class="ms-auto">
                 <label class="form-check form-switch form-check-reverse">
-                   <a href="/users/create" class="btn btn-primary btn-sm fw-bold"><i class="ph-plus-circle"></i>&nbsp; TAMBAH PENGGUNA</a>
+                   <a href="/prodi/create" class="btn btn-primary btn-sm fw-bold"><i class="ph-plus-circle"></i>&nbsp; TAMBAH PROGRAM STUDI</a>
                 </label>
             </div>
         </div>
@@ -41,32 +41,32 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
+                    <th>Program Studi</th>
+                    <th>Fakultas</th>
+                    <th>Status</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 <tr>
                     <th></th>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
+                    <th>Program Studi</th>
+                    <th>Fakultas</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($user as $u)
+                @foreach($prodis as $p)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>{{$u->nama}}</td>
-                    <td>{{$u->username}}</td>
-                    <td>{{$u->email}}</td>
+                    <td>{{$p->nama}}</td>
+                    <td>{{$p->fakultas->nama}}</td>
+                    <td>{{$p->status}}</td>
                     <td class="text-center">
                         <div class="d-inline-flex">
-                            <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah" data-bs-toggle="modal" data-bs-target="#modal_ubah{{$u->id}}">
+                            <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah" data-bs-toggle="modal" data-bs-target="#modal_ubah{{$p->id}}">
                                 <i class="ph-pen"></i>
                             </a>
-                            <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$u->id}}">
+                            <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$p->id}}">
                                 <i class="ph-trash"></i>
                             </a>
                             <a href="#" class="text-body" data-bs-popup="tooltip" title="Lihat">
@@ -77,97 +77,43 @@
                 </tr>
 
                  <!-- Vertical form modal -->
-                <div id="modal_ubah{{$u->id}}" class="modal fade" tabindex="-1">
+                <div id="modal_ubah{{$p->id}}" class="modal fade" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Edit Pengguna</h5>
+                                <h5 class="modal-title">Edit Program Studi</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
-                            <form action="/users/{{$u->id}}" method="post">
+                            <form action="/prodi/{{$p->id}}" method="post">
                                 @csrf
                                 @method('put')
                                 <div class="modal-body">
                                     <div class="mb-3">
                                         <div class="row">
-                                            <div class="col-sm-6">
-                                                <label class="form-label">Nama</label>
-                                                <input type="text" name="nama" value="{{$u->nama}}" class="form-control" required>
+                                            <div class="col-sm-12">
+                                                <label class="form-label">Program Studi</label>
+                                                <input type="text" name="nama" value="{{$p->nama}}" class="form-control" required>
                                                 @error('nama')
                                                     <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
                                                 @enderror
                                             </div>
-
-                                            <div class="col-sm-6">
-                                                <label class="form-label">Username</label>
-                                                <input type="text" name="username" value="{{$u->username}}" class="form-control" required>
-                                                @error('username')
-                                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                                                @enderror
-                                            </div>
+                                         </div>
                                         </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label class="form-label">Email</label>
-                                                <input type="text" name="email" value="{{$u->email}}" class="form-control" required>
-                                                @error('email')
-                                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                                                @enderror
-                                            </div>
-                                            @php
-                                                $selected_roles = $u->getRoleNames()->toArray();
-                                            @endphp
-                                            <div class="col-sm-6">
-                                                <label class="form-label">Role</label>
-                                                <select data-placeholder="Pilih role..." multiple="multiple" name="roles[]" class="form-control select" required   @if($roles->count() <= 0) disabled  @endif>
-                                                    {{-- <option></option> --}}
-                                                    <optgroup label="Daftar Role">
-                                                        @foreach($roles as $r)
-                                                            <option @if(in_array($r->name ,$selected_roles)) selected @endif value="{{$r->name}}">{{$r->name}} </option>
-                                                        @endforeach
-                                                    </optgroup>
-                                                </select>
-                                                @if($roles->count() <= 0)
-                                                    <div class="p-1">
-                                                        <small class="text-danger">Tidak ada permission yang tersedia silahkan create permission terlebih dahulu</small>
-                                                    </div>
-                                                @endif
-                                                @error('roles')
-                                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                                                @enderror
-                                            </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Fakultas</label>
+                                            <select class="form-select" name="fakultas_id">
+                                                @foreach ($fakultas as $f)
+                                                    <option value="{{  $f->id }}">{{  $f->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('fakultas')
+                                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                            @enderror
                                         </div>
-                                    </div>
 
-                                    <div>
-                                       <h6 class="fw-semibold">Ubah Password</h6>
-                                    </div>
 
-                                    <div class="mb-3">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label class="form-label">Password</label>
-                                                <input type="text" name="password" placeholder="Masukkan password baru" class="form-control">
-                                                @error('password')
-                                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <label class="form-label">Konfirmasi Password</label>
-                                                <input type="text" name="password_confirmation" placeholder="Konfirmasi password baru" class="form-control">
-                                                @error('password_confirmation')
-                                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Kirim <i class="ph-paper-plane-tilt ms-2"></i></button>
@@ -179,7 +125,7 @@
                 <!-- /vertical form modal -->
 
                 <!-- Delete Modal -->
-                <div id="modal_hapus{{$u->id}}" class="modal fade" tabindex="-1">
+                <div id="modal_hapus{{$p->id}}" class="modal fade" tabindex="-1">
                     <div class="modal-dialog modal-xs">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -188,12 +134,12 @@
                             </div>
 
                             <div class="modal-body">
-                               Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{$u->nama}}</span> ?
+                               Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{$p->nama}}</span> ?
                             </div>
 
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                <form action="/users/{{$u->id}}" method="post">
+                                <form action="/prodi/{{$p->id}}" method="post">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-primary">Ya</button>
@@ -203,7 +149,6 @@
                     </div>
                 </div>
 	            <!-- /Delete Modal -->
-
 
                 @endforeach
             </tbody>
@@ -241,9 +186,9 @@
                 },
                 "ajax": "/data/user",
                 "columns": [
-                    { data: "nama", "name": "nama" },
-                    { data: "username", name: "username" },
-                    { data: "email", name: "email" },
+                    { data: "nama", "nama": "nama" },
+                    { data: "fakultas", name: "fakultas" },
+                    { data: "status", name: "status" },
                     {
                         data: "aksi",
                         render: function(data, type, row, meta){
