@@ -50,12 +50,20 @@
                         </span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/prodi" class="nav-link">
+                        <i class="ph-circles-four"></i>
+                        <span>
+                            Manajemen Program Studi
+                        </span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- /main navigation -->
 
     </div>
     <!-- /sidebar content -->
-    
+
 </div>
 <!-- /main sidebar -->

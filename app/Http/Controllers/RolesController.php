@@ -16,12 +16,12 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $role = RoleModel::latest()->get(); 
+        $role = RoleModel::latest()->get();
         // $selected_permission =RoleModel::role_permission->toArray();
         // return $selected_permission;
         // Role::join('role_has_permissions', 'role_has_permissions.role_id', '=', 'roles.id')->get();
                         // ->select('roles.*', 'role_has_permissions.permission_id')
-                        
+
         $permission = PermissionModel::latest()->get();
         // return $role;
         return view('roles.index',[
@@ -45,7 +45,7 @@ class RolesController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {   
+    {
         $data = [
             'name' => 'required|unique:roles',
             'guard_name' => 'required',
@@ -68,7 +68,7 @@ class RolesController extends Controller
             return redirect()->back()->with('failed', $e);
         }
 
-        foreach ($request->permission as $p) { 
+        foreach ($request->permission as $p) {
             try{
                 $role_permission->givePermissionTo($p);
             }catch(Exception $e){
@@ -123,7 +123,7 @@ class RolesController extends Controller
         //     return redirect()->back()->with('failed', 'Perubahan guard name berhasil diubah namun permission gagal diterapkan karena tidak berada pada guard name yang sama');
         // }
 
-        foreach ($request->permission as $p) { 
+        foreach ($request->permission as $p) {
             try{
                 $role->givePermissionTo($p);
             }catch(Exception $e){
@@ -138,7 +138,7 @@ class RolesController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {   
+    {
         $roles = RoleModel::where('id',$id);
         $roles->delete();
         return redirect()->back()->with('success', 'Data role telah berhasil dihapus');

@@ -104,7 +104,7 @@
                                        @endif
                                     @endforeach
                                 @endforeach
-                               
+
                             </div>
 
                             <div class="modal-footer justify-content-between">
@@ -124,11 +124,11 @@
                                 <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-    
+
                             <div class="modal-body">
                                Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{$r->name}}</span> ?
                             </div>
-    
+
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
                                 <form action="/roles/{{$r->id}}" method="post">
@@ -187,12 +187,12 @@
                                                     <optgroup label="Daftar Permission">
                                                         @foreach($permission as $p)
                                                             @if ($r->guard_name == $p->guard_name)
-                                                                <option value="{{$p->name}}"  {{ in_array($p->id ,$selected_permisison) ? 'selected' : '' }}>{{$p->name}}</option> 
+                                                                <option value="{{$p->name}}"  {{ in_array($p->id ,$selected_permisison) ? 'selected' : '' }}>{{$p->name}}</option>
                                                             @endif
                                                         @endforeach
                                                     </optgroup>
                                                 </select>
-                                                @if($permission->count() <= 0) 
+                                                @if($permission->count() <= 0)
                                                     <div class="p-1">
                                                         <small class="text-danger">Tidak ada permission yang tersedia silahkan create permission terlebih dahulu</small>
                                                     </div>
@@ -208,7 +208,7 @@
                     </form>
                  </div>
                  <!-- /sticky footer -->
-                
+
                 @endforeach
             </tbody>
         </table>
@@ -301,7 +301,7 @@
                                             @endforeach
                             			</optgroup>
                             		</select>
-                                    @if($permission->count() <= 0) 
+                                    @if($permission->count() <= 0)
                                         <div class="p-1">
                                             <small class="text-danger">Tidak ada permission yang tersedia silahkan create permission terlebih dahulu</small>
                                         </div>

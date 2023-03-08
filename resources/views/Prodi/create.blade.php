@@ -1,72 +1,77 @@
 @extends('main')
 
+@push('select_js')
+    <script src="{{asset('../../../assets/js/jquery/jquery.min.js')}}"></script>
+	<script src="{{asset('../../../assets/js/vendor/forms/selects/select2.min.js')}}"></script>
+	<script src="{{asset('../../../assets/demo/pages/form_layouts.js')}}"></script>
+    <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
+	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
+@endpush
+
 @section('content')
-
-<!-- Content area -->
-<div class="content">
-
-<form enctype="multipart/form-data" action="{{ route('prodi.store') }}" method="POST">
-@csrf
-<!-- Input fields -->
-<div class="card">
-    <div class="card-header">
-        <h5 class="mb-0">Tambah Program Studi</h5>
-    </div>
-
-    <div class="card-body">
-        <div class="mb-4">
-            <!-- Default input -->
-            <div class="row mb-3">
-                <label class="col-form-label col-lg-3">Program Studi</label>
-                <div class="col-lg-9">
-                    <input type="text" name="nama" class="form-control" placeholder="Nama Program Studi">
-                    @error('nama')
-                    <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-            <!-- /default input -->
-
-      <!-- Sizing -->
-      <div class="row">
-                <label class="col-form-label col-lg-3">Fakultas</label>
-                <div class="col-lg-9">
-                    <div class="mb-3">
-                        <select class="form-select">
-                            @foreach ($fakultas as $f)
-                                <option value="{{  $f->nama }}">{{  $f->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <!-- /sizing -->
-
- <!-- Sizing -->
- <div class="row">
-                <label class="col-form-label col-lg-3">Status</label>
-                <div class="col-lg-9">
-                    <div class="mb-3">
-                        <select class="form-select">
-                            @foreach ($prodis as $prodi)
-                                <option value="{{  $prodi->status }}">{{  $prodi->status }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="d-flex justify-content-end align-items-center">
-                         <a href="{{ route('prodi.store') }}" class="btn btn-md btn-primary mb-3" id="f">KIRIM</a>
-					</div>
-                </div>
-            </div>
-            <!-- /sizing -->
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5 class="mb-0">Tambah Program Studi</h5>
         </div>
-        </div>
-    </div>
-</div>
-<!-- /input fields -->
-</form>
-</div>
-<!-- /content area -->
 
+        <div class="card-body pb-0">
+            <div class="card">
+                <div class="card-body border-top">
+                    <form action="/prodi" method="post">
+                        @csrf
+                        <fieldset class="mb-3">
+                            {{-- <legend class="fs-base fw-bold border-bottom pb-2 mb-3">Mandatory fields</legend> --}}
+
+                            <div class="mb-3">
+                                <label class="form-label">Program Studi</label>
+                                <input name="nama" type="text" class="form-control" value="{{old('nama')}}" placeholder="Masukkan program studi disini" required>
+                                @error('nama')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Fakultas</label>
+                                <select class="form-select" name="fakultas_id">
+                                    @foreach ($fakultas as $f)
+                                        <option value="{{  $f->id }}">{{  $f->nama }}</option>
+                                    @endforeach
+                                </select>
+                                @error('fakultas')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <!-- <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-select">
+                                    @foreach ($statuses as $s)
+                                        <option value="{{  $s->deskripsi }}">{{  $s->deskripsi }}</option>
+                                    @endforeach
+                                </select>
+                                @error('status')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                @enderror
+                            </div> -->
+
+                            <!-- <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <input name="status" type="text" class="form-control" value="{{old('status')}}" placeholder="Masukkan status" required>
+                                @error('status')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                @enderror
+                            </div> -->
+
+                        </fieldset>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">Kirim <i class="ph-paper-plane-tilt ms-2"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart position-relative" id="traffic-sources"></div>
+    </div>
 @endsection

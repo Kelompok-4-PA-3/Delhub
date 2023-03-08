@@ -9,6 +9,8 @@ class Prodi extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function fakultas(){
         return $this->belongsTo(Fakultas::class);
     }

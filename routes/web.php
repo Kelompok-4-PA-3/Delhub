@@ -21,7 +21,7 @@ Route::get('/', function () {
 });
 
 
-Route::resource('/prodi', \App\Http\Controllers\ProdiController::class);
+// Route::resource('/prodi', \App\Http\Controllers\ProdiController::class);
 // Route::get('/users/all', [UsersController::class,'getUsers']);
 
 Route::middleware([
@@ -32,6 +32,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('index');
     })->name('dashboard');
+
+    Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis','Prodi.index');
 
     Route::resource('/users', UsersController::class)->name('users','users.index');
     Route::get('/data/user', [UsersController::class, 'getUser']);
