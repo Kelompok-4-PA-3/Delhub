@@ -17,6 +17,11 @@ return new class extends Migration
             $table->foreign('fakultas_id')->references('id')->on('fakultas')->onUpdate('cascade')->onDelete('cascade');
             $table->string('nama');
             $table->boolean('status')->default(true);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes($column = 'deleted_at', $precision = 0);
+
             $table->timestamps();
         });
     }
