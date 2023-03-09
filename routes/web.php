@@ -1,16 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KrsController;
 use App\Http\Controllers\DosenController;
-use App\Http\Controllers\ProdiController;
-use App\Http\Controllers\RolesController;
-use App\Http\Controllers\UsersController;
-use App\Http\Controllers\InterestController;
-use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\MhsInterestController;
 
 /*
 |--------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-+@extends('main')
+@extends('main')
 
 @push('select_js')
     <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>

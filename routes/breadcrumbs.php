@@ -25,4 +25,4 @@ Breadcrumbs::for('interest', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('mhsInterest', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Manajemen Mahasiswa Interest', route('mhsInterest.index'));
-});
+})
