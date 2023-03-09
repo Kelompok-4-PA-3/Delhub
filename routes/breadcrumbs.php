@@ -17,3 +17,12 @@ Breadcrumbs::for('pengguna', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Manajemen Pengguna', route('users.index'));
 });
+Breadcrumbs::for('interest', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Manajemen Interest', route('interest.index'));
+});
+
+Breadcrumbs::for('mhsInterest', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Manajemen Mahasiswa Interest', route('mhsInterest.index'));
+})
