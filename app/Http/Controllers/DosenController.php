@@ -43,7 +43,7 @@ class DosenController extends Controller
         // return $request;
         $data = [
             'user_id' => 'required',
-            'nidn' => 'required|numeri|unique:dosens',
+            'nidn' => 'required|numeric|unique:dosens',
             'prodi_id' => 'required',
         ];
 

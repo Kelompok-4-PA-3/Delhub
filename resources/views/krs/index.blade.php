@@ -20,7 +20,7 @@
             <h5 class="mb-0">Daftar KRS</h5>
             <div class="ms-auto">
                 <label class="form-check form-switch form-check-reverse">
-                    <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#panel_footer"><i class="ph-plus-circle"></i>&nbsp; TAMBAH KATEGORI</a>
+                    <a href="/krs/create" class="btn btn-primary btn-sm fw-bold"><i class="ph-plus-circle"></i>&nbsp; TAMBAH KRS</a>
                  </label>
             </div>
         </div>
@@ -60,13 +60,13 @@
                 @foreach($krs as $k)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>{{$k->kategori->name}}</td>
-                    <td>{{$k->dosen->nama}}</td>
+                    <td>{{$k->kategori->nama_mk}}</td>
+                    <td>{{$k->dosen->user->nama}}</td>
                     <td>{{$k->prodi->nama}}</td>
                     <td>{{$k->angkatan}}</td>
                     <td class="text-center">
                         <div class="d-inline-flex">
-                            <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah" data-bs-toggle="offcanvas" data-bs-target="#form-edit{{$k->id}}">
+                            <a href="/krs/{{$k->id}}/edit" class="text-body" data-bs-popup="tooltip" title="Ubah">
                                 <i class="ph-pen"></i>
                             </a>
                             <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$k->id}}">
@@ -130,12 +130,12 @@
                             </div>
 
                             <div class="modal-body">
-                               Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{$k->nama_mk}}</span> ?
+                               Apakah anda yakin ingin menghapus data krs ini ?
                             </div>
 
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                <form action="/kategori/{{$k->id}}" method="post">
+                                <form action="/krs/{{$k->id}}" method="post">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-primary">Ya</button>
@@ -153,80 +153,6 @@
         <br>
     </div>
     <!-- /individual column searching (text inputs) -->
-
-    <!-- Sticky footer -->
-	<div id="panel_footer" class="offcanvas offcanvas-end  " tabindex="-1">
-		<div class="offcanvas-header border-bottom">
-			<h5 class="offcanvas-title fw-semibold">Tambah KRS</h5>
-			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-		</div>
-
-		<div class="offcanvas-body">
-            <form action="/krs" method="post">
-                @csrf
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <div class="mb-1">
-                            <label class="form-label">Kategori Mata Kuliah</label>
-                            <select name="mk_id" id="" placeholder="pilih kategori mata kuliah" class="form-control">
-                                <option value="1">D4-TRPL-2020 </option>
-                            </select>
-                            @error('mk_id')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-1">
-                            <label class="form-label">Konfigurasi</label>
-                            <select name="config_id" id="" placeholder="pilih konfigurasi" class="form-control">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                            </select>
-                            @error('config_id')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-1">
-                            <label class="form-label">Dosen</label>
-                            <select name="dosen_mk" id="" placeholder="pilih dosen" class="form-control">
-                                <option value="1">Riyanthi Sianturi</option>
-                                <option value="2">Verawaty Situmorang</option>
-                            </select>
-                            @error('dosen_mk')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-1">
-                            <label class="form-label">Program Studi</label>
-                            <select name="prodi_id" id="" placeholder="pilih dosen" class="form-control">
-                                <option value="1">D3 TI</option>
-                                <option value="2">D3 TK</option>
-                                <option value="3">D4 TRPL</option>
-                            </select>
-                            @error('prodi_id')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-1">
-                            <label class="form-label">Angkatan</label>
-                            <select name="angkatan" id="" placeholder="pilih angkatan" class="form-control">
-                                <option value="2019">2019</option>
-                                <option value="2020">2020</option>
-                                <option value="2021">2021</option>
-                                <option value="2022">2022</option>
-                            </select>
-                            @error('angkatan')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="border-top p-3">
-                <button type="submit" class="btn btn-primary w-100" >Kirim</button>
-            </div>
-        </form>
-	</div>
-	<!-- /sticky footer -->
 
 	<!-- /individual column searching (text inputs) -->
     <div class="chart position-relative" id="traffic-sources"></div>

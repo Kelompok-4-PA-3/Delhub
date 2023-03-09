@@ -8,6 +8,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KrsController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,4 +48,5 @@ Route::middleware([
     Route::resource('/krs', KrsController::class)->name('krs', 'krs.index');
     Route::resource('/dosen', DosenController::class)->name('dosen', 'dosen.index');
     Route::resource('/mahasiswa', MahasiswaController::class)->name('mahasiswa', 'mahasiswa.index');
+    Route::resource('/home', DashboardController::class)->name('home', 'home.index');
 });

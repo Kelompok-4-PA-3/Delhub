@@ -38,5 +38,10 @@ class DatabaseSeeder extends Seeder
             'nama' => 'D4 Teknologi Rekayasa Perangkat Lunak',
             'fakultas_id' => 1,
         ]);
+
+        \App\Models\Configs::create([
+            'tahun_aktif' => '2023',
+            'semester' => '5',
+        ]);
     }
 }

@@ -31,6 +31,14 @@
                     <i class="ph-dots-three sidebar-resize-show"></i>
                 </li>
                 <li class="nav-item">
+                    <a href="/home" class="nav-link">
+                        <i class="ph-squares-four"></i>
+                        <span>
+                            Dashboard
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="/kategori" class="nav-link">
                         <i class="ph-squares-four"></i>
                         <span>

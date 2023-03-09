@@ -16,4 +16,20 @@ class Krs extends Model
     protected $guarded = ['id'];
 
     protected $dates = ['deleted_at'];
+
+    public function kategori(){
+        return $this->belongsTo(Kategori::class, 'mk_id');
+    }
+
+    public function config(){
+        return $this->belongsTo(Configs::class, 'config_id');
+    }
+
+    public function dosen(){
+        return $this->belongsTo(Dosen::class, 'dosen_mk', 'nidn');
+    }
+
+    public function prodi(){
+        return $this->belongsTo(Prodi::class, 'prodi_id');
+    }
 }
