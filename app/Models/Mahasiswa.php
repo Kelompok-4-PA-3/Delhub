@@ -15,15 +15,17 @@ class Mahasiswa extends Model
 
     protected $primarykey = ['nim'];
 
-    protected $fillable = ['nim','user_id','prodi_id','angkatan'];
+    protected $fillable = ['nim', 'user_id', 'prodi_id', 'angkatan'];
 
     protected $dates = ['deleted_at'];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    
-    public function prodi(){
+
+    public function prodi()
+    {
         return $this->belongsTo(Prodi::class);
     }
 
@@ -31,5 +33,4 @@ class Mahasiswa extends Model
     {
         return 'nim';
     }
-
 }
