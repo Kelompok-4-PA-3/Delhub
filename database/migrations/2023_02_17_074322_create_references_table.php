@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kelompoks', function (Blueprint $table) {
+        Schema::create('references', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('krs_id');
-            $table->foreign('krs_id')->references('id')->on('krs')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('pembimbing')->nullable();
-            $table->foreign('pembimbing')->references('nidn')->on('dosens')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('nama_kelompok');
-            $table->string('topik')->nullable();
-            $table->boolean('active')->default(true);
+            $table->string('value');
+            $table->string('kategori');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kelompoks');
+        Schema::dropIfExists('references');
     }
 };

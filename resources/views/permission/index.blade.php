@@ -35,6 +35,16 @@
         </div>
         @endif
 
+        @if (session()->has('failed'))
+        <div class="alert alert-danger alert-icon-start alert-dismissible fade show">
+            <span class="alert-icon bg-danger text-white">
+                <i class="ph-warning-circle"></i>
+            </span>
+            <span class="fw-semibold">Gagal!</span> {{session('failed')}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        @endif
+
         <!-- /individual column searching (text inputs) -->
         <table class="table datatable-users">
             <thead>

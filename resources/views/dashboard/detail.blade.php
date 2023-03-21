@@ -16,13 +16,24 @@
 @section('breadscrumb', Breadcrumbs::render('pengguna'))
 
 @section('content')
+
+	<style>
+		.datatable-header {
+			display: none;
+		}
+
+		.datatable-footer{
+			display: none;
+		}
+	</style>
+
     <div class="row">
         <div class="col-xl-7">
 
             <!-- Traffic sources -->
             <div class="card">
                 <div class="card-header d-flex align-items-center">
-                    <h5 class="mb-0">Proyek saya</h5>
+                    <h5 class="mb-0">Daftar Kelompok</h5>
                     <div class="ms-auto">
                         <label class="form-check form-switch form-check-reverse">
                             <input type="checkbox" class="form-check-input" checked>
@@ -33,68 +44,30 @@
 
                 <div class="card-body pb-0">
                     <div class="project-list">
-
-						@foreach ($krs as $k)
-						<div class="p-1">
+						@if($kelompok->count() > 0)
+						@foreach($kelompok as $k)
+                        <div class="p-1">
                             <div class="d-flex mb-2">
-                                <a href="#" class="bg-success bg-opacity-10 text-success lh-1 rounded-pill p-2 me-3">
-                                    <i class="ph-notepad"></i>
+                                <a href="#" class="bg-info bg-opacity-10 text-info lh-1 rounded-pill p-2 me-3">
+                                    <i class="ph-users-four"></i>
                                 </a>
                                 <div>
                                     <div class="fw-semibold">
-                                        <a href="/dashboard/{{$k->id}}">{{$k->kategori->nama_mk}}</a>
+                                        <a href="/kelompok/{{$k->id}}">{{$k->nama_kelompok}}</a>
                                     </div>
-                                    <span class="text-muted">{{$k->dosen->user->nama}}</span>
+									@if ($k->topik != NULL)
+										<span class="text-muted" data-bs-popup="tooltip" title="{{$k->topik}}">{{ Str::limit ($k->topik, 30) }}</span>
+									@else
+										<small class="text-nowrap text-warning"><i class="ph-warning-circle"></i> Belum ada topik </small>
+									@endif
                                 </div>
                             </div>
                             <div class="w-75 mx-auto mb-3" id="new-visitors"></div>
                         </div>
 						@endforeach
-
-                        <div class="p-1">
-                            <div class="d-flex mb-2">
-                                <a href="#" class="bg-success bg-opacity-10 text-success lh-1 rounded-pill p-2 me-3">
-                                    <i class="ph-notepad"></i>
-                                </a>
-                                <div>
-                                    <div class="fw-semibold">
-                                        <a href="">PA3-D4TRPL-2020</a>
-                                    </div>
-                                    <span class="text-muted">Koordinator</span>
-                                </div>
-                            </div>
-                            <div class="w-75 mx-auto mb-3" id="new-visitors"></div>
-                        </div>
-
-                        <div class="p-1">
-                            <div class="d-flex mb-2">
-                                <a href="#" class="bg-warning bg-opacity-10 text-warning lh-1 rounded-pill p-2 me-3">
-                                    <i class="ph-projector-screen-chart"></i>
-                                </a>
-                                <div>
-                                    <div class="fw-semibold">
-                                        <a href="">TA-II-D4-TRPL-20</a>
-                                    </div>
-                                    <span class="text-muted">Penguji - Kelompok 4</span>
-                                </div>
-                            </div>
-                            <div class="w-75 mx-auto mb-3" id="new-sessions"></div>
-                        </div>
-
-                        <div class="p-1">
-                            <div class="d-flex mb-2">
-                                <a href="#" class="bg-indigo bg-opacity-10 text-indigo lh-1 rounded-pill p-2 me-3">
-                                    <i class="ph-users-three"></i>
-                                </a>
-                                <div>
-                                    <div class="fw-semibold">
-                                        <a href="">KP-D4TRPL-2022</a>
-                                    </div>
-                                    <span class="text-muted">Pembimbing - Rosa Kopeng</span>
-                                </div>
-                            </div>
-                            <div class="w-75 mx-auto mb-3" id="total-online"></div>
-                        </div>
+						@else
+							<p class="text-muted text-center">Belum ada kelompok</p>
+						@endif
                     </div>
                 </div>
 
@@ -105,7 +78,6 @@
         </div>
 
         <div class="col-xl-5">
-
         </div>
     </div>
 
@@ -162,16 +134,17 @@
                                     </a>
 
                                     <div class="dropdown-menu">
-                                        <form action="/kelompok" class="container" method="post">
+										<form action="/kelompok" class="container" method="post">
                                             @csrf
                                             <div class="d-flex">
                                                 <small for="">Jumlah kelompok : </small>
                                                 <input type="number" class="w-100 form-control form-control-sm" name="jumlah_kelompok" required>
-												
-												<div class="d-flex mt-2">
-													<button type="submit" class="badge ms-auto bg-primary border border-0">Buat</button>
-												</div>
+												<input type="text" value="{{$krs->kategori->nama_singkat}}" name="krs_name" class="d-none">
+												<input type="text" value="{{$krs->id}}" name="krs_id" class="d-none">
                                             </div>
+											<div class="d-flex mt-2">
+												<button type="submit" class="badge ms-auto bg-primary border border-0">Buat</button>
+											</div>
                                             @error('jumlah_kelompok')
                                             <div>
                                                 <small class="text-danger">{{$message}}</small>
@@ -225,27 +198,97 @@
 					</div>
 
 					<div class="collapse show" id="sidebar-users">
-						<div class="sidebar-section-body">
-							@foreach($krs as $k)
-							@if($k->krs_user->count() > 0)
-							@foreach($k->krs_user as $ku)
-							<div class="d-flex mb-3">
-								<a href="#" class="me-3">
-									<img src="../../../assets/images/demo/users/face1.jpg" width="36" height="36" class="rounded-pill" alt="">
+						<!-- Sidebar tabs -->
+						<ul class="nav nav-tabs nav-tabs-highlight nav-justified px-3">
+							<li class="nav-item">
+								<a href="#dafta-user" class="nav-link active" data-bs-toggle="tab">
+									<i class="ph-users"></i>
 								</a>
-								<div class="flex-fill">
-									<a href="#" class="fw-semibold">{{$ku->mahasiswa->user->nama}}</a>
-									<div class="fs-sm opacity-50">{{$ku->mahasiswa->nim}}</div>
+							</li>
+
+							<li class="nav-item">
+								<a href="#tambah-user" class="nav-link" data-bs-toggle="tab">
+									<i class="ph-user-plus"></i>
+								</a>
+							</li>
+						</ul>
+						<!-- /sidebar tabs -->
+						<div class="sidebar-section-body">
+							<div class="sidebar-content tab-content">
+								<div class="tab-pane fade active show" id="dafta-user">
+									<table class="table datatable-mahasiswa">
+										<thead>
+											<tr>
+												<th><small>Dafrar Mahasiswa</small></th>
+											</tr>
+											<tr>
+												<th>Dafrar Mahasiswa</th>
+											</tr>
+										</thead>
+										<tbody>
+
+											@foreach($krs->krs_user as $k)
+											<tr>
+												<td>
+													<div class="d-flex mb-3">
+														<a href="#" class="me-3">
+															<img src="../../../assets/images/demo/users/face1.jpg" width="36" height="36" class="rounded-pill" alt="">
+														</a>
+														<div class="flex-fill">
+															<a href="#" class="fw-semibold">{{$k->mahasiswa->user->nama}}</a>
+															<div class="fs-sm opacity-50">{{$k->mahasiswa->nim}}</div>
+														</div>
+														<div class="ms-3 align-self-center">
+															<div>
+																<div class="btn-group">
+																	<a href="#" class="text-muted" data-bs-toggle="dropdown"><i class="ph-gear-six"></i></a>
+									
+																	<div class="dropdown-menu">
+																		<a href="#" class="dropdown-item text-danger">Hapus</a>
+																		<a href="#" class="dropdown-item">Another action</a>
+																	</div>
+																</div>
+															</div>
+	
+														</div>
+													</div>
+												 </td>
+											</tr>
+											@endforeach
+											{{-- @else
+												<div class="text-center">
+													<small class="text-danger ">belum ada mahasiswa di proyek ini</small>
+												</div>
+											@endif --}}
+											
+										</tbody>
+									</table>
 								</div>
-								<div class="ms-3 align-self-center">
-									<div class="bg-success border-success rounded-pill p-1"></div>
+								<div class="tab-pane fade active" id="tambah-user">
+									<form action="/users/krs/add" method="post"> 
+										@csrf
+										<input class="d-none" type="text" name="krs_id" value="{{$krs->id}}">
+										<select data-placeholder="Pilih mahasiswa" multiple="multiple" id="permission_select_edit" name="mahasiswa[]" class="form-control select" required
+											@if ($mahasiswa->count() <= 0) disabled @endif>
+											<option></option>
+											<optgroup label="Daftar Mahasiswa">
+												@foreach ($mahasiswa as $m)
+													@if(!in_array($m->user_id, $krs->krs_user->pluck('user_id')->toArray()))
+														<option value="{{ $m->user->id }}">{{$m->user->nama}}</option>
+													@endif
+												@endforeach
+											</optgroup>
+										</select>
+										@if($mahasiswa->count() < 0)
+											<small class="text-danger">Tidak ada data mahasiswa ditemukan</small>
+										@endif
+										<div class="py-2">
+											<button type="submit" class="btn btn-sm btn-primary w-100">Kirim</button>
+										</div>
+									</form>
 								</div>
 							</div>
-							@endforeach
-							@else
-								<small class="text-muted text-center">Belum ada mahasiswa di project ini</small>
-							@endif
-							@endforeach
+
 						</div>
 					</div>
 				</div>

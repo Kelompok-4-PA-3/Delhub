@@ -83,14 +83,20 @@ class MahasiswaController extends Controller
     {
         $data = [
             'user_id' => 'required',
-            'nim' => 'required|numeric|unique:mahasiswas',
+            'nim' => 'required',
             'prodi_id' => 'required',
             'angkatan' => 'required'
         ];
 
+        $mhs = Mahasiswa::where('nim',$mahasiswa->nim);
+        
+        if($request->nim != $mahasiswa->nim){
+            $data['nim'] = 'required|unique:mahasiswas';
+        }
+
         $validasi = $request->validate($data);
-        // return $mahasiswa->nim;
-        Mahasiswa::where('nim',$mahasiswa->nim)->update($validasi);
+        
+        $mhs->update($validasi);
 
         return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil diubah');
     }
