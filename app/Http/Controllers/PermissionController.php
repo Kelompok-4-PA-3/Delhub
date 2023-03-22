@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\Permission as PermissionModel;
+use Spatie\Permission\Exceptions\PermissionAlreadyExists;
 
 class PermissionController extends Controller
 {
@@ -39,14 +40,27 @@ class PermissionController extends Controller
             'guard_name' => 'required',
         ];
         $validasi = $request->validate($data);
-        $permission = new PermissionModel();
-        $permission->name = $validasi['name'];
-        $permission->guard_name = $validasi['guard_name'];
-        $permission->save();
-        // Permission::create([
-        //     'name' =>$validasi['name'],
-        //     'guard_name' =>$validasi['guard_name']
-        // ]);
+        // $permission = new PermissionModel();
+        // $permission->name = $validasi['name'];
+        // $permission->guard_name = $validasi['guard_name'];
+        // $permission->save();
+        
+        try {
+            Permission::create($validasi);
+        } catch (PermissionAlreadyExists $e) {
+            // if (strpos($e->getMessage(), 'Duplicate entry') !== false) {
+            //     throw new Exception('The permission name ' .$validasi['name']. ' already exists.');
+            // } else {
+            //     throw $e;
+            // }
+            return redirect()->back()->with('failed', "Permission telah terdaftar pada guard name yang sama");
+            // if ($e->errorInfo[1] == 1062) {
+            //     return back()->with('failed','Permission telah terdaftar pada guard name yang sama');
+            // } else {
+            //     // Other query exception
+            //     throw $e;
+            // }
+        }
 
         return redirect()->back()->with('success', 'Permission baru telah berhasil dibuat');
     }

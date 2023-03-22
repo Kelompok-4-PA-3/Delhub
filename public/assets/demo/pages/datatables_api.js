@@ -115,6 +115,37 @@ const DatatableAPI = function() {
             }
         });
 
+          // Individual column searching with text inputs
+          $('.datatable-mahasiswa thead tr:eq(1) th').each(function () {
+            const title = $(this).text();
+            $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
+        });
+        $('.datatable-mahasiswa').DataTable({
+            orderCellsTop: true,
+            paging: false,
+            buttons: {
+                dom: {
+                    button: {
+                        className: 'btn btn-light'
+                    }
+                },
+            },
+            initComplete: function () {
+                this.api()
+                    .columns()
+                    .every(function (index) {
+                        const that = this;
+     
+                        $('.column-search').on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that.column($(this).parent().index() + ':visible').search(this.value).draw();
+                            }
+                        });
+                    });
+            }
+        });
+
+
 
         // Individual column searching with selects
         $('.datatable-column-search-selects').DataTable({

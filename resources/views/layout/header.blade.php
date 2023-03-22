@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="collapse d-lg-block my-lg-auto ms-lg-auto" id="page_header">
-                    <div class="d-sm-flex align-items-center mb-3 mb-lg-0 ms-lg-3">
+                    {{-- <div class="d-sm-flex align-items-center mb-3 mb-lg-0 ms-lg-3">
                         <div class="dropdown w-100 w-sm-auto">
                             <a href="#" class="d-flex align-items-center text-body lh-1 dropdown-toggle py-sm-2" data-bs-toggle="dropdown" data-bs-display="static">
                                 <img src="https://demo.interface.club/limitless/demo/template/assets/images/brands/tesla.svg" class="w-32px h-32px me-2" alt="">
@@ -92,7 +92,7 @@
                                 <i class="ph-plus"></i>
                             </a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 

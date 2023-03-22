@@ -27,6 +27,14 @@ class Dosen extends Model
         return $this->belongsTo(Prodi::class);
     }
 
+    public function kelompok(){
+        return $this->hasMany(Kelompok::class ,'pembimbing', 'nidn');
+    }
+
+    public function pembimbing_penguji(){
+        return $this->hasMany(PembimbingPenguji::class);
+    }
+
     public function getRouteKeyName()
     {
         return 'nidn';

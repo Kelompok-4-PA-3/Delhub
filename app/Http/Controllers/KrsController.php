@@ -7,6 +7,8 @@ use App\Models\Dosen;
 use App\Models\Prodi;
 use App\Models\Kategori;
 use App\Models\Configs;
+use App\Models\Mahasiswa;
+use App\Models\KrsUser;
 use Illuminate\Http\Request;
 
 class KrsController extends Controller
@@ -54,7 +56,23 @@ class KrsController extends Controller
             'angkatan' => 'required',
         ];
         $validasi = $request->validate($data);
-        Krs::create($validasi);
+        $krs = Krs::create($validasi);
+        $mahasiswa = Mahasiswa::where('prodi_id', $validasi['prodi_id'])->where('angkatan',$validasi['angkatan'])->get();
+        // return $mahasiswa;
+        // return $validasi['angkatan'];
+        // return Mahasiswa::all();
+        // return $mahasiswa->count();
+
+        if($mahasiswa->count() > 0){
+            $krs_mahasiswa = new KrsUser();
+            foreach ($mahasiswa as $m) {
+                $krs_mahasiswa->create([
+                    'user_id' => $m->user_id,
+                    'krs_id' => $krs->id
+                ]);
+            }
+        }
+
         return redirect('/krs')->with('success', 'KRS baru telah berhasil dibuat');
     }
 

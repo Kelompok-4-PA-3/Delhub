@@ -32,4 +32,8 @@ class Krs extends Model
     public function prodi(){
         return $this->belongsTo(Prodi::class, 'prodi_id');
     }
+
+    public function krs_user(){
+        return $this->hasMany(KrsUser::class);
+    }
 }

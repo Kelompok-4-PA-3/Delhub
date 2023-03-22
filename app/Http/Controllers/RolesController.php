@@ -62,7 +62,7 @@ class RolesController extends Controller
         // ]);
 
         // return $role->id;
-
+            // return "ini";
         try {
             $role_permission = Role::find($role->id);
         } catch (Exception $e) {

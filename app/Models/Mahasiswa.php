@@ -27,6 +27,10 @@ class Mahasiswa extends Model
         return $this->belongsTo(Prodi::class);
     }
 
+    public function krs_user(){
+        return $this->belongsToMany(KrsUser::class, 'user_id', 'user_id');
+    }
+
     public function getRouteKeyName()
     {
         return 'nim';
