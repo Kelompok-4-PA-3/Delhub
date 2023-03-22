@@ -40,17 +40,14 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        for($i = 0; $i <= 10; $i++){
+        for ($i = 0; $i <= 10; $i++) {
             \App\Models\Kategori::create([
                 'kode_mk' => Str::upper(Str::random(5)),
                 'nama_mk' => Str::random(10),
-                'nama_singkat' =>  Str::random(3,4),
+                'nama_singkat' =>  Str::random(3, 4),
             ]);
         }
 
-
-
-        
         \App\Models\Fakultas::create([
             'nama' => 'Fakultas Vokasi'
         ]);
@@ -102,6 +99,9 @@ class DatabaseSeeder extends Seeder
             'prodi_id' => 1,
         ]);
 
+        $this->call([
+            InterestSeeder::class,
+        ]);
         // \App\Models\::create([
         //     'name' => 'kelola bimbingan',
         //     'guard_name' => 'web',

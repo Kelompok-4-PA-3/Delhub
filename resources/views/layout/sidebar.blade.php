@@ -117,14 +117,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/interest" class="nav-link">
-                        <i class="ph-heart"></i>
-                        <span>
-                            Kelola Antusias
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="/mhsInterest" class="nav-link">
                         <i class="ph-heart"></i>
                         <span>
