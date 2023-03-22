@@ -41,6 +41,9 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
+    Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
+
+
 
     Route::resource('/users', UsersController::class)->name('users', 'users.index');
     Route::get('/data/user', [UsersController::class, 'getUser']);

@@ -88,6 +88,22 @@
                         </span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/ruangan" class="nav-link">
+                        <i class="ph-student"></i>
+                        <span>
+                            Manajemen Ruangan
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/prodi" class="nav-link">
+                        <i class="ph-circles-four"></i>
+                        <span>
+                            Manajemen Program Studi
+                        </span>
+                    </a>
+                </li>
                 <li class="nav-item-header pt-0">
                     <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">PENGGUNA</div>
                     <i class="ph-dots-three sidebar-resize-show"></i>
@@ -113,14 +129,6 @@
                         <i class="ph-lock-key"></i>
                         <span>
                             Manajemen Permissions
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/prodi" class="nav-link">
-                        <i class="ph-circles-four"></i>
-                        <span>
-                            Manajemen Program Studi
                         </span>
                     </a>
                 </li>
