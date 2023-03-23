@@ -43,6 +43,7 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
+    Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
 
     Route::resource('/users', UsersController::class)->name('users', 'users.index');
     Route::post('/users/upload', [UsersController::class, 'user_upload']);
@@ -55,7 +56,6 @@ Route::middleware([
     Route::resource('/mahasiswa', MahasiswaController::class)->name('mahasiswa', 'mahasiswa.index');
     Route::resource('/home', DashboardController::class)->name('home', 'home.index');
     Route::post('/users/krs/add', [DashboardController::class, 'add_user']);
-    Route::resource('/interest', InterestController::class)->name('interest', 'interest.index');
     Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
     Route::resource('/kelompok', KelompokController::class)->name('kelompok', 'kelompok.index');
     Route::post('/kelompok/dosen', [KelompokController::class, 'add_pembimbing']);
