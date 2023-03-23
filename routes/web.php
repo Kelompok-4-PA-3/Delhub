@@ -43,8 +43,12 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
+<<<<<<< HEAD
     Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
 
+=======
+    Route::resource('/fakultas', \App\Http\Controllers\FakultasController::class)->name('fakultas', 'fakultas.index');
+>>>>>>> a0adde0 (Fakultas)
     Route::resource('/users', UsersController::class)->name('users', 'users.index');
     Route::post('/users/upload', [UsersController::class, 'user_upload']);
     Route::get('/data/user', [UsersController::class, 'getUser']);
