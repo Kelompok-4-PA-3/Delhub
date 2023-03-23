@@ -24,7 +24,7 @@
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
+                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
             </ul>
         </div>
 
@@ -49,18 +49,21 @@
 
                     <div class="tab-content flex-lg-fill">
                         <div class="tab-pane fade show active" id="topik-proyek">
-                            <h5 class="fw-semibold p-2">Aplikasi Manajemen PA, TA, KP berbasis website</h5>
+                            <div class="px-2">
+                                <small class="text-muted ">Topik : </small>
+                            </div>
+                            @if ($kelompok->topik == NULL)
+                                <small class="p-2">Kelompok ini belum memiliki topik</small>
+                            @else
+                            <h5 class="fw-semibold p-2">{{$kelompok->topik}}</h5>
+                            @endif
                         </div>
 
                         <div class="tab-pane fade" id="edit-topik">
-                           <form action="">
-                            <select data-placeholder="Pilih Dosen" id="permission_select_edit" name="dosen" class="form-control select" required>
-                                <option></option>
-                                <optgroup label="Daftar Dosen">
-                                    <option value="">{{Str::limit('Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo ad laboriosam voluptate cupiditate vitae iste cumque. Ex vel inventore soluta!',30)}}</option>
-                                    <option value="2">Pembimbing 2</option>
-                                </optgroup>
-                            </select>
+                           <form action="/kelompok/topik" method="post">
+                            @csrf
+                            <input type="hidden" value="{{$kelompok->id}}" name="kelompok">
+                            <input type="text" class="form-control" name="topik" value="{{old('topik',$kelompok->topik)}}" placeholder="Masukkan topik disini" required>
                             <div class="p-1">
                                 <button class="btn btn-sm btn-primary w-100">Kirim</button>
                             </div>
@@ -101,9 +104,17 @@
                                <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted" href=""><i class="ph-trash"></i></a></small>
                             </div>
                            </div>
-                            <h6 class="fw-semibold p-2">
-                                {{$kelompok->dosen->user->nama}}
-                            </h6>
+                            
+                                @if ($kelompok->pembimbing == NULL)
+                                    <small class="text-muted text-center px-2">Belum ada dosen pembimbing </small>
+                                @else
+                                    <h6 class="fw-semibold px-2">
+                                        {{$kelompok->dosen->user->nama}}
+                                    </h6>
+                                @endif
+                               
+
+                           
                         </div>
                         
                         <div class="tab-pane fade active" id="penguji">
@@ -114,9 +125,14 @@
                                     <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted" href=""><i class="ph-trash"></i></a></small>
                                     </div>
                                 </div>
-                                <h6 class="fw-semibold px-2">
-                                    {{$kelompok->dosen->user->nama}}
-                            </h6>
+                                @if ($kelompok->pembimbing == NULL)
+                                    <small class="text-muted text-center px-2">Belum ada dosen penguji</small>
+                                @else
+                                    <h6 class="fw-semibold p-2">
+                                        {{$kelompok->dosen->user->nama}}
+                                    </h6>
+                                @endif
+                               
                             </div>
                             <div>
                                 <div class="d-flex px-2">
@@ -125,9 +141,14 @@
                                     <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted" href=""><i class="ph-trash"></i></a></small>
                                     </div>
                                 </div>
-                                <h6 class="fw-semibold px-2">
-                                    {{$kelompok->dosen->user->nama}}
-                                </h6>
+                                @if ($kelompok->pembimbing == NULL)
+                                    <small class="text-muted text-center px-2">Belum ada dosen penguji</small>
+                                @else
+                                    <h6 class="fw-semibold px-2">
+                                        {{$kelompok->dosen->user->nama}}
+                                    </h6>
+                                @endif
+                               
                             </div>
                         </div>
 
@@ -242,7 +263,6 @@
                                                         <i class="ph-list"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <div class="dropdown-divider"></div>
                                                         <a href="/bimbingan/status/{{$status = 'approved'}}/{{$kb->id}}" class="dropdown-item">
                                                             <i class="ph-checks text-success me-2"></i>
                                                             Approve
@@ -417,13 +437,5 @@
 		</div>
 		<!-- /right sidebar -->
 
-        <script>
-            $edit = document.getElementById('edit-judul');
-
-            function edit_topik(){
-                if ($edit.checked = true) {
-                    
-                }
-            }
-        </script>
+       
 @endsection

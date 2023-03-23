@@ -59,6 +59,9 @@ Route::middleware([
     Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
     Route::resource('/kelompok', KelompokController::class)->name('kelompok', 'kelompok.index');
     Route::post('/kelompok/dosen', [KelompokController::class, 'add_pembimbing']);
+    Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);    
+    // Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);    
+    Route::get('/kelompok/{id}/orang', [KelompokController::class, 'people']);
     Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
     Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan', 'bimbingan.index');
 

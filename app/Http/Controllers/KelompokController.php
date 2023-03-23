@@ -14,9 +14,13 @@ class KelompokController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function people($id)
+    {   
+        $kelompok = Kelompok::where('id',$id)->get();
+        return view('dashboard.kelompok.index',[
+            'title' => 'Kelompok',
+            'Kelompok' => $kelompok
+        ]);
     }
 
     /**
@@ -63,7 +67,7 @@ class KelompokController extends Controller
         // return $pembimbing;
         // $bimbingan = Bimbingan::where('kelomp')
         // return $ruangan;
-        return view('dashboard.kelompok',[
+        return view('dashboard.kelompok.kelompok',[
             'title' => $kelompok->nama_kelompok,
             'kelompok' => $kelompok,
             'reference' => $reference,
@@ -91,7 +95,8 @@ class KelompokController extends Controller
             $kelompok->save();
 
             return back()->with('success','Pembimbing telah berhasil ditambahkan ke kelompok ini');
-        }else{
+        }else{ 
+
             PembimbingPenguji::create([
                 'dosen_id' => $request->dosen,
                 'reference_id' => $request->reference,
@@ -100,15 +105,25 @@ class KelompokController extends Controller
 
             return back()->with('success','Penguji telah berhasil ditambahkan ke kelompok ini');
         }
-
-        // PembimbingPenguji::create([
-        //     'dosen_id' => $request->dosen,
-        //     'reference_id' => $request->reference,
-        //     'kelompok_id' => $request->kelompok
-        // ]);
-
-        // return back()->with('success','Dosen telah berhasil ditambahkan ke kelompok ini');
     }
+
+
+    public function add_topik(Request $request){
+        // return $request;
+        $data = [
+            'topik' => 'required',
+            'kelompok' => 'required'
+        ];
+
+        $validasi = $request->validate($data);
+
+        $kelompok = Kelompok::find($request->kelompok);
+        $kelompok->topik = $validasi['topik'];
+        $kelompok->save();
+
+        return back()->with('success', 'Topik telah berhasil dibuat');
+    }
+
 
     /**
      * Show the form for editing the specified resource.
