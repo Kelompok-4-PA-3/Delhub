@@ -45,6 +45,7 @@ Route::middleware([
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
     Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
 
+    Route::resource('/fakultas', \App\Http\Controllers\FakultasController::class)->name('fakultas', 'fakultas.index');
     Route::resource('/users', UsersController::class)->name('users', 'users.index');
     Route::post('/users/upload', [UsersController::class, 'user_upload']);
     Route::get('/data/user', [UsersController::class, 'getUser']);
@@ -59,8 +60,8 @@ Route::middleware([
     Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
     Route::resource('/kelompok', KelompokController::class)->name('kelompok', 'kelompok.index');
     Route::post('/kelompok/dosen', [KelompokController::class, 'add_pembimbing']);
-    Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);    
-    // Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);    
+    Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
+    // Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
     Route::get('/kelompok/{id}/orang', [KelompokController::class, 'people']);
     Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
     Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan', 'bimbingan.index');
