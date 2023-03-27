@@ -145,6 +145,28 @@ const DatatableAPI = function() {
             }
         });
 
+         // Individual column searching with text inputs
+        $('.datatable-people').DataTable({
+            orderCellsTop: false,
+            ordering: false,
+            paging: false,
+            "scrollY": false,
+            "columnDefs": [
+                { "width": "5%", "targets": 0 },
+                { "width": "65%", "targets": 1 },
+                { "width": "30%", "targets": 2 }
+            ],
+            buttons: {
+                dom: {
+                    button: {
+                        className: 'btn btn-light'
+                    }
+                },
+            },
+        });
+
+        $('.datatable-people .dataTables_scrollBody').removeClass('dataTables_scrollBody');
+        $('.datatable-people .dataTables_scrollBody').removeClass('dataTables_scrollBody');
 
 
         // Individual column searching with selects

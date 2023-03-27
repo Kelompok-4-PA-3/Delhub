@@ -6,9 +6,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\ModelHasRoles;
 // use UserFactory;
 use Str;
+use DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             'guard_name' => 'web'
         ]);
 
-        ModelHasPermission::create([
+        \App\Models\ModelHasRoles::create([
             'role_id' => 1,
             'model_type' => 'App\Models\User', // Change this to the model you want to assign the permission to
             'model_id' => 12, // Change this to the ID of the model you want to assign the permission to
@@ -62,25 +62,25 @@ class DatabaseSeeder extends Seeder
             'semester' => '5',
         ]);
 
-        \App\Models\Roles::create([
-            'name' => 'mahasiswa',
-            'guard_name' => 'web',
-        ]);
+        // \App\Models\Roles::create([
+        //     'name' => 'mahasiswa',
+        //     'guard_name' => 'web',
+        // ]);
 
-        \App\Models\Roles::create([
-            'name' => 'dosen',
-            'guard_name' => 'web',
-        ]);
+        // \App\Models\Roles::create([
+        //     'name' => 'dosen',
+        //     'guard_name' => 'web',
+        // ]);
 
-        \App\Models\Permission::create([
-            'name' => 'kelola kelompok',
-            'guard_name' => 'web',
-        ]);
+        // \App\Models\Permission::create([
+        //     'name' => 'kelola kelompok',
+        //     'guard_name' => 'web',
+        // ]);
 
-        \App\Models\Permission::create([
-            'name' => 'kelola bimbingan',
-            'guard_name' => 'web',
-        ]);
+        // \App\Models\Permission::create([
+        //     'name' => 'kelola bimbingan',
+        //     'guard_name' => 'web',
+        // ]);
 
         \App\Models\Ruangan::create([
             'nama' => 'Gedung Vokasi',
