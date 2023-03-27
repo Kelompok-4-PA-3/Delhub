@@ -74,7 +74,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/ruangan" class="nav-link">
-                        <i class="ph-student"></i>
+                        <i class="ph-bank"></i>
                         <span>
                             Manajemen Ruangan
                         </span>
