@@ -52,7 +52,7 @@ class BimbinganController extends Controller
         ]);
 
         $kelompok = Kelompok::find($validasi['kelompok_id']);
-        $dosen = $kelompok->dosen;
+        $dosen = $kelompok->dosen->user;
 
         // send email to dosen
         $dosen->notify(new RequestNotification($kelompok));
