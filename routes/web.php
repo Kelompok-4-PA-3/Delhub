@@ -11,6 +11,7 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\MhsInterestController;
+use App\Http\Controllers\JadwalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,7 @@ Route::middleware([
     Route::resource('/dosen', DosenController::class)->name('dosen', 'dosen.index');
     Route::resource('/mahasiswa', MahasiswaController::class)->name('mahasiswa', 'mahasiswa.index');
     Route::resource('/home', DashboardController::class)->name('home', 'home.index');
+    Route::resource('/jadwal', JadwalController::class)->name('jadwal', 'jadwal.index');
     Route::resource('interest', InterestController::class)->name('interest', 'interest.index');
     Route::resource('mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
 });

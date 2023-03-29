@@ -141,9 +141,14 @@
                     </a>
                 </li>
 			</ul>
-
-
-
+                 <li class="nav-item">
+                    <a href="/jadwal" class="nav-link">
+                        <i class="ph-heart"></i>
+                        <span>
+                            Jadwal
+                        </span>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a href="/interest" class="nav-link">
