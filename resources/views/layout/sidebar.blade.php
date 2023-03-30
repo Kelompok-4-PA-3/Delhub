@@ -169,6 +169,15 @@
                         </span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="/request" class="nav-link">
+                        <i class="ph-list-dashes"></i>
+                        <span>
+                            History Bimbingan
+                        </span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- /main navigation -->

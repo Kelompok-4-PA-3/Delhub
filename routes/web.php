@@ -44,6 +44,9 @@ Route::middleware([
 
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
     Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
+    Route::resource('/request', \App\Http\Controllers\RequestController::class)->name('requests', 'request.index');
+
+
 
     Route::resource('/fakultas', \App\Http\Controllers\FakultasController::class)->name('fakultas', 'fakultas.index');
     Route::resource('/users', UsersController::class)->name('users', 'users.index');

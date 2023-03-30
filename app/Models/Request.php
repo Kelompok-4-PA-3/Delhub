@@ -16,4 +16,8 @@ class Request extends Model
     protected $guarded = ['id'];
 
     protected $dates = ['deleted_at'];
+
+    public function kelompok(){
+        return $this->belongsTo(Kelompok::class);
+    }
 }
