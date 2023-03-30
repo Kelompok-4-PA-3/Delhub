@@ -11,7 +11,8 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\MhsInterestController;
-use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\kelompokController;
+use App\Http\Controllers\BimbinganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,8 +43,11 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
+    Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
+
     Route::resource('/fakultas', \App\Http\Controllers\FakultasController::class)->name('fakultas', 'fakultas.index');
     Route::resource('/users', UsersController::class)->name('users', 'users.index');
+    Route::post('/users/upload', [UsersController::class, 'user_upload']);
     Route::get('/data/user', [UsersController::class, 'getUser']);
     Route::resource('/roles', RolesController::class)->name('roles', 'roles.index');
     Route::resource('/permission', PermissionController::class)->name('permission', 'permission.index');
@@ -52,7 +56,15 @@ Route::middleware([
     Route::resource('/dosen', DosenController::class)->name('dosen', 'dosen.index');
     Route::resource('/mahasiswa', MahasiswaController::class)->name('mahasiswa', 'mahasiswa.index');
     Route::resource('/home', DashboardController::class)->name('home', 'home.index');
-    Route::resource('/jadwal', JadwalController::class)->name('jadwal', 'jadwal.index');
-    Route::resource('interest', InterestController::class)->name('interest', 'interest.index');
-    Route::resource('mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
+    Route::post('/users/krs/add', [DashboardController::class, 'add_user']);
+    Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
+    Route::resource('/kelompok', KelompokController::class)->name('kelompok', 'kelompok.index');
+    Route::post('/kelompok/dosen', [KelompokController::class, 'add_pembimbing']);
+    Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
+    // Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
+    Route::get('/kelompok/{id}/orang', [KelompokController::class, 'people']);
+    Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
+    Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan', 'bimbingan.index');
+
+    Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
 });
