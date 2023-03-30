@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('title')
-    <title>Kelola Antusias</title>
+    <title>Jadwal</title>
 @endsection
 
 @push('datatable_js')
@@ -17,12 +17,17 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <h5 class="mb-0">Tambah Antusias</h5>
+            <h5 class="mb-0">Tambah Jadwal</h5>
             <div class="ms-auto">
                 <label class="form-check form-switch form-check-reverse">
                     <a class="btn btn-primary btn-sm fw-bold" href="{{ route('interest.create') }}">
                         <i class="ph-plus-circle"></i>&nbsp;
-                        Tambah Antusias
+                        Submit
+                    </a>
+
+                    <a class="btn btn-primary btn-sm fw-bold" href="{{ route('interest.create') }}">
+                        <i class="ph-plus-circle"></i>&nbsp;
+                        Publish
                     </a>
                 </label>
             </div>
@@ -50,11 +55,11 @@
             <table class="table datatable-users">
                 <thead>
                     <th>No</th>
-                    <th>Nama</th>
-                    <th>Keterangan</th>
-                    <th>Status</th>
+                    <th>Jadwal</th>
+                    <th>Ruangan</th>
                     <th class="text-center">Ket</th>
                 </thead>
+
                 <tbody>
                     @foreach ($interests as $item)
                         <tr>
@@ -66,14 +71,17 @@
                                 <a href="{{ route('interest.edit', $item->id) }}" class="btn btn-sm btn-warning">
                                     <i class="ph-pencil"></i>
                                 </a>
+
+
                                 <a href="javascript:;" class="btn btn-sm btn-danger"
                                     onclick="handle_confirm('Are you sure you want to delete this coupon?', 'Yes, delete it', 'No, cancel', 'delete', '{{ route('interest.destroy', $item->id) }}')">
                                     <i class="ph-trash"></i>
                                 </a>
 
-                                
                             </td>
+
                         </tr>
+
                     @endforeach
                 </tbody>
             </table>
