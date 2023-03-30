@@ -85,6 +85,19 @@ class DatabaseSeeder extends Seeder
             'current_team_id' => null,
         ]);
 
+        \App\Models\User::create([
+            'nama' => 'Ester Yolanda Berutu',
+            'username' => '11420058',
+            'email' => 'if420058@students.del.ac.id',
+            'email_verified_at' => now(),
+            'password' => Hash::make('12345678'),
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'remember_token' => Str::random(10),
+            'profile_photo_path' => null,
+            'current_team_id' => null,
+        ]);
+
         Role::create([
             'name' => 'mahasiswa',
             'guard_name' => 'web'
@@ -206,7 +219,7 @@ class DatabaseSeeder extends Seeder
             'value' => 'member',
             'kategori' => 'role_kelompok',
         ]);
-        
+
         \App\Models\Reference::create([
             'value' => 'member',
             'kategori' => 'role_kelompok',

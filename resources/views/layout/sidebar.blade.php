@@ -41,7 +41,7 @@
                         </span>
                     </a>
                 </li>
-
+                @role('admin')
                 <li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link">
 								<i class="ph-layout"></i>
@@ -182,6 +182,8 @@
                         </span>
                     </a>
                 </li>
+                @endrole
+
             </ul>
         </div>
         <!-- /main navigation -->

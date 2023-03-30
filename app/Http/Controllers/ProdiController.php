@@ -20,7 +20,7 @@ class ProdiController extends Controller
     public function index() : View
     {
         //get prodis
-        $prodis = prodi::latest()->paginate(5);
+        $prodis = prodi::latest()->get();
         $fakultas = fakultas::all();
 
         //render view with prodis

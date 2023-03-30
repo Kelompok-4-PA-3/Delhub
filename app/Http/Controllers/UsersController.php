@@ -16,7 +16,7 @@ use Hash;
 class UsersController extends Controller
 {
     public function getUser(){
-        $user = User::latest()->paginate(10);
+        $user = User::latest()->get();
         return json_encode($user);
     }
     /**
@@ -24,7 +24,7 @@ class UsersController extends Controller
      */
     public function index(): View
     {
-        $user = User::latest()->paginate(10);
+        $user = User::latest()->get();
         $roles = RoleModel::latest()->get();
         return view('users.index',[
             'title' => 'Manajemen Pengguna',
@@ -37,7 +37,7 @@ class UsersController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(): View
-    {   
+    {
         $roles = RoleModel::latest()->get();
         return view('users.add',[
             'title' => ' <i class="ph-users"></i> Manajemen Pengguna',
@@ -63,7 +63,7 @@ class UsersController extends Controller
 
     public function store(Request $request)
     // : RedirectResponse
-    {   
+    {
         return $request;
         // return $request;
         $data = [
