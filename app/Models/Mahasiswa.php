@@ -28,7 +28,11 @@ class Mahasiswa extends Model
     }
 
     public function krs_user(){
-        return $this->belongsToMany(KrsUser::class, 'user_id', 'user_id');
+        return $this->hasMany(KrsUser::class, 'user_id', 'user_id');
+    }
+
+    public function kelompok_mahasiswa(){
+        return $this->hasMany(KelompokMahasiswa::class, 'nim', 'nim');
     }
 
     public function getRouteKeyName()

@@ -85,13 +85,18 @@ class DosenController extends Controller
         // return "ini update";
         $data = [
             'user_id' => 'required',
-            'nidn' => 'required|numeric|unique:dosens',
+            'nidn' => 'required',
             'prodi_id' => 'required',
         ];
 
+        $dsn = Dosen::where('nidn',$dosen->nidn);
+        // return $request->nidn ;
+        if($request->nidn != $dosen->nidn){
+            $data['nidn'] =  'required|numeric|unique:dosens';
+        }
+
         $validasi = $request->validate($data);
-        // return $dosen->nidn;
-        Dosen::where('nidn',$dosen->nidn)->update($validasi);
+        $dsn->update($validasi);
 
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil diubah');
 

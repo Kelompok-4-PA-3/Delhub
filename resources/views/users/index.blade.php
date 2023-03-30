@@ -265,8 +265,15 @@
             <h5 class="offcanvas-title fw-semibold">Tambah Pengguna</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
-
         <div class="offcanvas-body">
+            
+            <div class="py-1">
+                <div class="mb-1">
+                    <small class="text-danger"><i>Silahkan gunakan template dibawah ini sebagai format file yang di upload</i></small>
+                </div>
+                <a href="{{asset('/template/file-user.xlsx')}}" class="btn btn-light" downloaad><i class="ph-microsoft-excel-logo"></i>&nbsp; Download Template</a>
+            </div>
+
             <form action="/users/upload" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="card">

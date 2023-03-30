@@ -175,6 +175,9 @@ var DateTimePickers = function() {
         if(dpBasicElement) {
             const dpBasic = new Datepicker(dpBasicElement, {
                 container: '.content-inner',
+                format: 'yyyy-mm-dd hh:ii:ss',
+                autoClose: true,
+                position: 'bottom',
                 buttonClass: 'btn',
                 prevArrow: document.dir == 'rtl' ? '&rarr;' : '&larr;',
                 nextArrow: document.dir == 'rtl' ? '&larr;' : '&rarr;'

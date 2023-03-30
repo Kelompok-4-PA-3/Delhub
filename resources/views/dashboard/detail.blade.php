@@ -162,6 +162,12 @@
 								</a>
 							</li>
 							<li class="nav-item">
+								<a href="/krs/{{$krs->id}}/regulasi" class="nav-link">
+									<i class="ph-list-checks me-2"></i>
+									Regulasi
+								</a>
+							</li>
+							<li class="nav-item">
 								<a href="#" class="nav-link">
 									<i class="ph-circles-three-plus me-2"></i>
 									Create project

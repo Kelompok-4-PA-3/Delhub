@@ -19,6 +19,7 @@ return new class extends Migration
             // $table->foreign('dosen_id')->references('nidn')->on('dosens')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('reference_id');
             $table->foreign('reference_id')->references('id')->on('references')->onUpdate('cascade')->onDelete('cascade');
+            $table->boolean('is_done')->default(false);
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

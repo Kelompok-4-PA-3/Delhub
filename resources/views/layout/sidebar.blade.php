@@ -28,10 +28,11 @@
         <!-- Main navigation -->
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
-                <li class="nav-item-header pt-0">
+               <li class="nav-item-header pt-0">
                     <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">MATA KULIAH</div>
                     <i class="ph-dots-three sidebar-resize-show"></i>
                 </li>
+
                 <li class="nav-item">
                     <a href="/home" class="nav-link">
                         <i class="ph-squares-four"></i>
@@ -104,10 +105,13 @@
                         </span>
                     </a>
                 </li>
+                @endrole
+                @role('admin')
                 <li class="nav-item-header pt-0">
                     <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">     PENGGUNA</div>
                     <i class="ph-dots-three sidebar-resize-show"></i>
                 </li>
+
                 <li class="nav-item">
                     <a href="/users" class="nav-link">
                         <i class="ph-users"></i>
