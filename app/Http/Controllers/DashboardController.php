@@ -46,7 +46,7 @@ class DashboardController extends Controller
         // return $id;
        $krs = Krs::where('id', $id)->first();
        $mahasiswa = Mahasiswa::latest()->get();
-       $kelompok = Kelompok::where('krs_id',$id)->latest()->get();
+       $kelompok = Kelompok::where('krs_id',$id)->orderBy('created_at')->get();
 
        return view('dashboard.detail',[
         'title' => $krs->kategori->nama_mk,

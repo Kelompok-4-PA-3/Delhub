@@ -271,4 +271,21 @@
     </div>
     <!-- /demo config -->
 
+    @if (session()->has('success'))
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-light text-success">
+            <i class="ph-circle-wavy-check"></i>
+            <strong class="me-auto">&nbsp;Berhasil</strong>
+            <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body d-flex">
+            <h5>&#128522;</h5>&nbsp;<small class="text-muted">{{session('success')}}</small>
+            </div>
+        </div>
+        </div>
+    @endif
+
+    @stack('remove-scroll')
+
 </body>

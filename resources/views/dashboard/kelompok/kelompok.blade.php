@@ -10,7 +10,10 @@
     <script src="{{asset('/assets/js/vendor/tables/datatables/extensions/buttons.min.js')}}"></script>
     <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
-    {{-- <script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script> --}}
+    <script src="{{asset('/assets/js/vendor/ui/moment/moment.min.js')}}"></script>
+    <script src="{{asset('/assets/js/vendor/pickers/daterangepicker.js')}}"></script>
+	<script src="{{asset('/assets/js/vendor/pickers/datepicker.min.js')}}"></script>
+	<script src="{{asset('/assets/demo/pages/picker_date.js')}}"></script>
 @endpush
 
 @section('breadscrumb', Breadcrumbs::render('pengguna'))
@@ -294,9 +297,7 @@
                                 <input type="text" name="kelompok_id" value="{{$kelompok->id}}" class="d-none">
                                 <div class="p-1">
                                     <label for="">Deskripsi</label>
-                                    <textarea class="form-control" name="description" type="text" placeholder="Deskripsi bimbingan" required>
-                                        {{old('deskripsi')}}
-                                    </textarea>
+                                    <textarea class="form-control" name="description" type="text" placeholder="Deskripsi bimbingan" required>{{old('deskripsi')}}</textarea>
                                 </div>
                                 <div class="p-1">
                                     <label for="">Waktu</label>

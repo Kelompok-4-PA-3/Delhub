@@ -27,6 +27,7 @@ const DatatableAPI = function() {
         // Setting datatable defaults
         $.extend( $.fn.dataTable.defaults, {
             autoWidth: false,
+            scrollY: false,
             columnDefs: [{ 
                 orderable: false,
                 width: 100,
@@ -69,6 +70,7 @@ const DatatableAPI = function() {
         });
         $('.datatable-users').DataTable({
             orderCellsTop: true,
+            scrollY: false,
             buttons: {
                 dom: {
                     button: {
@@ -123,6 +125,7 @@ const DatatableAPI = function() {
         $('.datatable-mahasiswa').DataTable({
             orderCellsTop: true,
             paging: false,
+            scrollY: false,
             buttons: {
                 dom: {
                     button: {
@@ -150,11 +153,12 @@ const DatatableAPI = function() {
             orderCellsTop: false,
             ordering: false,
             paging: false,
-            "scrollY": false,
+            scrollY: false,
+            scrollX: false,
             "columnDefs": [
                 { "width": "5%", "targets": 0 },
-                { "width": "65%", "targets": 1 },
-                { "width": "30%", "targets": 2 }
+                { "width": "55%", "targets": 1 },
+                { "width": "25%", "targets": 2 }
             ],
             buttons: {
                 dom: {
