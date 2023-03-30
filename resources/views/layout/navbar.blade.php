@@ -13,7 +13,8 @@
 
         <div class="navbar-brand flex-1 flex-lg-0">
             <a href="index.html" class="d-inline-flex align-items-center">
-                <img src="https://demo.interface.club/limitless/demo/template/assets/images/logo_icon.svg" alt="">
+                <img src="https://demo.interface.club/limitless/demo/template/assets/images/logo_icon.svg"
+                    alt="">
                 {{-- <img src="https://demo.interface.club/limitless/demo/template/assets/images/logo_text_light.svg" class="d-none d-sm-inline-block h-16px ms-3" alt=""> --}}
                 <h5 class="h-16px ms-3">Delhub</h5>
             </a>
@@ -21,7 +22,8 @@
 
         <ul class="nav flex-row">
             <li class="nav-item d-lg-none">
-                <a href="#navbar_search" class="navbar-nav-link navbar-nav-link-icon rounded-pill" data-bs-toggle="collapse">
+                <a href="#navbar_search" class="navbar-nav-link navbar-nav-link-icon rounded-pill"
+                    data-bs-toggle="collapse">
                     <i class="ph-magnifying-glass"></i>
                 </a>
             </li>
@@ -386,19 +388,23 @@
 
         <ul class="nav flex-row justify-content-end order-1 order-lg-2">
             <li class="nav-item ms-lg-2">
-                <a href="#" class="navbar-nav-link navbar-nav-link-icon rounded-pill" data-bs-toggle="offcanvas" data-bs-target="#notifications">
+                <a href="#" class="navbar-nav-link navbar-nav-link-icon rounded-pill" data-bs-toggle="offcanvas"
+                    data-bs-target="#notifications">
                     <i class="ph-bell"></i>
-                    <span class="badge bg-yellow text-black position-absolute top-0 end-0 translate-middle-top zindex-1 rounded-pill mt-1 me-1">2</span>
+                    <span
+                        class="badge bg-yellow text-black position-absolute top-0 end-0 translate-middle-top zindex-1 rounded-pill mt-1 me-1">2</span>
                 </a>
             </li>
 
-            <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2" data-bs-popup="tooltip" title="{{Auth::user()->nama}}">
+            <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2" data-bs-popup="tooltip"
+                title="{{ Auth::user()->nama }}">
                 <a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
                     <div class="status-indicator-container">
-                        <img src="{{asset('/img/user-profile.jpg')}}" class="w-32px h-32px rounded-pill" alt="">
+                        <img src="{{ asset('/img/user-profile.jpg') }}" class="w-32px h-32px rounded-pill"
+                            alt="">
                         <span class="status-indicator bg-success"></span>
                     </div>
-                    <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->nama}}</span>
+                    <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->nama }}</span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
