@@ -17,7 +17,13 @@ class Request extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function kelompok(){
+    public function kelompok()
+    {
         return $this->belongsTo(Kelompok::class);
+    }
+
+    public function ruangan()
+    {
+        return $this->belongsTo(Ruangan::class);
     }
 }

@@ -5,7 +5,7 @@
                     <h4 class="page-title mb-0">
                         @if(isset($title))
                             {!! $title !!}
-                        @else 
+                        @else
                             Dashboards
                         @endif
                          {{-- <span class="fw-normal">Dashboards</span> --}}
