@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Request as Bimbingan;
+use App\Models\Kelompok;
 use Illuminate\Http\Request;
+use App\Models\Request as Bimbingan;
+use App\Notifications\RequestNotification;
 
 class BimbinganController extends Controller
 {
@@ -27,29 +29,34 @@ class BimbinganController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {   
+    {
         // return $request;
-       $data = [
-        'kelompok_id' => 'required',
-        'description' => 'required',
-        'waktu' => 'required',
-        'ruangan_id' => 'required',
-        'status' => 'nullable',
-       ];
-       
-       $validasi = $request->validate($data);
-       $bimbingan = new Bimbingan();
-       $validasi['status'] = 'waiting';
-    //    return $validasi;
-       $bimbingan->create([
-        'kelompok_id' => $validasi['kelompok_id'],
-        'description' => $validasi['description'],
-        'waktu' => $validasi['waktu'],
-        'ruangan_id' => $validasi['ruangan_id'],
-        'status' => $validasi['status'],
-       ]);
+        $data = [
+            'kelompok_id' => 'required',
+            'description' => 'required',
+            'waktu' => 'required',
+            'ruangan_id' => 'required',
+            'status' => 'nullable',
+        ];
 
-       return redirect()->back()->with('success', 'Request bimbingan telah berhasil dibuat');
+        $validasi = $request->validate($data);
+        $bimbingan = new Bimbingan();
+        $validasi['status'] = 'waiting';
+
+        $bimbingan->create([
+            'kelompok_id' => $validasi['kelompok_id'],
+            'description' => $validasi['description'],
+            'waktu' => $validasi['waktu'],
+            'ruangan_id' => $validasi['ruangan_id'],
+            'status' => $validasi['status'],
+        ]);
+
+        $kelompok = Kelompok::find($validasi['kelompok_id']);
+        $dosen = $kelompok->dosen;
+
+        // send email to dosen
+        $dosen->notify(new RequestNotification($kelompok));
+        return redirect()->back()->with('success', 'Request bimbingan telah berhasil dibuat');
     }
 
     /**
@@ -61,7 +68,7 @@ class BimbinganController extends Controller
         $bimbingan->status = $status;
         $bimbingan->save();
 
-        return redirect()->back()->with('success', 'Request bimbingan telah di'.$status);
+        return redirect()->back()->with('success', 'Request bimbingan telah di' . $status);
     }
 
     public function show(Bimbingan $bimbingan)
