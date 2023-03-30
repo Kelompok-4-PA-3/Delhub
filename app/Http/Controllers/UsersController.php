@@ -24,7 +24,7 @@ class UsersController extends Controller
      */
     public function index(): View
     {
-        $user = User::latest()->paginate(10);
+        $user = User::latest()->get();
         $roles = RoleModel::latest()->get();
         return view('users.index',[
             'title' => 'Manajemen Pengguna',

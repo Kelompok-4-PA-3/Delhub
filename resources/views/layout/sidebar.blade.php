@@ -41,13 +41,13 @@
                         </span>
                     </a>
                 </li>
-
+                @role('admin')
                 <li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link">
-								<i class="ph-layout"></i>
-								<span>Data Master</span>
-							</a>
-							<ul class="nav-group-sub collapse">
+                    <a href="#" class="nav-link">
+                    	<i class="ph-layout"></i>
+                    	<span>Data Master</span>
+                    </a>
+				<ul class="nav-group-sub collapse">
                 <li class="nav-item">
                     <a href="/kategori" class="nav-link">
                         <i class="ph-squares-four"></i>
@@ -105,8 +105,24 @@
                         </span>
                     </a>
                 </li>
-                @endrole
-                @role('admin')
+                <li class="nav-item">
+                    <a href="/fakultas" class="nav-link">
+                        <i class="ph-circles-four"></i>
+                        <span>
+                            Manajemen Fakultas
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/jadwal" class="nav-link">
+                        <i class="ph-heart"></i>
+                        <span>
+                            Jadwal
+                        </span>
+                    </a>
+                </li>
+                {{-- @endrole
+                @role('admin') --}}
                 <li class="nav-item-header pt-0">
                     <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">     PENGGUNA</div>
                     <i class="ph-dots-three sidebar-resize-show"></i>
@@ -136,31 +152,6 @@
                         </span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/prodi" class="nav-link">
-                        <i class="ph-circles-four"></i>
-                        <span>
-                            Manajemen Program Studi
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/fakultas" class="nav-link">
-                        <i class="ph-circles-four"></i>
-                        <span>
-                            Manajemen Fakultas
-                        </span>
-                    </a>
-                </li>
-			</ul>
-                 <li class="nav-item">
-                    <a href="/jadwal" class="nav-link">
-                        <i class="ph-heart"></i>
-                        <span>
-                            Jadwal
-                        </span>
-                    </a>
-                </li>
 
                 <li class="nav-item">
                     <a href="/interest" class="nav-link">
@@ -178,7 +169,8 @@
                         </span>
                     </a>
                 </li>
-                @endrole
+			</ul>
+            @endrole
                 
             </ul>
         </div>
