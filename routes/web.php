@@ -64,18 +64,18 @@ Route::middleware([
     Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
     Route::resource('/kelompok', KelompokController::class)->name('kelompok', 'kelompok.index');
     Route::post('/kelompok/dosen', [KelompokController::class, 'add_pembimbing']);
-    Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);    
-    Route::post('/kelompok/people/add', [KelompokController::class, 'add_mahasiswa']);    
-    Route::post('/kelompok/people/delete', [KelompokController::class, 'delete_mahasiswa']);    
-    // Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);    
+    Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
+    Route::post('/kelompok/people/add', [KelompokController::class, 'add_mahasiswa']);
+    Route::post('/kelompok/people/delete', [KelompokController::class, 'delete_mahasiswa']);
+    // Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
     Route::get('/kelompok/{id}/orang', [KelompokController::class, 'people']);
     Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
     Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan', 'bimbingan.index');
     Route::get('/krs/{id}/regulasi', [RegulasiController::class, 'index'])->name('regulasi', 'regulasi.index');
-    Route::get('/krs/{id}/regulasi/add', [RegulasiController::class, 'create'])->name('regulasi', 'regulasi.add');
-    Route::post('/krs/{id}/regulasi/add', [RegulasiController::class, 'store'])->name('regulasi', 'regulasi.store');
-    Route::post('/krs/{id}/regulasi/edit', [RegulasiController::class, 'update'])->name('regulasi', 'regulasi.update');
-    Route::get('/krs/{id}/regulasi/show', [RegulasiController::class, 'show'])->name('regulasi', 'regulasi.show');
+    Route::get('/krs/{id}/regulasi/add', [RegulasiController::class, 'create'])->name('regulasi-add', 'regulasi.add');
+    Route::post('/krs/{id}/regulasi/add', [RegulasiController::class, 'store'])->name('regulasi-store', 'regulasi.store');
+    Route::post('/krs/{id}/regulasi/edit', [RegulasiController::class, 'update'])->name('regulasi-update', 'regulasi.update');
+    Route::get('/krs/{id}/regulasi/show', [RegulasiController::class, 'show'])->name('regulasi-show', 'regulasi.show');
 
     Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
 });

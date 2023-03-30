@@ -18,7 +18,7 @@ class RuanganController extends Controller
     public function index() : View
     {
         //get prodis
-        $ruangans = ruangan::latest()->paginate(5);
+        $ruangans = ruangan::latest()->get();
 
         //render view with prodis
         return view('ruangan.index', compact('ruangans'));

@@ -19,7 +19,7 @@ class RequestController extends Controller
     public function index() : View
     {
         //get prodis
-        $requests = request::latest()->paginate(5);
+        $requests = request::latest()->get();
         $kelompoks = kelompok::all();
 
         //render view with prodis
