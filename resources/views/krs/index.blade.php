@@ -1,5 +1,5 @@
 @extends('main')
-   
+
 @section('title')
     <title>Kartu Rencana Studi</title>
 @endsection

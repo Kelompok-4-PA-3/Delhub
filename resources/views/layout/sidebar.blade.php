@@ -31,8 +31,8 @@
                <li class="nav-item-header pt-0">
                     <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">MATA KULIAH</div>
                     <i class="ph-dots-three sidebar-resize-show"></i>
-                </li> 
-                
+                </li>
+
                 <li class="nav-item">
                     <a href="/home" class="nav-link">
                         <i class="ph-squares-four"></i>
@@ -91,7 +91,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/ruangan" class="nav-link">
-                        <i class="ph-student"></i>
+                        <i class="ph-bank"></i>
                         <span>
                             Manajemen Ruangan
                         </span>
@@ -127,7 +127,7 @@
                     <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">     PENGGUNA</div>
                     <i class="ph-dots-three sidebar-resize-show"></i>
                 </li>
-                
+
                 <li class="nav-item">
                     <a href="/users" class="nav-link">
                         <i class="ph-users"></i>
@@ -169,9 +169,17 @@
                         </span>
                     </a>
                 </li>
-			</ul>
-            @endrole
-                
+
+                <li class="nav-item">
+                    <a href="/request" class="nav-link">
+                        <i class="ph-list-dashes"></i>
+                        <span>
+                            History Bimbingan
+                        </span>
+                    </a>
+                </li>
+                @endrole
+
             </ul>
         </div>
         <!-- /main navigation -->
