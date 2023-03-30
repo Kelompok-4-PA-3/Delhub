@@ -10,6 +10,12 @@
     <script src="{{asset('/assets/js/vendor/tables/datatables/extensions/buttons.min.js')}}"></script>
     <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
+    <script src="{{asset('/assets/js/vendor/ui/fab.min.js')}}"></script>
+	<script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script>
+	<script src="{{asset('/assets/demo/pages/extra_fab.js')}}"></script>
+	<script src="{{asset('/assets/js/vendor/uploaders/fileinput/fileinput.min.js')}}"></script>
+	<script src="{{asset('/assets/js/vendor/uploaders/fileinput/plugins/sortable.min.js')}}"></script>
+	<script src="{{asset('/assets/demo/pages/uploader_bootstrap.js')}}"></script>
 @endpush
 
 @section('breadscrumb', Breadcrumbs::render('pengguna'))
@@ -19,9 +25,47 @@
         <div class="card-header d-flex align-items-center">
             <h5 class="mb-0">Daftar Pengguna</h5>
             <div class="ms-auto">
-                <label class="form-check form-switch form-check-reverse">
+                {{-- <label class="form-check form-switch form-check-reverse">
                    <a href="/users/create" class="btn btn-primary btn-sm fw-bold"><i class="ph-plus-circle"></i>&nbsp; TAMBAH PENGGUNA</a>
-                </label>
+                </label> --}}
+                <style>
+                    #tambah-pengguna{
+                        transform: scale(0.9);
+                    }
+                    .btn-add-user{
+                        transform: scale(0.8);
+                    }
+                </style>
+                <div class="btn btn-primary btn-sm btn-add-user">
+                    <div class="fab-menu" data-fab-toggle="click">
+                        <button id="tambah-pengguna" type="button" class="fab-menu-btn btn text-white">
+                            {{-- TAMBAH PENGGUNA --}}
+                            <div class="m-1">
+                                <i class="fab-icon-open ph-plus"></i>
+                                <i class="fab-icon-close ph-x"></i>
+                            </div>
+                        </button>
+
+                        <ul class="fab-menu-inner" style="margin-top: -20px;">
+                            <li>
+                                <div class="fab-label-end fab-label-visible" data-fab-label="Tambah Pengguna Manual">
+                                    <a href="/users/create" class="btn btn-light btn-icon rounded-pill">
+                                        <i class="ph-note-pencil m-1"></i>
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="fab-label-end fab-label-visible" data-fab-label="Upload File Excel">
+                                    <a href="#" class="btn btn-light btn-icon rounded-pill" data-bs-toggle="offcanvas" data-bs-target="#panel_footer">
+                                        <i class="ph-microsoft-excel-logo m-1"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <label for="tambah-pengguna" class="text-uppercase fs-6 fw-bold me-3">Tambah Pengguna </label>
+                </div>
+                <br>
             </div>
         </div>
 
@@ -204,7 +248,6 @@
                 </div>
 	            <!-- /Delete Modal -->
 
-
                 @endforeach
             </tbody>
         </table>
@@ -216,42 +259,32 @@
         <div class="chart position-relative" id="traffic-sources"></div>
     </div>
 
-    {{-- datatable_js --}}
-	{{-- <script>
-        $(document).ready(function() {
-            $('.datatable-column-search-inputs thead tr:eq(1) th').not(':last-child').each(function () {
-                const title = $(this).text();
-                $(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
-            });
+     <!-- Sticky footer -->
+     <div id="panel_footer" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-semibold">Tambah Pengguna</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
 
-            $('#user-table').DataTable( {
-                orderCellsTop: true,
-                initComplete: function () {
-                    this.api()
-                        .columns()
-                        .every(function (index) {
-                            const that = this;
+        <div class="offcanvas-body">
+            <form action="/users/upload" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Specify file types</h5>
+                    </div>
 
-                            $('input').on('keyup change clear', function () {
-                                if (that.search() !== this.value) {
-                                    that.column($(this).parent().index() + ':visible').search(this.value).draw();
-                                }
-                            });
-                        });
-                },
-                "ajax": "/data/user",
-                "columns": [
-                    { data: "nama", "name": "nama" },
-                    { data: "username", name: "username" },
-                    { data: "email", name: "email" },
-                    {
-                        data: "aksi",
-                        render: function(data, type, row, meta){
-                            return '<div class="row"><div class="col" data-toggle="modal" data-target="#detail(${row.id})" ><button  class="btn btn-outline-info"><span class="fas fa-eye"></button></div><div class="col"><a href="/pasar/edit/${row.id}" class="btn btn-outline-warning"><span class="fas fa-edit"></a></div><div class="col"><button class="btn btn-outline-danger" onclick="deleteDataPasar(${row.id})"><span class="fas fa-trash"></button></div></div>';
-                        }
-                    }
-                ]
-            });
-    } );
-	</script> --}}
+                    <div class="card-body">
+                        <p class="fw-semibold">Seret file excel pada area</p>
+                        <input type="file" class="file-input" name="user-file" data-allowed-file-extensions='["xlsx", "xls", "csv"]'>
+                    </div>
+                </div>
+
+                <div class="border-top p-3">
+                    <button type="submit" class="btn btn-primary w-100">Kirim</button>
+                </div>
+            </form>
+        </div>
+        <!-- /sticky footer -->
+
 @endsection

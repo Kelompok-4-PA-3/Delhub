@@ -5,12 +5,17 @@
             <button type="button" class="navbar-toggler sidebar-mobile-main-toggle rounded-pill">
                 <i class="ph-list"></i>
             </button>
+
+            <button type="button" class="navbar-toggler sidebar-mobile-end-toggle rounded-pill">
+                <i class="ph-arrow-right"></i>
+            </button>
         </div>
 
         <div class="navbar-brand flex-1 flex-lg-0">
             <a href="index.html" class="d-inline-flex align-items-center">
                 <img src="https://demo.interface.club/limitless/demo/template/assets/images/logo_icon.svg" alt="">
-                <img src="https://demo.interface.club/limitless/demo/template/assets/images/logo_text_light.svg" class="d-none d-sm-inline-block h-16px ms-3" alt="">
+                {{-- <img src="https://demo.interface.club/limitless/demo/template/assets/images/logo_text_light.svg" class="d-none d-sm-inline-block h-16px ms-3" alt=""> --}}
+                <h5 class="h-16px ms-3">Delhub</h5>
             </a>
         </div>
 
@@ -21,7 +26,7 @@
                 </a>
             </li>
 
-            <li class="nav-item nav-item-dropdown-lg dropdown">
+            {{-- <li class="nav-item nav-item-dropdown-lg dropdown">
                 <a href="#" class="navbar-nav-link navbar-nav-link-icon rounded-pill" data-bs-toggle="dropdown">
                     <i class="ph-squares-four"></i>
                 </a>
@@ -77,9 +82,9 @@
                         </div>
                     </div>
                 </div>
-            </li>
+            </li> --}}
 
-            <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
+            {{-- <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
                 <a href="#" class="navbar-nav-link navbar-nav-link-icon rounded-pill" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                     <i class="ph-chats"></i>
                     <span class="badge bg-yellow text-black position-absolute top-0 end-0 translate-middle-top zindex-1 rounded-pill mt-1 me-1">8</span>
@@ -184,10 +189,10 @@
                         </a>
                     </div>
                 </div>
-            </li>
+            </li> --}}
         </ul>
 
-        <div class="navbar-collapse justify-content-center flex-lg-1 order-2 order-lg-1 collapse" id="navbar_search">
+        {{-- <div class="navbar-collapse justify-content-center flex-lg-1 order-2 order-lg-1 collapse" id="navbar_search">
             <div class="navbar-search flex-fill position-relative mt-2 mt-lg-0 mx-lg-3">
                 <div class="form-control-feedback form-control-feedback-start flex-grow-1" data-color-theme="dark">
                     <input type="text" class="form-control bg-transparent rounded-pill" placeholder="Search" data-bs-toggle="dropdown">
@@ -377,7 +382,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <ul class="nav flex-row justify-content-end order-1 order-lg-2">
             <li class="nav-item ms-lg-2">
@@ -390,14 +395,14 @@
             <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2" data-bs-popup="tooltip" title="{{Auth::user()->nama}}">
                 <a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
                     <div class="status-indicator-container">
-                        <img src="../../../assets/images/demo/users/face11.jpg" class="w-32px h-32px rounded-pill" alt="">
+                        <img src="{{asset('/img/user-profile.jpg')}}" class="w-32px h-32px rounded-pill" alt="">
                         <span class="status-indicator bg-success"></span>
                     </div>
                     <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->nama}}</span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('profile.show') }}" class="dropdown-item">
                         <i class="ph-user-circle me-2"></i>
                         My profile
                     </a>

@@ -15,9 +15,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('krs_id');
             $table->foreign('krs_id')->references('id')->on('krs')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('pembimbing')->nullable();
+            $table->foreign('pembimbing')->references('nidn')->on('dosens')->onUpdate('cascade')->onDelete('cascade');
             $table->string('nama_kelompok');
             $table->string('topik')->nullable();
             $table->boolean('active')->default(true);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }

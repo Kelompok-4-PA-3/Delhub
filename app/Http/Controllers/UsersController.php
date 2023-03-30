@@ -9,6 +9,8 @@ use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
 use App\Models\Roles as RoleModel;
 use Spatie\Permission\Models\Role;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\UsersImport;
 use Hash;
 
 class UsersController extends Controller
@@ -46,9 +48,23 @@ class UsersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    public function user_upload(Request $request){
+        // return $request;
+        // if($request->file('user-file')){
+        //     return "iya";
+        // }else{
+        //     return " tidak";
+        // }
+
+        Excel::import(new UsersImport, request()->file('user-file'));
+        return back()->with('success','Pengguna baru telah berhasil ditambahkan');
+    }
+
     public function store(Request $request)
     // : RedirectResponse
     {   
+        return $request;
         // return $request;
         $data = [
             'nama' => 'required',

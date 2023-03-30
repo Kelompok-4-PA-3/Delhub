@@ -20,8 +20,7 @@
             <h5 class="mb-0">Tambah Role</h5>
             <div class="ms-auto">
                 <label class="form-check form-switch form-check-reverse">
-                    <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#panel_footer"><i
-                            class="ph-plus-circle"></i>&nbsp; TAMBAH ROLES</a>
+                    <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#panel_footer"><i class="ph-plus-circle"></i>&nbsp; TAMBAH ROLES</a>
                 </label>
             </div>
         </div>
@@ -196,9 +195,9 @@
                                                 @endphp
                                                 <label class="col-form-label col-lg-3">Permisison</label>
                                                 <div class="">
-                                                    <select data-placeholder="Select a State..." multiple="multiple"
+                                                    <select data-placeholder="Pilih permission" multiple="multiple"
                                                         id="permission_select_edit" name="permission[]"
-                                                        class="form-control select select-permission" required
+                                                        class="form-control select" required
                                                         @if ($permission->count() <= 0) disabled @endif>
                                                         <option></option>
                                                         <optgroup label="Daftar Permission">
@@ -362,10 +361,6 @@
         var selectPermission = document.getElementById("permission_select");
         var options = selectPermission.options;
 
-        // var selectElem_edit = document.getElementById("guard_name_select_edit");
-        // var selectPermission_edit = document.getElementById("permission_select_edit");
-        // var options_edit = selectPermission_edit.options;
-
         selectElem.onchange = function() {
             var selectedValue = selectElem.options[selectElem.selectedIndex].value;
             for (let i = 0; i < options.length; i++) {
@@ -378,18 +373,5 @@
             }
             console.log(selectedValue);
         }
-
-        // selectElem_edit.onchange = function() {
-        // var selectedValue = selectElem_edit.options[selectElem_edit.selectedIndex].value;
-        //   for (let i = 0; i < options_edit.length; i++) {
-        //         if(options_edit[i].className == selectedValue){
-        //            options_edit[i].removeAttribute('disabled');
-        //         }else{
-        //             options_edit[i].setAttribute('disabled','');
-        //             options_edit[i].selected = false;
-        //         }
-        //   }
-        //   console.log(selectedValue);
-        // }
     </script>
 @endsection

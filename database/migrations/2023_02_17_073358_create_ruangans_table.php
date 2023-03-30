@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('nama');
             $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
     }
 

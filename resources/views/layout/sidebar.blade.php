@@ -48,6 +48,7 @@
 							</a>
 							<ul class="nav-group-sub collapse">
                 <li class="nav-item">
+<<<<<<< HEAD
                     <a href="/kategori" class="nav-link">
                         <i class="ph-squares-four"></i>
                         <span>
@@ -57,26 +58,20 @@
                 </li>
                               </li>
                 <li class="nav-item">
+=======
+>>>>>>> master
                     <a href="/krs" class="nav-link">
-                        <i class="ph-cardholder"></i>
+                        <i class="ph-squares-four"></i>
                         <span>
                             Manajemen KRS
                         </span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/permission" class="nav-link">
-                        <i class="ph-lock-key"></i>
+                    <a href="/kategori" class="nav-link">
+                        <i class="ph-squares-four"></i>
                         <span>
-                            Manajemen TA
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/permission" class="nav-link">
-                        <i class="ph-lock-key"></i>
-                        <span>
-                            Manajemen KP
+                            Manajemen Kategori Mata Kuliah
                         </span>
                     </a>
                 </li>
@@ -93,6 +88,22 @@
                         <i class="ph-student"></i>
                         <span>
                             Manajemen Mahasiswa
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/ruangan" class="nav-link">
+                        <i class="ph-student"></i>
+                        <span>
+                            Manajemen Ruangan
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/prodi" class="nav-link">
+                        <i class="ph-circles-four"></i>
+                        <span>
+                            Manajemen Program Studi
                         </span>
                     </a>
                 </li>
@@ -125,6 +136,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
+<<<<<<< HEAD
                     <a href="/prodi" class="nav-link">
                         <i class="ph-circles-four"></i>
                         <span>
@@ -159,6 +171,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
+=======
+>>>>>>> master
                     <a href="/mhsInterest" class="nav-link">
                         <i class="ph-heart"></i>
                         <span>
