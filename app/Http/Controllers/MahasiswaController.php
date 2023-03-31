@@ -13,9 +13,9 @@ class MahasiswaController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
-        $mahasiswa = Mahasiswa::latest()->get();
-        return view('mahasiswa.index',[
+    {
+        $mahasiswa = Mahasiswa::with('user', 'prodi')->latest()->get();
+        return view('mahasiswa.index', [
             'mahasiswa' => $mahasiswa,
         ]);
     }
@@ -27,7 +27,7 @@ class MahasiswaController extends Controller
     {
         $user = User::latest()->get();
         $prodi = Prodi::latest()->get();
-        return view('mahasiswa.add',[
+        return view('mahasiswa.add', [
             'prodi' => $prodi,
             'user' => $user
         ]);
@@ -47,10 +47,9 @@ class MahasiswaController extends Controller
         ];
 
         $validasi = $request->validate($data);
-        mahasiswa::create($validasi);
+        Mahasiswa::create($validasi);
 
         return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil ditambahkan');
-
     }
 
     /**
@@ -68,7 +67,7 @@ class MahasiswaController extends Controller
     {
         $user = User::latest()->get();
         $prodi = Prodi::latest()->get();
-        return view('mahasiswa.edit',[
+        return view('mahasiswa.edit', [
             'title' => 'Tambah mahasiswa',
             'user' => $user,
             'prodi' => $prodi,
@@ -88,14 +87,14 @@ class MahasiswaController extends Controller
             'angkatan' => 'required'
         ];
 
-        $mhs = Mahasiswa::where('nim',$mahasiswa->nim);
-        
-        if($request->nim != $mahasiswa->nim){
+        $mhs = Mahasiswa::where('nim', $mahasiswa->nim);
+
+        if ($request->nim != $mahasiswa->nim) {
             $data['nim'] = 'required|unique:mahasiswas';
         }
 
         $validasi = $request->validate($data);
-        
+
         $mhs->update($validasi);
 
         return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil diubah');
@@ -106,7 +105,8 @@ class MahasiswaController extends Controller
      */
     public function destroy(Mahasiswa $mahasiswa)
     {
-        Mahasiswa::where('nim',$mahasiswa->nim)->delete();
+        Mahasiswa::where('nim', $mahasiswa->nim)->delete();
+
         return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil dihapus');
     }
 }

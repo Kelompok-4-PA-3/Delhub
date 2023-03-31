@@ -13,28 +13,28 @@ class InterestSeeder extends Seeder
     public function run(): void
     {
         \App\Models\Interest::create([
-            'name' => 'Programmer',
-            'slug' => 'programmer',
+            'nama' => 'Programmer',
+            'keterangan' => 'programmer',
         ]);
 
         \App\Models\Interest::create([
-            'name' => 'Designer',
-            'slug' => 'designer',
+            'nama' => 'Designer',
+            'keterangan' => 'designer',
         ]);
 
         \App\Models\Interest::create([
-            'name' => 'Technical Writer',
-            'slug' => 'technical writer',
+            'nama' => 'Technical Writer',
+            'keterangan' => 'technical writer',
         ]);
 
         \App\Models\Interest::create([
-            'name' => 'Tester',
-            'slug' => 'tester',
+            'nama' => 'Tester',
+            'keterangan' => 'tester',
         ]);
 
         \App\Models\Interest::create([
-            'name' => 'System Analyst',
-            'slug' => 'system analyst',
+            'nama' => 'System Analyst',
+            'keterangan' => 'system analyst',
         ]);
     }
 }

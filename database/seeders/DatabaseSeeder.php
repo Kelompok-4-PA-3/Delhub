@@ -120,23 +120,23 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // for ($i = 0; $i <= 10; $i++) {
-            \App\Models\Kategori::create([
-                'kode_mk' => '1143201',
-                'nama_mk' => 'Proyek Akhir I D4 TRPL',
-                'nama_singkat' => 'PA-I-D4-TRPL-2020',
-            ]);
+        \App\Models\Kategori::create([
+            'kode_mk' => '1143201',
+            'nama_mk' => 'Proyek Akhir I D4 TRPL',
+            'nama_singkat' => 'PA-I-D4-TRPL-2020',
+        ]);
 
-            \App\Models\Kategori::create([
-                'kode_mk' => '1143202',
-                'nama_mk' => 'Proyek Akhir II D4 TRPL',
-                'nama_singkat' => 'PA-II-D4-TRPL-2020',
-            ]);
+        \App\Models\Kategori::create([
+            'kode_mk' => '1143202',
+            'nama_mk' => 'Proyek Akhir II D4 TRPL',
+            'nama_singkat' => 'PA-II-D4-TRPL-2020',
+        ]);
 
-            \App\Models\Kategori::create([
-                'kode_mk' => '1143203',
-                'nama_mk' => 'Proyek Akhir III D4 TRPL',
-                'nama_singkat' => 'PA-III-D4-TRPL-2020',
-            ]);
+        \App\Models\Kategori::create([
+            'kode_mk' => '1143203',
+            'nama_mk' => 'Proyek Akhir III D4 TRPL',
+            'nama_singkat' => 'PA-III-D4-TRPL-2020',
+        ]);
         // }
 
         \App\Models\Fakultas::create([
@@ -225,9 +225,9 @@ class DatabaseSeeder extends Seeder
             'kategori' => 'role_kelompok',
         ]);
 
-        // $this->call([
-        //     InterestSeeder::class,
-        // ]);
+        $this->call([
+            InterestSeeder::class,
+        ]);
         // \App\Models\::create([
         //     'name' => 'kelola bimbingan',
         //     'guard_name' => 'web',
