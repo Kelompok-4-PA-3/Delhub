@@ -22,7 +22,7 @@ class Mahasiswa extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-    
+
     public function prodi(){
         return $this->belongsTo(Prodi::class);
     }
@@ -40,4 +40,7 @@ class Mahasiswa extends Model
         return 'nim';
     }
 
+    public function kelompokMahasiswa(){
+        return $this->hasMany(KelompokMahasiswa::class);
+    }
 }

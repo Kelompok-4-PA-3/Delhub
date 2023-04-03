@@ -31,25 +31,25 @@ class BimbinganController extends Controller
     public function store(Request $request)
     {
         // return $request;
-        $data = [
-            'kelompok_id' => 'required',
-            'description' => 'required',
-            'waktu' => 'required',
-            'ruangan_id' => 'required',
-            'status' => 'nullable',
-        ];
+       $data = [
+        'kelompok_id' => 'required',
+        'description' => 'required',
+        'waktu' => 'required',
+        'ruangan_id' => 'required',
+        'status' => 'nullable',
+       ];
 
-        $validasi = $request->validate($data);
-        $bimbingan = new Bimbingan();
-        $validasi['status'] = 'waiting';
-
-        $bimbingan->create([
-            'kelompok_id' => $validasi['kelompok_id'],
-            'description' => $validasi['description'],
-            'waktu' => $validasi['waktu'],
-            'ruangan_id' => $validasi['ruangan_id'],
-            'status' => $validasi['status'],
-        ]);
+       $validasi = $request->validate($data);
+       $bimbingan = new Bimbingan();
+       $validasi['status'] = 'waiting';
+    //    return $validasi;
+       $bimbingan->create([
+        'kelompok_id' => $validasi['kelompok_id'],
+        'description' => $validasi['description'],
+        'waktu' => $validasi['waktu'],
+        'ruangan_id' => $validasi['ruangan_id'],
+        'status' => $validasi['status'],
+       ]);
 
         $kelompok = Kelompok::find($validasi['kelompok_id']);
         $dosen = $kelompok->dosen->user;

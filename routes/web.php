@@ -5,7 +5,6 @@ use App\Http\Controllers\KrsController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsersController;
-use App\Http\Controllers\InterestController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DashboardController;
@@ -72,10 +71,10 @@ Route::middleware([
     Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
     Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan', 'bimbingan.index');
     Route::get('/krs/{id}/regulasi', [RegulasiController::class, 'index'])->name('regulasi', 'regulasi.index');
-    Route::get('/krs/{id}/regulasi/add', [RegulasiController::class, 'create'])->name('regulasi', 'regulasi.add');
-    Route::post('/krs/{id}/regulasi/add', [RegulasiController::class, 'store'])->name('regulasi', 'regulasi.store');
-    Route::post('/krs/{id}/regulasi/edit', [RegulasiController::class, 'update'])->name('regulasi', 'regulasi.update');
-    Route::get('/krs/{id}/regulasi/show', [RegulasiController::class, 'show'])->name('regulasi', 'regulasi.show');
+    Route::get('/krs/{id}/regulasi/add', [RegulasiController::class, 'create'])->name('regulasi-add', 'regulasi.add');
+    Route::post('/krs/{id}/regulasi/add', [RegulasiController::class, 'store'])->name('regulasi-store', 'regulasi.store');
+    Route::post('/krs/{id}/regulasi/edit', [RegulasiController::class, 'update'])->name('regulasi-update', 'regulasi.update');
+    Route::get('/krs/{id}/regulasi/show', [RegulasiController::class, 'show'])->name('regulasi-show', 'regulasi.show');
 
     Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
 });

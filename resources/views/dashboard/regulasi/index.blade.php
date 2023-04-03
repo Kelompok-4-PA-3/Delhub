@@ -25,12 +25,18 @@
                         <div class="ms-auto nav-tabs-responsive">
                             <ul class="nav nav-tabs nav-tabs-underline flex-nowrap">
                                 <li class="nav-item">
-                                    @if ($regulasi->count() < 0)
+                                    @if ($regulasi != NULL)
+                                        @if ($regulasi->count() < 0)
+                                           
+                                        @else
+                                            <a href="#ubah-regulasi" id="btn-buat-regulasi" class="btn btn-sm btn-primary fw-semibold" data-bs-toggle="tab"> <i class="ph-pencil"></i> Edit Regulasi</a>
+                                        @endif
+                                            <a href="#regulasi" id="btn-regulasi" class="btn btn-sm btn-danger fw-semibold active" data-bs-toggle="tab">X Batal</a>
+                                    @else 
                                         <a href="#buat-regulasi" id="btn-buat-regulasi" class="btn btn-sm btn-primary fw-semibold" data-bs-toggle="tab"> + Buat Regulasi</a>
-                                    @else
-                                        <a href="#ubah-regulasi" id="btn-buat-regulasi" class="btn btn-sm btn-primary fw-semibold" data-bs-toggle="tab"> <i class="ph-pencil"></i> Edit Regulasi</a>
+                                        <a href="#regulasi" id="btn-regulasi" class="btn btn-sm btn-danger fw-semibold active" data-bs-toggle="tab">X Batal</a>
                                     @endif
-                                    <a href="#regulasi" id="btn-regulasi" class="btn btn-sm btn-danger fw-semibold active" data-bs-toggle="tab">X Batal</a>
+                                    {{-- @endif --}}
                                 </li>
                             </ul>
                         </div>
@@ -39,6 +45,7 @@
                         
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="regulasi">
+                            @if($regulasi != NULL)
                                 @php
                                     $total_bimbingan = $regulasi->seminar + $regulasi->proposal + $regulasi->prasidang + $regulasi->sidang;
                                 @endphp
@@ -77,7 +84,7 @@
                                     </div>
                                 @endif
                                 
-
+                            @endif
                             </div>
                             <div class="tab-pane fade show" id="buat-regulasi">
                                 <form action="/krs/{{$krs->id}}/regulasi/add" method="post">
@@ -167,7 +174,7 @@
                                                     <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
                                                         <i class="ph-minus ph-sm"></i>
                                                     </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="seminar" value="{{$regulasi->seminar}}" min="0">
+                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="seminar" @if($regulasi != NULL) value="{{$regulasi->seminar}} @endif" min="0">
                                                     <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
                                                         <i class="ph-plus ph-sm"></i>
                                                     </button>
@@ -182,7 +189,7 @@
                                                     <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
                                                         <i class="ph-minus ph-sm"></i>
                                                     </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="proposal" value="{{$regulasi->proposal}}" min="0">
+                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="proposal" @if($regulasi != NULL) value="{{$regulasi->proposal}} @endif" min="0">
                                                     <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
                                                         <i class="ph-plus ph-sm"></i>
                                                     </button>
@@ -197,7 +204,7 @@
                                                     <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
                                                         <i class="ph-minus ph-sm"></i>
                                                     </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="prasidang" value="{{$regulasi->prasidang}}" min="0">
+                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="prasidang" @if($regulasi != NULL) value="{{$regulasi->prasidang}} @endif" min="0">
                                                     <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
                                                         <i class="ph-plus ph-sm"></i>
                                                     </button>
@@ -212,7 +219,7 @@
                                                     <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
                                                         <i class="ph-minus ph-sm"></i>
                                                     </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="sidang" value="{{$regulasi->sidang}}" min="0">
+                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="sidang" @if($regulasi != NULL)value="{{$regulasi->sidang}} @endif" min="0">
                                                     <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
                                                         <i class="ph-plus ph-sm"></i>
                                                     </button>
@@ -232,16 +239,20 @@
                     </div>
                 </div>
             </div>
-
+            
+            
             <div class="col-xl-8">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
                         <h5 class="mb-0">Data Kelompok</h5>
                         <div class="ms-auto">
-                            <a href="/krs/{{$krs->id}}/regulasi/show" class="text-primary fw-semibold"> Detail</a>
+                            @if ($regulasi != NULL)
+                                <a href="/krs/{{$krs->id}}/regulasi/show" class="text-primary fw-semibold"> Detail</a>
+                            @endif
                          </div>
                     </div>
                     <div class="card-body">
+                        @if ($regulasi != NULL)
                         <table class="table">
                             <thead>
                                 <tr>
@@ -313,9 +324,16 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        @else 
+                            <i class="text-center text-muted">
+                                Regulasi untuk proyek ini belum ditentukan
+                            </i>
+                        @endif
                     </div>
                 </div>
             </div>
+
+            
             
         </div>
         {{-- <div class="mb-2">

@@ -107,17 +107,13 @@
                                <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted" href=""><i class="ph-trash"></i></a></small>
                             </div>
                            </div>
-                            
-                                @if ($kelompok->pembimbing == NULL)
-                                    <small class="text-muted text-center px-2">Belum ada dosen pembimbing </small>
-                                @else
-                                    <h6 class="fw-semibold px-2">
-                                        {{$kelompok->dosen->user->nama}}
-                                    </h6>
-                                @endif
-                               
-
-                           
+                            @if ($kelompok->pembimbing == NULL)
+                                <small class="text-muted text-center px-2">Belum ada dosen pembimbing </small>
+                            @else
+                                <h6 class="fw-semibold px-2">
+                                    {{$kelompok->dosen->user->nama}}
+                                </h6>
+                            @endif
                         </div>
                         
                         <div class="tab-pane fade active" id="penguji">
@@ -135,7 +131,6 @@
                                         {{$kelompok->dosen->user->nama}}
                                     </h6>
                                 @endif
-                               
                             </div>
                             <div>
                                 <div class="d-flex px-2">
@@ -307,7 +302,7 @@
                                     <label for="">Ruangan</label>
                                     <select class="form-control" name="ruangan_id" placeholder="waktu bimbingan" required>
                                         @foreach($ruangan as $r)
-                                            <option value="{{$r->id}}">Gedung Vokasi</option>
+                                            <option value="{{$r->id}}">{{$r->nama}}</option>
                                         @endforeach
                                     </select>
                                 </div>

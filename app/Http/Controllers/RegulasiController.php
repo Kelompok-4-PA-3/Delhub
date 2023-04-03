@@ -17,6 +17,7 @@ class RegulasiController extends Controller
         $krs = Krs::where('id', $id)->first();
         $kelompok = Kelompok::where('krs_id', $id)->get();
         $regulasi = Regulasi::where('krs_id', '=', $id)->first();
+        
         return view('dashboard.regulasi.index', [
             'title' => 'Regulasi',
             'krs' => $krs,
@@ -44,7 +45,7 @@ class RegulasiController extends Controller
     {   
         $regulasi = Regulasi::where('krs_id', '=', $request->krs_id)->first();
 
-        if ($regulasi->count() > 0) {
+        if ($regulasi != NULL) {
             return abort(404);
         }
         
