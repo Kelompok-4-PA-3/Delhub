@@ -8,6 +8,7 @@ use App\Models\Ruangan;
 use App\Models\Dosen;
 use App\Models\KrsUser;
 use App\Models\Reference;
+use App\Models\Regulasi;
 use App\Models\PembimbingPenguji;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,7 @@ class KelompokController extends Controller
         $mahasiswa = KrsUser::where('krs_id',$kelompok->krs_id)->get();
         $anggota = KelompokMahasiswa::where('kelompok_id',$kelompok->id)->get();
         $role_kelompok = Reference::where('kategori', '=', 'role_kelompok')->get();
-        // return $mahasiswa;
+
         return view('dashboard.kelompok.index',[
             'title' => 'Kelompok',
             'kelompok' => $kelompok,
@@ -83,10 +84,19 @@ class KelompokController extends Controller
         $dosen = Dosen::latest()->get();
         $reference = Reference::where('kategori','=','kelompok')->get();
         $pembimbing = PembimbingPenguji::where('kelompok_id','=',$kelompok->id)->get();
-        // $pembimbing->reference()->where('kategori','=','kelompok')->where('value','=','pembimbing')->first();
-        // return $pembimbing;
-        // $bimbingan = Bimbingan::where('kelomp')
-        // return $ruangan;
+        $role_dosen = Reference::where('kategori', '=', 'role_dosen')->get();
+        $pembimbing = PembimbingPenguji::where('kelompok_id','=',$kelompok->id)
+        ->leftjoin('references', function($ref){
+            $ref->on('pembimbing_pengujis.reference_id', '=', 'references.id')
+            ->where('value', '=', 'pembimbing');
+        })->leftjoin('dosens', function($dosen){
+            $dosen->on('pembimbing_pengujis.dosen_id', '=', 'dosens.nidn')
+            ->leftJoin('users', 'dosens.user_id', '=', 'users.id');
+        })->get(['pembimbing_pengujis.id','users.nama']);
+        $status_bimbingan = Reference::where('kategori', '=', 'status_bimbingan')->get();
+        $regulasi = Regulasi::where('krs_id', '=', $kelompok->krs_id)->first();
+        // return $regulasi->selec('');
+
         return view('dashboard.kelompok.kelompok',[
             'title' => $kelompok->nama_kelompok,
             'kelompok' => $kelompok,
@@ -94,6 +104,9 @@ class KelompokController extends Controller
             'dosen' => $dosen,
             'ruangan' => $ruangan,
             'pembimbing' => $pembimbing,
+            'role_dosen' => $role_dosen,
+            'status_bimbingan' => $status_bimbingan,
+            'regulasi' => $regulasi,
         ]);
         // return $kelompok;
     }
@@ -108,23 +121,21 @@ class KelompokController extends Controller
 
         $validasi = $request->validate($data);
 
-        if($validasi['reference'] == 'pembimbing'){
-
-            $kelompok = Kelompok::find($validasi['kelompok']);
-            $kelompok->pembimbing = $validasi['dosen'];
-            $kelompok->save();
-
-            return back()->with('success','Pembimbing telah berhasil ditambahkan ke kelompok ini');
-        }else{ 
-
+            $reference = Reference::where('value','=',$request->reference)->first();
             PembimbingPenguji::create([
                 'dosen_id' => $request->dosen,
                 'reference_id' => $request->reference,
                 'kelompok_id' => $request->kelompok
             ]);
 
-            return back()->with('success','Penguji telah berhasil ditambahkan ke kelompok ini');
-        }
+            return back()->with('success','Pembimbing telah berhasil ditambahkan ke kelompok ini');
+    }
+
+    public function delete_pembimbing($id){
+        // return $id;
+        PembimbingPenguji::find($id)->delete();
+
+        return back()->with('success','Pembimbing telah berhasil dihapus');
     }
 
 

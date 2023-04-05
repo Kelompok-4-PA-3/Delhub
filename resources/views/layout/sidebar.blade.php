@@ -41,6 +41,16 @@
                         </span>
                     </a>
                 </li>
+                @role('dosen')
+                <li class="nav-item">
+                    <a href="/request" class="nav-link">
+                        <i class="ph-list-dashes"></i>
+                        <span>
+                            History Bimbingan
+                        </span>
+                    </a>
+                </li>
+                @endrole
                 @role('admin')
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
@@ -49,19 +59,26 @@
                     </a>
 				<ul class="nav-group-sub collapse">
                 <li class="nav-item">
-                    <a href="/kategori" class="nav-link">
-                        <i class="ph-squares-four"></i>
-                        <span>
-                            Manajemen Kategori Mata Kuliah
-                        </span>
-                    </a>
-                </li>
-                              </li>
-                <li class="nav-item">
                     <a href="/krs" class="nav-link">
                         <i class="ph-squares-four"></i>
                         <span>
                             Manajemen KRS
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/kategori_proyek" class="nav-link">
+                        <i class="ph-squares-four"></i>
+                        <span>
+                            Manajemen Kategori Proyek
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/poin_regulasi" class="nav-link">
+                        <i class="ph-squares-four"></i>
+                        <span>
+                            Manajemen Poin Regulasi
                         </span>
                     </a>
                 </li>
@@ -166,15 +183,6 @@
                         <i class="ph-heart"></i>
                         <span>
                             Kelola Antusias Mahasiswa
-                        </span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="/request" class="nav-link">
-                        <i class="ph-list-dashes"></i>
-                        <span>
-                            History Bimbingan
                         </span>
                     </a>
                 </li>

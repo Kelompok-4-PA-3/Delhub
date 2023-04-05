@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kelompok;
+use App\Models\Reference;
 use Illuminate\Http\Request;
 use App\Models\Request as Bimbingan;
 use App\Notifications\RequestNotification;
@@ -39,6 +40,8 @@ class BimbinganController extends Controller
             'status' => 'nullable',
         ];
 
+        $ref = Reference::where('kategori','=','status_bimbingan_default')->first();
+        // return $ref;
         $validasi = $request->validate($data);
         $bimbingan = new Bimbingan();
         $validasi['status'] = 'waiting';
@@ -48,7 +51,7 @@ class BimbinganController extends Controller
             'description' => $validasi['description'],
             'waktu' => $validasi['waktu'],
             'ruangan_id' => $validasi['ruangan_id'],
-            'status' => $validasi['status'],
+            'status' => $ref->id,
         ]);
 
         $kelompok = Kelompok::find($validasi['kelompok_id']);

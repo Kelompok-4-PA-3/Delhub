@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('regulasis', function (Blueprint $table) {
+        Schema::create('kategori_proyeks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('krs_id');
-            $table->foreign('krs_id')->references('id')->on('krs')->onUpdate('cascade')->onDelete('cascade');
-            // $table->unsignedBigInteger('poin_regulasi_id');
-            // $table->foreign('poin_regulasi_id')->references('id')->on('poin_regulasis')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('poin')->default(0);
+            $table->string('nama')->unique(); 
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('regulasis');
+        Schema::dropIfExists('kategori_proyeks');
     }
 };

@@ -26,4 +26,9 @@ class Request extends Model
     {
         return $this->belongsTo(Ruangan::class);
     }
+
+    public function reference()
+    {
+        return $this->belongsTo(Reference::class, 'status', 'id');
+    }
 }
