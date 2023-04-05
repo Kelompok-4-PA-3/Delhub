@@ -40,17 +40,19 @@ class BimbinganController extends Controller
         'status' => 'nullable',
        ];
 
-       $validasi = $request->validate($data);
-       $bimbingan = new Bimbingan();
-       $validasi['status'] = 'waiting';
-    //    return $validasi;
-       $bimbingan->create([
-        'kelompok_id' => $validasi['kelompok_id'],
-        'description' => $validasi['description'],
-        'waktu' => $validasi['waktu'],
-        'ruangan_id' => $validasi['ruangan_id'],
-        'status' => $validasi['status'],
-       ]);
+        $ref = Reference::where('kategori','=','status_bimbingan_default')->first();
+        // return $ref;
+        $validasi = $request->validate($data);
+        $bimbingan = new Bimbingan();
+        $validasi['status'] = 'waiting';
+
+        $bimbingan->create([
+            'kelompok_id' => $validasi['kelompok_id'],
+            'description' => $validasi['description'],
+            'waktu' => $validasi['waktu'],
+            'ruangan_id' => $validasi['ruangan_id'],
+            'status' => $ref->id,
+        ]);
 
         $kelompok = Kelompok::find($validasi['kelompok_id']);
         $dosen = $kelompok->dosen->user;
