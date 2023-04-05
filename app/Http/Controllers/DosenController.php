@@ -13,9 +13,9 @@ class DosenController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
-        $dosen =Dosen::latest()->get();
-        return view('dosen.index',[
+    {
+        $dosen = Dosen::with('user', 'prodi')->latest()->get();
+        return view('dosen.index', [
             'title' => 'Manajemen Dosen',
             'dosen' => $dosen,
         ]);
@@ -25,10 +25,10 @@ class DosenController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {   
+    {
         $user = User::latest()->get();
         $prodi = Prodi::latest()->get();
-        return view('dosen.add',[
+        return view('dosen.add', [
             'title' => 'Tambah Dosen',
             'user' => $user,
             'prodi' => $prodi,
@@ -51,7 +51,6 @@ class DosenController extends Controller
         Dosen::create($validasi);
 
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil ditambahkan');
-
     }
 
     /**
@@ -69,7 +68,7 @@ class DosenController extends Controller
     {
         $user = User::latest()->get();
         $prodi = Prodi::latest()->get();
-        return view('dosen.edit',[
+        return view('dosen.edit', [
             'title' => 'Tambah Dosen',
             'user' => $user,
             'prodi' => $prodi,
@@ -89,9 +88,9 @@ class DosenController extends Controller
             'prodi_id' => 'required',
         ];
 
-        $dsn = Dosen::where('nidn',$dosen->nidn);
+        $dsn = Dosen::where('nidn', $dosen->nidn);
         // return $request->nidn ;
-        if($request->nidn != $dosen->nidn){
+        if ($request->nidn != $dosen->nidn) {
             $data['nidn'] =  'required|numeric|unique:dosens';
         }
 
@@ -99,7 +98,6 @@ class DosenController extends Controller
         $dsn->update($validasi);
 
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil diubah');
-
     }
 
     /**
@@ -107,7 +105,7 @@ class DosenController extends Controller
      */
     public function destroy(Dosen $dosen)
     {
-        Dosen::where('nidn',$dosen->nidn)->delete();
+        Dosen::where('nidn', $dosen->nidn)->delete();
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil dihapus');
     }
 }
