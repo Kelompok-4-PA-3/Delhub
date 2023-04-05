@@ -41,7 +41,104 @@
                         </span>
                     </a>
                 </li>
+                @role('dosen')
+                <li class="nav-item">
+                    <a href="/request" class="nav-link">
+                        <i class="ph-list-dashes"></i>
+                        <span>
+                            History Bimbingan
+                        </span>
+                    </a>
+                </li>
+                @endrole
                 @role('admin')
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                    	<i class="ph-layout"></i>
+                    	<span>Data Master</span>
+                    </a>
+				<ul class="nav-group-sub collapse">
+                <li class="nav-item">
+                    <a href="/krs" class="nav-link">
+                        <i class="ph-squares-four"></i>
+                        <span>
+                            Manajemen KRS
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/kategori_proyek" class="nav-link">
+                        <i class="ph-squares-four"></i>
+                        <span>
+                            Manajemen Kategori Proyek
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/poin_regulasi" class="nav-link">
+                        <i class="ph-squares-four"></i>
+                        <span>
+                            Manajemen Poin Regulasi
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/kategori" class="nav-link">
+                        <i class="ph-squares-four"></i>
+                        <span>
+                            Manajemen Kategori Mata Kuliah
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dosen" class="nav-link">
+                        <i class="ph-chalkboard-teacher"></i>
+                        <span>
+                            Manajemen Dosen
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/mahasiswa" class="nav-link">
+                        <i class="ph-student"></i>
+                        <span>
+                            Manajemen Mahasiswa
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/ruangan" class="nav-link">
+                        <i class="ph-bank"></i>
+                        <span>
+                            Manajemen Ruangan
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/prodi" class="nav-link">
+                        <i class="ph-circles-four"></i>
+                        <span>
+                            Manajemen Program Studi
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/fakultas" class="nav-link">
+                        <i class="ph-circles-four"></i>
+                        <span>
+                            Manajemen Fakultas
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/jadwal" class="nav-link">
+                        <i class="ph-heart"></i>
+                        <span>
+                            Jadwal
+                        </span>
+                    </a>
+                </li>
+                {{-- @endrole
                     <li class="nav-item nav-item-submenu">
                         <a href="#" class="nav-link">
                             <i class="ph-layout"></i>
@@ -161,6 +258,22 @@
                         </a>
                     </li>
 
+                <li class="nav-item">
+                    <a href="/interest" class="nav-link">
+                        <i class="ph-heart"></i>
+                        <span>
+                            Kelola Antusias
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/mhsInterest" class="nav-link">
+                        <i class="ph-heart"></i>
+                        <span>
+                            Kelola Antusias Mahasiswa
+                        </span>
+                    </a>
+                </li>
                     <li class="nav-item">
                         <a href="/request" class="nav-link">
                             <i class="ph-list-dashes"></i>

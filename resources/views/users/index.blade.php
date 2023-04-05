@@ -103,7 +103,7 @@
                 <tr>
                     <td>{{$loop->iteration}}</td>
                     <td>{{$u->nama}}</td>
-                    <td>{{$u->username}}</td>
+                    <td>{{$u->username}}</td>   
                     <td>{{$u->email}}</td>
                     <td class="text-center">
                         <div class="d-inline-flex">

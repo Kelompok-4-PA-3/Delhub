@@ -211,20 +211,90 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\Reference::create([
-            'value' => 'member',
-            'kategori' => 'role_kelompok',
+            'value' => 'pembimbing',
+            'kategori' => 'role_dosen',
         ]);
 
         \App\Models\Reference::create([
-            'value' => 'member',
-            'kategori' => 'role_kelompok',
+            'value' => 'penguji',
+            'kategori' => 'role_dosen',
         ]);
 
         \App\Models\Reference::create([
-            'value' => 'member',
-            'kategori' => 'role_kelompok',
+            'value' => 'approved',
+            'kategori' => 'status_bimbingan',
         ]);
 
+        \App\Models\Reference::create([
+            'value' => 'rejected',
+            'kategori' => 'status_bimbingan',
+        ]);
+
+        \App\Models\Reference::create([
+            'value' => 'reschedule',
+            'kategori' => 'status_bimbingan',
+        ]);
+
+        \App\Models\Reference::create([
+            'value' => 'waiting',
+            'kategori' => 'status_bimbingan_default',
+        ]);
+
+        \App\Models\KategoriProyek::create([
+            'nama' => 'Proyek Akhir',
+        ]);
+
+        \App\Models\KategoriProyek::create([
+            'nama' => 'Tugas Akhir I',
+        ]);
+        
+        \App\Models\KategoriProyek::create([
+            'nama' => 'Tugas Akhir II',
+        ]);
+
+        \App\Models\KategoriProyek::create([
+            'nama' => 'Kerja Praktek',
+        ]);
+
+        \App\Models\PoinRegulasi::create([
+            'nama' => 'Seminar',
+            'poin' => 5,
+            'kategori_id' => 1,
+        ]);
+
+        \App\Models\PoinRegulasi::create([
+            'nama' => 'Proposal',
+            'poin' => 5,
+            'kategori_id' => 2,
+        ]);
+
+        \App\Models\PoinRegulasi::create([
+            'nama' => 'Sidang',
+            'poin' => 5,
+            'kategori_id' => 2,
+        ]);
+
+        \App\Models\PoinRegulasi::create([
+            'nama' => 'Prasidang',
+            'poin' => 5,
+            'kategori_id' => 3,
+        ]);
+
+        \App\Models\PoinRegulasi::create([
+            'nama' => 'Sidang',
+            'poin' => 5,
+            'kategori_id' => 3,
+        ]);
+
+        // \App\Models\PoinRegulasi::create([
+        //     'nama' => 'Sidang',
+        //     'poin' => 5,
+        //     'kategori_id' => 4,
+        // ]);
+
+        // $this->call([
+        //     InterestSeeder::class,
+        // ]);
         $this->call([
             InterestSeeder::class,
         ]);

@@ -43,14 +43,14 @@
                     <th>No</th>
                     <th>Kode</th>
                     <th>Nama</th>
-                    <th>Nama Singkat</th>
+                    <th>Kategori Proyek</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 <tr>
                     <th></th>
                     <th>Kode</th>
                     <th>Nama</th>
-                    <th>Nama Singkat</th>
+                    <th>Kategori Proyek</th>
                     <th></th>
                 </tr>
             </thead>
@@ -60,7 +60,7 @@
                     <td>{{$loop->iteration}}</td>
                     <td>{{$k->kode_mk}}</td>
                     <td>{{$k->nama_mk}}</td>
-                    <td>{{$k->nama_singkat}}</td>
+                    <td>{{$k->kategori->nama}}</td>
                     <td class="text-center">
                         <div class="d-inline-flex">
                             <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah" data-bs-toggle="offcanvas" data-bs-target="#form-edit{{$k->id}}">
@@ -93,18 +93,32 @@
                                             <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
                                         @enderror
                                     </div>
-                                    <div>
+                                    <div class="mt-2">
                                         <label class="form-label">Nama</label>
                                         <input type="text" name="nama_mk" value="{{old('nama_mk',$k->nama_mk)}}" class="form-control" required placeholder="Masukkan nama mk disini">
                                         @error('nama_mk')
                                             <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
                                         @enderror
                                     </div>
-                                    <div>
+                                    <div class="mt-2">
                                         <label class="form-label">Nama Singkat</label>
                                         <input type="text" name="nama_singkat" value="{{old('nama_singkat',$k->nama_singkat)}}" class="form-control" required placeholder="Masukkan nama singkat disini">
                                         @error('nama_singkat')
                                             <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mt-2">
+                                        <label class="form-label">Kategori Proyek</label>
+                                        <select type="text" name="kategori_proyek" class="form-control" required>
+                                            <option value="">Pilih kategori proyek</option>
+                                            @foreach ($kategori_proyek as $kp)
+                                                <option value="{{$kp->id}}" {{$kp->id == $k->kategori_proyek ? 'selected' : ''}}>{{$kp->nama}}</option>
+                                                {{-- <option value="{{$kp->id}}" {{$kp->id == $pr->kategori_id ? 'selected' : ''}}>{{$kp->nama}}</option> --}}
+                                            @endforeach
+                                        </select>
+                                        @error('kategori_proyek')
+                                            <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -163,25 +177,46 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <div>
+                        <div class="mt-2">
                             <label class="form-label">Kode</label>
                             <input type="text" name="kode_mk" value="{{old('kode_mk')}}" class="form-control" required placeholder="Masukkan kode mk disini">
                             @error('kode_mk')
                                 <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
                             @enderror
                         </div>
-                        <div>
+                        <div class="mt-2">
                             <label class="form-label">Nama</label>
                             <input type="text" name="nama_mk" value="{{old('nama_mk')}}" class="form-control" required placeholder="Masukkan nama mk disini">
                             @error('nama_mk')
                                 <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
                             @enderror
                         </div>
-                        <div>
+                        <div class="mt-2">
                             <label class="form-label">Nama Singkat</label>
                             <input type="text" name="nama_singkat" value="{{old('nama_singkat')}}" class="form-control" required placeholder="Masukkan nama singkat disini">
                             @error('nama_singkat')
                                 <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label">Nama Singkat</label>
+                            <input type="text" name="nama_singkat" value="{{old('nama_singkat')}}" class="form-control" required placeholder="Masukkan nama singkat disini">
+                            @error('nama_singkat')
+                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label">Kategori Proyek</label>
+                            <select type="text" name="kategori_id" class="form-control" required>
+                                <option value="">Pilih kategori proyek</option>
+                                @foreach ($kategori_proyek as $kp)
+                                    <option value="{{$kp->id}}" {{$kp->id == old('kategori_id') ? 'selected' : ''}}>{{$kp->nama}}</option>
+                                    {{-- <option value="{{$kp->id}}" {{$kp->id == $pr->kategori_id ? 'selected' : ''}}>{{$kp->nama}}</option> --}}
+                                @endforeach
+                            </select>
+                            @error('nama')
+                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
+                                </div>
                             @enderror
                         </div>
                     </div>

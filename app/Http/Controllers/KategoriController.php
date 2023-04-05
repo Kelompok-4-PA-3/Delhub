@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategori;
+use App\Models\KategoriProyek;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -13,9 +14,11 @@ class KategoriController extends Controller
     public function index()
     {
         $kategori = Kategori::latest()->get();
+        $kategori_proyek = KategoriProyek::latest()->get();
         return view('kategori.index',[
             'title' => 'Manajemen Kategori Mata Kuliah',
-            'kategori' => $kategori
+            'kategori' => $kategori,
+            'kategori_proyek' => $kategori_proyek
         ]);
     }
 
@@ -37,6 +40,7 @@ class KategoriController extends Controller
             'kode_mk' => 'required',
             'nama_mk' => 'required',
             'nama_singkat' => 'required',
+            'kategori_proyek' => 'required',
         ];
 
         $validasi = $request->validate($data);
@@ -67,10 +71,12 @@ class KategoriController extends Controller
      */
     public function update(Request $request, Kategori $kategori)
     {
+        // return $request;
         $data = [
             'kode_mk' => 'required',
             'nama_mk' => 'required',
             'nama_singkat' => 'required',
+            'kategori_proyek' => 'required',
         ];
         $validasi = $request->validate($data);
         $kategori = Kategori::find($kategori->id);

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('kode_mk');
             $table->string('nama_mk');
             $table->string('nama_singkat');
+            $table->unsignedBigInteger('kategori_proyek')->nullable();
+            $table->foreign('kategori_proyek')->references('id')->on('kategori_proyeks')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

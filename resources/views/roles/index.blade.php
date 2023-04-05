@@ -107,7 +107,6 @@
                                                 @endif
                                             @endforeach
                                         @endforeach
-
                                     </div>
 
                                     <div class="modal-footer justify-content-between">
@@ -195,8 +194,7 @@
                                                 @endphp
                                                 <label class="col-form-label col-lg-3">Permisison</label>
                                                 <div class="">
-                                                    <select data-placeholder="Pilih permission" multiple="multiple"
-                                                        id="permission_select_edit" name="permission[]"
+                                                    <select data-placeholder="Pilih permission" multiple="multiple" name="permission[]"
                                                         class="form-control select" required
                                                         @if ($permission->count() <= 0) disabled @endif>
                                                         <option></option>
@@ -236,7 +234,7 @@
     </div>
 
     <!-- Vertical form modal -->
-    <div id="modal_tambah_roles" class="modal fade" tabindex="-1">
+    {{-- <div id="modal_tambah_roles" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -273,15 +271,39 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Kirim <i
-                                class="ph-paper-plane-tilt ms-2"></i></button>
+                        <button type="submit" class="btn btn-primary">Kirim <i class="ph-paper-plane-tilt ms-2"></i></button>
                     </div>
                 </form>
 
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- /vertical form modal -->
+
+{{-- <select data-placeholder="Pilih permission" multiple="multiple"
+    id="permission_select_edit" name="permission[]"
+    class="form-control select" required>
+    <option></option>
+    <optgroup label="Daftar Permission">
+      <option value="manata">mantap</option>
+    </optgroup>
+</select>
+<select data-placeholder="Pilih permission" multiple="multiple"
+    id="permission_select_edit" name="permission[]"
+    class="form-control select" required>
+    <option></option>
+    <optgroup label="Daftar Permission">
+      <option value="manata">mantap</option>
+    </optgroup>
+</select>
+<select data-placeholder="Pilih permission" multiple="multiple"
+    id="permission_select_edit" name="permission[]"
+    class="form-control select" required>
+    <option></option>
+    <optgroup label="Daftar Permission">
+      <option value="manata">mantap</option>
+    </optgroup>
+</select> --}}
 
     <!-- Sticky footer -->
     <div id="panel_footer" class="offcanvas offcanvas-end  " tabindex="-1">
@@ -297,8 +319,7 @@
                     <div class="mb-3">
                         <div>
                             <label class="form-label">Nama</label>
-                            <input type="text" name="name" value="{{ old('name') }}" class="form-control"
-                                required placeholder="Masukkan name disini">
+                            <input type="text" name="name" value="{{ old('name') }}" class="form-control" required placeholder="Masukkan name disini">
                             @error('name')
                                 <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
                                 </div>

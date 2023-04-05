@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class Kategori extends Model
+class KategoriProyek extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -17,7 +17,11 @@ class Kategori extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function kategori(){
-        return $this->belongsTo(KategoriProyek::class, 'kategori_proyek', 'id');
+    // public function krs(){
+    //     return $this->hasMany(Krs::class);
+    // }
+
+    public function poin_regulasi(){
+       return $this->hasMany(PoinRegulasi::class, 'kategori_id', 'id');
     }
 }

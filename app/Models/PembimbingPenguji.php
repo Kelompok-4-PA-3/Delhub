@@ -15,10 +15,10 @@ class PembimbingPenguji extends Model
 
     protected $guarded = ['id'];
 
-    // protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 
     public function dosen(){
-        $this->belongsToMany(Dosen::class, 'dosen_id');
+        $this->belongsTo(Dosen::class, 'dosen_id', 'nidn');
     }
     
     public function reference(){

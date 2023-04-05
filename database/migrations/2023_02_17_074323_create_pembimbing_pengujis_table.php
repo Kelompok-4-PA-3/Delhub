@@ -15,12 +15,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('kelompok_id');
             $table->foreign('kelompok_id')->references('id')->on('kelompoks')->onUpdate('cascade')->onDelete('cascade');
-            // $table->string('dosen_id');
-            // $table->foreign('dosen_id')->references('nidn')->on('dosens')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('dosen_id');
+            $table->foreign('dosen_id')->references('nidn')->on('dosens')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('reference_id');
             $table->foreign('reference_id')->references('id')->on('references')->onUpdate('cascade')->onDelete('cascade');
-            $table->boolean('is_done')->default(false);
             $table->boolean('active')->default(true);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }

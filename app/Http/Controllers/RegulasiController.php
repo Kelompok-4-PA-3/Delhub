@@ -63,7 +63,6 @@ class RegulasiController extends Controller
 
         return back()->with('success', 'Regulasi telah berhasil ditambahkan');
     }
-
     /**
      * Display the specified resource.
      */

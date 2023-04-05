@@ -26,7 +26,7 @@
                                     <option></option>
                                     <optgroup label="Daftar Kategori Mata Kuliah">
                                         @foreach($kategori as $k)
-                                            <option @if(old('mk_id') == $k->id) selected @endif value="{{$k->id}}">{{$k->nama_mk}}</option>
+                                            <option @if(old('mk_id') == $k->id) selected @endif value="{{$k->id}}">{{$k->nama_mk}} - {{$k->kode_mk}}</option>
                                         @endforeach
                                     </optgroup>
                                 </select>

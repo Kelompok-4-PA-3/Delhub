@@ -101,19 +101,50 @@
 
                     <div class="tab-content flex-lg-fill">
                         <div class="tab-pane fade show active" id="pembimbing">
-                           <div class="d-flex p-2 mt-2">
-                            <small class="text-muted ">Pembimbing : </small>
-                            <div class="ms-auto">
-                               <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted" href=""><i class="ph-trash"></i></a></small>
-                            </div>
-                           </div>
-                            @if ($kelompok->pembimbing == NULL)
-                                <small class="text-muted text-center px-2">Belum ada dosen pembimbing </small>
-                            @else
-                                <h6 class="fw-semibold px-2">
-                                    {{$kelompok->dosen->user->nama}}
-                                </h6>
-                            @endif
+
+                            @if ($pembimbing->count() > 0)
+                                @foreach ($pembimbing as $pd)
+                                    <div>
+                                        <div class="d-flex p-2 mt-2">
+                                            <small class="text-muted">Pembimbing : </small>
+                                            <div class="ms-auto">
+                                                <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pd->id }}"><i class="ph-trash"></i></a></small>
+                                            </div>
+                                        </div>
+                                        <h6 class="fw-semibold px-2">
+                                            {{$pd->nama}}
+                                        </h6>
+                                    </div>
+
+                                    <!-- Delete Modal -->
+                                    <div id="modal_hapus{{ $pd->id }}" class="modal fade" tabindex="-1">
+                                        <div class="modal-dialog modal-xs">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{ $pd->nama }}</span> ?
+                                                </div>
+
+                                                <div class="modal-footer justify-content-between">
+                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                    <form action="/kelompok/dosen/{{$pd->id}}/delete" method="post">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-primary">Ya</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Delete Modal -->
+
+                                @endforeach
+                           @else 
+                                <i><small>Belum ada pembimbing di kelompok ini</small></i>
+                           @endif
                         </div>
                         
                         <div class="tab-pane fade active" id="penguji">
@@ -170,9 +201,8 @@
                             <select data-placeholder="Pilih Kategori" name="reference" class="form-control select" required>
                                 <option></option>
                                 <optgroup label="Daftar Kategori">
-                                    <option value="pembimbing">Pembimbing</option>
-                                    @foreach($reference as $r)
-                                        <option value="{{$r->id}}">{{$r->value}}</option>
+                                    @foreach($role_dosen as $rd)
+                                        <option value="{{$rd->id}}">{{$rd->value}}</option>
                                     @endforeach
                                 </optgroup>
                             </select>
@@ -198,7 +228,13 @@
                     <div class="mt-2 mt-sm-0 ms-sm-auto">
                         <div class="d-flex mt-3">
                             <small class="text-muted">Total : </small>
-                            <h1>{{$kelompok->bimbingan->count()}}</h1> / <h6 class="text-muted">8</h6>
+                            <h1>{{$kelompok->bimbingan->count()}}</h1> / <h6 class="text-muted">
+                                @if ($regulasi == NULL)
+                                    -
+                                @else 
+                                    {{$regulasi}}
+                                @endif
+                            </h6>
                         </div>
                     </div>
                 </div>
@@ -240,17 +276,17 @@
                                                         <small><a href="#" class="text-body fw-semibold letter-icon-title">{{Str::limit($kb->description,20)}}</a></small>
                                                         <div class="d-flex align-items-center text-muted fs-sm">
                                                             <span class="
-                                                            @if($kb->status == 'waiting')
+                                                            @if($kb->reference->value == 'waiting')
                                                                 bg-info
-                                                            @elseif($kb->status == 'approved')
+                                                            @elseif($kb->reference->value == 'approved')
                                                                 bg-success
-                                                            @elseif($kb->status == 'rejected')
+                                                            @elseif($kb->reference->value == 'rejected')
                                                                 bg-danger
-                                                            @elseif($kb->status == 'reschedule')
+                                                            @elseif($kb->reference->value == 'reschedule')
                                                                 bg-warning
                                                             @endif
                                                              rounded-pill p-1 me-2"></span>
-                                                            {{$kb->status}}
+                                                            {{$kb->reference->value}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -261,18 +297,18 @@
                                                         <i class="ph-list"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a href="/bimbingan/status/{{$status = 'approved'}}/{{$kb->id}}" class="dropdown-item">
-                                                            <i class="ph-checks text-success me-2"></i>
-                                                            Approve
-                                                        </a>
-                                                        <a href="/bimbingan/status/{{$status = 'rejected'}}/{{$kb->id}}" class="dropdown-item">
-                                                            <i class="ph-x text-danger me-2"></i>
-                                                            Rejected
-                                                        </a>
-                                                        <a href="/bimbingan/status/{{$status = 'reschedule'}}/{{$kb->id}}" class="dropdown-item">
-                                                            <i class="ph-calendar-x text-info me-2"></i>
-                                                            Reschedule
-                                                        </a>
+                                                        @foreach($status_bimbingan as $sb)
+                                                            <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}" class="dropdown-item">
+                                                                @if($sb->value == 'approved')
+                                                                    <i class="ph-checks text-success me-2"></i>
+                                                                @elseif($sb->value == 'rejected')
+                                                                    <i class="ph-x text-danger me-2"></i>
+                                                                @elseif($sb->value == 'reschedule')
+                                                                    <i class="ph-calendar-x text-info me-2"></i>
+                                                                @endif
+                                                                {{$sb->value}}
+                                                            </a>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </td>

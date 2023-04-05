@@ -1,15 +1,17 @@
 @extends('main')
 
-@push('select_js')
-    <script src="{{asset('/assets/js/jquery/jquery.min.js')}}"></script>
+@push('datatable_js')
+	<script src="{{asset('/assets/js/vendor/tables/datatables/datatables.min.js')}}"></script>
+	<script src="{{asset('/assets/demo/pages/datatables_api.js')}}"></script>
+    <script src="{{asset('/assets/js/vendor/tables/datatables/extensions/buttons.min.js')}}"></script>
+    <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
-	<script src="{{asset('/assets/demo/pages/form_layouts.js')}}"></script>
 @endpush
 
 @section('content')
 
         <style>
-            table{
+           .table-regulasi{
                 display: block;
                 overflow-x: auto;
                 white-space: nowrap;
@@ -22,7 +24,7 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
                         <h5 class="mb-0">Regulasi</h5>
-                        <div class="ms-auto nav-tabs-responsive">
+                        {{-- <div class="ms-auto nav-tabs-responsive">
                             <ul class="nav nav-tabs nav-tabs-underline flex-nowrap">
                                 <li class="nav-item">
                                     @if ($regulasi != NULL)
@@ -36,13 +38,27 @@
                                         <a href="#buat-regulasi" id="btn-buat-regulasi" class="btn btn-sm btn-primary fw-semibold" data-bs-toggle="tab"> + Buat Regulasi</a>
                                         <a href="#regulasi" id="btn-regulasi" class="btn btn-sm btn-danger fw-semibold active" data-bs-toggle="tab">X Batal</a>
                                     @endif
-                                    {{-- @endif --}}
                                 </li>
                             </ul>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="card-body">
-                        
+                        <table class="table">
+                            <tr>
+                                <th>Nama</th>
+                                <th>Poin</th>
+                            </tr>
+                            @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
+                            <tr>
+                                <td>{{$kkkp->nama}}</td>
+                                <td>{{$kkkp->poin}}</td>
+                            </tr>
+                            @endforeach
+                        </table>
+                        <div>
+                            {{-- {{$krs->kategori->kategori->poin_regulasi}} --}}
+                           
+                        </div>
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="regulasi">
                             @if($regulasi != NULL)
@@ -83,7 +99,6 @@
                                         <small><i class="text-muted">Anda belum membuat regulasi!</i></small>
                                     </div>
                                 @endif
-                                
                             @endif
                             </div>
                             <div class="tab-pane fade show" id="buat-regulasi">
@@ -246,30 +261,52 @@
                     <div class="card-header d-flex align-items-center">
                         <h5 class="mb-0">Data Kelompok</h5>
                         <div class="ms-auto">
-                            @if ($regulasi != NULL)
-                                <a href="/krs/{{$krs->id}}/regulasi/show" class="text-primary fw-semibold"> Detail</a>
+                            @if ($krs->kategori->kategori->count() > 0)
+                            <div class="d-flex">
+                                <small>Ket : &nbsp;</small>
+                                <div class="d-flex">
+                                    <button class="btn bg-check-success shadow-sm"></button>
+                                    <small>&nbsp;Terpenuhi</small>
+                                </div>
+                                <div></div>
+                            </div>
+                                {{-- <a href="/krs/{{$krs->id}}/regulasi/show" class="text-primary fw-semibold"> Detail</a> --}}
                             @endif
                          </div>
                     </div>
-                    <div class="card-body">
-                        @if ($regulasi != NULL)
-                        <table class="table">
+                    <div class="card-body table-regulasi">
+                        <style>
+                            .img-success{
+                                position: absolute;
+                                margin-top: -25px;
+                                margin-right: -85px;
+                            }
+                            .bg-check-success{
+                                background-color: #D1E7DD !important;
+                            }
+                        </style>
+                        @if ($krs->kategori->kategori->poin_regulasi != NULL)
+                        <table class="table datatable-selection-single">
                             <thead>
                                 <tr>
                                     <th><small> Nama Kelompok </small></th>
                                     <th><small> Jlh Bimbingan </small></th>
-                                    @if ($regulasi->seminar > 0)
-                                        <th><small> Seminar </small></th>
-                                    @endif
-                                    @if($regulasi->proposal > 0)
-                                        <th><small> Proposal </small></th>
-                                    @endif
-                                    @if($regulasi->prasidang > 0)
-                                        <th><small> Prasidang </small></th>
-                                    @endif
-                                    @if($regulasi->sidang > 0)
-                                        <th><small> Sidang </small></th>
-                                    @endif
+                                    @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
+                                        <th>
+                                            {{$kkkp->nama}}
+                                        </th>
+                                    @endforeach
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
+                                        <th>
+                                            {{$kkkp->nama}}
+                                        </th>
+                                    @endforeach
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -278,48 +315,28 @@
                                      $bimbingan = $k->bimbingan->count();
                                     @endphp
                                     <tr>
-                                        <td><small> {{$k->nama_kelompok}} </small></td>
-                                        <td><small> {{$k->bimbingan->count()}} </small></td>
-                                        @if ($regulasi->seminar > 0)
+                                        <td>
+                                            {{$k->nama_kelompok}}
+                                        </td>
+                                        <td class="text-center">{{$bimbingan}}</td>
+                                        @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
+                                        @if($bimbingan > 0)
                                             @php
-                                                $bimbingan -= $regulasi->seminar;
+                                                $bimbingan -= $kkkp->poin;
                                             @endphp
-                                            @if ($bimbingan >= 0)
-                                                <td class="text-center"><small> <i class="ph-check text-success"></i> </small></td>
-                                            @else
-                                                <td class="text-center"><small><i class="ph-minus"></i></small></td>
+
+                                            @if($bimbingan >= 0 )
+                                                <td class="text-center bg-check-success">
+                                                    {{$kkkp->poin}} <small class="text-muted"> / {{$kkkp->poin}} </small>
+                                                    <img class="img-success" src="{{asset('img/check.gif')}}" style="max-width: 35px;"  alt=""> 
+                                                </td>
+                                            @else 
+                                                <td class="text-center">  {{$bimbingan +  $kkkp->poin}} <small class="text-muted"> / {{$kkkp->poin}} </small></td>
                                             @endif
+                                        @else
+                                            <td class="text-center"> 0 <small class="text-muted"> / {{$kkkp->poin}} </small></td>
                                         @endif
-                                        @if($regulasi->proposal > 0)
-                                            @php
-                                                $bimbingan -= $regulasi->proposal;
-                                            @endphp
-                                            @if ($bimbingan >= 0)
-                                                <td class="text-center"><small> <i class="ph-check text-success"></i> </small></td>
-                                            @else
-                                                <td class="text-center"><small><i class="ph-minus"></i></small></td>
-                                            @endif
-                                        @endif
-                                        @if($regulasi->prasidang > 0)
-                                            @php
-                                                $bimbingan -= $regulasi->prasidang;
-                                            @endphp
-                                            @if ($bimbingan >= 0)
-                                                <td class="text-center"><small> <i class="ph-check text-success"></i> </small></td>
-                                            @else
-                                                <td class="text-center"><small><i class="ph-minus"></i></small></td>
-                                            @endif
-                                        @endif
-                                        @if($regulasi->sidang > 0)
-                                            @php
-                                                $bimbingan -= $regulasi->sidang;
-                                            @endphp
-                                            @if ($bimbingan >= 0)
-                                                <td class="text-center"><small> <i class="ph-check text-success"></i></small></td>
-                                            @else
-                                                <td class="text-center"><small><i class="ph-minus"></i></small></td>
-                                            @endif
-                                        @endif
+                                        @endforeach
                                     </tr>
                                 @endforeach
                             </tbody>
