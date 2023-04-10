@@ -18,85 +18,85 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(10)->create();
+        // \App\Models\User::factory(10)->create();
 
-        \App\Models\User::create([
-            'nama' => 'Rizki Okto S',
-            'username' => '11420033',
-            'email' => 'if420033@students.del.ac.id',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678'),
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
-            'current_team_id' => null,
-        ]);
+        // \App\Models\User::create([
+        //     'nama' => 'Rizki Okto S',
+        //     'username' => '11420033',
+        //     'email' => 'if420033@students.del.ac.id',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('12345678'),
+        //     'two_factor_secret' => null,
+        //     'two_factor_recovery_codes' => null,
+        //     'remember_token' => Str::random(10),
+        //     'profile_photo_path' => null,
+        //     'current_team_id' => null,
+        // ]);
 
-        \App\Models\User::create([
-            'nama' => 'Agnes Feni R Naibaho',
-            'username' => '11420030',
-            'email' => 'if420030@students.del.ac.id',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678'),
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
-            'current_team_id' => null,
-        ]);
+        // \App\Models\User::create([
+        //     'nama' => 'Agnes Feni R Naibaho',
+        //     'username' => '11420030',
+        //     'email' => 'if420030@students.del.ac.id',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('12345678'),
+        //     'two_factor_secret' => null,
+        //     'two_factor_recovery_codes' => null,
+        //     'remember_token' => Str::random(10),
+        //     'profile_photo_path' => null,
+        //     'current_team_id' => null,
+        // ]);
 
-        \App\Models\User::create([
-            'nama' => 'Eladita Nadeak',
-            'username' => '11420031',
-            'email' => 'if420031@students.del.ac.id',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678'),
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
-            'current_team_id' => null,
-        ]);
+        // \App\Models\User::create([
+        //     'nama' => 'Eladita Nadeak',
+        //     'username' => '11420031',
+        //     'email' => 'if420031@students.del.ac.id',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('12345678'),
+        //     'two_factor_secret' => null,
+        //     'two_factor_recovery_codes' => null,
+        //     'remember_token' => Str::random(10),
+        //     'profile_photo_path' => null,
+        //     'current_team_id' => null,
+        // ]);
 
-        \App\Models\User::create([
-            'nama' => 'Riyanthi Sianturi',
-            'username' => 'riyanthi.sianturi',
-            'email' => 'riyanthi.sianturi@del.ac.id',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678'),
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
-            'current_team_id' => null,
-        ]);
+        // \App\Models\User::create([
+        //     'nama' => 'Riyanthi Sianturi',
+        //     'username' => 'riyanthi.sianturi',
+        //     'email' => 'riyanthi.sianturi@del.ac.id',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('12345678'),
+        //     'two_factor_secret' => null,
+        //     'two_factor_recovery_codes' => null,
+        //     'remember_token' => Str::random(10),
+        //     'profile_photo_path' => null,
+        //     'current_team_id' => null,
+        // ]);
 
-        \App\Models\User::create([
-            'nama' => 'Goklas H Panjaitan',
-            'username' => 'goklas.panjaitan',
-            'email' => 'goklaspanjaintan@del.ac.id',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678'),
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
-            'current_team_id' => null,
-        ]);
+        // \App\Models\User::create([
+        //     'nama' => 'Goklas H Panjaitan',
+        //     'username' => 'goklas.panjaitan',
+        //     'email' => 'goklaspanjaintan@del.ac.id',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('12345678'),
+        //     'two_factor_secret' => null,
+        //     'two_factor_recovery_codes' => null,
+        //     'remember_token' => Str::random(10),
+        //     'profile_photo_path' => null,
+        //     'current_team_id' => null,
+        // ]);
 
-        \App\Models\User::create([
-            'nama' => 'Ester Yolanda Berutu',
-            'username' => '11420058',
-            'email' => 'if420058@students.del.ac.id',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678'),
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
-            'current_team_id' => null,
-        ]);
+        // \App\Models\User::create([
+        //     'nama' => 'Ester Yolanda Berutu',
+        //     'username' => '11420058',
+        //     'email' => 'if420058@students.del.ac.id',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('12345678'),
+        //     'two_factor_secret' => null,
+        //     'two_factor_recovery_codes' => null,
+        //     'remember_token' => Str::random(10),
+        //     'profile_photo_path' => null,
+        //     'current_team_id' => null,
+        // ]);
 
         Role::create([
             'name' => 'mahasiswa',
@@ -139,36 +139,36 @@ class DatabaseSeeder extends Seeder
         ]);
         // }
 
-        \App\Models\Fakultas::create([
-            'nama' => 'Fakultas Vokasi'
-        ]);
+        // \App\Models\Fakultas::create([
+        //     'nama' => 'Fakultas Vokasi'
+        // ]);
 
-        \App\Models\Fakultas::create([
-            'nama' => 'Fakultas Informatika dan Teknik Elektro'
-        ]);
+        // \App\Models\Fakultas::create([
+        //     'nama' => 'Fakultas Informatika dan Teknik Elektro'
+        // ]);
 
-        \App\Models\Fakultas::create([
-            'nama' => 'Fakultas Teknologi Industri'
-        ]);
+        // \App\Models\Fakultas::create([
+        //     'nama' => 'Fakultas Teknologi Industri'
+        // ]);
 
-        \App\Models\Fakultas::create([
-            'nama' => 'Fakultas Bioteknologi'
-        ]);
+        // \App\Models\Fakultas::create([
+        //     'nama' => 'Fakultas Bioteknologi'
+        // ]);
 
-        \App\Models\Prodi::create([
-            'nama' => 'D4 Teknologi Rekayasa Perangkat Lunak',
-            'fakultas_id' => 1,
-        ]);
+        // \App\Models\Prodi::create([
+        //     'nama' => 'D4 Teknologi Rekayasa Perangkat Lunak',
+        //     'fakultas_id' => 1,
+        // ]);
 
-        \App\Models\Prodi::create([
-            'nama' => 'D3 Teknologi Informasi',
-            'fakultas_id' => 1,
-        ]);
+        // \App\Models\Prodi::create([
+        //     'nama' => 'D3 Teknologi Informasi',
+        //     'fakultas_id' => 1,
+        // ]);
 
-        \App\Models\Prodi::create([
-            'nama' => 'D3 Teknologi Komputer',
-            'fakultas_id' => 1,
-        ]);
+        // \App\Models\Prodi::create([
+        //     'nama' => 'D3 Teknologi Komputer',
+        //     'fakultas_id' => 1,
+        // ]);
 
         \App\Models\Configs::create([
             'tahun_aktif' => '2023',
@@ -187,18 +187,18 @@ class DatabaseSeeder extends Seeder
             'nama' => 'Ruangan 516',
         ]);
 
-        \App\Models\Mahasiswa::create([
-            'nim' => '11420033',
-            'user_id' => 2,
-            'prodi_id' => 1,
-            'angkatan' => '2002',
-        ]);
+        // \App\Models\Mahasiswa::create([
+        //     'nim' => '11420033',
+        //     'user_id' => 2,
+        //     'prodi_id' => 1,
+        //     'angkatan' => '2002',
+        // ]);
 
-        \App\Models\Dosen::create([
-            'nidn' => '12312039812',
-            'user_id' => 2,
-            'prodi_id' => 1,
-        ]);
+        // \App\Models\Dosen::create([
+        //     'nidn' => '12312039812',
+        //     'user_id' => 2,
+        //     'prodi_id' => 1,
+        // ]);
 
         \App\Models\Reference::create([
             'value' => 'leader',

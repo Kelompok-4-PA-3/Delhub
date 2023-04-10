@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Dosen;
 use App\Models\User;
 use App\Models\Prodi;
+use App\Models\Roles;
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 
 class DosenController extends Controller
@@ -43,9 +45,19 @@ class DosenController extends Controller
         // return $request;
         $data = [
             'user_id' => 'required',
+            'nama_singkat' => 'required|unique:dosens|max:3|min:3',
             'nidn' => 'required|numeric|unique:dosens',
             'prodi_id' => 'required',
         ];
+
+        $role_dosen = Roles::where('name','dosen')->first();
+
+
+        if ($role_dosen == NULL) {
+            return back()->with('failed', 'Tidak dapat menambahkan dosen karena role dosen tidak ditemukan');
+        }
+
+        User::where('id',$request->user_id)->first()->assignRole($role_dosen->id);
 
         $validasi = $request->validate($data);
         Dosen::create($validasi);
@@ -84,9 +96,14 @@ class DosenController extends Controller
         // return "ini update";
         $data = [
             'user_id' => 'required',
+            'nama_singkat' => 'required',
             'nidn' => 'required',
             'prodi_id' => 'required',
         ];
+
+        if ($reques->nama_singkat != $dosen->nama_singkat) {
+            $data['nama_singkat'] = 'required|unique:dosens|max:3|min:3';
+        }
 
         $dsn = Dosen::where('nidn', $dosen->nidn);
         // return $request->nidn ;
@@ -104,7 +121,12 @@ class DosenController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Dosen $dosen)
-    {
+    {   
+        $role_dosen = Roles::where('name','dosen')->first();
+        if ($role_dosen == NULL) {
+            return back()->with('failed', 'Tidak dapat menambahkan dosen karena role dosen tidak ditemukan');
+        }
+        User::where('id',$request->user_id)->first()->removeRole('dosen');
         Dosen::where('nidn', $dosen->nidn)->delete();
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil dihapus');
     }

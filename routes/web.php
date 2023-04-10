@@ -15,6 +15,8 @@ use App\Http\Controllers\BimbinganController;
 use App\Http\Controllers\RegulasiController;
 use App\Http\Controllers\KategoriProyekController;
 use App\Http\Controllers\PoinRegulasiController;
+use App\Http\Controllers\MyProjectController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,8 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', function () {
+        // return Auth::user()->dosen;
+        
         return view('index');
     })->name('dashboard');
 
@@ -79,6 +83,7 @@ Route::middleware([
     Route::get('/krs/{id}/regulasi/show', [RegulasiController::class, 'show'])->name('regulasi-show', 'regulasi.show');
     Route::resource('/kategori_proyek', KategoriProyekController::class)->name('kategori_proyek', 'kategori_proyek.index');
     Route::resource('/poin_regulasi', PoinRegulasiController::class)->name('poin_regulasi', 'poin_regulasi.index');
-
+    Route::get('/koordinator/proyeksaya/{id}', [MyProjectController::class, 'koordintor']);
+    Route::get('/pembimbing/{nidn}/', [MyProjectController::class, 'pembimbing']);
     Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
 });

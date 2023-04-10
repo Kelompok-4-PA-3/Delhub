@@ -153,12 +153,13 @@ const DatatableAPI = function() {
 
         $('.datatable-regulasi thead tr:eq(1) th').not(':first-child').each(function () {
             const title = $(this).text();
-            $(this).html('<input type="checkbox" class="form-check-input"' + title + '" /> <button class="btn bg-check-success shadow-sm"></button>');
+            $(this).html('<select class="column-check form-control"><option value=""> <button class="btn bg-white shadow-sm"> Semua </button></option><option value="Success"> <button class="btn bg-check-success shadow-sm"> Terpenuhi </button></option></select>');
+            // $(this).html('<input type="checkbox" class="form-check-input column-check" value="Success"' + title + '" /> <button class="btn bg-check-success shadow-sm"></button>');
         });
         $('.datatable-regulasi').DataTable({
             orderCellsTop: true,
-            paging: false,
-            scrollY: false,
+            paging: true,
+            scrollY: true,
             buttons: {
                 dom: {
                     button: {
@@ -172,9 +173,12 @@ const DatatableAPI = function() {
                     .every(function (index) {
                         const that = this;
      
-                        $('.column-check').on('change', function () {
-                            if ($(this).is(':checked')) {
-                                that.column($(this).parent().index() + ':visible').hasClass('column-check').draw();
+                        $('.column-check').on('keyup change clear', function () {
+                            if (!that.checked) {
+                                if (that.search() !== this.value) {
+                                    // console.log(this.value);
+                                    that.column($(this).parent().index() + ':visible').search(this.value).draw();
+                                }
                             }
                         });
                     });

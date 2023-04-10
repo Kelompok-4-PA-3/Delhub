@@ -55,6 +55,7 @@
                 </tr>
             </thead>
             <tbody>
+                @if($kategori->count() > 0)
                 @foreach($kategori as $k)
                 <tr>
                     <td>{{$loop->iteration}}</td>
@@ -159,6 +160,7 @@
 
 
                 @endforeach
+                @endif
             </tbody>
         </table>
         <br>

@@ -44,7 +44,6 @@ class BimbinganController extends Controller
         // return $ref;
         $validasi = $request->validate($data);
         $bimbingan = new Bimbingan();
-        $validasi['status'] = 'waiting';
 
         $bimbingan->create([
             'kelompok_id' => $validasi['kelompok_id'],
@@ -69,9 +68,10 @@ class BimbinganController extends Controller
     {
         $bimbingan = Bimbingan::find($id);
         $bimbingan->status = $status;
+        // return $bimbingan->reference->value;
         $bimbingan->save();
 
-        return redirect()->back()->with('success', 'Request bimbingan telah di' . $status);
+        return redirect()->back()->with('success', 'Request bimbingan telah di' . $bimbingan->reference->value);
     }
 
     public function show(Bimbingan $bimbingan)

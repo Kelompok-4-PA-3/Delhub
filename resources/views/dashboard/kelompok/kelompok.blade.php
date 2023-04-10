@@ -91,12 +91,16 @@
                                 Penguji
                             </a>
                         </li>
-                        <li class="nav-item">
+                        @can('kelola pembimbing penguji')
+                          @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn)
+                          <li class="nav-item">
                             <a href="#edit-dosen" class="nav-link" data-bs-toggle="tab">
                                 <i class="ph-pencil me-2"></i>
                                 Edit
                             </a>
-                        </li>
+                           </li>
+                          @endif
+                        @endcan
                     </ul>
 
                     <div class="tab-content flex-lg-fill">
@@ -107,9 +111,11 @@
                                     <div>
                                         <div class="d-flex p-2 mt-2">
                                             <small class="text-muted">Pembimbing : </small>
-                                            <div class="ms-auto">
-                                                <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pd->id }}"><i class="ph-trash"></i></a></small>
-                                            </div>
+                                            @if()
+                                                <div class="ms-auto">
+                                                    <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pd->id }}"><i class="ph-trash"></i></a></small>
+                                                </div>
+                                            @endif
                                         </div>
                                         <h6 class="fw-semibold px-2">
                                             {{$pd->nama}}
@@ -181,6 +187,7 @@
                             </div>
                         </div>
 
+                        @can('kelola pembimbing penguji')
                         <div class="tab-pane fade" id="edit-dosen">
                            <form action="/kelompok/dosen" method="post">
                             @csrf
@@ -212,6 +219,7 @@
                             </div>
                            </form>
                         </div>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -224,13 +232,13 @@
             <!-- Sales stats -->
             <div class="card">
                 <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
-                    <h5 class="py-sm-2 my-sm-1">Bimbingan</h5><br>
+                    <h5 class="py-sm-2 my-sm-1">Bimbingan </h5><br>
                     <div class="mt-2 mt-sm-0 ms-sm-auto">
                         <div class="d-flex mt-3">
                             <small class="text-muted">Total : </small>
                             <h1>{{$kelompok->bimbingan->count()}}</h1> / <h6 class="text-muted">
                                 @if ($regulasi == NULL)
-                                    -
+                                    {{$kelompok->krs->kategori->kategori->poin_regulasi->sum('poin')}}
                                 @else 
                                     {{$regulasi}}
                                 @endif
@@ -240,22 +248,25 @@
                 </div>
              
                 <div class="card-body pb-0">
+                    
                     <!-- Tabs -->
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified">
                         <li class="nav-item">
                             <a href="#list-bimbingan" class="nav-link active" data-bs-toggle="tab">
-                                Daftar 
+                                Daftar   
                             </a>
                         </li>
+                        @can('request bimbingan')
+                            <li class="nav-item">
+                                <a href="#tambah-bimbingan" class="nav-link" data-bs-toggle="tab">
+                                    Request
+                                </a>
+                            </li>
+                        @endcan
+                      
 
-                        <li class="nav-item">
-                            <a href="#tambah-bimbingan" class="nav-link" data-bs-toggle="tab">
-                                Request
-                            </a>
-                        </li>
                     </ul>
                     <!-- /tabs -->
-
 
                     <!-- Tabs content -->
                     <div class="tab-content card-body">
@@ -297,18 +308,24 @@
                                                         <i class="ph-list"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        @foreach($status_bimbingan as $sb)
-                                                            <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}" class="dropdown-item">
-                                                                @if($sb->value == 'approved')
-                                                                    <i class="ph-checks text-success me-2"></i>
-                                                                @elseif($sb->value == 'rejected')
-                                                                    <i class="ph-x text-danger me-2"></i>
-                                                                @elseif($sb->value == 'reschedule')
-                                                                    <i class="ph-calendar-x text-info me-2"></i>
-                                                                @endif
-                                                                {{$sb->value}}
-                                                            </a>
-                                                        @endforeach
+                                                      
+                                                        @can('update status bimbingan')
+                                                            @if (app('is_pembimbing')->is_pembimbing($kelompok->id))
+                                                                @foreach($status_bimbingan as $sb)
+                                                                    <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}" class="dropdown-item">
+                                                                        @if($sb->value == 'approved')
+                                                                            <i class="ph-checks text-success me-2"></i>
+                                                                        @elseif($sb->value == 'rejected')
+                                                                            <i class="ph-x text-danger me-2"></i>
+                                                                        @elseif($sb->value == 'reschedule')
+                                                                            <i class="ph-calendar-x text-info me-2"></i>
+                                                                        @endif
+                                                                        {{$sb->value}}
+                                                                    </a>
+                                                                @endforeach
+                                                            @endif
+                                                        @endcan
+
                                                     </div>
                                                 </div>
                                             </td>
@@ -321,7 +338,7 @@
                                 </table>
                             </div>
                         </div>
-
+                        @can('request bimbingan')
                         <div class="tab-pane active fade" id="tambah-bimbingan">
                             <form action="/bimbingan" method="post">
                                 @csrf
@@ -347,6 +364,7 @@
                                 </div>
                             </form>
                         </div>
+                        @endcan
                     </div>
                     <!-- /tabs content -->
 

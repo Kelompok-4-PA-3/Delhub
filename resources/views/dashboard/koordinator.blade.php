@@ -83,7 +83,7 @@
 
 @endsection
 
-@if(Auth::user()->dosen()->count() > 0)
+@if(Auth::user()->dosen->count() > 0)
 @if($krs->dosen_mk == Auth::user()->dosen->nidn)
 @section('right-sidebar')
  <!-- Right sidebar -->

@@ -8,7 +8,7 @@
         <div class="sidebar-section">
             <div class="sidebar-section-body d-flex justify-content-center">
                 <h5 class="sidebar-resize-hide flex-grow-1 my-auto">Navigation</h5>
-
+                {{-- {{Auth::user()->dosen}} --}}
                 <div>
                     <button type="button"
                         class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex">
@@ -41,7 +41,41 @@
                         </span>
                     </a>
                 </li>
+                {{-- {{Auth::user()->dosen}} --}}
                 @role('dosen')
+                @if (Auth::user()->dosen->krs->count() > 0)
+                    <li class="nav-item">
+                        <a href="/koordinator/proyeksaya/{{Auth::user()->dosen->krs->first()->id}}" class="nav-link">
+                            <i class="ph-list-dashes"></i>
+                            <span>
+                               Koordinator
+                            </span>
+                        </a>
+                    </li>
+                @endif
+                {{-- {{Auth::user()->dosen->pembimbing_penguji}} --}}
+                @if (Auth::user()->dosen->pembimbing_penguji->where('reference_id','=',3)->count() > 0)
+                    <li class="nav-item">
+                        <a href="/pembimbing/{{Auth::user()->dosen->nidn}}" class="nav-link">
+                            <i class="ph-list-dashes"></i>
+                            <span>
+                            Pembimbing
+                            </span>
+                        </a>
+                    </li>
+                @endif
+
+                @if (Auth::user()->dosen->pembimbing_penguji->where('reference_id','=',4)->count() > 0)
+                <li class="nav-item">
+                    <a href="/koordinator" class="nav-link">
+                        <i class="ph-list-dashes"></i>
+                        <span>
+                        Penguji
+                        </span>
+                    </a>
+                </li>
+            @endif
+
                 <li class="nav-item">
                     <a href="/request" class="nav-link">
                         <i class="ph-list-dashes"></i>

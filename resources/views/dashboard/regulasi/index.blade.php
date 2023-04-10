@@ -20,7 +20,7 @@
 
         <div class="row">
 
-            <div class="col-xl-4">
+            <div class="col-xl-4 d-none">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
                         <h5 class="mb-0">Regulasi</h5>
@@ -256,7 +256,7 @@
             </div>
             
             
-            <div class="col-xl-8">
+            <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
                         <h5 class="mb-0">Data Kelompok</h5>
@@ -284,37 +284,44 @@
                             .bg-check-success{
                                 background-color: #D1E7DD !important;
                             }
+                            /* tbody {
+                                   height:  40px;
+                                } */
                         </style>
+                        {{-- <select class="column-check">
+                            <option value=""> <button class="btn bg-white shadow-sm"></button></option>
+                            <option value="Success"> <button class="btn bg-check-success shadow-sm"></button></option>
+                        </select> --}}
+                        @php
+                            $bimbingan = 0;
+                        @endphp
                         @if ($krs->kategori->kategori->poin_regulasi != NULL)
-                        <table class="table datatable-selection-single">
+                        <table class="table datatable-regulasi" cellpadding="5">
                             <thead>
                                 <tr>
                                     <th><small> Nama Kelompok </small></th>
                                     <th><small> Jlh Bimbingan </small></th>
                                     @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
-                                        <th>
-                                            {{$kkkp->nama}}
-                                        </th>
+                                        <th>{{$kkkp->nama}}</th>
                                     @endforeach
-                                    <th></th>
                                 </tr>
                                 <tr>
                                     <th></th>
                                     <th></th>
                                     @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
-                                        <th>
-                                            {{$kkkp->nama}}
-                                        </th>
+                                        <th>{{$kkkp->nama}}</th>
                                     @endforeach
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                {{-- <tr>
+									<td></td>
+								</tr> --}}
                                 @foreach ($kelompok as $k) 
                                     @php
                                      $bimbingan = $k->bimbingan->count();
                                     @endphp
-                                    <tr>
+                                    <tr class="mt-5">
                                         <td>
                                             {{$k->nama_kelompok}}
                                         </td>
@@ -326,7 +333,8 @@
                                             @endphp
 
                                             @if($bimbingan >= 0 )
-                                                <td class="text-center bg-check-success">
+                                                <td class="text-center bg-check-success checked">
+                                                    <span class="d-none">Success</span>
                                                     {{$kkkp->poin}} <small class="text-muted"> / {{$kkkp->poin}} </small>
                                                     <img class="img-success" src="{{asset('img/check.gif')}}" style="max-width: 35px;"  alt=""> 
                                                 </td>
@@ -363,18 +371,40 @@
             </ul>
         </div> --}}
         <script>
-            $create = document.getElementById('btn-buat-regulasi');
-            $index = document.getElementById('btn-regulasi');
-            $index.style.display = "none";
-            $create.style.display = "block";
-            console.log($create);
-            $create.onclick = (e) => {
-                $index.style.display = 'block';
-                e.target.style.display = 'none';
-            }
-            $index.onclick = (e) => {
-                $create.style.display = 'block';
-                e.target.style.display = 'none';
-            }
+            // $create = document.getElementById('btn-buat-regulasi');
+            // $index = document.getElementById('btn-regulasi');
+            // $index.style.display = "none";
+            // $create.style.display = "block";
+            // console.log($create);
+            // $create.onclick = (e) => {
+            //     $index.style.display = 'block';
+            //     e.target.style.display = 'none';
+            // }
+            // $index.onclick = (e) => {
+            //     $create.style.display = 'block';
+            //     e.target.style.display = 'none';
+            // }
+            // $('.table-regulasi thead tr:eq(1) th').not(':first-child').each(function () {
+            //     const title = $(this).text();
+            //     $(this).html('<input type="checkbox" class="form-check-input column-check" value="Success"' + title + '" /> <button class="btn bg-check-success shadow-sm"></button>');
+            // });
+
+            // var table = $('.table-regulasi').DataTable();
+            // table.columns().every( function () {
+            //     $('.column-check').on('change', function () {
+            //     if ($(this).is(':checked')) {
+            //         console.log(this.value);
+                    // that.column($(this).parent().index() + ':visible').search(this.value).draw();
+                    // var val = [];
+            //     }
+            // });
+            // });
+
+            // $('.column-check').on('change', function () {
+            //     if ($(this).is(':checked')) {
+            //         console.log(this.value);
+
+            //     }
+            // });
         </script>
 @endsection

@@ -30,7 +30,7 @@ class PembimbingPenguji extends Model
     // }
     
     public function kelompok(){
-        return $this->belongsToMany(Kelompok::class, 'kelompok_id');
+        return $this->belongsToMany(Kelompok::class, 'kelompok_id', 'id');
     }
 
     public function pembimbing(){

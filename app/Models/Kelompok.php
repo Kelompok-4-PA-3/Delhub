@@ -36,4 +36,7 @@ class Kelompok extends Model
     {
         return $this->belongsTo(Dosen::class, 'pembimbing', 'nidn');
     }
+    public function Krs(){
+        return $this->belongsTo(Krs::class, 'krs_id', 'id');
+    }
 }
