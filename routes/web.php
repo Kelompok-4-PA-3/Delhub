@@ -13,6 +13,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\MhsInterestController;
 use App\Http\Controllers\kelompokController;
 use App\Http\Controllers\BimbinganController;
+use App\Http\Controllers\JadwalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,9 +43,13 @@ Route::middleware([
         return view('index');
     })->name('dashboard');
 
-    Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
-    Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
 
+    Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
+
+    Route::resource('/jadwal', \App\Http\Controllers\JadwalController::class)->name('jadwals', 'jadwal.index');
+
+
+    Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
     Route::resource('/fakultas', \App\Http\Controllers\FakultasController::class)->name('fakultas', 'fakultas.index');
     Route::resource('/users', UsersController::class)->name('users', 'users.index');
     Route::post('/users/upload', [UsersController::class, 'user_upload']);
@@ -57,6 +62,7 @@ Route::middleware([
     Route::resource('/mahasiswa', MahasiswaController::class)->name('mahasiswa', 'mahasiswa.index');
     Route::resource('/home', DashboardController::class)->name('home', 'home.index');
     Route::post('/users/krs/add', [DashboardController::class, 'add_user']);
+    Route::resource('/interest', InterestController::class)->name('interest', 'interest.index');
     Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
     Route::resource('/kelompok', KelompokController::class)->name('kelompok', 'kelompok.index');
     Route::post('/kelompok/dosen', [KelompokController::class, 'add_pembimbing']);
@@ -65,6 +71,14 @@ Route::middleware([
     Route::get('/kelompok/{id}/orang', [KelompokController::class, 'people']);
     Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
     Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan', 'bimbingan.index');
+
+    Route::post('/jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
+
+    Route::get('/jadwal/{jadwal}/edit', [JadwalController::class, 'edit'])->name('jadwal.edit');
+    Route::put('/jadwal/{jadwal}', [JadwalController::class, 'update'])->name('jadwal.ubah');
+    Route::delete('/jadwal/{jadwal}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
+
+    // R
 
     Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
 });

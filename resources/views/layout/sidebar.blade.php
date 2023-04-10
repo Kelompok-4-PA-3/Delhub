@@ -48,7 +48,6 @@
 							</a>
 							<ul class="nav-group-sub collapse">
                 <li class="nav-item">
-<<<<<<< HEAD
                     <a href="/kategori" class="nav-link">
                         <i class="ph-squares-four"></i>
                         <span>
@@ -58,8 +57,6 @@
                 </li>
                               </li>
                 <li class="nav-item">
-=======
->>>>>>> master
                     <a href="/krs" class="nav-link">
                         <i class="ph-squares-four"></i>
                         <span>
@@ -136,7 +133,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-<<<<<<< HEAD
                     <a href="/prodi" class="nav-link">
                         <i class="ph-circles-four"></i>
                         <span>
@@ -171,8 +167,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-=======
->>>>>>> master
                     <a href="/mhsInterest" class="nav-link">
                         <i class="ph-heart"></i>
                         <span>

@@ -22,3 +22,8 @@ Breadcrumbs::for('mhsInterest', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Manajemen Mahasiswa Interest', route('mhsInterest.index'));
 });
+
+Breadcrumbs::for('jadwal', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Jadwal', route('jadwal.index'));
+});
