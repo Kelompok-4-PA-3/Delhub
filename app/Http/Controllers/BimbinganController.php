@@ -7,6 +7,7 @@ use App\Models\Reference;
 use Illuminate\Http\Request;
 use App\Models\Request as Bimbingan;
 use App\Notifications\RequestNotification;
+use App\Notifications\UpdateRequestNotification;
 
 class BimbinganController extends Controller
 {
@@ -32,15 +33,15 @@ class BimbinganController extends Controller
     public function store(Request $request)
     {
         // return $request;
-       $data = [
-        'kelompok_id' => 'required',
-        'description' => 'required',
-        'waktu' => 'required',
-        'ruangan_id' => 'required',
-        'status' => 'nullable',
-       ];
+        $data = [
+            'kelompok_id' => 'required',
+            'description' => 'required',
+            'waktu' => 'required',
+            'ruangan_id' => 'required',
+            'status' => 'nullable',
+        ];
 
-        $ref = Reference::where('kategori','=','status_bimbingan_default')->first();
+        $ref = Reference::where('kategori', '=', 'status_bimbingan_default')->first();
         // return $ref;
         $validasi = $request->validate($data);
         $bimbingan = new Bimbingan();
@@ -71,7 +72,14 @@ class BimbinganController extends Controller
         // return $bimbingan->reference->value;
         $bimbingan->save();
 
-        return redirect()->back()->with('success', 'Request bimbingan telah di' . $bimbingan->reference->value);
+        // send email to mahasiswa
+        $kelompok = $bimbingan->kelompok;
+        $mahasiswa = $kelompok->kelompok_mahasiswa;
+        foreach ($mahasiswa as $mhs) {
+            $mhs->user->notify(new UpdateRequestNotification($status));
+        }
+
+        return redirect()->back()->with('success', 'Request bimbingan telah di' . $status);
     }
 
     public function show(Bimbingan $bimbingan)
