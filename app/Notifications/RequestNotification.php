@@ -36,6 +36,8 @@ class RequestNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Permintaan Bimbingan')
+            ->line('Permintaan bimbingan dari kelompok ' . $this->kelompok->nama_kelompok . ' telah diterima.')
+            ->action('Lihat Permintaan', url('/kelompok/' . $this->kelompok->id))
             ->view('emails.request', ['kelompok' => $this->kelompok]);
     }
 
