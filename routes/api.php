@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\Student\RequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::group([
+    'middleware' => 'auth:sanctum',
+    'prefix' => 'requests'
+], function () {
+    Route::get('/', [RequestController::class, 'index']);
+    Route::post('/', [RequestController::class, 'store']);
+    Route::get('/{id}', [RequestController::class, 'show']);
+});

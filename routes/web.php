@@ -10,7 +10,6 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\MhsInterestController;
-use App\Http\Controllers\kelompokController;
 use App\Http\Controllers\BimbinganController;
 use App\Http\Controllers\RegulasiController;
 use App\Http\Controllers\KategoriProyekController;
@@ -44,7 +43,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', function () {
         // return Auth::user()->dosen;
-        
+
         return view('index');
     })->name('dashboard');
 
