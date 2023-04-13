@@ -17,6 +17,11 @@ use App\Http\Controllers\KategoriProyekController;
 use App\Http\Controllers\PoinRegulasiController;
 use App\Http\Controllers\MyProjectController;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Mahasiswa;
+use App\Models\Dosen;
+use Spatie\Permission\Models\Role;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -86,4 +91,27 @@ Route::middleware([
     Route::get('/koordinator/proyeksaya/{id}', [MyProjectController::class, 'koordintor']);
     Route::get('/pembimbing/{nidn}/', [MyProjectController::class, 'pembimbing']);
     Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
+
+
+    // test
+    Route::get('/mahasiswas/adds', function() {
+        $mahasiswa = Mahasiswa::join('users','users.id','=','mahasiswas.user_id')->get();
+        // return $mahasiswa;
+        foreach($mahasiswa as $m){
+            $m->users->assignRole('mahasiswa');
+        }
+
+        return 'berhasil';
+    });
+    
+    Route::get('/dosens/adds', function() {
+        $dosen = Dosen::join('users','users.id','=','dosens.user_id')->get();
+        // return $dosen;
+        foreach($dosen as $d){
+            $d->user->assignRole('dosen');
+        }
+
+        return 'berhasil';
+    });
+    
 });

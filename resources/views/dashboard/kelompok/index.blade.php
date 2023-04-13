@@ -58,12 +58,16 @@
 						Anggota
 					</a>
 				</li>
-				<li class="nav-item">
-					<a href="#tambah-anggota" class="nav-link" data-bs-toggle="tab">
-						<i class="ph-users-three me-2"></i>
-						Tambah Anggota
-					</a>
-				</li>
+				@if(Auth::user()->dosen()->count() > 0)
+					@if($krs->dosen_mk == Auth::user()->dosen->nidn)
+						<li class="nav-item">
+							<a href="#tambah-anggota" class="nav-link" data-bs-toggle="tab">
+								<i class="ph-users-three me-2"></i>
+								Tambah Anggota
+							</a>
+						</li>
+					@endif
+				@endif
 			</ul>
 		</div>
 
@@ -96,7 +100,7 @@
 									<td class="text-center">	
 										<div class="d-inline-flex">
 											<div class="px-4">
-												<small class="text-muted">{{ucfirst($a->role)}}</small>
+												<small class="text-muted">{{ucfirst($a->role->value)}}</small>
 											</div>
 											<small>
 												<form action="/kelompok/people/delete" method="post">
@@ -114,43 +118,47 @@
 					</table>
 				</div>
 			</div>
-			<div class="tab-pane fade show" id="tambah-anggota">
-				<div class="card p-3">
-					<div class="p-3">
-						<form action="/kelompok/people/add" method="post">
-							@csrf
-							<p>Tambah Anggota Kelompok</p>
-							<input type="hidden" name="kelompok" value="{{$kelompok->id}}">
-							<div class="py-2">
-								<select data-placeholder="Pilih mahasiswa" name="mahasiswa" class="form-control select" required>
-									<option></option>
-									<optgroup label="Daftar mahasiswa">
-										@foreach($mahasiswa as $km)
-											@if(!in_array($km->mahasiswa->nim, $anggota->pluck('nim')->toArray()))
-											<option value="{{$km->mahasiswa->nim}}">
-												<div>
-													{{$km->mahasiswa->user->nama}} (<small>Design, Coding</small>)<br>
-												</div>
-											</option>
-											@endif
-										@endforeach
-									</optgroup>
-								</select>
+			@if(Auth::user()->dosen()->count() > 0)
+					@if($krs->dosen_mk == Auth::user()->dosen->nidn)
+						<div class="tab-pane fade show" id="tambah-anggota">
+							<div class="card p-3">
+								<div class="p-3">
+									<form action="/kelompok/people/add" method="post">
+										@csrf
+										<p>Tambah Anggota Kelompok</p>
+										<input type="hidden" name="kelompok" value="{{$kelompok->id}}">
+										<div class="py-2">
+											<select data-placeholder="Pilih mahasiswa" name="mahasiswa" class="form-control select" required>
+												<option></option>
+												<optgroup label="Daftar mahasiswa">
+													@foreach($mahasiswa as $km)
+														@if(!in_array($km->mahasiswa->nim, $anggota->pluck('nim')->toArray()))
+														<option value="{{$km->mahasiswa->nim}}">
+															<div>
+																{{$km->mahasiswa->user->nama}} (<small>Design, Coding</small>)<br>
+															</div>
+														</option>
+														@endif
+													@endforeach
+												</optgroup>
+											</select>
+										</div>
+										<div class="py-2">
+											<select data-placeholder="Pilih Kategori" name="role" class="form-control select" required>
+												@foreach ($role_kelompok as $rk)
+													<option value="{{$rk->id}}" selected>{{ucfirst($rk->value)}}</option>
+												@endforeach
+											</select>
+										</div>
+										<div>
+											<button type="submit" class="btn btn-sm btn-primary w-100">Kirim</button>
+										</div>
+									</form>
+								</div>
 							</div>
-							<div class="py-2">
-								<select data-placeholder="Pilih Kategori" name="role" class="form-control select" required>
-									@foreach ($role_kelompok as $rk)
-										<option value="{{$rk->id}}" selected>{{ucfirst($rk->value)}}</option>
-									@endforeach
-								</select>
-							</div>
-							<div>
-								<button type="submit" class="btn btn-sm btn-primary w-100">Kirim</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
+						</div>
+					@endif
+				@endif
 		</div>
 
     </div>

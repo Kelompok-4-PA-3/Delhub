@@ -286,6 +286,44 @@ class DatabaseSeeder extends Seeder
             'kategori_id' => 3,
         ]);
 
+        Permission::create([
+            'name' => 'request bimbingan',
+            'guard_name' => 'web',
+        ]);
+        Permission::create([
+            'name' => 'update status bimbingan',
+            'guard_name' => 'web',
+        ]);
+        Permission::create([
+            'name' => 'kelola pembimbing penguji',
+            'guard_name' => 'web',
+        ]);
+        Permission::create([
+            'name' => 'kelola topik kelompok',
+            'guard_name' => 'web',
+        ]);
+        Permission::create([
+            'name' => 'hapus bimbingan',
+            'guard_name' => 'web',
+        ]);
+
+        Role::create([
+            'name' => 'koordinator',
+            'guard_name' => 'web',
+        ]);
+        Role::create([
+            'name' => 'mahasiswa',
+            'guard_name' => 'web',
+        ]);
+        Role::create([
+            'name' => 'dosen',
+            'guard_name' => 'web',
+        ]);
+        Role::create([
+            'name' => 'admin',
+            'guard_name' => 'web',
+        ]);
+
         // \App\Models\PoinRegulasi::create([
         //     'nama' => 'Sidang',
         //     'poin' => 5,

@@ -43,10 +43,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#edit-topik" class="nav-link" data-bs-toggle="tab">
-                                <i class="ph-pencil me-2"></i>
-                                Edit
-                            </a>
+                            @can('kelola topik kelompok')
+                                @if (app('is_kelompok_leader')->is_kelompok_leader($kelompok->id))
+                                    <a href="#edit-topik" class="nav-link" data-bs-toggle="tab">
+                                        <i class="ph-pencil me-2"></i>
+                                        Edit  
+                                    </a>
+                                @endif
+                            @endcan
                         </li>
                     </ul>
 
@@ -111,11 +115,13 @@
                                     <div>
                                         <div class="d-flex p-2 mt-2">
                                             <small class="text-muted">Pembimbing : </small>
-                                            @if()
-                                                <div class="ms-auto">
-                                                    <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pd->id }}"><i class="ph-trash"></i></a></small>
-                                                </div>
-                                            @endif
+                                            @can('kelola pembimbing penguji')
+                                                @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn)
+                                                    <div class="ms-auto">
+                                                        <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pd->id }}"><i class="ph-trash"></i></a></small>
+                                                    </div>
+                                                @endif
+                                            @endcan
                                         </div>
                                         <h6 class="fw-semibold px-2">
                                             {{$pd->nama}}
@@ -326,10 +332,42 @@
                                                             @endif
                                                         @endcan
 
+                                                        @can('hapus bimbingan')
+                                                            <a href="#" class="text-danger mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$kb->id}}">
+                                                                <i class="ph-x"></i> Batal
+                                                            </a>
+                                                        @endif
+
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
+
+                                         <!-- Delete Modal -->
+                                        <div id="modal_hapus{{$kb->id}}" class="modal fade" tabindex="-1">
+                                            <div class="modal-dialog modal-xs">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        Apakah anda yakin ingin menghapus data bimbingan ini ?
+                                                    </div>
+
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                        <form action="/request/{{$kb->id}}" method="post">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <button type="submit" class="btn btn-primary">Ya</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /Delete Modal -->  
                                         @endforeach
                                         @else
                                             <p class="text-muted text-center">Belum ada bimbingan tersedia</p> 
@@ -337,7 +375,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div>              
+
                         @can('request bimbingan')
                         <div class="tab-pane active fade" id="tambah-bimbingan">
                             <form action="/bimbingan" method="post">

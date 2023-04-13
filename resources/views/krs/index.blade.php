@@ -72,9 +72,6 @@
                             <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$k->id}}">
                                 <i class="ph-trash"></i>
                             </a>
-                            <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$k->id}}">
-                                <i class="ph-trash"></i>
-                            </a>
                         </div>
                     </td>
                 </tr>
