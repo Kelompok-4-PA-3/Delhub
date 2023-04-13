@@ -353,7 +353,7 @@
                                                     </div>
 
                                                     <div class="modal-body">
-                                                        Apakah anda yakin ingin menghapus data bimbingan ini ?
+                                                        Apakah anda yakin ingin menghapus    data bimbingan ini ?
                                                     </div>
 
                                                     <div class="modal-footer justify-content-between">

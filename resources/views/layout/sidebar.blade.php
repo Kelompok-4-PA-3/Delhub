@@ -96,6 +96,8 @@
 
                 @if (Auth::user()->dosen->pembimbing_penguji->where('reference_id','=',4)->count() > 0)
                 <li class="nav-item">
+                    <a href="/kategori" class="nav-link">
+                        <i class="ph-squares-four"></i>
                     <a href="/koordinator" class="nav-link">
                         <i class="ph-list-dashes"></i>
                         <span>
@@ -185,6 +187,43 @@
                         </span>
                     </a>
                 </li>
+                <li class="nav-item-header pt-0">
+                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">     PENGGUNA</div>
+                    <i class="ph-dots-three sidebar-resize-show"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="/users" class="nav-link">
+                        <i class="ph-users"></i>
+                        <span>
+                            Manajemen Pengguna
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/roles" class="nav-link">
+                        <i class="ph-user-list"></i>
+                        <span>
+                            Manajemen Role
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/permission" class="nav-link">
+                        <i class="ph-lock-key"></i>
+                        <span>
+                            Manajemen Permissions
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/prodi" class="nav-link">
+                        <i class="ph-circles-four"></i>
+                        <span>
+                            Manajemen Program Studi
+                        </span>
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a href="/fakultas" class="nav-link">
                         <i class="ph-circles-four"></i>

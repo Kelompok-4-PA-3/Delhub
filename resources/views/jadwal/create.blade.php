@@ -1,4 +1,4 @@
-@extends('main')
+-@extends('main')
 
 @push('select_js')
     <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
@@ -15,36 +15,44 @@
         <div class="card-body pb-0">
             <div class="card">
                 <div class="card-body border-top">
-                    <form action="{{ route('interest.store') }}" method="post">
+                    <form action="{{ route('jadwal.store') }}" method="post">
                         @csrf
                         <fieldset class="mb-3">
                             <div class="mb-3">
-                                <label class="form-label">Nama</label>
-                                <input name="nama" type="text"
-                                    class="form-control @error('nama') is-invalid @enderror"
-                                    placeholder="Masukkan nama disini" />
-                                @error('nama')
-                                    <div class="text-danger text-sm p-1">
-                                        <i class="ph-warning-circle"></i>{{ $message }}
-                                    </div>
+                                <label class="form-label">Kelompok</label>
+                                <input name="kel" type="text" class="form-control" value="{{old('nama')}}" placeholder="Masukkan kelompok disini" required>
+                                @error('kel')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Keterangan</label>
-                                <input name="keterangan" type="text"
-                                    class="form-control @error('keterangan') is-invalid @enderror"
-                                    placeholder="Masukkan keterangan disini" />
-                                @error('keterangan')
-                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
-                                    </div>
+                                <label class="form-label">Tanggal Bimbingan</label>
+                                <input type="date" class="form-control" name="tanggal" required>
+                                @error('tanggal')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
                                 @enderror
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">Waktu Bimbingan</label>
+                                <input type="time" class="form-control" name="waktu" required>
+                                @error('waktu')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Ruangan</label>
+                                <input name="ruangan" type="text" class="form-control" value="{{old('ruangan')}}" placeholder="Masukkan Ruangan" required>
+                                @error('ruangan')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                @enderror
+                            </div>
+
                         </fieldset>
                         <div class="text-end">
-                            <button type="submit" class="btn btn-primary">Simpan
-                                <i class="ph-paper-plane-tilt ms-2"></i>
-                            </button>
+                            <button type="submit" class="btn btn-primary">Kirim <i
+                                    class="ph-paper-plane-tilt ms-2"></i></button>
                         </div>
                     </form>
                 </div>

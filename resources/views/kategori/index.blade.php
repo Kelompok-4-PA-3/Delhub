@@ -201,19 +201,11 @@
                             @enderror
                         </div>
                         <div class="mt-2">
-                            <label class="form-label">Nama Singkat</label>
-                            <input type="text" name="nama_singkat" value="{{old('nama_singkat')}}" class="form-control" required placeholder="Masukkan nama singkat disini">
-                            @error('nama_singkat')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="mt-2">
                             <label class="form-label">Kategori Proyek</label>
-                            <select type="text" name="kategori_id" class="form-control" required>
+                            <select type="text" name="kategori_proyek" class="form-control" required>
                                 <option value="">Pilih kategori proyek</option>
                                 @foreach ($kategori_proyek as $kp)
                                     <option value="{{$kp->id}}" {{$kp->id == old('kategori_id') ? 'selected' : ''}}>{{$kp->nama}}</option>
-                                    {{-- <option value="{{$kp->id}}" {{$kp->id == $pr->kategori_id ? 'selected' : ''}}>{{$kp->nama}}</option> --}}
                                 @endforeach
                             </select>
                             @error('nama')

@@ -10,8 +10,13 @@ class Jadwal extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama',
-        'keterangan',
-        'active',
+        'kel',
+        'tanggal',
+        'waktu',
+        'ruangan',
     ];
+    public function mahasiswa()
+    {
+        return $this->hasMany(Mahasiswa::class);
+    }
 }

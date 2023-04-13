@@ -11,6 +11,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\MhsInterestController;
 use App\Http\Controllers\BimbinganController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\RegulasiController;
 use App\Http\Controllers\KategoriProyekController;
 use App\Http\Controllers\PoinRegulasiController;
@@ -58,6 +59,13 @@ Route::middleware([
 
 
 
+
+    Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
+
+    Route::resource('/jadwal', \App\Http\Controllers\JadwalController::class)->name('jadwals', 'jadwal.index');
+
+
+    Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
     Route::resource('/fakultas', \App\Http\Controllers\FakultasController::class)->name('fakultas', 'fakultas.index');
     Route::resource('/users', UsersController::class)->name('users', 'users.index');
     Route::post('/users/upload', [UsersController::class, 'user_upload']);
@@ -70,6 +78,7 @@ Route::middleware([
     Route::resource('/mahasiswa', MahasiswaController::class)->name('mahasiswa', 'mahasiswa.index');
     Route::resource('/home', DashboardController::class)->name('home', 'home.index');
     Route::post('/users/krs/add', [DashboardController::class, 'add_user']);
+    Route::resource('/interest', InterestController::class)->name('interest', 'interest.index');
     Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
     Route::resource('/kelompok', KelompokController::class)->name('kelompok', 'kelompok.index');
     Route::post('/kelompok/dosen', [KelompokController::class, 'add_pembimbing']);
@@ -80,6 +89,12 @@ Route::middleware([
     Route::get('/kelompok/{id}/orang', [KelompokController::class, 'people']);
     Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
     Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan', 'bimbingan.index');
+
+    Route::post('/jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
+
+    Route::get('/jadwal/{jadwal}/edit', [JadwalController::class, 'edit'])->name('jadwal.edit');
+    Route::put('/jadwal/{jadwal}', [JadwalController::class, 'update'])->name('jadwal.ubah');
+    Route::delete('/jadwal/{jadwal}', [JadwalController::class, 'delete'])->name('jadwal.delete');
     Route::get('/krs/{id}/regulasi', [RegulasiController::class, 'index'])->name('regulasi', 'regulasi.index');
     Route::get('/krs/{id}/regulasi/add', [RegulasiController::class, 'create'])->name('regulasi-add', 'regulasi.add');
     Route::post('/krs/{id}/regulasi/add', [RegulasiController::class, 'store'])->name('regulasi-store', 'regulasi.store');
@@ -95,22 +110,18 @@ Route::middleware([
     // test
     Route::get('/mahasiswas/adds', function() {
         $mahasiswa = Mahasiswa::join('users','users.id','=','mahasiswas.user_id')->get();
-        // return $mahasiswa;
         foreach($mahasiswa as $m){
-            $m->users->assignRole('mahasiswa');
+            $m->user->assignRole('mahasiswa');
         }
-
         return 'berhasil';
     });
-    
+
     Route::get('/dosens/adds', function() {
         $dosen = Dosen::join('users','users.id','=','dosens.user_id')->get();
-        // return $dosen;
         foreach($dosen as $d){
             $d->user->assignRole('dosen');
         }
-
         return 'berhasil';
     });
-    
+
 });
