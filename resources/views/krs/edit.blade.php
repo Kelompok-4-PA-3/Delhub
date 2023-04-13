@@ -17,7 +17,8 @@
         <div class="card-body pb-0">
             <div class="card">
                 <div class="card-body border-top">
-                    <form action="/krs" method="post">
+                    <form action="/krs/{{$krs->id}}" method="post">
+                        @method('put')
                         @csrf
                         <fieldset class="mb-3">
                             <div class="mb-3">

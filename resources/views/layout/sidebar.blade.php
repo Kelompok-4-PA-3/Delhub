@@ -41,6 +41,35 @@
                         </span>
                     </a>
                 </li>
+                @role('mahasiswa')
+                {{-- @foreach (Auth::user()->mahasiswa->krs_user as $krs)
+                    <li class="nav-item-header pt-0">
+                        <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide"> {{$krs->krs->kategori->nama_mk}}</div>
+                        <i class="ph-dots-three sidebar-resize-show"></i>
+                    </li>
+                     @foreach ($krs->krs-> as $km)
+                        <li class="nav-item">
+                            <a href="/kelompok/{{$krs->krs}}" class="nav-link">
+                                <i class="ph-list-dashes"></i>
+                                <span>
+                                {{$krs->kelompok->nama_kelompok}}
+                                </span>
+                            </a>
+                        </li>
+                    @endforeach
+                @endforeach --}}
+                @foreach (Auth::user()->mahasiswa->kelompok_mahasiswa as $km)
+                <li class="nav-item">
+                    {{-- {{$km->kelompok}} --}}
+                    <a href="/kelompok/{{$km->kelompok->id}}" class="nav-link">
+                        <i class="ph-list-dashes"></i>
+                        <span>
+                           {{$km->kelompok->nama_kelompok}}
+                        </span>
+                    </a>
+                </li>
+                @endforeach
+                @endrole
                 {{-- {{Auth::user()->dosen}} --}}
                 @role('dosen')
                 @if (Auth::user()->dosen->krs->count() > 0)
@@ -76,7 +105,7 @@
                         </span>
                     </a>
                 </li>
-            @endif
+                @endif
 
                 <li class="nav-item">
                     <a href="/request" class="nav-link">

@@ -13,17 +13,20 @@ class KelompokMahasiswa extends Model
     use SoftDeletes;
     use UserStamps;
 
-    protected $fillable = ['kelompok_id','nim', 'role'];
+    protected $fillable = ['kelompok_id', 'nim', 'role'];
 
-    public function mahasiswa(){
-        return $this->belongsTo(Mahasiswa::class,'nim','nim');
+    public function mahasiswa()
+    {
+        return $this->belongsToMany(Mahasiswa::class, 'nim', 'nim');
     }
 
-    public function kelompok(){
-        return $this->belongsTo(Kelompok::class,'kelompok_id');
+    public function kelompok()
+    {
+        return $this->belongsTo(Kelompok::class, 'kelompok_id');
     }
 
-    public function role(){
+    public function role()
+    {
         return $this->hasOne(Reference::class, 'id', 'role');
     }
 }
