@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// use Wildside\Userstamps\Userstamps;
+use Wildside\Userstamps\Userstamps;
 
 class Reference extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    // use UsersStamps;
+    use Userstamps;
 
     protected $guarded = ['id'];
 

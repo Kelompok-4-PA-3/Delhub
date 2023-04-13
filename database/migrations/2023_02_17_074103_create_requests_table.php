@@ -19,7 +19,9 @@ return new class extends Migration
             $table->foreign('kelompok_id')->references('id')->on('kelompoks')->onUpdate('cascade')->onDelete('cascade');
             $table->text('description');
             $table->datetime('waktu');
-            $table->string('status');
+            $table->unsignedBigInteger('status');
+            $table->foreign('status')->references('id')->on('references')->onUpdate('cascade')->onDelete('cascade');
+            $table->boolean('is_done')->default(false);
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

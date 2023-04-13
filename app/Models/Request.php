@@ -16,4 +16,19 @@ class Request extends Model
     protected $guarded = ['id'];
 
     protected $dates = ['deleted_at'];
+
+    public function kelompok()
+    {
+        return $this->belongsTo(Kelompok::class);
+    }
+
+    public function ruangan()
+    {
+        return $this->belongsTo(Ruangan::class);
+    }
+
+    public function reference()
+    {
+        return $this->belongsTo(Reference::class, 'status', 'id');
+    }
 }

@@ -10,7 +10,10 @@
     <script src="{{asset('/assets/js/vendor/tables/datatables/extensions/buttons.min.js')}}"></script>
     <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
-    {{-- <script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script> --}}
+    <script src="{{asset('/assets/js/vendor/ui/moment/moment.min.js')}}"></script>
+    <script src="{{asset('/assets/js/vendor/pickers/daterangepicker.js')}}"></script>
+	<script src="{{asset('/assets/js/vendor/pickers/datepicker.min.js')}}"></script>
+	<script src="{{asset('/assets/demo/pages/picker_date.js')}}"></script>
 @endpush
 
 @section('breadscrumb', Breadcrumbs::render('pengguna'))
@@ -88,33 +91,66 @@
                                 Penguji
                             </a>
                         </li>
-                        <li class="nav-item">
+                        @can('kelola pembimbing penguji')
+                          @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn)
+                          <li class="nav-item">
                             <a href="#edit-dosen" class="nav-link" data-bs-toggle="tab">
                                 <i class="ph-pencil me-2"></i>
                                 Edit
                             </a>
-                        </li>
+                           </li>
+                          @endif
+                        @endcan
                     </ul>
 
                     <div class="tab-content flex-lg-fill">
                         <div class="tab-pane fade show active" id="pembimbing">
-                           <div class="d-flex p-2 mt-2">
-                            <small class="text-muted ">Pembimbing : </small>
-                            <div class="ms-auto">
-                               <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted" href=""><i class="ph-trash"></i></a></small>
-                            </div>
-                           </div>
-                            
-                                @if ($kelompok->pembimbing == NULL)
-                                    <small class="text-muted text-center px-2">Belum ada dosen pembimbing </small>
-                                @else
-                                    <h6 class="fw-semibold px-2">
-                                        {{$kelompok->dosen->user->nama}}
-                                    </h6>
-                                @endif
-                               
 
-                           
+                            @if ($pembimbing->count() > 0)
+                                @foreach ($pembimbing as $pd)
+                                    <div>
+                                        <div class="d-flex p-2 mt-2">
+                                            <small class="text-muted">Pembimbing : </small>
+                                            @if()
+                                                <div class="ms-auto">
+                                                    <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pd->id }}"><i class="ph-trash"></i></a></small>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <h6 class="fw-semibold px-2">
+                                            {{$pd->nama}}
+                                        </h6>
+                                    </div>
+
+                                    <!-- Delete Modal -->
+                                    <div id="modal_hapus{{ $pd->id }}" class="modal fade" tabindex="-1">
+                                        <div class="modal-dialog modal-xs">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{ $pd->nama }}</span> ?
+                                                </div>
+
+                                                <div class="modal-footer justify-content-between">
+                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                    <form action="/kelompok/dosen/{{$pd->id}}/delete" method="post">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-primary">Ya</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Delete Modal -->
+
+                                @endforeach
+                           @else 
+                                <i><small>Belum ada pembimbing di kelompok ini</small></i>
+                           @endif
                         </div>
                         
                         <div class="tab-pane fade active" id="penguji">
@@ -132,7 +168,6 @@
                                         {{$kelompok->dosen->user->nama}}
                                     </h6>
                                 @endif
-                               
                             </div>
                             <div>
                                 <div class="d-flex px-2">
@@ -152,6 +187,7 @@
                             </div>
                         </div>
 
+                        @can('kelola pembimbing penguji')
                         <div class="tab-pane fade" id="edit-dosen">
                            <form action="/kelompok/dosen" method="post">
                             @csrf
@@ -172,9 +208,8 @@
                             <select data-placeholder="Pilih Kategori" name="reference" class="form-control select" required>
                                 <option></option>
                                 <optgroup label="Daftar Kategori">
-                                    <option value="pembimbing">Pembimbing</option>
-                                    @foreach($reference as $r)
-                                        <option value="{{$r->id}}">{{$r->value}}</option>
+                                    @foreach($role_dosen as $rd)
+                                        <option value="{{$rd->id}}">{{$rd->value}}</option>
                                     @endforeach
                                 </optgroup>
                             </select>
@@ -184,6 +219,7 @@
                             </div>
                            </form>
                         </div>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -196,32 +232,41 @@
             <!-- Sales stats -->
             <div class="card">
                 <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
-                    <h5 class="py-sm-2 my-sm-1">Bimbingan</h5><br>
+                    <h5 class="py-sm-2 my-sm-1">Bimbingan </h5><br>
                     <div class="mt-2 mt-sm-0 ms-sm-auto">
                         <div class="d-flex mt-3">
                             <small class="text-muted">Total : </small>
-                            <h1>{{$kelompok->bimbingan->count()}}</h1> / <h6 class="text-muted">8</h6>
+                            <h1>{{$kelompok->bimbingan->count()}}</h1> / <h6 class="text-muted">
+                                @if ($regulasi == NULL)
+                                    {{$kelompok->krs->kategori->kategori->poin_regulasi->sum('poin')}}
+                                @else 
+                                    {{$regulasi}}
+                                @endif
+                            </h6>
                         </div>
                     </div>
                 </div>
              
                 <div class="card-body pb-0">
+                    
                     <!-- Tabs -->
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified">
                         <li class="nav-item">
                             <a href="#list-bimbingan" class="nav-link active" data-bs-toggle="tab">
-                                Daftar 
+                                Daftar   
                             </a>
                         </li>
+                        @can('request bimbingan')
+                            <li class="nav-item">
+                                <a href="#tambah-bimbingan" class="nav-link" data-bs-toggle="tab">
+                                    Request
+                                </a>
+                            </li>
+                        @endcan
+                      
 
-                        <li class="nav-item">
-                            <a href="#tambah-bimbingan" class="nav-link" data-bs-toggle="tab">
-                                Request
-                            </a>
-                        </li>
                     </ul>
                     <!-- /tabs -->
-
 
                     <!-- Tabs content -->
                     <div class="tab-content card-body">
@@ -242,17 +287,17 @@
                                                         <small><a href="#" class="text-body fw-semibold letter-icon-title">{{Str::limit($kb->description,20)}}</a></small>
                                                         <div class="d-flex align-items-center text-muted fs-sm">
                                                             <span class="
-                                                            @if($kb->status == 'waiting')
+                                                            @if($kb->reference->value == 'waiting')
                                                                 bg-info
-                                                            @elseif($kb->status == 'approved')
+                                                            @elseif($kb->reference->value == 'approved')
                                                                 bg-success
-                                                            @elseif($kb->status == 'rejected')
+                                                            @elseif($kb->reference->value == 'rejected')
                                                                 bg-danger
-                                                            @elseif($kb->status == 'reschedule')
+                                                            @elseif($kb->reference->value == 'reschedule')
                                                                 bg-warning
                                                             @endif
                                                              rounded-pill p-1 me-2"></span>
-                                                            {{$kb->status}}
+                                                            {{$kb->reference->value}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -263,18 +308,24 @@
                                                         <i class="ph-list"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a href="/bimbingan/status/{{$status = 'approved'}}/{{$kb->id}}" class="dropdown-item">
-                                                            <i class="ph-checks text-success me-2"></i>
-                                                            Approve
-                                                        </a>
-                                                        <a href="/bimbingan/status/{{$status = 'rejected'}}/{{$kb->id}}" class="dropdown-item">
-                                                            <i class="ph-x text-danger me-2"></i>
-                                                            Rejected
-                                                        </a>
-                                                        <a href="/bimbingan/status/{{$status = 'reschedule'}}/{{$kb->id}}" class="dropdown-item">
-                                                            <i class="ph-calendar-x text-info me-2"></i>
-                                                            Reschedule
-                                                        </a>
+                                                      
+                                                        @can('update status bimbingan')
+                                                            @if (app('is_pembimbing')->is_pembimbing($kelompok->id))
+                                                                @foreach($status_bimbingan as $sb)
+                                                                    <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}" class="dropdown-item">
+                                                                        @if($sb->value == 'approved')
+                                                                            <i class="ph-checks text-success me-2"></i>
+                                                                        @elseif($sb->value == 'rejected')
+                                                                            <i class="ph-x text-danger me-2"></i>
+                                                                        @elseif($sb->value == 'reschedule')
+                                                                            <i class="ph-calendar-x text-info me-2"></i>
+                                                                        @endif
+                                                                        {{$sb->value}}
+                                                                    </a>
+                                                                @endforeach
+                                                            @endif
+                                                        @endcan
+
                                                     </div>
                                                 </div>
                                             </td>
@@ -287,16 +338,14 @@
                                 </table>
                             </div>
                         </div>
-
+                        @can('request bimbingan')
                         <div class="tab-pane active fade" id="tambah-bimbingan">
                             <form action="/bimbingan" method="post">
                                 @csrf
                                 <input type="text" name="kelompok_id" value="{{$kelompok->id}}" class="d-none">
                                 <div class="p-1">
                                     <label for="">Deskripsi</label>
-                                    <textarea class="form-control" name="description" type="text" placeholder="Deskripsi bimbingan" required>
-                                        {{old('deskripsi')}}
-                                    </textarea>
+                                    <textarea class="form-control" name="description" type="text" placeholder="Deskripsi bimbingan" required>{{old('deskripsi')}}</textarea>
                                 </div>
                                 <div class="p-1">
                                     <label for="">Waktu</label>
@@ -306,7 +355,7 @@
                                     <label for="">Ruangan</label>
                                     <select class="form-control" name="ruangan_id" placeholder="waktu bimbingan" required>
                                         @foreach($ruangan as $r)
-                                            <option value="{{$r->id}}">Gedung Vokasi</option>
+                                            <option value="{{$r->id}}">{{$r->nama}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -315,6 +364,7 @@
                                 </div>
                             </form>
                         </div>
+                        @endcan
                     </div>
                     <!-- /tabs content -->
 

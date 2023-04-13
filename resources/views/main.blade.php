@@ -24,7 +24,7 @@
     {{-- datatables.js --}}
     @stack('datatable_js')
 
-    <script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script>
+    <script src="{{ asset('/assets/js/vendor/ui/prism.min.js') }}"></script>
 
 
     <script src="{{ asset('assets/js/vendor/visualization/d3/d3.min.js') }}"></script>
@@ -61,7 +61,7 @@
                 <div class="content">
 
                     @yield('content')
-                    
+
                 </div>
                 <!-- /content area -->
 
@@ -69,7 +69,9 @@
                 <!-- Footer -->
                 <div class="navbar navbar-sm navbar-footer border-top">
                     <div class="container-fluid">
-                        <span>&copy; 2022 <a href="https://themeforest.net/item/limitless-responsive-web-application-kit/13080328">Delhub</a> | Kelompok 4 PA III D4 TRPL 20</span>
+                        <span>&copy; 2022 <a
+                                href="https://themeforest.net/item/limitless-responsive-web-application-kit/13080328">Delhub</a>
+                            | Kelompok 4 PA III D4 TRPL 20</span>
                     </div>
                 </div>
                 <!-- /footer -->
@@ -80,11 +82,11 @@
         </div>
         <!-- /main content -->
 
-       @yield('right-sidebar')
+        @yield('right-sidebar')
 
     </div>
     <!-- /page content -->
-    
+
 
 
     <!-- Notifications -->
@@ -100,33 +102,49 @@
         <div class="offcanvas-body p-0">
             <div class="bg-light fw-medium py-2 px-3">New notifications</div>
             <div class="p-3">
-                @if(Auth::user()->dosen()->count() > 0)
-                {{-- {{auth()->user()->dosen->kelompok}} --}}
-                @foreach(auth()->user()->dosen->kelompok as $dk)
-                    {{-- {{$dk->bimbingan}} --}}
-                    @foreach($dk->bimbingan as $dkb)
-                       @if($dkb->status == 'waiting')
-                           <div class="d-flex align-items-start mb-3">
-                            <div class="flex-fill">
-                                <a href="#" class="fw-semibold">{{$dk->nama_kelompok}}</a> Telah merequest bimbingan untuk anda untuk keperluan "{{$dkb->description}}"
-        
-                                <div class="my-2">
-                                    <a href="/bimbingan/status/approved/{{$dk->id}}" class="btn btn-success btn-sm me-1">
-                                        <i class="ph-checks ph-sm me-1"></i>
-                                        Approve
-                                    </a>
-                                    <a href="/kelompok/{{$dk->id}}" class="btn btn-light btn-sm">
-                                        Review
-                                    </a>
-                                </div>
-        
-                                <div class="fs-sm text-muted mt-1">{{\Carbon\Carbon::parse($dkb->created_at)->diffForHumans()}}</div>
-                            </div>
-                        </div>
-                       @endif
-                    @endforeach
-                @endforeach
+            @role('dosen')
+                @php
+                    $waiting = app('request_bimbingan')->bimbingan(Auth::user()->dosen->nidn)['waiting'];
+                    $pembimbing = Auth::user()->dosen->pembimbing_penguji;
+                @endphp 
+
+                @if ($pembimbing->count() > 0)
+
+                        @foreach (app('request_bimbingan')->bimbingan(Auth::user()->dosen->nidn)['pembimbing'] as $dkb)
+                         
+                                @php 
+                                    $status_id = DB::table('references')->where('kategori','status_bimbingan')->where('value','approved')->first()->id
+                                @endphp
+
+                                @if($dkb->status == $waiting)
+
+                                    <div class="d-flex align-items-start mb-3">
+                                        <div class="flex-fill text-justify">
+                                            <a href="#" class="fw-semibold">{{ $dkb->nama_kelompok }}</a> Telah
+                                            merequest bimbingan untuk anda untuk keperluan "{{ $dkb->description }}"
+                                            <div class="my-2">
+                                                <a href="/bimbingan/status/{{$status_id}}/{{ $dkb->id }}"
+                                                    {{-- /bimbingan/status/{{$dk->id}}/{{$kb->id}} --}}
+                                                    class="btn btn-success btn-sm me-1">
+                                                    <i class="ph-checks ph-sm me-1"></i>
+                                                    Approve
+                                                </a>
+                                                <a href="/kelompok/{{ $dkb->kelompok_id }}" class="btn btn-light btn-sm">
+                                                    Review
+                                                </a>
+                                            </div>
+
+                                            <div class="fs-sm text-muted mt-1">
+                                                {{ \Carbon\Carbon::parse($dkb->created_at)->diffForHumans() }}</div>
+                                        </div>
+                                    </div>
+                                
+                                @endif
+                            
+                        @endforeach
                 @endif
+                
+            @endrole
             </div>
 
             {{-- <div class="bg-light fw-medium py-2 px-3">Older notifications</div> --}}
@@ -270,5 +288,39 @@
         </div>
     </div>
     <!-- /demo config -->
+
+    @if (session()->has('success'))
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-light text-success">
+                    <i class="ph-circle-wavy-check"></i>
+                    <strong class="me-auto">&nbsp;Berhasil</strong>
+                    <button type="button" class="btn-close text-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body d-flex">
+                    <h5>&#128522;</h5>&nbsp;<small class="text-muted">{{ session('success') }}</small>
+                </div>
+            </div>
+        </div>
+    @endif
+    
+    @if (session()->has('failed'))
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-light text-danger">
+                    <i class="ph-circle-wavy-warning"></i>
+                    <strong class="me-auto">&nbsp;Gagal!</strong>
+                    <button type="button" class="btn-close text-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body d-flex">
+                    <h5>&#128522;</h5>&nbsp;<small class="text-muted">{{ session('success') }}</small>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @stack('remove-scroll')
 
 </body>

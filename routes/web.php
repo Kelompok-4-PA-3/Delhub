@@ -5,7 +5,6 @@ use App\Http\Controllers\KrsController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsersController;
-use App\Http\Controllers\InterestController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DashboardController;
@@ -14,6 +13,11 @@ use App\Http\Controllers\MhsInterestController;
 use App\Http\Controllers\kelompokController;
 use App\Http\Controllers\BimbinganController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\RegulasiController;
+use App\Http\Controllers\KategoriProyekController;
+use App\Http\Controllers\PoinRegulasiController;
+use App\Http\Controllers\MyProjectController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,8 +44,16 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', function () {
+        // return Auth::user()->dosen;
+
         return view('index');
     })->name('dashboard');
+
+    Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
+    Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
+    Route::resource('/request', \App\Http\Controllers\RequestController::class)->name('requests', 'request.index');
+
+
 
 
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
@@ -66,8 +78,10 @@ Route::middleware([
     Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
     Route::resource('/kelompok', KelompokController::class)->name('kelompok', 'kelompok.index');
     Route::post('/kelompok/dosen', [KelompokController::class, 'add_pembimbing']);
+    Route::post('/kelompok/dosen/{id}/delete', [KelompokController::class, 'delete_pembimbing']);
     Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
-    // Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
+    Route::post('/kelompok/people/add', [KelompokController::class, 'add_mahasiswa']);
+    Route::post('/kelompok/people/delete', [KelompokController::class, 'delete_mahasiswa']);
     Route::get('/kelompok/{id}/orang', [KelompokController::class, 'people']);
     Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
     Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan', 'bimbingan.index');
@@ -76,9 +90,15 @@ Route::middleware([
 
     Route::get('/jadwal/{jadwal}/edit', [JadwalController::class, 'edit'])->name('jadwal.edit');
     Route::put('/jadwal/{jadwal}', [JadwalController::class, 'update'])->name('jadwal.ubah');
-    Route::delete('/jadwal/{jadwal}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
-
-    // R
-
+    Route::delete('/jadwal/{jadwal}', [JadwalController::class, 'delete'])->name('jadwal.delete');
+    Route::get('/krs/{id}/regulasi', [RegulasiController::class, 'index'])->name('regulasi', 'regulasi.index');
+    Route::get('/krs/{id}/regulasi/add', [RegulasiController::class, 'create'])->name('regulasi-add', 'regulasi.add');
+    Route::post('/krs/{id}/regulasi/add', [RegulasiController::class, 'store'])->name('regulasi-store', 'regulasi.store');
+    Route::post('/krs/{id}/regulasi/edit', [RegulasiController::class, 'update'])->name('regulasi-update', 'regulasi.update');
+    Route::get('/krs/{id}/regulasi/show', [RegulasiController::class, 'show'])->name('regulasi-show', 'regulasi.show');
+    Route::resource('/kategori_proyek', KategoriProyekController::class)->name('kategori_proyek', 'kategori_proyek.index');
+    Route::resource('/poin_regulasi', PoinRegulasiController::class)->name('poin_regulasi', 'poin_regulasi.index');
+    Route::get('/koordinator/proyeksaya/{id}', [MyProjectController::class, 'koordintor']);
+    Route::get('/pembimbing/{nidn}/', [MyProjectController::class, 'pembimbing']);
     Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
 });

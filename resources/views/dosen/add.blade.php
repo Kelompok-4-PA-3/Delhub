@@ -36,12 +36,22 @@
                             </div>
                             
                             <div class="mb-3">
+                                <label class="form-label">Nama Singkat</label>
+                                <input name="nama_singkat" type="text" class="form-control" value="{{old('nama_singkat')}}" placeholder="Masukkan nama singkat disini" required>
+                                @error('nama_singkat')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
                                 <label class="form-label">NIDN</label>
                                 <input name="nidn" type="number" class="form-control" value="{{old('nidn')}}" placeholder="Masukkan nidn disini" required>
                                 @error('nidn')
                                     <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
                                 @enderror
-                                
+                            </div>
+
+
                             <div class="mb-3">
                                 <label class="form-label">Program Studi</label>
                                 <select data-placeholder="Pilih pengguna" class="form-control select" name="prodi_id">

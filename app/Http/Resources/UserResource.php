@@ -14,14 +14,24 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id' => $this->id,
-            'nama' => $this->nama,
-            'username' => $this->username,
-            'email' => $this->email,
-            'email_verified_at' => $this->email_verified_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ];
+        // check role is dosen or mahasiswa
+        $role = $this->roles->first()->name;
+        if ($role == 'dosen') {
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'email' => $this->email,
+                'role' => $role,
+                'dosen' => new DosenResource($this->dosen),
+            ];
+        } else if ($role == 'mahasiswa') {
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'email' => $this->email,
+                'role' => $role,
+                'mahasiswa' => new MahasiswaResource($this->mahasiswa),
+            ];
+        }
     }
 }

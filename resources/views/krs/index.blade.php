@@ -1,5 +1,5 @@
 @extends('main')
-   
+
 @section('title')
     <title>Kartu Rencana Studi</title>
 @endsection
@@ -68,6 +68,9 @@
                         <div class="d-inline-flex">
                             <a href="/krs/{{$k->id}}/edit" class="text-body" data-bs-popup="tooltip" title="Ubah">
                                 <i class="ph-pen"></i>
+                            </a>
+                            <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$k->id}}">
+                                <i class="ph-trash"></i>
                             </a>
                             <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$k->id}}">
                                 <i class="ph-trash"></i>

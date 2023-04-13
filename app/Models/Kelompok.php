@@ -17,19 +17,26 @@ class Kelompok extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function kelompok_mahasiswa(){
+    public function kelompok_mahasiswa()
+    {
         return $this->hasMany(KelompokMahasiswa::class);
     }
 
-    public function bimbingan(){
+    public function bimbingan()
+    {
         return $this->hasMany(Request::class);
-}
+    }
 
-    public function pembimbing_penguji(){
+    public function pembimbing_penguji()
+    {
         return $this->hasMany(PembimbingPenguji::class);
     }
 
-    public function dosen(){
-        return $this->belongsTo(Dosen::class,'pembimbing','nidn');
+    public function dosen()
+    {
+        return $this->belongsTo(Dosen::class, 'pembimbing', 'nidn');
+    }
+    public function Krs(){
+        return $this->belongsTo(Krs::class, 'krs_id', 'id');
     }
 }

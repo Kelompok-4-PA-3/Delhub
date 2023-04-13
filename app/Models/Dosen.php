@@ -22,9 +22,13 @@ class Dosen extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-    
+
     public function prodi(){
         return $this->belongsTo(Prodi::class);
+    }
+
+    public function krs(){
+        return $this->hasMany(Krs::class, 'dosen_mk', 'nidn');
     }
 
     public function kelompok(){
@@ -32,7 +36,7 @@ class Dosen extends Model
     }
 
     public function pembimbing_penguji(){
-        return $this->hasMany(PembimbingPenguji::class);
+        return $this->hasMany(PembimbingPenguji::class, 'dosen_id', 'nidn');
     }
 
     public function getRouteKeyName()

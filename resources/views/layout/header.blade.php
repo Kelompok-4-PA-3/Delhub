@@ -98,9 +98,16 @@
 
             <div class="page-header-content d-lg-flex border-top">
                 <div class="d-flex">
-                    <div class="py-2">
+                    
+									<div class="page-header-content border-top py-2">
+										<div class="breadcrumb breadcrumb-arrows">
+                                            @yield('breadscrumb')
+										</div>
+									</div>
+
+                    {{-- <div class="py-2">
                         @yield('breadscrumb')
-                    </div>
+                    </div> --}}
 
                     <a href="#breadcrumb_elements" class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
                         <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>

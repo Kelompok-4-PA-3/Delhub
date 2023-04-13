@@ -83,6 +83,8 @@
 
 @endsection
 
+@if(Auth::user()->dosen()->count() > 0)
+@if($krs->dosen_mk == Auth::user()->dosen->nidn)
 @section('right-sidebar')
  <!-- Right sidebar -->
 		<div class="sidebar sidebar-end sidebar-expand-lg sidebar-collapsed">
@@ -159,6 +161,12 @@
 								<a href="/kelompok" class="nav-link">
 									<i class="ph-plus-circle me-2"></i>
 									Create task
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="/krs/{{$krs->id}}/regulasi" class="nav-link">
+									<i class="ph-list-checks me-2"></i>
+									Regulasi
 								</a>
 							</li>
 							<li class="nav-item">
@@ -300,3 +308,5 @@
 		</div>
 		<!-- /right sidebar -->
 @endsection
+@endif
+@endif

@@ -15,8 +15,9 @@ use Hash;
 
 class UsersController extends Controller
 {
-    public function getUser(){
-        $user = User::latest()->paginate(10);
+    public function getUser()
+    {
+        $user = User::latest()->get();
         return json_encode($user);
     }
     /**
@@ -24,9 +25,9 @@ class UsersController extends Controller
      */
     public function index(): View
     {
-        $user = User::latest()->paginate(10);
+        $user = User::latest()->get();
         $roles = RoleModel::latest()->get();
-        return view('users.index',[
+        return view('users.index', [
             'title' => 'Manajemen Pengguna',
             'user' => $user,
             'roles' => $roles
@@ -37,9 +38,9 @@ class UsersController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(): View
-    {   
+    {
         $roles = RoleModel::latest()->get();
-        return view('users.add',[
+        return view('users.add', [
             'title' => ' <i class="ph-users"></i> Manajemen Pengguna',
             'roles' => $roles
         ]);
@@ -49,7 +50,8 @@ class UsersController extends Controller
      * Store a newly created resource in storage.
      */
 
-    public function user_upload(Request $request){
+    public function user_upload(Request $request)
+    {
         // return $request;
         // if($request->file('user-file')){
         //     return "iya";
@@ -58,12 +60,12 @@ class UsersController extends Controller
         // }
 
         Excel::import(new UsersImport, request()->file('user-file'));
-        return back()->with('success','Pengguna baru telah berhasil ditambahkan');
+        return back()->with('success', 'Pengguna baru telah berhasil ditambahkan');
     }
 
     public function store(Request $request)
     // : RedirectResponse
-    {   
+    {
         return $request;
         // return $request;
         $data = [
@@ -84,7 +86,7 @@ class UsersController extends Controller
         $user->username = $validasi['username'];
         $user->email = $validasi['email'];
         $user->password = $password;
-        foreach($request->roles as $r){
+        foreach ($request->roles as $r) {
             $user->assignRole($r);
             // return $r;
         }
@@ -133,15 +135,15 @@ class UsersController extends Controller
         $user->username = $validasi['username'];
         $user->email = $validasi['email'];
         $user->syncRoles([]);
-        foreach($request->roles as $r){
+        foreach ($request->roles as $r) {
             $user->assignRole($r);
         }
-        if ($request->password !== null){
+        if ($request->password !== null) {
             $user->password = Hash::make($validasi['password']);
         }
         $user->save();
 
-        return redirect('/users')->with('success','Data penguna telah berhasil diubah');
+        return redirect('/users')->with('success', 'Data penguna telah berhasil diubah');
     }
 
     /**
@@ -153,4 +155,3 @@ class UsersController extends Controller
         return redirect()->back()->with('success', 'Data pengguna telah berhasil dihapus');
     }
 }
-

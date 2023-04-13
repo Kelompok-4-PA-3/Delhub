@@ -28,7 +28,11 @@ class Mahasiswa extends Model
     }
 
     public function krs_user(){
-        return $this->belongsToMany(KrsUser::class, 'user_id', 'user_id');
+        return $this->hasMany(KrsUser::class, 'user_id', 'user_id');
+    }
+
+    public function kelompok_mahasiswa(){
+        return $this->hasMany(KelompokMahasiswa::class, 'nim', 'nim');
     }
 
     public function getRouteKeyName()
@@ -36,7 +40,12 @@ class Mahasiswa extends Model
         return 'nim';
     }
 
+<<<<<<< HEAD
     public function jadwal(){
         return $this->belongsTo(Jadwal::class);
+=======
+    public function kelompokMahasiswa(){
+        return $this->hasMany(KelompokMahasiswa::class);
+>>>>>>> 795a7e58360873a933373d7cad4bbdfb23b0fbf7
     }
 }

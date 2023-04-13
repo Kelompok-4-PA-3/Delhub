@@ -26,7 +26,8 @@ const DatatableAPI = function() {
 
         // Setting datatable defaults
         $.extend( $.fn.dataTable.defaults, {
-            autoWidth: false,
+            // autoWidth: false,
+            // scrollY: false,
             columnDefs: [{ 
                 orderable: false,
                 width: 100,
@@ -63,12 +64,16 @@ const DatatableAPI = function() {
 
 
         // Individual column searching with text inputs
-        $('.datatable-users thead tr:eq(1) th').not(':last-child').each(function () {
+        $('.datatable-users thead tr:eq(1) th').not(':last-child').not(':first-child').each(function () {
             const title = $(this).text();
             $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
         });
         $('.datatable-users').DataTable({
             orderCellsTop: true,
+            autoWidth: false, // mematikan autoWidth default
+            "columns td:first-child": [
+                { "width": "5%" },
+              ],
             buttons: {
                 dom: {
                     button: {
@@ -116,13 +121,14 @@ const DatatableAPI = function() {
         });
 
           // Individual column searching with text inputs
-          $('.datatable-mahasiswa thead tr:eq(1) th').each(function () {
+        $('.datatable-mahasiswa thead tr:eq(1) th').each(function () {
             const title = $(this).text();
             $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
         });
         $('.datatable-mahasiswa').DataTable({
             orderCellsTop: true,
             paging: false,
+            scrollY: false,
             buttons: {
                 dom: {
                     button: {
@@ -145,16 +151,51 @@ const DatatableAPI = function() {
             }
         });
 
+        $('.datatable-regulasi thead tr:eq(1) th').not(':first-child').each(function () {
+            const title = $(this).text();
+            $(this).html('<select class="column-check form-control"><option value=""> <button class="btn bg-white shadow-sm"> Semua </button></option><option value="Success"> <button class="btn bg-check-success shadow-sm"> Terpenuhi </button></option></select>');
+            // $(this).html('<input type="checkbox" class="form-check-input column-check" value="Success"' + title + '" /> <button class="btn bg-check-success shadow-sm"></button>');
+        });
+        $('.datatable-regulasi').DataTable({
+            orderCellsTop: true,
+            paging: true,
+            scrollY: true,
+            buttons: {
+                dom: {
+                    button: {
+                        className: 'btn btn-light'
+                    }
+                },
+            },
+            initComplete: function () {
+                this.api()
+                    .columns()
+                    .every(function (index) {
+                        const that = this;
+     
+                        $('.column-check').on('keyup change clear', function () {
+                            if (!that.checked) {
+                                if (that.search() !== this.value) {
+                                    // console.log(this.value);
+                                    that.column($(this).parent().index() + ':visible').search(this.value).draw();
+                                }
+                            }
+                        });
+                    });
+            }
+        });
+
          // Individual column searching with text inputs
         $('.datatable-people').DataTable({
             orderCellsTop: false,
             ordering: false,
             paging: false,
-            "scrollY": false,
+            scrollY: false,
+            scrollX: false,
             "columnDefs": [
                 { "width": "5%", "targets": 0 },
-                { "width": "65%", "targets": 1 },
-                { "width": "30%", "targets": 2 }
+                { "width": "55%", "targets": 1 },
+                { "width": "25%", "targets": 2 }
             ],
             buttons: {
                 dom: {
