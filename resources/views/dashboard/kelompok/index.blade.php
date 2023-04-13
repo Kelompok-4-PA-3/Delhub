@@ -59,7 +59,7 @@
 					</a>
 				</li>
 				@if(Auth::user()->dosen()->count() > 0)
-					@if($krs->dosen_mk == Auth::user()->dosen->nidn)
+					@if($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn)
 						<li class="nav-item">
 							<a href="#tambah-anggota" class="nav-link" data-bs-toggle="tab">
 								<i class="ph-users-three me-2"></i>

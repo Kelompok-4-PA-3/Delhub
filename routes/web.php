@@ -95,21 +95,17 @@ Route::middleware([
     // test
     Route::get('/mahasiswas/adds', function() {
         $mahasiswa = Mahasiswa::join('users','users.id','=','mahasiswas.user_id')->get();
-        // return $mahasiswa;
         foreach($mahasiswa as $m){
             $m->users->assignRole('mahasiswa');
         }
-
         return 'berhasil';
     });
     
     Route::get('/dosens/adds', function() {
         $dosen = Dosen::join('users','users.id','=','dosens.user_id')->get();
-        // return $dosen;
         foreach($dosen as $d){
             $d->user->assignRole('dosen');
         }
-
         return 'berhasil';
     });
     
