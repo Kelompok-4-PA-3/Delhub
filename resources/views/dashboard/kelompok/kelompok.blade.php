@@ -127,7 +127,7 @@
                                         </div>
                                         <h6 class="fw-semibold px-2">
                                             {{$pd->nama}} 
-                                            {{$pd->reference->value}}
+                                            {{$pd->reference}}
                                         </h6>
                                     </div>
 
@@ -303,7 +303,7 @@
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                       
                                                         {{-- @can('update status bimbingan') --}}
-                                                            @if (app('is_pembimbing')->is_pembimbing($kelompok->id))
+                                                            {{-- @if (app('is_pembimbing')->is_pembimbing($kelompok->id)) --}}
                                                                 @foreach($status_bimbingan as $sb)
                                                                     <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}" class="dropdown-item">
                                                                         @if($sb->value == 'approved')
@@ -317,7 +317,7 @@
                                                                     </a>
                                                                 @endforeach
                                                             {{-- @endif --}}
-                                                        @endcan
+                                                        {{-- @endcan --}}
 
                                                         @can('hapus bimbingan')
                                                             <a href="#" class="text-danger mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$kb->id}}">
