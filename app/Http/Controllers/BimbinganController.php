@@ -75,7 +75,7 @@ class BimbinganController extends Controller
         // send email to mahasiswa
         $kelompok = $bimbingan->kelompok;
         // get all mahasiswa in kelompok mahasiswa
-        $mahasiswa = $kelompok->kelompok_mahasiswa->where('status', 1)->get();
+        $mahasiswa = $kelompok->kelompok_mahasiswa;
         foreach ($mahasiswa as $mhs) {
             $mhs->mahasiswa->user->notify(new UpdateRequestNotification($status));
         }
