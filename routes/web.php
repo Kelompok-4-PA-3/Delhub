@@ -9,6 +9,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\MhsInterestController;
 use App\Http\Controllers\BimbinganController;
 use App\Http\Controllers\JadwalController;
