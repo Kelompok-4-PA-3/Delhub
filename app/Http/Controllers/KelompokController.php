@@ -83,6 +83,7 @@ class KelompokController extends Controller
         $ruangan = Ruangan::latest()->get();
         $dosen = Dosen::latest()->get();
         $reference = Reference::where('kategori','=','kelompok')->get();
+        $pembimbing_penguji = PembimbingPenguji::where('kelompok_id','=',$kelompok->id)->get();
         $pembimbing = PembimbingPenguji::where('kelompok_id','=',$kelompok->id)->get();
         $role_dosen = Reference::where('kategori', '=', 'role_dosen')->get();
         $pembimbing = PembimbingPenguji::where('kelompok_id','=',$kelompok->id)

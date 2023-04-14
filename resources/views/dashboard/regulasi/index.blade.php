@@ -170,7 +170,7 @@
                                             <td colspan="3"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="text-end"><button type="submit" class="btn btn-sm btn-primary">Kirim</button></td>
+                                            <td colspan="3" class="text-end"><button type="submit" class="btn btn-sm btn-primary">Submit</button></td>
                                         </tr>
                                     </table>
                                 </form> 

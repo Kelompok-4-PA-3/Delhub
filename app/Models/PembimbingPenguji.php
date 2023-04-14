@@ -18,11 +18,11 @@ class PembimbingPenguji extends Model
     protected $dates = ['deleted_at'];
 
     public function dosen(){
-        $this->belongsTo(Dosen::class, 'dosen_id', 'nidn');
+        return $this->belongsTo(Dosen::class, 'dosen_id', 'nidn');
     }
     
     public function reference(){
-        $this->belongsToMany(Reference::class, 'reference_id');
+        return $this->belongsTo(Reference::class, 'reference_id', 'id');
     }
 
     // public function reference(){

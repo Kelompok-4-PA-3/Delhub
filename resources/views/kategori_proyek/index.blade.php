@@ -132,7 +132,7 @@
                                             </div>
                                      </div>
                                     <div class="border-top p-3">
-                                        <button type="submit" class="btn btn-primary w-100">Kirim</button>
+                                        <button type="submit" class="btn btn-primary w-100">Submit</button>
                                     </div>
                                 </form>
                             </div>
@@ -172,7 +172,7 @@
                     </div>
                 </div>
                 <div class="border-top p-3">
-                    <button type="submit" class="btn btn-primary w-100">Kirim</button>
+                    <button type="submit" class="btn btn-primary w-100">Submit</button>
                 </div>
             </form>
         </div>
