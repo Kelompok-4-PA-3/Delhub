@@ -25,8 +25,7 @@ class KelompokMahasiswa extends Model
         return $this->belongsTo(Kelompok::class, 'kelompok_id');
     }
 
-    public function role()
-    {
-        return $this->hasOne(Reference::class, 'id', 'role');
+    public function reference(){
+        return $this->belongsTo(Reference::class, 'role', 'id');
     }
 }

@@ -72,7 +72,7 @@
                             <input type="hidden" value="{{$kelompok->id}}" name="kelompok">
                             <input type="text" class="form-control" name="topik" value="{{old('topik',$kelompok->topik)}}" placeholder="Masukkan topik disini" required>
                             <div class="p-1">
-                                <button class="btn btn-sm btn-primary w-100">Kirim</button>
+                                <button class="btn btn-sm btn-primary w-100">Submit</button>
                             </div>
                            </form>
                         </div>
@@ -112,6 +112,8 @@
 
                             @if ($pembimbing->count() > 0)
                                 @foreach ($pembimbing as $pd)
+                              
+                                    {{-- @if ($pd->reference->value = 'pembimbing 1') --}}
                                     <div>
                                         <div class="d-flex p-2 mt-2">
                                             <small class="text-muted">Pembimbing : </small>
@@ -124,7 +126,8 @@
                                             @endcan
                                         </div>
                                         <h6 class="fw-semibold px-2">
-                                            {{$pd->nama}}
+                                            {{$pd->nama}} 
+                                            {{$pd->reference->value}}
                                         </h6>
                                     </div>
 
@@ -175,22 +178,6 @@
                                     </h6>
                                 @endif
                             </div>
-                            <div>
-                                <div class="d-flex px-2">
-                                    <small class="text-muted ">Penguji 2 : </small>
-                                    <div class="ms-auto">
-                                    <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted" href=""><i class="ph-trash"></i></a></small>
-                                    </div>
-                                </div>
-                                @if ($kelompok->pembimbing == NULL)
-                                    <small class="text-muted text-center px-2">Belum ada dosen penguji</small>
-                                @else
-                                    <h6 class="fw-semibold px-2">
-                                        {{$kelompok->dosen->user->nama}}
-                                    </h6>
-                                @endif
-                               
-                            </div>
                         </div>
 
                         @can('kelola pembimbing penguji')
@@ -221,7 +208,7 @@
                             </select>
                             </div>
                             <div class="p-1">
-                                <button class="btn btn-sm btn-primary w-100">Kirim</button>
+                                <button class="btn btn-sm btn-primary w-100">Submit</button>
                             </div>
                            </form>
                         </div>
@@ -315,7 +302,7 @@
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                       
-                                                        @can('update status bimbingan')
+                                                        {{-- @can('update status bimbingan') --}}
                                                             @if (app('is_pembimbing')->is_pembimbing($kelompok->id))
                                                                 @foreach($status_bimbingan as $sb)
                                                                     <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}" class="dropdown-item">
@@ -329,7 +316,7 @@
                                                                         {{$sb->value}}
                                                                     </a>
                                                                 @endforeach
-                                                            @endif
+                                                            {{-- @endif --}}
                                                         @endcan
 
                                                         @can('hapus bimbingan')
@@ -399,7 +386,7 @@
                                     </select>
                                 </div>
                                 <div class="mt-2">
-                                    <button type="sumbit" class="btn btn-primary btn-sm w-100">Kirim</button>
+                                    <button type="sumbit" class="btn btn-primary btn-sm w-100">Submit</button>
                                 </div>
                             </form>
                         </div>

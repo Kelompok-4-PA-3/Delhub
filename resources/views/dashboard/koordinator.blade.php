@@ -291,7 +291,7 @@
 											<small class="text-danger">Tidak ada data mahasiswa ditemukan</small>
 										@endif
 										<div class="py-2">
-											<button type="submit" class="btn btn-sm btn-primary w-100">Kirim</button>
+											<button type="submit" class="btn btn-sm btn-primary w-100">Submit</button>
 										</div>
 									</form>
 								</div>

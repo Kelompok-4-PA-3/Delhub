@@ -100,7 +100,7 @@
 									<td class="text-center">	
 										<div class="d-inline-flex">
 											<div class="px-4">
-												<small class="text-muted">{{ucfirst($a->role->value)}}</small>
+												<small class="text-muted">{{ucfirst($a->reference->value)}}</small>
 											</div>
 											<small>
 												<form action="/kelompok/people/delete" method="post">
@@ -119,7 +119,7 @@
 				</div>
 			</div>
 			@if(Auth::user()->dosen()->count() > 0)
-					@if($krs->dosen_mk == Auth::user()->dosen->nidn)
+					@if($kelompok->krs->dosen_mk  == Auth::user()->dosen->nidn)
 						<div class="tab-pane fade show" id="tambah-anggota">
 							<div class="card p-3">
 								<div class="p-3">
@@ -128,14 +128,14 @@
 										<p>Tambah Anggota Kelompok</p>
 										<input type="hidden" name="kelompok" value="{{$kelompok->id}}">
 										<div class="py-2">
-											<select data-placeholder="Pilih mahasiswa" name="mahasiswa" class="form-control select" required>
+											<select data-placeholder="Pilih mahasiswa" name="mahasiswa" multiple="multiple" class="form-control select" required>
 												<option></option>
 												<optgroup label="Daftar mahasiswa">
 													@foreach($mahasiswa as $km)
 														@if(!in_array($km->mahasiswa->nim, $anggota->pluck('nim')->toArray()))
 														<option value="{{$km->mahasiswa->nim}}">
 															<div>
-																{{$km->mahasiswa->user->nama}} (<small>Design, Coding</small>)<br>
+																{{$km->mahasiswa->user->nama}} - {{$km->mahasiswa->nim}} (<small>Design, Coding</small>)<br>
 															</div>
 														</option>
 														@endif
@@ -151,7 +151,7 @@
 											</select>
 										</div>
 										<div>
-											<button type="submit" class="btn btn-sm btn-primary w-100">Kirim</button>
+											<button type="submit" class="btn btn-sm btn-primary w-100">Submit</button>
 										</div>
 									</form>
 								</div>
