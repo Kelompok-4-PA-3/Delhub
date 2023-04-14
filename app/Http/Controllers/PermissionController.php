@@ -1,4 +1,4 @@
-<?php
++++++++++++++++++++++++++++++<?php
 
 namespace App\Http\Controllers;
 
@@ -27,7 +27,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-      
+
     }
 
     /**
@@ -44,7 +44,7 @@ class PermissionController extends Controller
         // $permission->name = $validasi['name'];
         // $permission->guard_name = $validasi['guard_name'];
         // $permission->save();
-        
+
         try {
             Permission::create($validasi);
         } catch (PermissionAlreadyExists $e) {

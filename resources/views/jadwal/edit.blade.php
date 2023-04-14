@@ -9,44 +9,34 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <h5 class="mb-0">Edit Antusias</h5>
+            <h5 class="mb-0">Edit JAdwal</h5>
         </div>
 
         <div class="card-body pb-0">
             <div class="card">
                 <div class="card-body border-top">
-                    <form action="{{ route('interest.update', $interest->id) }}" method="post">
-                        @csrf
-                        @method('PUT')
-                        <fieldset class="mb-3">
-                            <div class="mb-3">
-                                <label class="form-label">Nama</label>
-                                <input name="nama" type="text"
-                                    class="form-control @error('nama') is-invalid @enderror"
-                                    placeholder="Masukkan nama disini" value="{{ $interest->nama }}" />
-                                @error('nama')
-                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+                    <form method="POST" action="{{ route('jadwal.update', $jadwal->id) }}">
+    @csrf
+    @method('PUT')
+    <div class="form-group">
+        <label for="kel">Kelas</label>
+        <input type="text" name="kel" class="form-control" value="{{ $jadwal->kel }}">
+    </div>
+    <div class="form-group">
+        <label for="tanggal">Tanggal</label>
+        <input type="date" name="tanggal" class="form-control" value="{{ $jadwal->tanggal }}">
+    </div>
+    <div class="form-group">
+        <label for="waktu">Waktu</label>
+        <input type="time" name="waktu" class="form-control" value="{{ $jadwal->waktu }}">
+    </div>
+    <div class="form-group">
+        <label for="ruangan">Ruangan</label>
+        <input type="text" name="ruangan" class="form-control" value="{{ $jadwal->ruangan }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
 
-                            <div class="mb-3">
-                                <label class="form-label">Keterangan</label>
-                                <input name="keterangan" type="text"
-                                    class="form-control @error('keterangan') is-invalid @enderror"
-                                    placeholder="Masukkan keterangan disini" value="{{ $interest->keterangan }}" />
-                                @error('keterangan')
-                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </fieldset>
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary">Simpan
-                                <i class="ph-paper-plane-tilt ms-2"></i>
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>

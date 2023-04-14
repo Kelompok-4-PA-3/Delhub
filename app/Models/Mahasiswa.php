@@ -40,7 +40,12 @@ class Mahasiswa extends Model
         return 'nim';
     }
 
+<<<<<<< HEAD
+    public function jadwal(){
+        return $this->belongsTo(Jadwal::class);
+=======
     public function kelompokMahasiswa(){
         return $this->hasMany(KelompokMahasiswa::class);
+>>>>>>> 795a7e58360873a933373d7cad4bbdfb23b0fbf7
     }
 }
