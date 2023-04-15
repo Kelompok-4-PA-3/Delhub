@@ -113,23 +113,29 @@ class KelompokController extends Controller
     }
 
     public function add_pembimbing(Request $request){
-        // return $request;
+
         $data = [
-            'dosen' => 'required',
-            'kelompok' => 'required',
-            'reference' => 'required',
+            'kelompok_id' => 'required',
+            'pembimbing' => 'required',
         ];
 
         $validasi = $request->validate($data);
+        $pembimbing = Pembimbing::where('kelompok_id', $request->kelompok_id)->get();
 
-            $reference = Reference::where('value','=',$request->reference)->first();
-            PembimbingPenguji::create([
-                'dosen_id' => $request->dosen,
-                'reference_id' => $request->reference,
-                'kelompok_id' => $request->kelompok
-            ]);
+        if ($pembimbing->count() > 0) {
+                $pembimbing->pembimbing_2 = $validasi['pembimbing'];
+                $pembimbing->save();
 
-            return back()->with('success','Pembimbing telah berhasil ditambahkan ke kelompok ini');
+                return back()->with('success','Pembimbing 2 telah berhasil ditambahkan ke kelompok ini');
+            }
+
+
+        Pembimbing::create([
+            'krs_id' => $validasi['krs'],
+            'pembimbing_1' => $validasi['pembimbing'],
+        ]);
+
+        return back()->with('success','Pembimbing telah berhasil ditambahkan ke kelompok ini');
     }
 
     public function delete_pembimbing($id){

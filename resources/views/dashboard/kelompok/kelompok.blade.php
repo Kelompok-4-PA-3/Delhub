@@ -112,8 +112,6 @@
 
                             @if ($pembimbing->count() > 0)
                                 @foreach ($pembimbing as $pd)
-                              
-                                    {{-- @if ($pd->reference->value = 'pembimbing 1') --}}
                                     <div>
                                         <div class="d-flex p-2 mt-2">
                                             <small class="text-muted">Pembimbing : </small>

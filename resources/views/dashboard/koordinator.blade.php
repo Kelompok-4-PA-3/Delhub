@@ -263,11 +263,6 @@
 												 </td>
 											</tr>
 											@endforeach
-											{{-- @else
-												<div class="text-center">
-													<small class="text-danger ">belum ada mahasiswa di proyek ini</small>
-												</div>
-											@endif --}}
 											
 										</tbody>
 									</table>
