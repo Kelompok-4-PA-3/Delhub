@@ -113,7 +113,7 @@ class KelompokController extends Controller
     }
 
     public function add_pembimbing(Request $request){
-
+        return $request;
         $data = [
             'kelompok_id' => 'required',
             'pembimbing' => 'required',

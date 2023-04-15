@@ -90,21 +90,23 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="#edit-pembimbing" class="nav-link" data-bs-toggle="tab">
+                                <i class="ph-pencil me-2"></i>
+                                Edit
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="#penguji" class="nav-link" data-bs-toggle="tab">
                                 <i class="ph-user-circle me-2"></i>
                                 Penguji
                             </a>
                         </li>
-                        @can('kelola pembimbing penguji')
-                          @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn)
-                          <li class="nav-item">
-                            <a href="#edit-dosen" class="nav-link" data-bs-toggle="tab">
+                        <li class="nav-item">
+                            <a href="#edit-penguji" class="nav-link" data-bs-toggle="tab">
                                 <i class="ph-pencil me-2"></i>
                                 Edit
                             </a>
-                           </li>
-                          @endif
-                        @endcan
+                        </li>
                     </ul>
 
                     <div class="tab-content flex-lg-fill">
@@ -114,19 +116,11 @@
                                 @foreach ($pembimbing as $pd)
                                     <div>
                                         <div class="d-flex p-2 mt-2">
-                                            <small class="text-muted">Pembimbing : </small>
-                                            @can('kelola pembimbing penguji')
-                                                @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn)
-                                                    <div class="ms-auto">
-                                                        <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pd->id }}"><i class="ph-trash"></i></a></small>
-                                                    </div>
-                                                @endif
-                                            @endcan
+                                            <small class="text-muted">Pembimbing 1 : </small>
+                                            <div class="ms-auto">
+                                                <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pd->id }}"><i class="ph-trash"></i></a></small>
+                                            </div>
                                         </div>
-                                        <h6 class="fw-semibold px-2">
-                                            {{$pd->nama}} 
-                                            {{$pd->reference}}
-                                        </h6>
                                     </div>
 
                                     <!-- Delete Modal -->
@@ -179,12 +173,12 @@
                         </div>
 
                         @can('kelola pembimbing penguji')
-                        <div class="tab-pane fade" id="edit-dosen">
-                           <form action="/kelompok/dosen" method="post">
+                        <div class="tab-pane fade" id="edit-pembimbing">
+                           <form action="/kelompok/dosen/pembimbing" method="post">
                             @csrf
                             <input class="d-none" type="text" name="kelompok" value="{{$kelompok->id}}">
                             <div class="py-1">
-                                <select data-placeholder="Pilih Dosen" name="dosen" class="form-control select" required>
+                                <select data-placeholder="Pilih Dosen" name="pembimbing" class="form-control select" required>
                                     <option></option>
                                     <optgroup label="Daftar Dosen">
                                         @foreach($dosen as $d)
@@ -211,6 +205,41 @@
                            </form>
                         </div>
                         @endcan
+
+                        @can('kelola pembimbing penguji')
+                        <div class="tab-pane fade" id="edit-penguji">
+                           <form action="/kelompok/dosen/pembimbing" method="post">
+                            @csrf
+                            <input class="d-none" type="text" name="kelompok" value="{{$kelompok->id}}">
+                            <div class="py-1">
+                                <select data-placeholder="Pilih Dosen" name="pembimbing" class="form-control select" required>
+                                    <option></option>
+                                    <optgroup label="Daftar Dosen">
+                                        @foreach($dosen as $d)
+                                            @if($d->nidn != $kelompok->pembimbing)
+                                                <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
+                                            @endif
+                                        @endforeach
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="py-1">
+                            <select data-placeholder="Pilih Kategori" name="reference" class="form-control select" required>
+                                <option></option>
+                                <optgroup label="Daftar Kategori">
+                                    @foreach($role_dosen as $rd)
+                                        <option value="{{$rd->id}}">{{$rd->value}}</option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
+                            </div>
+                            <div class="p-1">
+                                <button class="btn btn-sm btn-primary w-100">Submit</button>
+                            </div>
+                           </form>
+                        </div>
+                        @endcan
+
                     </div>
                 </div>
             </div>
@@ -247,15 +276,11 @@
                                 Daftar   
                             </a>
                         </li>
-                        @can('request bimbingan')
-                            <li class="nav-item">
-                                <a href="#tambah-bimbingan" class="nav-link" data-bs-toggle="tab">
-                                    Request
-                                </a>
-                            </li>
-                        @endcan
-                      
-
+                         <li class="nav-item">
+                             <a href="#tambah-bimbingan" class="nav-link" data-bs-toggle="tab">
+                                 Request
+                             </a>
+                         </li>
                     </ul>
                     <!-- /tabs -->
 
