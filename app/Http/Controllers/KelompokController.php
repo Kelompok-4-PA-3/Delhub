@@ -18,7 +18,7 @@ class KelompokController extends Controller
      * Display a listing of the resource.
      */
     public function people($id)
-    {   
+    {
         $kelompok = Kelompok::where('id',$id)->first();
         $mahasiswa = KrsUser::where('krs_id',$kelompok->krs_id)->get();
         $anggota = KelompokMahasiswa::where('kelompok_id',$kelompok->id)->get();
@@ -45,7 +45,7 @@ class KelompokController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {   
+    {
         $data = [
             'jumlah_kelompok' => 'required|numeric',
             'krs_name' => 'required',
@@ -55,7 +55,7 @@ class KelompokController extends Controller
         $jlh_kelompok = Kelompok::where('krs_id','=', $request->krs_id)->get();
         if ($jlh_kelompok->count() > 0) {
             $kelompok = new Kelompok();
-            for ($i=$jlh_kelompok->count() + 1; $i <= $jlh_kelompok->count() + (int)$request->jumlah_kelompok; $i++) { 
+            for ($i=$jlh_kelompok->count() + 1; $i <= $jlh_kelompok->count() + (int)$request->jumlah_kelompok; $i++) {
                 $kelompok->create([
                     'nama_kelompok' => 'KELOMPOK-'.$i.'-'.$request->krs_name,
                     'krs_id' => $request->krs_id
@@ -64,7 +64,7 @@ class KelompokController extends Controller
             return redirect()->back()->with('success', 'Kelompok telah berhasil dibuat');
         }else{
             $kelompok = new Kelompok();
-            for ($i=1; $i <= $request->jumlah_kelompok ; $i++) { 
+            for ($i=1; $i <= $request->jumlah_kelompok ; $i++) {
                 $kelompok->create([
                     'nama_kelompok' => 'KELOMPOK-'.$i.'-'.$request->krs_name,
                     'krs_id' => $request->krs_id
@@ -72,7 +72,7 @@ class KelompokController extends Controller
             }
             return redirect()->back()->with('success', 'Kelompok telah berhasil dibuat');
         }
-       
+
     }
 
     /**
@@ -153,7 +153,7 @@ class KelompokController extends Controller
             'kelompok' => 'required',
             'mahasiswa' => 'required',
         ];
-        
+
 
         $validasi = $request->validate($data);
 

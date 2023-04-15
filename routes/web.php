@@ -9,6 +9,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\MhsInterestController;
 use App\Http\Controllers\BimbinganController;
 use App\Http\Controllers\JadwalController;
@@ -56,9 +57,6 @@ Route::middleware([
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
     Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
     Route::resource('/request', \App\Http\Controllers\RequestController::class)->name('requests', 'request.index');
-
-
-
 
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
 
@@ -108,20 +106,19 @@ Route::middleware([
 
 
     // test
-    Route::get('/mahasiswas/adds', function() {
-        $mahasiswa = Mahasiswa::join('users','users.id','=','mahasiswas.user_id')->get();
-        foreach($mahasiswa as $m){
-            $m->users->assignRole('mahasiswa');
+    Route::get('/mahasiswas/adds', function () {
+        $mahasiswa = Mahasiswa::join('users', 'users.id', '=', 'mahasiswas.user_id')->get();
+        foreach ($mahasiswa as $m) {
+            $m->user->assignRole('mahasiswa');
         }
         return 'berhasil';
     });
-    
-    Route::get('/dosens/adds', function() {
-        $dosen = Dosen::join('users','users.id','=','dosens.user_id')->get();
-        foreach($dosen as $d){
+
+    Route::get('/dosens/adds', function () {
+        $dosen = Dosen::join('users', 'users.id', '=', 'dosens.user_id')->get();
+        foreach ($dosen as $d) {
             $d->user->assignRole('dosen');
         }
         return 'berhasil';
     });
-    
 });

@@ -247,7 +247,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\KategoriProyek::create([
             'nama' => 'Tugas Akhir I',
         ]);
-        
+
         \App\Models\KategoriProyek::create([
             'nama' => 'Tugas Akhir II',
         ]);

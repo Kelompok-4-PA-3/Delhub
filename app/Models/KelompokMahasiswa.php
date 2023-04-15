@@ -17,7 +17,7 @@ class KelompokMahasiswa extends Model
 
     public function mahasiswa()
     {
-        return $this->belongsToMany(Mahasiswa::class, 'nim', 'nim');
+        return $this->belongsTo(Mahasiswa::class, 'nim', 'nim');
     }
 
     public function kelompok()
@@ -25,7 +25,8 @@ class KelompokMahasiswa extends Model
         return $this->belongsTo(Kelompok::class, 'kelompok_id');
     }
 
-    public function reference(){
+    public function reference()
+    {
         return $this->belongsTo(Reference::class, 'role', 'id');
     }
 }

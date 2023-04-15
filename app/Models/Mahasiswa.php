@@ -43,4 +43,8 @@ class Mahasiswa extends Model
     public function jadwal(){
         return $this->belongsTo(Jadwal::class);
     }
+
+    public function kelompokMahasiswa(){
+        return $this->hasMany(KelompokMahasiswa::class);
+    }
 }
