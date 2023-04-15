@@ -77,9 +77,6 @@
 					<table class="table datatable-people">
 						<thead class="">
 							<tr class="">
-								{{-- <th></th>
-								<th></th>
-								<th></th> --}}
 							</tr>
 						</thead>
 						<tbody>
@@ -89,7 +86,7 @@
 									<td>
 										<div class="d-flex">
 											<div class="px-2">
-												<img src="../../../assets/images/demo/users/face11.jpg" class="w-32px h-32px rounded-pill" alt="">
+									x			<img src="../../../assets/images/demo/users/face11.jpg" class="w-32px h-32px rounded-pill" alt="">
 											</div>
 										<div>
 											<a class="fw-semibold" href="">{{$a->mahasiswa->user->nama}}</a><br>
