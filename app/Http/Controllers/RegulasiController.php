@@ -15,9 +15,9 @@ class RegulasiController extends Controller
     public function index($id)
     {   
         $krs = Krs::where('id', $id)->first();
-        $kelompok = Kelompok::where('krs_id', $id)->get();
+        $kelompok = Kelompok::where('krs_id', $id)->orderBy('id','asc')->get();
         $regulasi = Regulasi::where('krs_id', '=', $id)->first();
-        
+        return  $kelompok;
         return view('dashboard.regulasi.index', [
             'title' => 'Regulasi',
             'krs' => $krs,

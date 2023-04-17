@@ -10,6 +10,8 @@ use App\Models\KrsUser;
 use App\Models\Reference;
 use App\Models\Regulasi;
 use App\Models\PembimbingPenguji;
+use App\Models\Pembimbing;
+use App\Models\Penguji;
 use Illuminate\Http\Request;
 
 class KelompokController extends Controller
@@ -113,36 +115,67 @@ class KelompokController extends Controller
     }
 
     public function add_pembimbing(Request $request){
-        return $request;
+        // return $request;
         $data = [
             'kelompok_id' => 'required',
-            'pembimbing' => 'required',
+            'pembimbing_1' => 'required',
+            'pembimbing_2' => 'nullable',
         ];
 
         $validasi = $request->validate($data);
-        $pembimbing = Pembimbing::where('kelompok_id', $request->kelompok_id)->get();
+        $data_pembimbing = Pembimbing::where('kelompok_id',$request->kelompok_id)->first();
+        $pembimbing = new Pembimbing();
 
-        if ($pembimbing->count() > 0) {
-                $pembimbing->pembimbing_2 = $validasi['pembimbing'];
-                $pembimbing->save();
-
-                return back()->with('success','Pembimbing 2 telah berhasil ditambahkan ke kelompok ini');
-            }
-
-
-        Pembimbing::create([
-            'krs_id' => $validasi['krs'],
-            'pembimbing_1' => $validasi['pembimbing'],
-        ]);
+        if ($data_pembimbing != NULL) {
+            $pembimbing = $data_pembimbing;
+            // return 'ya';
+        }
+       
+        $pembimbing->kelompok_id = $validasi['kelompok_id'];
+        $pembimbing->pembimbing_1 = $validasi['pembimbing_1'];
+        $pembimbing->pembimbing_2 = $validasi['pembimbing_2'];
+        $pembimbing->save();
 
         return back()->with('success','Pembimbing telah berhasil ditambahkan ke kelompok ini');
     }
 
     public function delete_pembimbing($id){
         // return $id;
-        PembimbingPenguji::find($id)->delete();
+        Pembimbing::find($id)->delete();
 
         return back()->with('success','Pembimbing telah berhasil dihapus');
+    }
+
+    public function add_penguji(Request $request){
+        // return $request;
+        $data = [
+            'kelompok_id' => 'required',
+            'penguji_1' => 'required',
+            'penguji_2' => 'nullable',
+        ];
+
+        $validasi = $request->validate($data);
+        $data_penguji = Penguji::where('kelompok_id',$request->kelompok_id)->first();
+        $penguji = new Penguji();
+
+        if ($data_penguji != NULL) {
+            $penguji = $data_penguji;
+            // return 'ya';
+        }
+       
+        $penguji->kelompok_id = $validasi['kelompok_id'];
+        $penguji->penguji_1 = $validasi['penguji_1'];
+        $penguji->penguji_2 = $validasi['penguji_2'];
+        $penguji->save();
+
+        return back()->with('success','Penguji telah berhasil ditambahkan ke kelompok ini')->with('penguji','active');
+    }
+
+    public function delete_penguji($id){
+        // return $id;
+        Penguji::find($id)->delete();
+
+        return back()->with('success','Penguji telah berhasil dihapus');
     }
 
 

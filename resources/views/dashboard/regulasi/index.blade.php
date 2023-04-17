@@ -284,14 +284,8 @@
                             .bg-check-success{
                                 background-color: #D1E7DD !important;
                             }
-                            /* tbody {
-                                   height:  40px;
-                                } */
                         </style>
-                        {{-- <select class="column-check">
-                            <option value=""> <button class="btn bg-white shadow-sm"></button></option>
-                            <option value="Success"> <button class="btn bg-check-success shadow-sm"></button></option>
-                        </select> --}}
+
                         @php
                             $bimbingan = 0;
                         @endphp
@@ -301,11 +295,15 @@
                                 <tr>
                                     <th><small> Nama Kelompok </small></th>
                                     <th><small> Jlh Bimbingan </small></th>
+                                    <th><small> Pembimbing 1</small></th>
+                                    <th><small> Pembimbing 2 </small></th>
                                     @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
                                         <th>{{$kkkp->nama}}</th>
                                     @endforeach
                                 </tr>
                                 <tr>
+                                    <th></th>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
@@ -314,9 +312,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- <tr>
-									<td></td>
-								</tr> --}}
                                 @foreach ($kelompok as $k) 
                                     @php
                                      $bimbingan = $k->bimbingan->count();
@@ -325,6 +320,8 @@
                                         <td>
                                             {{$k->nama_kelompok}}
                                         </td>
+                                        <td class="text-center">{{$bimbingan}}</td>
+                                        <td>{{$k->pembimbings != NULL ? $k->pembimbings->pembimbing_1_dosen->user->nama : '-'}}</td>
                                         <td class="text-center">{{$bimbingan}}</td>
                                         @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
                                         @if($bimbingan > 0)

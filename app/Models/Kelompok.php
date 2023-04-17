@@ -27,9 +27,23 @@ class Kelompok extends Model
         return $this->hasMany(Request::class);
     }
 
+    // public function kelompok(){
+    //     return $this->hasMany(Kelompok::class, 'id', 'kelompok_id');
+    // }
+
     public function pembimbing_penguji()
     {
         return $this->hasMany(PembimbingPenguji::class);
+    }
+
+    public function pembimbings()
+    {
+        return $this->hasOne(Pembimbing::class, 'kelompok_id', 'id');
+    }
+
+    public function pengujis()
+    {
+        return $this->hasOne(Penguji::class, 'kelompok_id', 'id');
     }
 
     public function dosen()

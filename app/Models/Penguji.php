@@ -15,4 +15,16 @@ class Penguji extends Model
     use UserStamps;
 
     protected $fillable = ['user_id','penguji1','penguji2'];
+
+    public function kelompok(){
+        return $this->belongsTo(Kelompok::class, 'kelompok_id', 'id');
+    }
+
+    public function penguji_1_dosen(){
+        return $this->belongsTo(Dosen::class, 'penguji_1', 'nidn');
+    }
+
+    public function penguji_2_dosen(){
+        return $this->belongsTo(Dosen::class, 'penguji_2', 'nidn');
+    }
 }

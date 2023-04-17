@@ -84,7 +84,7 @@
                 <div class="d-lg-flex">
                     <ul class="nav nav-tabs nav-tabs-vertical nav-tabs-vertical-start wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
                         <li class="nav-item">
-                            <a href="#pembimbing" class="nav-link active" data-bs-toggle="tab">
+                            <a href="#pembimbing" class="nav-link {{session()->has('penguji') ? '' : 'active' }}" data-bs-toggle="tab">
                                 <i class="ph-user-circle me-2"></i>
                                 Pembimbing
                             </a>
@@ -96,7 +96,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#penguji" class="nav-link" data-bs-toggle="tab">
+                            <a href="#penguji" class="nav-link {{session()->has('penguji') ?  'active' : '' }}" data-bs-toggle="tab">
                                 <i class="ph-user-circle me-2"></i>
                                 Penguji
                             </a>
@@ -110,21 +110,42 @@
                     </ul>
 
                     <div class="tab-content flex-lg-fill">
-                        <div class="tab-pane fade show active" id="pembimbing">
+                        <div class="tab-pane fade show  {{session()->has('penguji') ?  '' : 'active' }}" id="pembimbing">
 
-                            @if ($pembimbing->count() > 0)
-                                @foreach ($pembimbing as $pd)
+                            @if ($kelompok->pembimbings != NULL)
+                                <div class="d-flex px-1 ">
+                                    <div class="ms-auto ">
+                                        <small class="" data bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kelompok->pembimbings->id }}"><i class="ph-trash"></i></a></small>
+                                    </div>
+                                </div>
+                                @if ($kelompok->pembimbings->pembimbing_1 != NULL)
                                     <div>
-                                        <div class="d-flex p-2 mt-2">
+                                        <div class="d-flex px-2 mt-2">
                                             <small class="text-muted">Pembimbing 1 : </small>
-                                            <div class="ms-auto">
-                                                <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pd->id }}"><i class="ph-trash"></i></a></small>
-                                            </div>
+                                        </div>
+                                        <div class="px-2">
+                                            <h5>
+                                                {{$kelompok->pembimbings->pembimbing_1_dosen->user->nama}}
+                                            </h5>
                                         </div>
                                     </div>
+                                @endif
+                                
+                                @if ($kelompok->pembimbings->pembimbing_2 != NULL)
+                                    <div>
+                                        <div class="d-flex p-2 mt-2">
+                                            <small class="text-muted">Pembimbing 2 : </small>
+                                        </div>
+                                        <div class="px-2">
+                                            <h5>
+                                                {{$kelompok->pembimbings->pembimbing_2_dosen->user->nama}}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                @endif
 
                                     <!-- Delete Modal -->
-                                    <div id="modal_hapus{{ $pd->id }}" class="modal fade" tabindex="-1">
+                                    <div id="modal_hapus{{ $kelompok->pembimbings->id }}" class="modal fade" tabindex="-1">
                                         <div class="modal-dialog modal-xs">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -133,12 +154,12 @@
                                                 </div>
 
                                                 <div class="modal-body">
-                                                    Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{ $pd->nama }}</span> ?
+                                                    Apakah anda yakin ingin menghapus data pembimbing saat ini ?
                                                 </div>
 
                                                 <div class="modal-footer justify-content-between">
                                                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                                    <form action="/kelompok/dosen/{{$pd->id}}/delete" method="post">
+                                                    <form action="/kelompok/dosen/penguji/{{$kelompok->pembimbings->id}}/delete" method="post">
                                                         @csrf
                                                         <button type="submit" class="btn btn-primary">Ya</button>
                                                     </form>
@@ -148,57 +169,113 @@
                                     </div>
                                     <!-- /Delete Modal -->
 
-                                @endforeach
+                                {{-- @endforeach --}}
                            @else 
                                 <i><small>Belum ada pembimbing di kelompok ini</small></i>
                            @endif
                         </div>
                         
-                        <div class="tab-pane fade active" id="penguji">
-                            <div class="mt-1">
-                                <div class="d-flex px-2">
-                                    <small class="text-muted ">Penguji 1 : </small>
-                                    <div class="ms-auto">
-                                    <small class="" data-bs-popup="tooltip" title="hapus"> <a class="text-muted" href=""><i class="ph-trash"></i></a></small>
+                        <div class="tab-pane fade show {{session()->has('penguji') ?  'active' : '' }}" id="penguji">
+
+                            @if ($kelompok->pengujis != NULL)
+                                <div class="d-flex px-1 ">
+                                    <div class="ms-auto ">
+                                        <small class="" data bs-popup="tooltip" title="hapus"> <a class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kelompok->pengujis->id }}"><i class="ph-trash"></i></a></small>
                                     </div>
                                 </div>
-                                @if ($kelompok->pembimbing == NULL)
-                                    <small class="text-muted text-center px-2">Belum ada dosen penguji</small>
-                                @else
-                                    <h6 class="fw-semibold p-2">
-                                        {{$kelompok->dosen->user->nama}}
-                                    </h6>
+                                @if ($kelompok->pengujis->penguji_1 != NULL)
+                                    <div>
+                                        <div class="d-flex px-2 mt-2">
+                                            <small class="text-muted">Penguji 1 : </small>
+                                        </div>
+                                        <div class="px-2">
+                                            <h5>
+                                                {{$kelompok->pengujis->penguji_1_dosen->user->nama}}
+                                            </h5>
+                                        </div>
+                                    </div>
                                 @endif
-                            </div>
+                                
+                                @if ($kelompok->pengujis->penguji_2 != NULL)
+                                    <div>
+                                        <div class="d-flex p-2 mt-2">
+                                            <small class="text-muted">Pembimbing 2 : </small>
+                                        </div>
+                                        <div class="px-2">
+                                            <h5>
+                                                {{$kelompok->pengujis->penguji_2_dosen->user->nama}}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                    <!-- Delete Modal -->
+                                    <div id="modal_hapus{{ $kelompok->pengujis->id }}" class="modal fade" tabindex="-1">
+                                        <div class="modal-dialog modal-xs">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    Apakah anda yakin ingin menghapus data pembimbing saat ini ?
+                                                </div>
+
+                                                <div class="modal-footer justify-content-between">
+                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                    <form action="/kelompok/dosen/penguji/{{$kelompok->pengujis->id}}/delete" method="post">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-primary">Ya</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Delete Modal -->
+
+                                {{-- @endforeach --}}
+                           @else 
+                                <i><small>Belum ada penguji di kelompok ini</small></i>
+                           @endif
                         </div>
 
                         @can('kelola pembimbing penguji')
                         <div class="tab-pane fade" id="edit-pembimbing">
                            <form action="/kelompok/dosen/pembimbing" method="post">
                             @csrf
-                            <input class="d-none" type="text" name="kelompok" value="{{$kelompok->id}}">
+                            <input class="d-none" type="text" name="kelompok_id" value="{{$kelompok->id}}">
+
                             <div class="py-1">
-                                <select data-placeholder="Pilih Dosen" name="pembimbing" class="form-control select" required>
+                                <select data-placeholder="Pembimbing 1" name="pembimbing_1" class="form-control select" required>
                                     <option></option>
                                     <optgroup label="Daftar Dosen">
                                         @foreach($dosen as $d)
-                                            @if($d->nidn != $kelompok->pembimbing)
+                                            @if($kelompok->pembimbings != NULL)
+                                                <option value="{{$d->nidn}}" @if ($kelompok->pembimbings->pembimbing_1 != NULL) {{$kelompok->pembimbings->pembimbing_1 == $d->nidn ? 'selected' : ''}} @endif>{{Str::limit($d->user->nama,30)}}</option>
+                                            @else
                                                 <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
                                             @endif
                                         @endforeach
                                     </optgroup>
                                 </select>
                             </div>
+
                             <div class="py-1">
-                            <select data-placeholder="Pilih Kategori" name="reference" class="form-control select" required>
-                                <option></option>
-                                <optgroup label="Daftar Kategori">
-                                    @foreach($role_dosen as $rd)
-                                        <option value="{{$rd->id}}">{{$rd->value}}</option>
-                                    @endforeach
-                                </optgroup>
-                            </select>
+                                <select data-placeholder="Pembimbing 2" name="pembimbing_2" class="form-control select">
+                                    <option></option>
+                                    <optgroup label="Daftar Dosen">
+                                        @foreach($dosen as $d)
+                                            @if($kelompok->pembimbings != NULL)
+                                                <option value="{{$d->nidn}}" @if ($kelompok->pembimbings->pembimbing_2 != NULL) {{$kelompok->pembimbings->pembimbing_2 == $d->nidn ? 'selected' : ''}} @endif>{{Str::limit($d->user->nama,30)}}</option>
+                                            @else
+                                                <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
+                                            @endif
+                                        @endforeach
+                                    </optgroup>
+                                </select>
                             </div>
+
                             <div class="p-1">
                                 <button class="btn btn-sm btn-primary w-100">Submit</button>
                             </div>
@@ -208,35 +285,44 @@
 
                         @can('kelola pembimbing penguji')
                         <div class="tab-pane fade" id="edit-penguji">
-                           <form action="/kelompok/dosen/pembimbing" method="post">
-                            @csrf
-                            <input class="d-none" type="text" name="kelompok" value="{{$kelompok->id}}">
-                            <div class="py-1">
-                                <select data-placeholder="Pilih Dosen" name="pembimbing" class="form-control select" required>
-                                    <option></option>
-                                    <optgroup label="Daftar Dosen">
-                                        @foreach($dosen as $d)
-                                            @if($d->nidn != $kelompok->pembimbing)
-                                                <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
-                                            @endif
-                                        @endforeach
-                                    </optgroup>
-                                </select>
-                            </div>
-                            <div class="py-1">
-                            <select data-placeholder="Pilih Kategori" name="reference" class="form-control select" required>
-                                <option></option>
-                                <optgroup label="Daftar Kategori">
-                                    @foreach($role_dosen as $rd)
-                                        <option value="{{$rd->id}}">{{$rd->value}}</option>
-                                    @endforeach
-                                </optgroup>
-                            </select>
-                            </div>
-                            <div class="p-1">
-                                <button class="btn btn-sm btn-primary w-100">Submit</button>
-                            </div>
-                           </form>
+                            <form action="/kelompok/dosen/penguji" method="post">
+                                @csrf
+                                <input class="d-none" type="text" name="kelompok_id" value="{{$kelompok->id}}">
+    
+                                <div class="py-1">
+                                    <select data-placeholder="Penguji 1" name="penguji_1" class="form-control select" required>
+                                        <option></option>
+                                        <optgroup label="Daftar Dosen">
+                                            @foreach($dosen as $d)
+                                                @if($kelompok->pengujis != NULL)
+                                                    <option value="{{$d->nidn}}" @if ($kelompok->pengujis->penguji_1 != NULL) {{$kelompok->pengujis->penguji_1 == $d->nidn ? 'selected' : ''}} @endif>{{Str::limit($d->user->nama,30)}}</option>
+                                                @else
+                                                    <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
+                                                @endif
+                                            @endforeach
+                                        </optgroup>
+                                    </select>
+                                </div>
+    
+                                <div class="py-1">
+                                    <select data-placeholder="Penguji 2" name="penguji_2" class="form-control select">
+                                        <option></option>
+                                        <optgroup label="Daftar Dosen">
+                                            @foreach($dosen as $d)
+                                                @if($kelompok->pengujis != NULL)
+                                                    <option value="{{$d->nidn}}" @if ($kelompok->pengujis->penguji_2 != NULL) {{$kelompok->pengujis->penguji_2 == $d->nidn ? 'selected' : ''}} @endif>{{Str::limit($d->user->nama,30)}}</option>
+                                                @else
+                                                    <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
+                                                @endif
+                                            @endforeach
+                                        </optgroup>
+                                    </select>
+                                </div>
+    
+                                <div class="p-1">
+                                    <button class="btn btn-sm btn-primary w-100">Submit</button>
+                                </div>
+                               </form>
                         </div>
                         @endcan
 
@@ -342,11 +428,11 @@
                                                             {{-- @endif --}}
                                                         {{-- @endcan --}}
 
-                                                        @can('hapus bimbingan')
+                                                        {{-- @can('hapus bimbingan') --}}
                                                             <a href="#" class="text-danger mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$kb->id}}">
                                                                 <i class="ph-x"></i> Batal
                                                             </a>
-                                                        @endif
+                                                        {{-- @endif --}}
 
                                                     </div>
                                                 </div>
@@ -387,7 +473,7 @@
                             </div>
                         </div>              
 
-                        @can('request bimbingan')
+                        {{-- @can('request bimbingan') --}}
                         <div class="tab-pane active fade" id="tambah-bimbingan">
                             <form action="/bimbingan" method="post">
                                 @csrf
@@ -413,7 +499,7 @@
                                 </div>
                             </form>
                         </div>
-                        @endcan
+                        {{-- @endcan --}}
                     </div>
                     <!-- /tabs content -->
 
