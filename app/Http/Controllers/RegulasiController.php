@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Regulasi;
 use App\Models\Krs;
 use App\Models\Kelompok;
+use App\Models\Pembimbing;
 use Illuminate\Http\Request;
 
 class RegulasiController extends Controller
@@ -15,14 +16,17 @@ class RegulasiController extends Controller
     public function index($id)
     {   
         $krs = Krs::where('id', $id)->first();
-        $kelompok = Kelompok::where('krs_id', $id)->orderBy('id','asc')->get();
+        $kelompok = Kelompok::where('krs_id', $id)->get();
         $regulasi = Regulasi::where('krs_id', '=', $id)->first();
-        return  $kelompok;
+        $dosen = Kelompok::where('krs_id', $id)->join('pembimbings','kelompoks.id','=','pembimbings.kelompok_id')->get();
+        // return $dosen-;
+        // return  $kelompok->sortBy('id');
         return view('dashboard.regulasi.index', [
             'title' => 'Regulasi',
             'krs' => $krs,
             'kelompok' => $kelompok,
             'regulasi' => $regulasi,
+            'dosen' => $dosen,
         ]);
     }
 

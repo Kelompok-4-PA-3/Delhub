@@ -98,44 +98,49 @@ class DatabaseSeeder extends Seeder
         //     'current_team_id' => null,
         // ]);
 
-        Role::create([
-            'name' => 'mahasiswa',
-            'guard_name' => 'web'
-        ]);
+        // Role::create([
+        //     'name' => 'mahasiswa',
+        //     'guard_name' => 'web'
+        // ]);
 
-        Role::create([
-            'name' => 'dosen',
-            'guard_name' => 'web'
-        ]);
+        // Role::create([
+        //     'name' => 'dosen',
+        //     'guard_name' => 'web'
+        // ]);
 
-        Role::create([
-            'name' => 'admin',
-            'guard_name' => 'web'
-        ]);
+        // Role::create([
+        //     'name' => 'admin',
+        //     'guard_name' => 'web'
+        // ]);
 
-        \App\Models\ModelHasRoles::create([
-            'role_id' => 1,
-            'model_type' => 'App\Models\User', // Change this to the model you want to assign the permission to
-            'model_id' => 12, // Change this to the ID of the model you want to assign the permission to
-        ]);
+        // \App\Models\ModelHasRoles::create([
+        //     'role_id' => 1,
+        //     'model_type' => 'App\Models\User', // Change this to the model you want to assign the permission to
+        //     'model_id' => 12, // Change this to the ID of the model you want to assign the permission to
+        // ]);
 
         // for ($i = 0; $i <= 10; $i++) {
         \App\Models\Kategori::create([
             'kode_mk' => '1143201',
             'nama_mk' => 'Proyek Akhir I D4 TRPL',
             'nama_singkat' => 'PA-I-D4-TRPL-2020',
+            'kategori_proyek' => 1
         ]);
 
         \App\Models\Kategori::create([
             'kode_mk' => '1143202',
             'nama_mk' => 'Proyek Akhir II D4 TRPL',
             'nama_singkat' => 'PA-II-D4-TRPL-2020',
+            'kategori_proyek' => 1
+
         ]);
 
         \App\Models\Kategori::create([
             'kode_mk' => '1143203',
             'nama_mk' => 'Proyek Akhir III D4 TRPL',
             'nama_singkat' => 'PA-III-D4-TRPL-2020',
+            'kategori_proyek' => 1
+
         ]);
         // }
 
@@ -170,10 +175,10 @@ class DatabaseSeeder extends Seeder
         //     'fakultas_id' => 1,
         // ]);
 
-        \App\Models\Configs::create([
-            'tahun_aktif' => '2023',
-            'semester' => '5',
-        ]);
+        // \App\Models\Configs::create([
+        //     'tahun_aktif' => '2023',
+        //     'semester' => '5',
+        // ]);
 
         \App\Models\Ruangan::create([
             'nama' => 'Gedung Vokasi',
@@ -240,9 +245,9 @@ class DatabaseSeeder extends Seeder
             'kategori' => 'status_bimbingan_default',
         ]);
 
-        \App\Models\KategoriProyek::create([
-            'nama' => 'Proyek Akhir',
-        ]);
+        // \App\Models\KategoriProyek::create([
+        //     'nama' => 'Proyek Akhir',
+        // ]);
 
         \App\Models\KategoriProyek::create([
             'nama' => 'Tugas Akhir I',
@@ -286,43 +291,43 @@ class DatabaseSeeder extends Seeder
             'kategori_id' => 3,
         ]);
 
-        Permission::create([
-            'name' => 'request bimbingan',
-            'guard_name' => 'web',
-        ]);
-        Permission::create([
-            'name' => 'update status bimbingan',
-            'guard_name' => 'web',
-        ]);
-        Permission::create([
-            'name' => 'kelola pembimbing penguji',
-            'guard_name' => 'web',
-        ]);
-        Permission::create([
-            'name' => 'kelola topik kelompok',
-            'guard_name' => 'web',
-        ]);
-        Permission::create([
-            'name' => 'hapus bimbingan',
-            'guard_name' => 'web',
-        ]);
+        // Permission::create([
+        //     'name' => 'request bimbingan',
+        //     'guard_name' => 'web',
+        // ]);
+        // Permission::create([
+        //     'name' => 'update status bimbingan',
+        //     'guard_name' => 'web',
+        // ]);
+        // Permission::create([
+        //     'name' => 'kelola pembimbing penguji',
+        //     'guard_name' => 'web',
+        // ]);
+        // Permission::create([
+        //     'name' => 'kelola topik kelompok',
+        //     'guard_name' => 'web',
+        // ]);
+        // Permission::create([
+        //     'name' => 'hapus bimbingan',
+        //     'guard_name' => 'web',
+        // ]);
 
-        Role::create([
-            'name' => 'koordinator',
-            'guard_name' => 'web',
-        ]);
-        Role::create([
-            'name' => 'mahasiswa',
-            'guard_name' => 'web',
-        ]);
-        Role::create([
-            'name' => 'dosen',
-            'guard_name' => 'web',
-        ]);
-        Role::create([
-            'name' => 'admin',
-            'guard_name' => 'web',
-        ]);
+        // Role::create([
+        //     'name' => 'koordinator',
+        //     'guard_name' => 'web',
+        // ]);
+        // Role::create([
+        //     'name' => 'mahasiswa',
+        //     'guard_name' => 'web',
+        // ]);
+        // Role::create([
+        //     'name' => 'dosen',
+        //     'guard_name' => 'web',
+        // ]);
+        // Role::create([
+        //     'name' => 'admin',
+        //     'guard_name' => 'web',
+        // ]);
 
         // \App\Models\PoinRegulasi::create([
         //     'nama' => 'Sidang',
@@ -333,9 +338,9 @@ class DatabaseSeeder extends Seeder
         // $this->call([
         //     InterestSeeder::class,
         // ]);
-        $this->call([
-            InterestSeeder::class,
-        ]);
+        // $this->call([
+        //     InterestSeeder::class,
+        // ]);
         // \App\Models\::create([
         //     'name' => 'kelola bimbingan',
         //     'guard_name' => 'web',

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->datetime('waktu');
             $table->unsignedBigInteger('status');
             $table->foreign('status')->references('id')->on('references')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('file_bukti');
             $table->boolean('is_done')->default(false);
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();

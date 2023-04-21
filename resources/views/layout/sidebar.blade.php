@@ -81,6 +81,14 @@
                             </span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="/config" class="nav-link">
+                            <i class="ph-list-dashes"></i>
+                            <span>
+                               Config
+                            </span>
+                        </a>
+                    </li>
                 @endif
                 {{-- {{Auth::user()->dosen->pembimbing_penguji}} --}}
                 @if (Auth::user()->dosen->pembimbing_penguji->where('reference_id','=',3)->count() > 0)

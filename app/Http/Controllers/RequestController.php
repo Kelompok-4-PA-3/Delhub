@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Request;
-use App\Models\Kelompok;
-// use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
+use App\Models\Request as Bimbingan;
+use App\Models\Kelompok;
+use App\Models\Pembimbing;
+use Auth;
 
 class RequestController extends Controller
 {
@@ -15,14 +17,24 @@ class RequestController extends Controller
      *
      * @return void
      */
-    public function index(): View
+    public function index()
+    // : View
     {
-        //get prodis
-        $requests = request::latest()->get();
-        $kelompoks = kelompok::all();
+        $requests = Pembimbing::where('pembimbing_1', Auth::user()->dosen->nidn)
+        ->orWhere('pembimbing_2', Auth::user()->dosen->nidn)
+        ->join('kelompoks', function($kelompok) {
+              $kelompok->on('pembimbings.kelompok_id', '=', 'kelompoks.id')
+                       ->join('requests', 'requests.kelompok_id', '=', 'kelompoks.id');
+        })
+        ->select('kelompoks.nama_kelompok', 'requests.*')
+        ->get();
+
+        // return $requests;
+        // $requests = Bimbingan::latest()->get();
+        // $kelompoks = kelompok::all();
 
         //render view with prodis
-        return view('request.index', compact('requests', 'kelompoks'));
+        return view('request.index', compact('requests'));
     }
 
     /**

@@ -40,7 +40,7 @@
                     <th>Deskripsi</th>
                     <th>Waktu</th>
                     <th>Status</th>
-                    <th class="text-center">Actions</th>
+                    {{-- <th class="text-center">Actions</th> --}}
                 </tr>
                 <tr>
                     <th></th>
@@ -48,24 +48,33 @@
                     <th>Deskripsi</th>
                     <th>Waktu</th>
                     <th>Status</th>
-                    <th></th>
+                    {{-- <th></th> --}}
                 </tr>
             </thead>
             <tbody>
                 @foreach($requests as $r)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>{{$r->kelompok->nama_kelompok ?? ''}}</td>
+                    <td>
+                        <a class="text-body fw-semibold letter-icon-title" href="/kelompok/{{$r->kelompok->id}}">
+                            {{$r->kelompok->nama_kelompok ?? ''}}
+                        </a>
+                    </td>
                     <td>{{$r->description}}</td>
                     <td>{{$r->waktu}}</td>
-                    <td>{{$r->status}}</td>
-                    <td class="text-center">
+                    @if (!$r->is_done)
+                        <td class="text-center">{{$r->references->value}}</td>
+                    @else 
+                        <td class="bg-success bg-opacity-10 text-success text-center fw-bold">Done</td>
+                    @endif
+                   
+                    {{-- <td class="text-center">
                         <div class="d-inline-flex">
                             <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$r->id}}">
                                 <i class="ph-trash"></i>
                             </a>
                         </div>
-                    </td>
+                    </td> --}}
                 </tr>
 
 

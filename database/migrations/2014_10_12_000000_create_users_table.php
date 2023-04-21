@@ -12,21 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('name');
+            $table->id();
+            $table->string('nama');
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
             $table->string('profile_photo_path', 2048)->nullable();
-            $table->string('two_factor_secret', 512)->nullable();
-            $table->string('two_factor_recovery_codes', 512)->nullable();
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->softDeletes($column = 'deleted_at', $precision = 0);
-
+            $table->rememberToken();
+            $table->timestamps();
         });
     }
 

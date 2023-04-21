@@ -260,6 +260,7 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
                         <h5 class="mb-0">Data Kelompok</h5>
+                        {{-- <small>{{$kelompok->sortBy('id')}}</small> --}}
                         <div class="ms-auto">
                             @if ($krs->kategori->kategori->count() > 0)
                             <div class="d-flex">
@@ -284,6 +285,9 @@
                             .bg-check-success{
                                 background-color: #D1E7DD !important;
                             }
+                            .pembimbing-name{
+                                cursor: pointer;
+                            }
                         </style>
 
                         @php
@@ -302,27 +306,45 @@
                                     @endforeach
                                 </tr>
                                 <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
+                                    <th ></th>
+                                    <th ></th>
+                                    <th class="pembimbing-column">
+                                        <select name="" id="" class="form-control">
+                                            @foreach($dosen as $d)
+                                                <div class="list-pembimbing">
+                                                    {{-- <option value="asdasd">mantap</option> --}}
+                                                </div>
+                                            @endforeach
+                                        </select>
+                                    </th>
+                                    <th class="pembimbing-column"></th>
                                     @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
-                                        <th>{{$kkkp->nama}}</th>
+                                        <th class="regulasi-column">{{$kkkp->nama}}</th>
                                     @endforeach
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($kelompok as $k) 
+                                @foreach ($kelompok->sortBy('id') as $k) 
                                     @php
-                                     $bimbingan = $k->bimbingan->count();
+                                        $bimbingan = $k->bimbingan->where('is_done',true)->count();
                                     @endphp
                                     <tr class="mt-5">
                                         <td>
                                             {{$k->nama_kelompok}}
                                         </td>
                                         <td class="text-center">{{$bimbingan}}</td>
-                                        <td>{{$k->pembimbings != NULL ? $k->pembimbings->pembimbing_1_dosen->user->nama : '-'}}</td>
-                                        <td class="text-center">{{$bimbingan}}</td>
+                                        <td class="pembimbing-name" data-bs-popup="tooltip" title="{{$k->pembimbings != NULL ? $k->pembimbings->pembimbing_1_dosen->user->nama : '-'}}">{{$k->pembimbings != NULL ? $k->pembimbings->pembimbing_1_dosen->nama_singkat : '-'}}</td>
+                                        @php
+                                            $pembimbing2 = '-';
+                                            $pembimbing2_inisial = '-';
+                                            if ($k->pembimbings != NULL) {
+                                                if ($k->pembimbings->pembimbing_2_dosen != NULL) {
+                                                    $pembimbing2 =  $k->pembimbings->pembimbing_2_dosen->user->nama;
+                                                    $pembimbing2_inisial =  $k->pembimbings->pembimbing_2_dosen->nama_singkat;
+                                                }
+                                            } 
+                                        @endphp
+                                        <td class="pembimbing-name" data-bs-popup="tooltip" title="{{$pembimbing2}}">{{$pembimbing2_inisial}}</td>
                                         @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
                                         @if($bimbingan > 0)
                                             @php
@@ -354,54 +376,12 @@
                     </div>
                 </div>
             </div>
-
-            
-            
         </div>
-        {{-- <div class="mb-2">
-            <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
-                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}" class="nav-link {{ (request()->is('/kelompok/{id}')) ? 'active' : '' }}"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
-                <li class="nav-item"><a href="#" class="nav-link {{ (request()->is('/kelompok/orang')) ? 'active' : '' }}"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
-                <li class="nav-item"><a href="/kelompok" class="nav-link  active"> <i class="ph-users"></i> &nbsp; Orang</a></li>
-            </ul>
-        </div> --}}
-        <script>
-            // $create = document.getElementById('btn-buat-regulasi');
-            // $index = document.getElementById('btn-regulasi');
-            // $index.style.display = "none";
-            // $create.style.display = "block";
-            // console.log($create);
-            // $create.onclick = (e) => {
-            //     $index.style.display = 'block';
-            //     e.target.style.display = 'none';
-            // }
-            // $index.onclick = (e) => {
-            //     $create.style.display = 'block';
-            //     e.target.style.display = 'none';
-            // }
-            // $('.table-regulasi thead tr:eq(1) th').not(':first-child').each(function () {
-            //     const title = $(this).text();
-            //     $(this).html('<input type="checkbox" class="form-check-input column-check" value="Success"' + title + '" /> <button class="btn bg-check-success shadow-sm"></button>');
-            // });
 
-            // var table = $('.table-regulasi').DataTable();
-            // table.columns().every( function () {
-            //     $('.column-check').on('change', function () {
-            //     if ($(this).is(':checked')) {
-            //         console.log(this.value);
-                    // that.column($(this).parent().index() + ':visible').search(this.value).draw();
-                    // var val = [];
-            //     }
-            // });
-            // });
-
-            // $('.column-check').on('change', function () {
-            //     if ($(this).is(':checked')) {
-            //         console.log(this.value);
-
-            //     }
-            // });
-        </script>
+        {{-- <script>
+            let $element = $('#daftar-pembimbing');
+            let text = $element.text();
+            let newText = text.replace(new RegExp('""', ""), "");
+            console.log($element.text(newText));
+        </script> --}}
 @endsection

@@ -59,7 +59,10 @@
                 <tr>
                     <td>{{$loop->iteration}}</td>
                     <td>{{$d->nidn}}</td>
-                    <td>{{$d->user->nama}}</td>
+                    @if ($d->user != NULL)
+                        <td>{{$d->user->nama}}</td>
+                    @endif
+                    {{-- <td>{{$d->user->nama}}</td> --}}
                     <td>{{$d->prodi->nama}}</td>
                     <td class="text-center">
                         <div class="d-inline-flex">
@@ -83,7 +86,7 @@
                             </div>
 
                             <div class="modal-body">
-                               Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{$d->user->nama}}</span> ?
+                               {{-- Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{$d->user->nama}}</span> ? --}}
                             </div>
 
                             <div class="modal-footer justify-content-between">

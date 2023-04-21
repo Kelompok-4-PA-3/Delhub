@@ -27,4 +27,8 @@ class Pembimbing extends Model
     public function pembimbing_2_dosen(){
         return $this->belongsTo(Dosen::class, 'pembimbing_2', 'nidn');
     }
+
+    public function references(){
+        return $this->belongsTo(Reference::class, 'status', 'id');
+    }
 } 

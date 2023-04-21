@@ -10,11 +10,19 @@
     <script src="{{asset('/assets/js/vendor/tables/datatables/extensions/buttons.min.js')}}"></script>
     <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
+    <script src="{{asset('/assets/demo/pages/picker_date.js')}}"></script>
+    <script src="{{asset('/assets/js/vendor/ui/fab.min.js')}}"></script>
+	<script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script>
+	<script src="{{asset('/assets/demo/pages/extra_fab.js')}}"></script>
+    <script src="{{asset('/assets/js/jquery/jquery.min.js')}}"></script>
+	<script src="{{asset('/assets/js/vendor/uploaders/fileinput/fileinput.min.js')}}"></script>
+	<script src="{{asset('/assets/js/vendor/uploaders/fileinput/plugins/sortable.min.js')}}"></script>
+	<script src="{{asset('/assets/demo/pages/uploader_bootstrap.js')}}"></script>
     <script src="{{asset('/assets/js/vendor/ui/moment/moment.min.js')}}"></script>
     <script src="{{asset('/assets/js/vendor/pickers/daterangepicker.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/pickers/datepicker.min.js')}}"></script>
-	<script src="{{asset('/assets/demo/pages/picker_date.js')}}"></script>
 @endpush
+
 
 @section('breadscrumb', Breadcrumbs::render('pengguna'))
 
@@ -240,7 +248,7 @@
                            @endif
                         </div>
 
-                        @can('kelola pembimbing penguji')
+                        {{-- @can('kelola pembimbing penguji') --}}
                         <div class="tab-pane fade" id="edit-pembimbing">
                            <form action="/kelompok/dosen/pembimbing" method="post">
                             @csrf
@@ -281,9 +289,9 @@
                             </div>
                            </form>
                         </div>
-                        @endcan
+                        {{-- @endcan --}}
 
-                        @can('kelola pembimbing penguji')
+                        {{-- @can('kelola pembimbing penguji') --}}
                         <div class="tab-pane fade" id="edit-penguji">
                             <form action="/kelompok/dosen/penguji" method="post">
                                 @csrf
@@ -324,7 +332,7 @@
                                 </div>
                                </form>
                         </div>
-                        @endcan
+                        {{-- @endcan --}}
 
                     </div>
                 </div>
@@ -342,7 +350,7 @@
                     <div class="mt-2 mt-sm-0 ms-sm-auto">
                         <div class="d-flex mt-3">
                             <small class="text-muted">Total : </small>
-                            <h1>{{$kelompok->bimbingan->count()}}</h1> / <h6 class="text-muted">
+                            <h1>{{$kelompok->bimbingan->where('is_done',true)->count()}}</h1> / <h6 class="text-muted">
                                 @if ($regulasi == NULL)
                                     {{$kelompok->krs->kategori->kategori->poin_regulasi->sum('poin')}}
                                 @else 
@@ -399,21 +407,23 @@
                                                                 bg-warning
                                                             @endif
                                                              rounded-pill p-1 me-2"></span>
-                                                            {{$kb->reference->value}}
+                                                            {{ $kb->is_done ? 'Done' : $kb->reference->value }}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <div class="dropdown">
-                                                    <a href="#" class="text-body" data-bs-toggle="dropdown">
-                                                        <i class="ph-list"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                      
-                                                        {{-- @can('update status bimbingan') --}}
-                                                            {{-- @if (app('is_pembimbing')->is_pembimbing($kelompok->id)) --}}
-                                                                @foreach($status_bimbingan as $sb)
+                                                @if (!$kb->is_done)
+                                                    <div class="dropdown">
+                                                        <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                                            <i class="ph-list"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                        
+                                                            {{-- @can('update status bimbingan') --}}
+                                                                {{-- @if (app('is_pembimbing')->is_pembimbing($kelompok->id)) --}}
+                                                                @if ($kb->reference->value == 'waiting')
+                                                                    @foreach($status_bimbingan as $sb)
                                                                     <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}" class="dropdown-item">
                                                                         @if($sb->value == 'approved')
                                                                             <i class="ph-checks text-success me-2"></i>
@@ -424,20 +434,92 @@
                                                                         @endif
                                                                         {{$sb->value}}
                                                                     </a>
-                                                                @endforeach
+                                                                    @endforeach
+                                                                @endif
+
+                                                                    @if($kb->reference->value == 'approved' && !$kb->is_done)
+                                                                        <a href="#" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#upload_bukti{{$kb->id}}">
+                                                                            <i class="ph-microsoft-excel-logo me-2"></i>
+                                                                            {{$kb->file_bukti == NULL ? 'upload MOM' : 'Lihat MOM'}}
+                                                                        </a>
+                                                                    @endif
+                                                                {{-- @endif --}}
+                                                            {{-- @endcan --}}
+
+                                                            @if($kb->reference->value == 'waiting')
+                                                                <a href="#" class="text-danger dropdown-item" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$kb->id}}">
+                                                                    <i class="ph-trash me-2"></i> Batal
+                                                                </a>
+                                                            @endif
                                                             {{-- @endif --}}
-                                                        {{-- @endcan --}}
 
-                                                        {{-- @can('hapus bimbingan') --}}
-                                                            <a href="#" class="text-danger mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$kb->id}}">
-                                                                <i class="ph-x"></i> Batal
-                                                            </a>
-                                                        {{-- @endif --}}
-
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @else 
+                                                    <div>
+                                                       <i class="ph-circle-wavy-check text-success"></i>
+                                                    </div>
+                                                @endif
+                                                
+
                                             </td>
                                         </tr>
+
+                                       <!-- Sticky footer -->
+                                        <div id="upload_bukti{{$kb->id}}" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
+                                            <div class="offcanvas-header border-bottom">
+                                                <h5 class="offcanvas-title fw-semibold">File Bukti</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                                            </div>
+                                            <div class="offcanvas-body">
+
+                                                @if ($kb->file_bukti == NULL)
+                                                    <div class="py-1">
+                                                        <div class="mb-1">
+                                                            <small class="text-danger"><i>Silahkan upload file MOM dan file - file pendukung sebagai bukti bahwa anda telah melakukan bimbingan</i></small>
+                                                        </div>
+                                                    </div>
+
+                                                    <form action="/bimbingan/upload/{{$kb->id}}" method="post" enctype="multipart/form-data">
+                                                        @csrf
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <p class="fw-semibold">Seret file pada area</p>
+                                                                <input type="file" class="form-control" name="file-bukti" required>
+                                                                {{-- <input id="file1" name="file1" type="file"> --}}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="border-top p-3">
+                                                            <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                                        </div>
+                                                    </form>
+                                                @else 
+
+                                                <div class="py-1">
+                                                    <div class="mb-1">
+                                                        <small class=""><i>Silahkan konfirmasi jika bimbingan telah selesai dan dokumen pendukung sudah benar</i></small>
+                                                    </div>
+                                                </div>
+
+                                                    <a href="{{asset('/storage/bukti-bimbingan/'.$kb->file_bukti)}}" download class="navbar-nav-link navbar-nav-link-icon text-primary bg-primary bg-opacity-10 fw-semibold rounded p-2" target="_blank">
+                                                        <div class="d-flex align-items-center mx-md-1">
+                                                            <i class="ph-file"></i>
+                                                            <span class="d-none d-md-inline-block ms-2">{{$kb->file_bukti}}</span>
+                                                        </div>
+                                                    </a>
+
+                                                    <form action="/bimbingan/approve/{{$kb->id}}" method="post" enctype="multipart/form-data">
+                                                        @csrf
+                                                        <div class="border-top p-3">
+                                                            <button type="submit" class="btn btn-success w-100">Approve</button>
+                                                        </div>
+                                                    </form>
+                                                @endif
+                                                
+                                            </div>
+                                        </div>
+                                        <!-- /sticky footer -->
 
                                          <!-- Delete Modal -->
                                         <div id="modal_hapus{{$kb->id}}" class="modal fade" tabindex="-1">

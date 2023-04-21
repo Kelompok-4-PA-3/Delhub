@@ -52,7 +52,7 @@ class UsersController extends Controller
 
     public function user_upload(Request $request)
     {
-        // return $request;
+        // return $request->file('user-file');
         // if($request->file('user-file')){
         //     return "iya";
         // }else{

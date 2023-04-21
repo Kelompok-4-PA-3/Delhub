@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Request as Bimbingan;
 use App\Notifications\RequestNotification;
 use App\Notifications\UpdateRequestNotification;
+use Storage;
 
 class BimbinganController extends Controller
 {
@@ -25,6 +26,36 @@ class BimbinganController extends Controller
     public function create()
     {
         //
+    }
+
+    public function upload_bukti(Request $request,$id){
+        $data = [
+            'file-bukti' => 'required'
+        ];
+
+        $validasi = $request->validate($data);
+        $bimbingan = Bimbingan::find($id);
+
+        if($request->file('file-bukti')){
+
+            $filename = $request->file('file-bukti')->getClientOriginalName();
+            $path = $request->file('file-bukti')->storeAs('public/bukti-bimbingan/',$filename);
+            $bimbingan->file_bukti = $filename;
+            $bimbingan->save();
+
+            return redirect()->back()->with('success', 'Bukti bimbingan telah berhasil diupload');
+        }
+
+        return back()->with('failed', 'Permintaan anda gagal di proses');
+        // ->file('file-bukti');
+    }
+
+    public function approve_bukti(Request $request,$id){
+        $bimbingan = Bimbingan::find($id);
+        $bimbingan->is_done = true;
+        $bimbingan->save();
+
+        return redirect()->back()->with('success', 'Bukti bimbingan telah berhasil diapprove');
     }
 
     /**

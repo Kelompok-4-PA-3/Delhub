@@ -11,6 +11,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\MhsInterestController;
+use App\Http\Controllers\InterestController;
 use App\Http\Controllers\BimbinganController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\RegulasiController;
@@ -62,6 +63,11 @@ Route::middleware([
 
     Route::resource('/jadwal', \App\Http\Controllers\JadwalController::class)->name('jadwals', 'jadwal.index');
 
+    Route::resource('/config', \App\Http\Controllers\ConfigController::class)->name('configs', 'config.index');
+    Route::post('/config/update/status/{id}', [\App\Http\Controllers\ConfigController::class, 'update_status'])->name('configs', 'config.update_status');
+
+    
+
 
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
     Route::resource('/fakultas', \App\Http\Controllers\FakultasController::class)->name('fakultas', 'fakultas.index');
@@ -88,7 +94,9 @@ Route::middleware([
     Route::post('/kelompok/people/delete', [KelompokController::class, 'delete_mahasiswa']);
     Route::get('/kelompok/{id}/orang', [KelompokController::class, 'people']);
     Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
-    Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan', 'bimbingan.index');
+    Route::post('/bimbingan/upload/{id}', [BimbinganController::class, 'upload_bukti'])->name('bimbingan_upload', 'bimbingan.upload_bukti');
+    Route::post('/bimbingan/approve/{id}', [BimbinganController::class, 'approve_bukti'])->name('bimbingan_approve', 'bimbingan.approve_bukti');
+    Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan_status', 'bimbingan.update_status');
 
     Route::post('/jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
 

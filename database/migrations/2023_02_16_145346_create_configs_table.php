@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('tahun_aktif');
             $table->string('semester');
-            $table->boolean('active')->default(true);
+            $table->boolean('previously used')->default(false)->nullable();
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }

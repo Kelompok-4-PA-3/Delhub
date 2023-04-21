@@ -69,6 +69,7 @@ const DatatableAPI = function() {
             $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
         });
         $('.datatable-users').DataTable({
+            fixedHeader: true,
             orderCellsTop: true,
             autoWidth: false, // mematikan autoWidth default
             "columns td:first-child": [
@@ -151,15 +152,23 @@ const DatatableAPI = function() {
             }
         });
 
-        $('.datatable-regulasi thead tr:eq(1) th').not(':first-child').each(function () {
+        $('.datatable-regulasi thead tr:eq(1) th:not(:first-child).regulasi-column').each(function () {
             const title = $(this).text();
             $(this).html('<select class="column-check form-control"><option value=""> <button class="btn bg-white shadow-sm"> Semua </button></option><option value="Success"> <button class="btn bg-check-success shadow-sm"> Terpenuhi </button></option></select>');
-            // $(this).html('<input type="checkbox" class="form-check-input column-check" value="Success"' + title + '" /> <button class="btn bg-check-success shadow-sm"></button>');
         });
+
+        $('.datatable-regulasi thead tr:eq(1) th:not(:first-child).pembimbing-column').each(function () {
+            const title = $(this).text();
+            $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
+
+        });
+
         $('.datatable-regulasi').DataTable({
             orderCellsTop: true,
             paging: true,
             scrollY: true,
+            scrollX: true,
+            "order": [[ 1, "asc" ]],
             buttons: {
                 dom: {
                     button: {
@@ -176,11 +185,19 @@ const DatatableAPI = function() {
                         $('.column-check').on('keyup change clear', function () {
                             if (!that.checked) {
                                 if (that.search() !== this.value) {
-                                    // console.log(this.value);
                                     that.column($(this).parent().index() + ':visible').search(this.value).draw();
                                 }
                             }
                         });
+
+                        $('.column-search').on('keyup change clear', function () {
+                            if (!that.checked) {
+                                if (that.search() !== this.value) {
+                                    that.column($(this).parent().index() + ':visible').search(this.value).draw();
+                                }
+                            }
+                        });
+
                     });
             }
         });
