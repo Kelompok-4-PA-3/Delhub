@@ -15,7 +15,7 @@ class RequestNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct($bimbingan,  $kelompok)
+    public function __construct($bimbingan, $kelompok)
     {
         $this->bimbingan = $bimbingan;
         $this->kelompok = $kelompok;
@@ -38,8 +38,6 @@ class RequestNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Permintaan Bimbingan')
-            ->line('Permintaan bimbingan dari kelompok ' . $this->kelompok->nama_kelompok . ' telah diterima.')
-            ->action('Lihat Permintaan', route('bimbingan.show', $this->bimbingan->id))
             ->view('emails.request', [
                 'bimbingan' => $this->bimbingan,
                 'kelompok' => $this->kelompok

@@ -77,9 +77,8 @@ class BimbinganController extends Controller
         $ref = Reference::where('kategori', '=', 'status_bimbingan_default')->first();
         // return $ref;
         $validasi = $request->validate($data);
-        $bimbingan = new Bimbingan();
 
-        $bimbingan->create([
+        $bimbingan = Bimbingan::create([
             'kelompok_id' => $validasi['kelompok_id'],
             'description' => $validasi['description'],
             'waktu' => $validasi['waktu'],
