@@ -40,7 +40,10 @@ class RequestNotification extends Notification
             ->subject('Permintaan Bimbingan')
             ->line('Permintaan bimbingan dari kelompok ' . $this->kelompok->nama_kelompok . ' telah diterima.')
             ->action('Lihat Permintaan', route('bimbingan.show', $this->bimbingan->id))
-            ->view('emails.request', ['kelompok' => $this->kelompok]);
+            ->view('emails.request', [
+                'bimbingan' => $this->bimbingan,
+                'kelompok' => $this->kelompok
+            ]);
     }
 
     /**
