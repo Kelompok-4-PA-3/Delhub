@@ -21,13 +21,13 @@ class RequestController extends Controller
     // : View
     {
         $requests = Pembimbing::where('pembimbing_1', Auth::user()->dosen->nidn)
-        ->orWhere('pembimbing_2', Auth::user()->dosen->nidn)
-        ->join('kelompoks', function($kelompok) {
-              $kelompok->on('pembimbings.kelompok_id', '=', 'kelompoks.id')
-                       ->join('requests', 'requests.kelompok_id', '=', 'kelompoks.id');
-        })
-        ->select('kelompoks.nama_kelompok', 'requests.*')
-        ->get();
+            ->orWhere('pembimbing_2', Auth::user()->dosen->nidn)
+            ->join('kelompoks', function ($kelompok) {
+                $kelompok->on('pembimbings.kelompok_id', '=', 'kelompoks.id')
+                    ->join('requests', 'requests.kelompok_id', '=', 'kelompoks.id');
+            })
+            ->select('kelompoks.nama_kelompok', 'requests.*')
+            ->get();
 
         // return $requests;
         // $requests = Bimbingan::latest()->get();

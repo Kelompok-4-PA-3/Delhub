@@ -29,10 +29,18 @@
                             <tr>
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        Permintaan bimbingan anda telah {{ $status }}.
+                                        Permintaan bimbingan anda telah {{ $status }}
+                                        <br>
+                                        olen dosen pembimbing pada tanggal
+                                        {{ \Carbon\Carbon::now()->format('d F Y') }}.
+                                    </div>
+                                    <div style="padding-bottom: 30px; font-size: 17px;">
+                                        <a href="{{ route('bimbingan.show', $bimbingan->id) }}">Klik
+                                            disini</a> untuk melihat detail permintaan bimbingan anda.
                                     </div>
                                     <div style="padding-bottom: 10px">Kind regards,
                                         <br>The Delhub Team.
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

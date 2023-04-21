@@ -10,12 +10,14 @@ use Illuminate\Notifications\Notification;
 class UpdateRequestNotification extends Notification
 {
     use Queueable;
+    private $bimbingan;
     private $status;
     /**
      * Create a new notification instance.
      */
-    public function __construct($status)
+    public function __construct(object $bimbingan, string $status)
     {
+        $this->bimbingan = $bimbingan;
         $this->status = $status;
     }
 
@@ -36,7 +38,10 @@ class UpdateRequestNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Permintaan Bimbingan Anda Telah Diperbarui')
-            ->view('emails.update_request', ['status' => $this->status]);
+            ->view('emails.update_request', [
+                'bimbingan' => $this->bimbingan,
+                'status' => $this->status
+            ]);
     }
 
     /**
