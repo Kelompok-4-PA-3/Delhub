@@ -11,10 +11,10 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <img alt="Logo"
-                                                        src="https://demo.interface.club/limitless/demo/template/assets/images/logo_icon.svg" />
+                                                    <img alt="Logo" height="75px" width="75px"
+                                                        src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Del_Institute_of_Technology_Logo.png" />
                                                 </td>
-                                                <td style="text-align: right; color:#999">
+                                                <td style="text-align: left; color:#999">
                                                     <span>Permintaan Bimbingan</span>
                                                 </td>
                                             </tr>
@@ -29,16 +29,18 @@
                             <tr>
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        Permintaan bimbingan anda telah {{ $status }}
+                                        Permintaan bimbingan anda telah di- {{ $status }}
                                         <br>
-                                        olen dosen pembimbing pada tanggal
+                                        oleh dosen pembimbing pada tanggal
                                         {{ \Carbon\Carbon::now()->format('d F Y') }}.
                                     </div>
-                                    <div style="padding-bottom: 30px; font-size: 17px;">
-                                        <a href="{{ route('bimbingan.show', $bimbingan->id) }}"
-                                            class="btn btn-primary">Klik
-                                            disini</a> untuk melihat detail permintaan bimbingan anda.
-                                    </div>
+
+                                        <a href="{{ url('/') }}">
+                                        <button style="font-size: 15px;
+                                        background: #6495ED; color: white; border: white 3px solid; border-radius: 5px;
+                                        padding: 12px 20px; margin-left: 150px;">Kunjungi Website</button></a>
+
+
                                     <div style="padding-bottom: 10px">Kind regards,
                                         <br>The Delhub Team.
                                     </div>
