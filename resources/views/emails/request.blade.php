@@ -29,10 +29,18 @@
                             <tr>
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        Permintaan bimbingan dari kelompok {{ $kelompok->nama }} telah diterima.
+                                        Permintaan bimbingan dari kelompok {{ $kelompok->nama_kelompok }} telah diterima
+                                        <br>
+                                        pada {{ \Carbon\Carbon::now()->format('d M Y') }}.
+                                    </div>
+                                    <div style="padding-bottom: 30px; font-size: 17px;">
+                                        <a href="{{ route('bimbingan.show', $bimbingan->id) }}"
+                                            class="btn btn-primary">Klik
+                                            disini</a> untuk melihat detail permintaan bimbingan anda.
                                     </div>
                                     <div style="padding-bottom: 10px">Kind regards,
                                         <br>The Delhub Team.
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

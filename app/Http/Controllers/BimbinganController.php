@@ -96,10 +96,10 @@ class BimbinganController extends Controller
         }
 
         // send email to pembimbing
-        $pembimbing1->user->notify(new RequestNotification($kelompok));
+        $pembimbing1->user->notify(new RequestNotification($bimbingan, $kelompok));
 
         if ($pembimbing2 != null) {
-            $pembimbing2->user->notify(new RequestNotification($kelompok));
+            $pembimbing2->user->notify(new RequestNotification($bimbingan, $kelompok));
         }
         return redirect()->back()->with('success', 'Request bimbingan telah berhasil dibuat');
     }
@@ -119,7 +119,10 @@ class BimbinganController extends Controller
         // get all mahasiswa in kelompok mahasiswa
         $mahasiswa = $kelompok->kelompok_mahasiswa;
         foreach ($mahasiswa as $mhs) {
-            $mhs->mahasiswa->user->notify(new UpdateRequestNotification($status));
+            $mhs->mahasiswa->user->notify(new UpdateRequestNotification(
+                $bimbingan,
+                $status
+            ));
         }
 
         return redirect()->back()->with('success', 'Request bimbingan telah di' . $status);

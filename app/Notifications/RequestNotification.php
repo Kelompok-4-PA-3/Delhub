@@ -10,12 +10,14 @@ use Illuminate\Notifications\Notification;
 class RequestNotification extends Notification
 {
     use Queueable;
+    private $bimbingan;
     private $kelompok;
     /**
      * Create a new notification instance.
      */
-    public function __construct($kelompok)
+    public function __construct($bimbingan,  $kelompok)
     {
+        $this->bimbingan = $bimbingan;
         $this->kelompok = $kelompok;
     }
 
@@ -37,7 +39,7 @@ class RequestNotification extends Notification
         return (new MailMessage)
             ->subject('Permintaan Bimbingan')
             ->line('Permintaan bimbingan dari kelompok ' . $this->kelompok->nama_kelompok . ' telah diterima.')
-            ->action('Lihat Permintaan', url('/kelompok/' . $this->kelompok->id))
+            ->action('Lihat Permintaan', route('bimbingan.show', $this->bimbingan->id))
             ->view('emails.request', ['kelompok' => $this->kelompok]);
     }
 
