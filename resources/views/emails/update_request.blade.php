@@ -29,7 +29,7 @@
                             <tr>
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        Permintaan bimbingan anda telah {{ $status->value }}
+                                        Permintaan bimbingan anda telah {{ $status }}
                                         <br>
                                         olen dosen pembimbing pada tanggal
                                         {{ \Carbon\Carbon::now()->format('d F Y') }}.

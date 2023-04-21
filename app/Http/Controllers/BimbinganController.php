@@ -113,6 +113,7 @@ class BimbinganController extends Controller
         $bimbingan->status = $status;
         // return $bimbingan->reference->value;
         $bimbingan->save();
+        $ref = Reference::find($status);
 
         // send email to mahasiswa
         $kelompok = $bimbingan->kelompok;
@@ -121,11 +122,11 @@ class BimbinganController extends Controller
         foreach ($mahasiswa as $mhs) {
             $mhs->mahasiswa->user->notify(new UpdateRequestNotification(
                 $bimbingan,
-                $status
+                $ref->value,
             ));
         }
 
-        return redirect()->back()->with('success', 'Request bimbingan telah di' . $status);
+        return redirect()->back()->with('success', 'Request bimbingan telah di' . $ref->value);
     }
 
     public function show(Bimbingan $bimbingan)
