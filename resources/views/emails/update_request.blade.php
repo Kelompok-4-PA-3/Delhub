@@ -35,7 +35,8 @@
                                         {{ \Carbon\Carbon::now()->format('d F Y') }}.
                                     </div>
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        <a href="{{ route('bimbingan.show', $bimbingan->id) }}">Klik
+                                        <a href="{{ route('bimbingan.show', $bimbingan->id) }}"
+                                            class="btn btn-primary">Klik
                                             disini</a> untuk melihat detail permintaan bimbingan anda.
                                     </div>
                                     <div style="padding-bottom: 10px">Kind regards,

@@ -29,10 +29,19 @@ class RequestController extends Controller
         Request::create($data);
 
         $kelompok = Kelompok::find($data['kelompok_id']);
-        $dosen = $kelompok->dosen->user;
+        $pembimbing1 = $kelompok->pembimbings->pembimbing_1_dosen;
+        $pembimbing2 = $kelompok->pembimbings->pembimbing_2_dosen;
 
-        // send email to dosen
-        $dosen->notify(new RequestNotification($kelompok));
+        if ($pembimbing1 == null && $pembimbing2 == null) {
+            return redirect()->back()->with('failed', 'Pembimbing tidak ditemukan');
+        }
+
+        // send email to pembimbing
+        $pembimbing1->user->notify(new RequestNotification($kelompok));
+
+        if ($pembimbing2 != null) {
+            $pembimbing2->user->notify(new RequestNotification($kelompok));
+        }
 
         return ResponseFormatter::success($request, 'Data berhasil ditambahkan');
     }
