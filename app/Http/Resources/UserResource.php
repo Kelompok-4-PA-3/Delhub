@@ -19,7 +19,7 @@ class UserResource extends JsonResource
         if ($role == 'dosen') {
             return [
                 'id' => $this->id,
-                'name' => $this->name,
+                'name' => $this->nama,
                 'email' => $this->email,
                 'role' => $role,
                 'dosen' => new DosenResource($this->dosen),
@@ -27,7 +27,7 @@ class UserResource extends JsonResource
         } else if ($role == 'mahasiswa') {
             return [
                 'id' => $this->id,
-                'name' => $this->name,
+                'name' => $this->nama,
                 'email' => $this->email,
                 'role' => $role,
                 'mahasiswa' => new MahasiswaResource($this->mahasiswa),

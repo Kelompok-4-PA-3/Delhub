@@ -18,7 +18,7 @@ class MahasiswaResource extends JsonResource
             'nim' => $this->nim,
             'angkatan' => $this->angkatan,
             'prodi' => $this->prodi->nama,
-            'kelompok' => $this->kelompok_mahasiswa->where('status', '1')->first()->kelompok->nama_kelompok ?? 'Belum ada kelompok',
+            'kelompok' => $this->kelompok_mahasiswa->where('status', '1')->first()->kelompok ? new KelompokResource($this->kelompok_mahasiswa->where('status', '1')->first()->kelompok) : null,
         ];
     }
 }
