@@ -17,7 +17,7 @@ class RequestController extends Controller
     public function index()
     {
         $kelompok_id = User::find(auth()->user()->id)->mahasiswa->kelompok_mahasiswa->where('status', '1')->first()->kelompok->id ?? null;
-        $requests = Request::where('kelompok_id', $kelompok_id)->get();
+        $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference')->get();
         return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
     }
 
