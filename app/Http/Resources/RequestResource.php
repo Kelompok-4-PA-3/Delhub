@@ -17,7 +17,7 @@ class RequestResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'ruangan' => $this->ruangan->nama,
+            'ruangan' => new RoomResource($this->ruangan),
             'deskripsi' => $this->description ?? '-',
             'waktu' => Carbon::parse($this->waktu)->format('d-m-Y H:i'),
             'status' => $this->reference->value,
