@@ -17,7 +17,7 @@ class RequestController extends Controller
     public function index()
     {
         $kelompok_id = User::find(auth()->user()->id)->mahasiswa->kelompok_mahasiswa->where('status', '1')->first()->kelompok->id ?? null;
-        $requests = Request::where('kelompok_id', $kelompok_id)->get();
+        $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference')->get();
         return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
     }
 
@@ -26,21 +26,21 @@ class RequestController extends Controller
         $data = $request->validated();
         $ref = Reference::where('kategori', '=', 'status_bimbingan_default')->first();
         $data['status'] = $ref->id;
-        Request::create($data);
+        $request = Request::create($data);
 
         $kelompok = Kelompok::find($data['kelompok_id']);
         $pembimbing1 = $kelompok->pembimbings->pembimbing_1_dosen;
         $pembimbing2 = $kelompok->pembimbings->pembimbing_2_dosen;
 
         if ($pembimbing1 == null && $pembimbing2 == null) {
-            return redirect()->back()->with('failed', 'Pembimbing tidak ditemukan');
+            return ResponseFormatter::error(null, 'Pembimbing tidak ditemukan', 500);
         }
 
         // send email to pembimbing
-        $pembimbing1->user->notify(new RequestNotification($kelompok));
+        $pembimbing1->user->notify(new RequestNotification($request, $kelompok));
 
         if ($pembimbing2 != null) {
-            $pembimbing2->user->notify(new RequestNotification($kelompok));
+            $pembimbing2->user->notify(new RequestNotification($request, $kelompok));
         }
 
         return ResponseFormatter::success($request, 'Data berhasil ditambahkan');
