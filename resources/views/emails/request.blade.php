@@ -29,7 +29,7 @@
                             <tr>
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        Permintaan bimbingan dari  {{ $kelompok->nama_kelompok }} telah diterima
+                                        {{ $kelompok->nama_kelompok }} telah melakukan request bimbingan untuk Anda
                                         <br>
                                         pada tanggal {{ \Carbon\Carbon::now()->format('d M Y') }}.
                                     </div>
