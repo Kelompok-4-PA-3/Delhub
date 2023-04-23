@@ -12,6 +12,10 @@ use App\Models\Regulasi;
 use App\Models\PembimbingPenguji;
 use App\Models\Pembimbing;
 use App\Models\Penguji;
+use App\Models\User;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use App\Models\Permission as PermissionModel;
 use Illuminate\Http\Request;
 
 class KelompokController extends Controller
@@ -81,7 +85,10 @@ class KelompokController extends Controller
      * Display the specified resource.
      */
     public function show(Kelompok $kelompok)
-    {
+    {   
+        // if (auth()->user()->cannot('kelola-bimbingan',$kelompok)) {
+        //     abort(403);
+        // }
         $ruangan = Ruangan::latest()->get();
         $dosen = Dosen::latest()->get();
         $reference = Reference::where('kategori','=','kelompok')->get();
@@ -98,7 +105,7 @@ class KelompokController extends Controller
         })->get(['pembimbing_pengujis.id','users.nama']);
         $status_bimbingan = Reference::where('kategori', '=', 'status_bimbingan')->get();
         $regulasi = Regulasi::where('krs_id', '=', $kelompok->krs_id)->first();
-        // return $regulasi->selec('');
+        $mahasiswa = KrsUser::where('krs_id',$kelompok->krs_id)->get();
 
         return view('dashboard.kelompok.kelompok',[
             'title' => $kelompok->nama_kelompok,
@@ -110,6 +117,7 @@ class KelompokController extends Controller
             'role_dosen' => $role_dosen,
             'status_bimbingan' => $status_bimbingan,
             'regulasi' => $regulasi,
+            'mahasiswa' => $mahasiswa
         ]);
         // return $kelompok;
     }
@@ -122,19 +130,62 @@ class KelompokController extends Controller
             'pembimbing_2' => 'nullable',
         ];
 
+  
+
         $validasi = $request->validate($data);
         $data_pembimbing = Pembimbing::where('kelompok_id',$request->kelompok_id)->first();
+        $dosen1 = Dosen::where('nidn',$validasi['pembimbing_1'])->join('users','dosens.user_id','users.id')->first();
+        $dosen2 = Dosen::where('nidn',$validasi['pembimbing_2'])->join('users','dosens.user_id','users.id')->first();
+        $kelompok = Kelompok::find($request->kelompok_id);
+
+
+        // $user = $user = User::find($dosen1->user_id);
+        // if ($dosen1 != NULL) {
+        //     $user->assignRole('pembimbing');
+
+        //     if ($dosen2 != NULL) {
+        //         $user = User::find($dosen2->user_id);
+        //         // return $user;
+        //         $user->giveRoleToId('pembimbing', $request->kelompok_id);
+        //     }
+        // }else{
+        //     return back()->with('failed', 'Permintaan anda tidak dapat diprotes');
+        // }
+
         $pembimbing = new Pembimbing();
 
         if ($data_pembimbing != NULL) {
             $pembimbing = $data_pembimbing;
-            // return 'ya';
         }
-       
+
+        // $permission = Permission::where('name', 'update-status-bimbingan')
+        // ->where('guard_name', 'web')
+        // ->where('model_id', $kelompok->id)
+        // ->first();
+
+        // if ($permission == NULL) {
+        //     Permission::firstOrCreate([
+        //         'name' => 'update-status-bimbingan', 
+        //         'guard_name' => 'web',
+        //         'model_type' => Kelompok::class, 
+        //         'model_id' => $kelompok->id
+        //        ]);
+        // }
+        
+       $role = Role::where('name','pembimbing')->where('guard_name','web')->first();
+    //    $role->givePermissionTo($permission); 
+       $user1 = User::find($dosen1->user_id);
+       $user2 = User::find($dosen2->user_id);
+       $user1->assignRole($role);
+       $user2->assignRole($role);
+
+
         $pembimbing->kelompok_id = $validasi['kelompok_id'];
         $pembimbing->pembimbing_1 = $validasi['pembimbing_1'];
         $pembimbing->pembimbing_2 = $validasi['pembimbing_2'];
         $pembimbing->save();
+
+        // return $user->getRoleNames().$user; 
 
         return back()->with('success','Pembimbing telah berhasil ditambahkan ke kelompok ini');
     }

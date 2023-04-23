@@ -74,4 +74,9 @@ class User extends Authenticatable
     public function mahasiswa(){
         return $this->hasOne(Mahasiswa::class, 'user_id', 'id');
     }
+
+    // public function getRoleNames()
+    // {
+    //     return $this->roles->pluck('name');
+    // }
 }

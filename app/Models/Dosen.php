@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
+use Spatie\Permission\Traits\HasRoles;
 
 class Dosen extends Model
 {
     use HasFactory;
     use SoftDeletes;
     use UserStamps;
+    use HasRoles;
 
     protected $primarykey = ['nidn'];
 
@@ -35,8 +37,12 @@ class Dosen extends Model
         return $this->hasMany(Kelompok::class ,'pembimbing', 'nidn');
     }
 
-    public function pembimbing_penguji(){
-        return $this->hasMany(PembimbingPenguji::class, 'dosen_id', 'nidn');
+    public function pembimbing_1(){
+        return $this->hasMany(Pembimbing::class, 'pembimbing_1', 'nidn');
+    }
+
+    public function pembimbing_2(){
+        return $this->hasMany(Pembimbing::class, 'pembimbing_2', 'nidn');
     }
 
     public function getRouteKeyName()

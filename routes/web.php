@@ -85,6 +85,11 @@ Route::middleware([
     Route::resource('/interest', InterestController::class)->name('interest', 'interest.index');
     Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
     Route::resource('/kelompok', KelompokController::class)->name('kelompok', 'kelompok.index');
+
+    Route::middleware(['is_pembimbing'])->group(function () {
+        Route::resource('/kelompok', 'KelompokController')->only(['show']);
+    });
+
     Route::post('/kelompok/dosen/pembimbing', [KelompokController::class, 'add_pembimbing']);
     Route::post('/kelompok/dosen/penguji', [KelompokController::class, 'add_penguji']);
     Route::post('/kelompok/dosen/pembimbing/{id}/delete', [KelompokController::class, 'delete_pembimbing']);

@@ -15,6 +15,8 @@ class Permission extends Model
 
     protected $table = 'permissions';
 
+    protected $guarded = ['id'];
+
     protected $dates = ['deleted_at'];
     
 }

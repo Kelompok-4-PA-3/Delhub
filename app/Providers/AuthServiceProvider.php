@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use App\Models\Kelompok;
+use App\Policies\KelompokPolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -13,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        // Kelompok::class => KelompokPolicy::class,
     ];
 
     /**
@@ -23,6 +25,19 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('pembimbing-kelompok', function ($user, $kelompok) {
+            $kelompok = Kelompok::find($kelompok);
+            if ($kelompok->pembimbings != NULL) {
+                return $user->dosen->nidn == $kelompok->pembimbings->pembimbing_1 || $user->dosen->nidn == $kelompok->pembimbings->pembimbing_2;
+            }
+        });
+
+        // Gate::define('permission-kelompok', function ($user, $kelompok) {
+        //     $kelompok = Kelompok::find($kelompok);
+        //     if ($kelompok->pembimbings != NULL) {
+        //         return $user->dosen->nidn == $kelompok->pembimbings->pembimbing_1 || $user->dosen->nidn == $kelompok->pembimbings->pembimbing_2;
+        //     }elseif
+        // });
+
     }
 }

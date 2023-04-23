@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Krs;
 use App\Models\Kelompok;
 use App\Models\Mahasiswa;
-use App\Models\PembimbingPenguji;
+use App\Models\Pembimbing;
 use Auth;
 
 class MyProjectController extends Controller
@@ -29,8 +29,9 @@ class MyProjectController extends Controller
 
     public function pembimbing($nidn){
         // return $nidn;
-        $kelompok = PembimbingPenguji::where('dosen_id','=', $nidn)
-                    ->join('kelompoks','kelompoks.id','=','pembimbing_pengujis.kelompok_id')
+        $kelompok = Pembimbing::where('pembimbing_1','=', $nidn)
+                    ->orWhere('pembimbing_2',$nidn)
+                    ->join('kelompoks','kelompoks.id','=','pembimbings.kelompok_id')
                     // ->select('nama_kelompok')
                     ->get();
         // return $kelompok;
