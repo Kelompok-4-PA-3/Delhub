@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RequestResource extends JsonResource
+class KelompokResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +16,9 @@ class RequestResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'ruangan' => $this->ruangan->nama,
-            'deskripsi' => $this->description ?? '-',
-            'waktu' => Carbon::parse($this->waktu)->format('d-m-Y H:i'),
-            'status' => $this->reference->value,
+            'name' => $this->nama_kelompok,
+            'topik' => $this->topik ? $this->topik->nama : "Belum ada topik",
+            'pembimbing' => $this->pembimbings->pembimbing_1_dosen->user->nama,
         ];
     }
 }

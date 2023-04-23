@@ -28,7 +28,8 @@ class BimbinganController extends Controller
         //
     }
 
-    public function upload_bukti(Request $request,$id){
+    public function upload_bukti(Request $request, $id)
+    {
         $data = [
             'file-bukti' => 'required'
         ];
@@ -36,10 +37,10 @@ class BimbinganController extends Controller
         $validasi = $request->validate($data);
         $bimbingan = Bimbingan::find($id);
 
-        if($request->file('file-bukti')){
+        if ($request->file('file-bukti')) {
 
             $filename = $request->file('file-bukti')->getClientOriginalName();
-            $path = $request->file('file-bukti')->storeAs('public/bukti-bimbingan/',$filename);
+            $path = $request->file('file-bukti')->storeAs('public/bukti-bimbingan/', $filename);
             $bimbingan->file_bukti = $filename;
             $bimbingan->save();
 
@@ -50,7 +51,8 @@ class BimbinganController extends Controller
         // ->file('file-bukti');
     }
 
-    public function approve_bukti(Request $request,$id){
+    public function approve_bukti(Request $request, $id)
+    {
         $bimbingan = Bimbingan::find($id);
         $bimbingan->is_done = true;
         $bimbingan->save();
@@ -75,9 +77,8 @@ class BimbinganController extends Controller
         $ref = Reference::where('kategori', '=', 'status_bimbingan_default')->first();
         // return $ref;
         $validasi = $request->validate($data);
-        $bimbingan = new Bimbingan();
 
-        $bimbingan->create([
+        $bimbingan = Bimbingan::create([
             'kelompok_id' => $validasi['kelompok_id'],
             'description' => $validasi['description'],
             'waktu' => $validasi['waktu'],
@@ -86,10 +87,19 @@ class BimbinganController extends Controller
         ]);
 
         $kelompok = Kelompok::find($validasi['kelompok_id']);
-        $dosen = $kelompok->dosen->user;
+        $pembimbing1 = $kelompok->pembimbings->pembimbing_1_dosen;
+        $pembimbing2 = $kelompok->pembimbings->pembimbing_2_dosen;
 
-        // send email to dosen
-        $dosen->notify(new RequestNotification($kelompok));
+        if ($pembimbing1 == null && $pembimbing2 == null) {
+            return redirect()->back()->with('failed', 'Pembimbing tidak ditemukan');
+        }
+
+        // send email to pembimbing
+        $pembimbing1->user->notify(new RequestNotification($bimbingan, $kelompok));
+
+        if ($pembimbing2 != null) {
+            $pembimbing2->user->notify(new RequestNotification($bimbingan, $kelompok));
+        }
         return redirect()->back()->with('success', 'Request bimbingan telah berhasil dibuat');
     }
 
@@ -102,16 +112,20 @@ class BimbinganController extends Controller
         $bimbingan->status = $status;
         // return $bimbingan->reference->value;
         $bimbingan->save();
+        $ref = Reference::find($status);
 
         // send email to mahasiswa
         $kelompok = $bimbingan->kelompok;
         // get all mahasiswa in kelompok mahasiswa
         $mahasiswa = $kelompok->kelompok_mahasiswa;
         foreach ($mahasiswa as $mhs) {
-            $mhs->mahasiswa->user->notify(new UpdateRequestNotification($status));
+            $mhs->mahasiswa->user->notify(new UpdateRequestNotification(
+                $bimbingan,
+                $ref->value,
+            ));
         }
 
-        return redirect()->back()->with('success', 'Request bimbingan telah di' . $status);
+        return redirect()->back()->with('success', 'Request bimbingan telah di' . $ref->value);
     }
 
     public function show(Bimbingan $bimbingan)
