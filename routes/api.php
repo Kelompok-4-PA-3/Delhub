@@ -21,8 +21,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('auth:sanctum')->get('/mahasiswa', [AuthController::class, 'getMahasiswa']);
+Route::middleware('auth:sanctum')->get('/dosen', [AuthController::class, 'getDosen']);
+Route::middleware('auth:sanctum')->get('/kelompok', [AuthController::class, 'getKelompok']);
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
 
 Route::group([
     'middleware' => 'auth:sanctum',
