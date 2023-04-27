@@ -10,6 +10,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateRequest;
 use App\Http\Resources\RequestCollection;
+use App\Http\Resources\RequestResource;
 use App\Notifications\RequestNotification;
 
 class RequestController extends Controller
@@ -43,7 +44,7 @@ class RequestController extends Controller
             $pembimbing2->user->notify(new RequestNotification($request, $kelompok));
         }
 
-        return ResponseFormatter::success($request, 'Data berhasil ditambahkan');
+        return ResponseFormatter::success(new RequestResource($request), 'Data berhasil ditambahkan');
     }
 
     public function show($id)

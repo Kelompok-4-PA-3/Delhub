@@ -1,5 +1,5 @@
 @extends('main')
-   
+
 @section('title')
     <title>Manajemen Mahasiswa</title>
 @endsection
@@ -56,7 +56,7 @@
                                 @if (app('is_kelompok_leader')->is_kelompok_leader($kelompok->id))
                                     <a href="#edit-topik" class="nav-link" data-bs-toggle="tab">
                                         <i class="ph-pencil me-2"></i>
-                                        Edit  
+                                        Edit
                                     </a>
                                 @endif
                             {{-- @endcan --}}
@@ -144,7 +144,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                
+
                                 @if ($kelompok->pembimbings->pembimbing_2 != NULL)
                                     <div>
                                         <div class="d-flex p-2 mt-2">
@@ -186,11 +186,11 @@
                                     <!-- /Delete Modal -->
 
                                 {{-- @endforeach --}}
-                           @else 
+                           @else
                                 <i><small>Belum ada pembimbing di kelompok ini</small></i>
                            @endif
                         </div>
-                        
+
                         <div class="tab-pane fade show {{session()->has('penguji') ?  'active' : '' }}" id="penguji">
 
                             @if ($kelompok->pengujis != NULL)
@@ -211,7 +211,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                
+
                                 @if ($kelompok->pengujis->penguji_2 != NULL)
                                     <div>
                                         <div class="d-flex p-2 mt-2">
@@ -251,7 +251,7 @@
                                     <!-- /Delete Modal -->
 
                                 {{-- @endforeach --}}
-                           @else 
+                           @else
                                 <i><small>Belum ada penguji di kelompok ini</small></i>
                            @endif
                         </div>
@@ -304,7 +304,7 @@
                             <form action="/kelompok/dosen/penguji" method="post">
                                 @csrf
                                 <input class="d-none" type="text" name="kelompok_id" value="{{$kelompok->id}}">
-    
+
                                 <div class="py-1">
                                     <select data-placeholder="Penguji 1" name="penguji_1" class="form-control select" required>
                                         <option></option>
@@ -319,7 +319,7 @@
                                         </optgroup>
                                     </select>
                                 </div>
-    
+
                                 <div class="py-1">
                                     <select data-placeholder="Penguji 2" name="penguji_2" class="form-control select">
                                         <option></option>
@@ -334,7 +334,7 @@
                                         </optgroup>
                                     </select>
                                 </div>
-    
+
                                 <div class="p-1">
                                     <button class="btn btn-sm btn-primary w-100">Submit</button>
                                 </div>
@@ -361,21 +361,21 @@
                             <h1>{{$kelompok->bimbingan->where('is_done',true)->count()}}</h1> / <h6 class="text-muted">
                                 @if ($regulasi == NULL)
                                     {{$kelompok->krs->kategori->kategori->poin_regulasi->sum('poin')}}
-                                @else 
+                                @else
                                     {{$regulasi}}
                                 @endif
                             </h6>
                         </div>
                     </div>
                 </div>
-             
+
                 <div class="card-body pb-0">
-                    
+
                     <!-- Tabs -->
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified">
                         <li class="nav-item">
                             <a href="#list-bimbingan" class="nav-link active" data-bs-toggle="tab">
-                                Daftar   
+                                Daftar
                             </a>
                         </li>
                          <li class="nav-item">
@@ -427,7 +427,7 @@
                                                             <i class="ph-list"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                        
+
                                                             {{-- @can('update status bimbingan') --}}
                                                                 {{-- @if (app('is_pembimbing')->is_pembimbing($kelompok->id)) --}}
                                                                 {{-- @can('pembimbing-kelompok',$kelompok) --}}
@@ -466,12 +466,12 @@
 
                                                         </div>
                                                     </div>
-                                                @else 
+                                                @else
                                                     <div>
                                                        <i class="ph-circle-wavy-check text-success"></i>
                                                     </div>
                                                 @endif
-                                                
+
 
                                             </td>
                                         </tr>
@@ -505,7 +505,7 @@
                                                             <button type="submit" class="btn btn-primary w-100">Submit</button>
                                                         </div>
                                                     </form>
-                                                @else 
+                                                @else
 
                                                 <div class="py-1">
                                                     <div class="mb-1">
@@ -527,7 +527,7 @@
                                                         </div>
                                                     </form>
                                                 @endif
-                                                
+
                                             </div>
                                         </div>
                                         <!-- /sticky footer -->
@@ -556,15 +556,15 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- /Delete Modal -->  
+                                        <!-- /Delete Modal -->
                                         @endforeach
                                         @else
-                                            <p class="text-muted text-center">Belum ada bimbingan tersedia</p> 
+                                            <p class="text-muted text-center">Belum ada bimbingan tersedia</p>
                                         @endif
                                     </tbody>
                                 </table>
                             </div>
-                        </div>              
+                        </div>
 
                         {{-- @can('request bimbingan') --}}
                         <div class="tab-pane active fade" id="tambah-bimbingan">
@@ -596,7 +596,7 @@
                     </div>
                     <!-- /tabs content -->
 
-                   
+
                 </div>
 
                 <div class="chart mb-2" id="app_sales"></div>

@@ -14,6 +14,9 @@ class DosenResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'nidn' => $this->nidn,
+            'name' => $this->user->nama,
+        ];
     }
 }

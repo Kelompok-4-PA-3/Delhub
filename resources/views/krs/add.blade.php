@@ -51,7 +51,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Dosen Pembimbing</label>
+                                <label class="form-label">Kooridnator</label>
                                 <select data-placeholder="Pilih Konfigurasi" class="form-control select" name="dosen_mk">
                                     <option></option>
                                     <optgroup label="Daftar Dosen">

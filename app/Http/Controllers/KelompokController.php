@@ -148,12 +148,6 @@ class KelompokController extends Controller
         if ($data_pembimbing != NULL) {
             $pembimbing = $data_pembimbing;
         }
-        
-       $role = Role::where('name','pembimbing')->where('guard_name','web')->first();
-       $user1 = User::find($dosen1->user_id);
-       $user1->assignRole($role);
-
-
         $pembimbing->kelompok_id = $validasi['kelompok_id'];
         $pembimbing->pembimbing_1 = $validasi['pembimbing_1'];
         if($validasi['pembimbing_2'] != NULL){
@@ -188,7 +182,7 @@ class KelompokController extends Controller
             $penguji = $data_penguji;
             // return 'ya';
         }
-       
+
         $penguji->kelompok_id = $validasi['kelompok_id'];
         $penguji->penguji_1 = $validasi['penguji_1'];
         $penguji->penguji_2 = $validasi['penguji_2'];

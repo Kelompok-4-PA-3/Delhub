@@ -90,11 +90,11 @@
                                 <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-    
+
                             <div class="modal-body">
                                Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{$p->name}}</span> ?
                             </div>
-    
+
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
                                 <form action="/permission/{{$p->id}}" method="post">
