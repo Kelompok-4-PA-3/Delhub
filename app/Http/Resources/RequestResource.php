@@ -19,7 +19,7 @@ class RequestResource extends JsonResource
             'id' => $this->id,
             'ruangan' => new RoomResource($this->ruangan),
             'deskripsi' => $this->description ?? '-',
-            'waktu' => $this->time->format('D, d M Y H:i'),
+            'waktu' => Carbon::parse($this->waktu)->format('D, d M Y H:i'),
             'status' => $this->reference->value,
         ];
     }
