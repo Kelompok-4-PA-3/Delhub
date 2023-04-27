@@ -23,6 +23,10 @@ public function register(): void
     $this->app->singleton('is_kelompok_leader', function ($app) {
         return new \App\Services\CheckRole;
     });
+
+    $this->app->singleton('role_penilaian', function ($app) {
+        return new \App\Services\CheckRole;
+    });
 }
 
 /**

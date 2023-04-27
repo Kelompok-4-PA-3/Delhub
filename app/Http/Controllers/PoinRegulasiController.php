@@ -92,8 +92,8 @@ class PoinRegulasiController extends Controller
      */
     public function destroy(PoinRegulasi $poinRegulasi)
     {
-        $kategori = PoinRegulasi::find($kategori->id);
-        $kategori->delete();
+        $poinRegulasi = PoinRegulasi::find($poinRegulasi->id);
+        $poinRegulasi->delete();
 
         return redirect()->back()->with('success', 'Poin regulasi berhasil dihapus');
     }

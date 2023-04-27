@@ -312,7 +312,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="toast-body d-flex">
-                    <h5>&#128522;</h5>&nbsp;<small class="text-muted">{{ session('success') }}</small>
+                    <h5>&#128522;</h5>&nbsp;<small class="text-muted">{{ session('failed') }}</small>
                 </div>
             </div>
         </div>

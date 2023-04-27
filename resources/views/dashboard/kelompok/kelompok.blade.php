@@ -36,6 +36,7 @@
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
                 <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
+                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/penilaian" class="nav-link"><i class="ph-notebook"></i> &nbsp; Penilaian</a></li>
             </ul>
         </div>
 
@@ -51,14 +52,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            @can('kelola topik kelompok')
+                            {{-- @can('kelola topik kelompok') --}}
                                 @if (app('is_kelompok_leader')->is_kelompok_leader($kelompok->id))
                                     <a href="#edit-topik" class="nav-link" data-bs-toggle="tab">
                                         <i class="ph-pencil me-2"></i>
                                         Edit  
                                     </a>
                                 @endif
-                            @endcan
+                            {{-- @endcan --}}
                         </li>
                     </ul>
 
@@ -429,7 +430,7 @@
                                                         
                                                             {{-- @can('update status bimbingan') --}}
                                                                 {{-- @if (app('is_pembimbing')->is_pembimbing($kelompok->id)) --}}
-                                                                @can('pembimbing-kelompok',$kelompok)
+                                                                {{-- @can('pembimbing-kelompok',$kelompok) --}}
                                                                     @if ($kb->reference->value == 'waiting')
                                                                         @foreach($status_bimbingan as $sb)
                                                                         <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}" class="dropdown-item">
@@ -444,7 +445,7 @@
                                                                         </a>
                                                                         @endforeach
                                                                     @endif
-                                                                @endif
+                                                                {{-- @endcan --}}
                                                                 
 
                                                                     @if($kb->reference->value == 'approved' && !$kb->is_done)

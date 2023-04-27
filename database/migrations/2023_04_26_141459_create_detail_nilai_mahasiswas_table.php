@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('komponen_penilaians', function (Blueprint $table) {
+        Schema::create('detail_nilai_mahasiswas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('poin_regulasi_id');
-            $table->foreign('poin_regulasi_id')->references('id')->on('poin_regulasis')->onUpdate('cascade')->onDelete('cascade');
-            $table->Text('komponen_penilaian');
-            $table->double('bobot');
-            $table->boolean('is_verified')->default(false);
+            $table->unsignedBigInteger('nilai_id');
+            $table->foreign('nilai_id')->references('id')->on('nilai_mahasiswas')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('komponen_id');
+            $table->foreign('komponen_id')->references('id')->on('komponen_penilaians')->onUpdate('cascade')->onDelete('cascade');
+            $table->double('nilai');
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('komponen_penilaians');
+        Schema::dropIfExists('detail_nilai_mahasiswas');
     }
 };

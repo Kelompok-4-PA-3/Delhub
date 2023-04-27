@@ -62,7 +62,7 @@ const QuillEditor = function() {
         // Empty editor with placeholder
         const quillPlaceholder = new Quill('.quill-placeholder', {
             bounds: '.content-inner',
-            placeholder: 'Please add your text here...',
+            placeholder: 'Masukkan komponen penilaian disini...',
             theme: 'snow'
         });
 
@@ -70,7 +70,7 @@ const QuillEditor = function() {
         const quillReadonly = new Quill('.quill-scrollable', {
             bounds: '.content-inner',
             scrollingContainer: 'quill-scrollable-container',
-            placeholder: 'Please add your text here...',
+            placeholder: 'Masukkan komponen penilaian disini...',
             theme: 'snow'
         });
 

@@ -66,7 +66,7 @@ class UsersController extends Controller
     public function store(Request $request)
     // : RedirectResponse
     {
-        return $request;
+        // return $request;
         // return $request;
         $data = [
             'nama' => 'required',

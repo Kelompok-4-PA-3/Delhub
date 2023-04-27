@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelompok;
 use App\Models\KelompokMahasiswa;
+use App\Models\Mahasiswa;
 use App\Models\Ruangan;
 use App\Models\Dosen;
 use App\Models\KrsUser;
@@ -16,6 +17,10 @@ use App\Models\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\Permission as PermissionModel;
+use App\Models\KomponenPenilaian;
+use App\Models\ConfigPenilaian;
+use App\Models\NilaiMahasiswa;
+use App\Models\DetailNilaiMahasiswa;
 use Illuminate\Http\Request;
 
 class KelompokController extends Controller
@@ -92,7 +97,7 @@ class KelompokController extends Controller
         $ruangan = Ruangan::latest()->get();
         $dosen = Dosen::latest()->get();
         $reference = Reference::where('kategori','=','kelompok')->get();
-        $pembimbing_penguji = PembimbingPenguji::where('kelompok_id','=',$kelompok->id)->get();
+        // $pembimbing_penguji = PembimbingPenguji::where('kelompok_id','=',$kelompok->id)->get();
         $pembimbing = PembimbingPenguji::where('kelompok_id','=',$kelompok->id)->get();
         $role_dosen = Reference::where('kategori', '=', 'role_dosen')->get();
         $pembimbing = PembimbingPenguji::where('kelompok_id','=',$kelompok->id)
@@ -138,55 +143,25 @@ class KelompokController extends Controller
         $dosen2 = Dosen::where('nidn',$validasi['pembimbing_2'])->join('users','dosens.user_id','users.id')->first();
         $kelompok = Kelompok::find($request->kelompok_id);
 
-
-        // $user = $user = User::find($dosen1->user_id);
-        // if ($dosen1 != NULL) {
-        //     $user->assignRole('pembimbing');
-
-        //     if ($dosen2 != NULL) {
-        //         $user = User::find($dosen2->user_id);
-        //         // return $user;
-        //         $user->giveRoleToId('pembimbing', $request->kelompok_id);
-        //     }
-        // }else{
-        //     return back()->with('failed', 'Permintaan anda tidak dapat diprotes');
-        // }
-
         $pembimbing = new Pembimbing();
 
         if ($data_pembimbing != NULL) {
             $pembimbing = $data_pembimbing;
         }
-
-        // $permission = Permission::where('name', 'update-status-bimbingan')
-        // ->where('guard_name', 'web')
-        // ->where('model_id', $kelompok->id)
-        // ->first();
-
-        // if ($permission == NULL) {
-        //     Permission::firstOrCreate([
-        //         'name' => 'update-status-bimbingan', 
-        //         'guard_name' => 'web',
-        //         'model_type' => Kelompok::class, 
-        //         'model_id' => $kelompok->id
-        //        ]);
-        // }
         
        $role = Role::where('name','pembimbing')->where('guard_name','web')->first();
-    //    $role->givePermissionTo($permission); 
        $user1 = User::find($dosen1->user_id);
-       $user2 = User::find($dosen2->user_id);
        $user1->assignRole($role);
-       $user2->assignRole($role);
 
 
         $pembimbing->kelompok_id = $validasi['kelompok_id'];
         $pembimbing->pembimbing_1 = $validasi['pembimbing_1'];
-        $pembimbing->pembimbing_2 = $validasi['pembimbing_2'];
+        if($validasi['pembimbing_2'] != NULL){
+            $user2 = User::find($dosen2->user_id);
+            $user2->assignRole($role);
+            $pembimbing->pembimbing_2 = $validasi['pembimbing_2'];
+        }
         $pembimbing->save();
-
-        // return $user->getRoleNames().$user; 
-
         return back()->with('success','Pembimbing telah berhasil ditambahkan ke kelompok ini');
     }
 
@@ -241,12 +216,13 @@ class KelompokController extends Controller
 
         $validasi = $request->validate($data);
 
-        KelompokMahasiswa::create([
-            'kelompok_id' => $validasi['kelompok'],
-            'nim' => $validasi['mahasiswa'],
-            'role' => $validasi['role'],
-        ]);
-
+        foreach($request->mahasiswa as $m){
+            KelompokMahasiswa::create([
+                'kelompok_id' => $validasi['kelompok'],
+                'nim' => $m,
+                'role' => $validasi['role'],
+            ]);
+        }
         return back()->with('success','Mahasiswa telah berhasil ditambahkan ke kelompok ini');
     }
 
@@ -278,6 +254,70 @@ class KelompokController extends Controller
         $kelompok->save();
 
         return back()->with('success', 'Topik telah berhasil dibuat');
+    }
+
+    public function penilaian(Kelompok $kelompok){
+        $poin_regulasi = $kelompok->krs->kategori->kategori->poin_regulasi;
+        $konfigurasi =  ConfigPenilaian::where('krs_id', $kelompok->krs->id)->first();
+
+        // return $poin_regulasi;
+        // ->komponen_penilaian;
+        // $komponen = KomponenPenilaian::where('poin_regulasi_id');
+
+        return view('dashboard.penilaian.index',[
+            'kelompok' => $kelompok,
+            'poin_regulasi' => $poin_regulasi,
+            'konfigurasi' => $konfigurasi,
+        ]);
+    }
+
+    public function penilaian_mahasiswa(Request $request,Kelompok $kelompok, Mahasiswa $mahasiswa){
+        $poin_regulasi = KomponenPenilaian::where('poin_regulasi_id',$request->poin_regulasi_id)->get();
+
+        foreach($poin_regulasi->pluck('id') as $prp){
+            $data['nilai'.$prp] = 'required|numeric|max:100';
+        }
+
+        $validasi = $request->validate($data);
+        $total = 0;
+        
+        foreach ($poin_regulasi as $prp) {
+            $data['nilai'.$prp] = $validasi['nilai'.$prp->id];
+            $validasi['nilai'.$prp->id] *= ($prp->bobot / 100); 
+            $total +=  $validasi['nilai'.$prp->id];
+        }
+
+        $nilai_mahasiswa = NilaiMahasiswa::where('nim',$mahasiswa->nim)
+                                        ->where('kelompok_id',$kelompok->id)
+                                        ->where('poin_regulasi_id',$request->poin_regulasi_id)
+                                        ->first();
+
+        if ($nilai_mahasiswa == NULL) {
+            $nilai_mahasiswa = new NilaiMahasiswa();
+        }
+
+        $nilai_mahasiswa->kelompok_id = $kelompok->id;
+        $nilai_mahasiswa->poin_regulasi_id = $request->poin_regulasi_id;
+        $nilai_mahasiswa->nim = $mahasiswa->nim;
+        $nilai_mahasiswa->nilai = $total * ($request->role_penilaian / 100);
+        $nilai_mahasiswa->save();
+
+       
+        foreach ($poin_regulasi as $prp) {
+            $detail_nilai_mahasiswa = new DetailNilaiMahasiswa;
+
+            if ($detail_nilai_mahasiswa == NULL) {
+                $detail_nilai_mahasiswa = DetailNilaiMahasiswa::where('nilai_id',$nilai_mahasiswa->id)
+                                                                ->where('komponen_id',$prp->id)->first();
+            }
+
+            $detail_nilai_mahasiswa->nilai_id =  $nilai_mahasiswa->id;
+            $detail_nilai_mahasiswa->komponen_id =  $prp->id;
+            $detail_nilai_mahasiswa->nilai=    $data['nilai'.$prp];
+            $detail_nilai_mahasiswa->save();
+        }
+
+        return back()->with('success','Penilaian mahasiswa telah berhasil dibuat');
     }
 
 

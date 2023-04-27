@@ -20,4 +20,8 @@ class PoinRegulasi extends Model
     public function kategori_proyek(){
         return $this->belongsTo(KategoriProyek::class, 'kategori_id', 'id');
     }
+
+    public function komponen_penilaian(){
+        return $this->hasMany(KomponenPenilaian::class, 'poin_regulasi_id', 'id');
+    }
 }

@@ -80,6 +80,9 @@
                                         data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pr->id }}">
                                         <i class="ph-trash"></i>
                                     </a>
+                                    <a href="/poin_regulasi/{{$pr->id}}/komponen_penilaian" class="text-body" data-bs-popup="tooltip" title="Komponen penilaian">
+                                        <i  class="ph-notebook"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -100,7 +103,7 @@
 
                                     <div class="modal-footer justify-content-between">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                        <form action="/kategori_proyek/{{ $pr->id }}" method="post">
+                                        <form action="/poin_regulasi/{{ $pr->id }}" method="post">
                                             @csrf
                                             @method('delete')
                                             <button type="submit" class="btn btn-primary">Ya</button>

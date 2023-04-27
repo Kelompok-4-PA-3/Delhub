@@ -47,4 +47,8 @@ class Mahasiswa extends Model
     public function kelompokMahasiswa(){
         return $this->hasMany(KelompokMahasiswa::class);
     }
+
+    public function nilai(){
+        return $this->hasMany(NilaiMahasiswa::class, 'nim', 'nim');
+    }
 }

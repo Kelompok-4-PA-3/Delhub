@@ -125,7 +125,7 @@
 										<p>Tambah Anggota Kelompok</p>
 										<input type="hidden" name="kelompok" value="{{$kelompok->id}}">
 										<div class="py-2">
-											<select data-placeholder="Pilih mahasiswa" name="mahasiswa" multiple="multiple" class="form-control select" required>
+											<select data-placeholder="Pilih mahasiswa" name="mahasiswa[]" multiple="multiple" class="form-control select" required>
 												<option></option>
 												<optgroup label="Daftar mahasiswa">
 													@foreach($mahasiswa as $km)

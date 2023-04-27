@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreign('config_id')->references('id')->on('configs')->onUpdate('cascade')->onDelete('cascade');
             $table->string('dosen_mk');
             $table->foreign('dosen_mk')->references('nidn')->on('dosens')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('dosen_mk_2')->nullable();
+            $table->foreign('dosen_mk_2')->references('nidn')->on('dosens')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('prodi_id');
             $table->foreign('prodi_id')->references('id')->on('prodis')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('angkatan');
