@@ -97,7 +97,7 @@
                                     <div class="modal-body">
                                         <b class="fw-semibold">Nama : </b>
                                         <p>{{ $r->name }}</p>
-                                        <b class="fw-semibold">Guar name : </b>
+                                        <b class="fw-semibold">Guard name : </b>
                                         <p>{{ $r->guard_name }}</p>
                                         <b class="fw-semibold">Permission : </b>
                                         @foreach ($permission as $p)

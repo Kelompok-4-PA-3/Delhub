@@ -19,4 +19,14 @@ class Jadwal extends Model
     {
         return $this->hasMany(Mahasiswa::class);
     }
+
+    public function pembimbings()
+    {
+        return $this->hasOne(Pembimbing::class, 'kelompok_id', 'id');
+    }
+
+    public function kelompoks()
+    {
+        return $this->belongsTo(Kelompok::class);
+    }
 }

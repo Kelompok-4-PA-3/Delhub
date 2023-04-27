@@ -66,7 +66,7 @@ Route::middleware([
     Route::resource('/config', \App\Http\Controllers\ConfigController::class)->name('configs', 'config.index');
     Route::post('/config/update/status/{id}', [\App\Http\Controllers\ConfigController::class, 'update_status'])->name('configs', 'config.update_status');
 
-    
+
 
 
     Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
@@ -100,10 +100,10 @@ Route::middleware([
 
     Route::post('/jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
 
-    Route::get('/jadwal/{jadwal}/edit', [JadwalController::class, 'edit'])->name('jadwal.edit');
-    Route::put('/jadwal/{jadwal}', [JadwalController::class, 'update'])->name('jadwal.ubah');
-    Route::delete('/jadwal/{jadwal}', [JadwalController::class, 'delete'])->name('jadwal.delete');
-    Route::get('/krs/{id}/regulasi', [RegulasiController::class, 'index'])->name('regulasi', 'regulasi.index');
+    // Route::get('/jadwal/{jadwal}/edit', [JadwalController::class, 'edit'])->name('jadwal.edit');
+    // Route::put('/jadwal/{jadwal}', [JadwalController::class, 'update'])->name('jadwal.ubah');
+    // Route::delete('/jadwal/{jadwal}', [JadwalController::class, 'delete'])->name('jadwal.destroy');
+    // Route::get('/krs/{id}/regulasi', [RegulasiController::class, 'index'])->name('regulasi', 'regulasi.index');
     Route::get('/krs/{id}/regulasi/add', [RegulasiController::class, 'create'])->name('regulasi-add', 'regulasi.add');
     Route::post('/krs/{id}/regulasi/add', [RegulasiController::class, 'store'])->name('regulasi-store', 'regulasi.store');
     Route::post('/krs/{id}/regulasi/edit', [RegulasiController::class, 'update'])->name('regulasi-update', 'regulasi.update');

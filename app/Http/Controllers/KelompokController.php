@@ -130,7 +130,7 @@ class KelompokController extends Controller
             $pembimbing = $data_pembimbing;
             // return 'ya';
         }
-       
+
         $pembimbing->kelompok_id = $validasi['kelompok_id'];
         $pembimbing->pembimbing_1 = $validasi['pembimbing_1'];
         $pembimbing->pembimbing_2 = $validasi['pembimbing_2'];
@@ -162,7 +162,7 @@ class KelompokController extends Controller
             $penguji = $data_penguji;
             // return 'ya';
         }
-       
+
         $penguji->kelompok_id = $validasi['kelompok_id'];
         $penguji->penguji_1 = $validasi['penguji_1'];
         $penguji->penguji_2 = $validasi['penguji_2'];

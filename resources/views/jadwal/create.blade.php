@@ -9,7 +9,11 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <h5 class="mb-0">Tambah Jadwal</h5>
+        @csrf
+        @method('PUT')
+        @foreach($kelompoks as $k)
+            <h5 class="mb-0">{{ $k->nama_kelompok }}</h5>
+        @endforeach
         </div>
 
         <div class="card-body pb-0">
@@ -18,13 +22,6 @@
                     <form action="{{ route('jadwal.store') }}" method="post">
                         @csrf
                         <fieldset class="mb-3">
-                            <div class="mb-3">
-                                <label class="form-label">Kelompok</label>
-                                <input name="kel" type="text" class="form-control" value="{{old('nama')}}" placeholder="Masukkan kelompok disini" required>
-                                @error('kel')
-                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                                @enderror
-                            </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Tanggal Bimbingan</label>

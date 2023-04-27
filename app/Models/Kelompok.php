@@ -41,6 +41,11 @@ class Kelompok extends Model
         return $this->hasOne(Pembimbing::class, 'kelompok_id', 'id');
     }
 
+    public function pembimbing()
+    {
+        return $this->belongsTo(Pembimbing::class);
+    }
+
     public function pengujis()
     {
         return $this->hasOne(Penguji::class, 'kelompok_id', 'id');
