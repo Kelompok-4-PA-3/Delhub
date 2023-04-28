@@ -29,9 +29,23 @@
                             <tr>
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        {{ $kelompok->nama_kelompok }} telah melakukan request bimbingan untuk Anda
+                                        Kepada Yth. <br>
+                                        Bapak/Ibu {{$kelompok->pembimbings->pembimbing_1_dosen->user->nama}} <br>
+                                        Bapak/Ibu {{$kelompok->pembimbings->pembimbing_2_dosen->user->nama}} <br><br>
+
+                                        Melalui email ini, kami dari {{ $kelompok->nama_kelompok }} ingin melakukan request bimbingan untuk Bapak/Ibu
+                                        dengan detail sebagai berikut.
                                         <br>
-                                        pada tanggal {{ \Carbon\Carbon::now()->format('d M Y') }}.
+                                        Tanggal     :  <br>
+                                        Ruangan     : <br>
+                                        Deskripsi   : <br>
+                                        <br> <br>
+                                        Demikian permintaan bimbingan ini kami sampaikan. Atas perhatian Bapak/Ibu kami ucapkan terima kasih.
+                                        <br> <br>
+                                        Laguboti, {{ \Carbon\Carbon::now()->format('d F Y') }}
+
+
+
                                     </div>
                                     <a href="{{ url('/') }}">
                                         <button style="font-size: 15px;

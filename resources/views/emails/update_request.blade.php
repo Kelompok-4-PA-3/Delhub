@@ -29,10 +29,15 @@
                             <tr>
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        Permintaan bimbingan anda telah di- {{ $status }}
-                                        <br>
-                                        oleh dosen pembimbing pada tanggal
-                                        {{ \Carbon\Carbon::now()->format('d F Y') }}.
+                                        Dear kelompok ...<br><br>
+                                        Permintaan bimbingan dari kelompok Anda telah di- {{ $status }}
+                                        oleh dosen pembimbing pada tanggal {{ \Carbon\Carbon::now()->format('d F Y') }}. <br>
+                                        Berikut detail bimbingan Anda.<br>
+                                        Tanggal     :  <br>
+                                        Ruangan     : <br>
+                                        Deskripsi   : <br>
+
+
                                     </div>
 
                                         <a href="{{ url('/') }}">
