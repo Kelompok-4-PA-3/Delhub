@@ -50,6 +50,6 @@ class RequestController extends Controller
     public function show($id)
     {
         $request = Request::find($id);
-        return ResponseFormatter::success($request, 'Data berhasil diambil');
+        return ResponseFormatter::success(new RequestResource($request), 'Data berhasil diambil');
     }
 }
