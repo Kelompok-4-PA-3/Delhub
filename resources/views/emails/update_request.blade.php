@@ -34,7 +34,8 @@
                                         oleh dosen pembimbing pada tanggal {{ \Carbon\Carbon::now()->format('d F Y') }}.
                                         <br>
                                         Berikut detail bimbingan Anda.<br>
-                                        Tanggal : {{ $bimbingan->waktu }} <br>
+                                        Tanggal : {{ \Carbon\Carbon::parse($bimbingan->tanggal)->format('d F Y') }}<br>
+                                        Pukul : {{ \Carbon\Carbon::parse($bimbingan->jam)->format('H:i') }}<br>
                                         Ruangan : {{ $bimbingan->ruangan->nama }}<br>
                                         Deskripsi : {{ $bimbingan->description }}<br>
 

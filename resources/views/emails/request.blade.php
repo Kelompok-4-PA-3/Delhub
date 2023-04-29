@@ -37,7 +37,8 @@
                                         request bimbingan untuk Bapak/Ibu
                                         dengan detail sebagai berikut.
                                         <br>
-                                        Tanggal : {{ $bimbingan->waktu }} <br>
+                                        Tanggal : {{ \Carbon\Carbon::parse($bimbingan->tanggal)->format('d F Y') }}<br>
+                                        Pukul : {{ \Carbon\Carbon::parse($bimbingan->jam)->format('H:i') }}<br>
                                         Ruangan : {{ $bimbingan->ruangan->nama }}<br>
                                         Deskripsi : {{ $bimbingan->description }}<br>
                                         <br> <br>
