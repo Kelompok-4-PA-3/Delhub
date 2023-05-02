@@ -11,7 +11,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <img alt="Logo"  height="75px" width="75px"
+                                                    <img alt="Logo" height="75px" width="75px"
                                                         src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Del_Institute_of_Technology_Logo.png" />
                                                 </td>
                                                 <td style="text-align: left; color:#999">
@@ -29,14 +29,31 @@
                             <tr>
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        {{ $kelompok->nama_kelompok }} telah melakukan request bimbingan untuk Anda
+                                        Kepada Yth. <br>
+                                        Bapak/Ibu {{ $kelompok->pembimbings->pembimbing_1_dosen->user->nama }} <br>
+                                        Bapak/Ibu {{ $kelompok->pembimbings->pembimbing_2_dosen->user->nama }} <br><br>
+
+                                        Melalui email ini, kami dari {{ $kelompok->nama_kelompok }} ingin melakukan
+                                        request bimbingan untuk Bapak/Ibu
+                                        dengan detail sebagai berikut.
                                         <br>
-                                        pada tanggal {{ \Carbon\Carbon::now()->format('d M Y') }}.
+                                        Tanggal : {{ \Carbon\Carbon::parse($bimbingan->tanggal)->format('d F Y') }}<br>
+                                        Pukul : {{ \Carbon\Carbon::parse($bimbingan->jam)->format('H:i') }}<br>
+                                        Ruangan : {{ $bimbingan->ruangan->nama }}<br>
+                                        Deskripsi : {{ $bimbingan->description }}<br>
+                                        <br> <br>
+                                        Demikian permintaan bimbingan ini kami sampaikan. Atas perhatian Bapak/Ibu kami
+                                        ucapkan terima kasih.
+                                        <br> <br>
+                                        Laguboti, {{ \Carbon\Carbon::now()->format('d F Y') }}
+
                                     </div>
                                     <a href="{{ url('/') }}">
-                                        <button style="font-size: 15px;
+                                        <button
+                                            style="font-size: 15px;
                                         background: #6495ED; color: white; border: white 3px solid; border-radius: 5px;
-                                        padding: 12px 20px; margin-left: 150px;">Kunjungi Website</button></a>
+                                        padding: 12px 20px; margin-left: 150px;">Kunjungi
+                                            Website</button></a>
 
                                     <div style="padding-bottom: 10px">Kind regards,
                                         <br>The Delhub Team.

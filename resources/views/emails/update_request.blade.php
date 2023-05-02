@@ -29,16 +29,24 @@
                             <tr>
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        Permintaan bimbingan anda telah di- {{ $status }}
+                                        Dear kelompok {{ $kelompok->nama_kelompok }}<br><br>
+                                        Permintaan bimbingan dari kelompok Anda telah di- {{ $status }}
+                                        oleh dosen pembimbing pada tanggal {{ \Carbon\Carbon::now()->format('d F Y') }}.
                                         <br>
-                                        oleh dosen pembimbing pada tanggal
-                                        {{ \Carbon\Carbon::now()->format('d F Y') }}.
+                                        Berikut detail bimbingan Anda.<br>
+                                        Tanggal : {{ \Carbon\Carbon::parse($bimbingan->tanggal)->format('d F Y') }}<br>
+                                        Pukul : {{ \Carbon\Carbon::parse($bimbingan->jam)->format('H:i') }}<br>
+                                        Ruangan : {{ $bimbingan->ruangan->nama }}<br>
+                                        Deskripsi : {{ $bimbingan->description }}<br>
+
                                     </div>
 
-                                        <a href="{{ url('/') }}">
-                                        <button style="font-size: 15px;
+                                    <a href="{{ url('/') }}">
+                                        <button
+                                            style="font-size: 15px;
                                         background: #6495ED; color: white; border: white 3px solid; border-radius: 5px;
-                                        padding: 12px 20px; margin-left: 150px;">Kunjungi Website</button></a>
+                                        padding: 12px 20px; margin-left: 150px;">Kunjungi
+                                            Website</button></a>
 
 
                                     <div style="padding-bottom: 10px">Kind regards,
