@@ -34,7 +34,6 @@ class RequestController extends Controller
             })->with('ruangan', 'reference')->orderBy('created_at', 'desc')->get();
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
         }
-
     }
 
     public function store(CreateRequest $request)

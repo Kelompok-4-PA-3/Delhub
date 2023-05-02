@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\GuidanceController;
+use App\Http\Controllers\API\LectureController;
 use App\Http\Controllers\API\RoomController;
 use App\Http\Controllers\API\RequestController;
 
@@ -48,7 +48,7 @@ Route::group([
 
 Route::group([
     'middleware' => 'auth:sanctum',
-    'prefix' => 'guidances'
+    'prefix' => 'lecture'
 ], function () {
-    Route::get('/', [GuidanceController::class, 'index']);
+    Route::get('/guidance', [LectureController::class, 'getGuidance']);
 });
