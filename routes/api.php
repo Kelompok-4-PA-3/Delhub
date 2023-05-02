@@ -3,8 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\GuidanceController;
 use App\Http\Controllers\API\RoomController;
-use App\Http\Controllers\API\Student\RequestController;
+use App\Http\Controllers\API\RequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +44,11 @@ Route::group([
     'prefix' => 'rooms'
 ], function () {
     Route::get('/', [RoomController::class, 'index']);
+});
+
+Route::group([
+    'middleware' => 'auth:sanctum',
+    'prefix' => 'guidances'
+], function () {
+    Route::get('/', [GuidanceController::class, 'index']);
 });

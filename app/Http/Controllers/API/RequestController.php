@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\Student;
+namespace App\Http\Controllers\API;
 
 use App\Models\User;
 use App\Models\Request;
@@ -15,11 +15,26 @@ use App\Notifications\RequestNotification;
 
 class RequestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kelompok_id = User::find(auth()->user()->id)->mahasiswa->kelompok_mahasiswa->where('status', '1')->first()->kelompok->id ?? null;
-        $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference')->get();
-        return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
+        if (auth()->user()->hasRole('mahasiswa')) {
+            $kelompok_id = User::find(auth()->user()->id)->mahasiswa->kelompok_mahasiswa->where('status', '1')->first()->kelompok->id ?? null;
+            $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference')->orderBy('created_at', 'desc')->get();
+            return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
+        } else if (auth()->user()->hasRole('dosen')) {
+            $krs_id = $request->krs_id;
+            $dosen = User::find(auth()->user()->id)->dosen->nidn;
+            // get request where pembimbing 1 or pembimbing 2 is dosen and krs in kelompok is $krs_id
+            $requests = Request::whereHas('kelompok', function ($query) use ($krs_id) {
+                $query->where('krs_id', 'LIKE', '%' . $krs_id . '%');
+            })->whereHas('kelompok', function ($query) use ($dosen) {
+                $query->whereHas('pembimbings', function ($query) use ($dosen) {
+                    $query->where('pembimbing_1', $dosen)->orWhere('pembimbing_2', $dosen);
+                });
+            })->with('ruangan', 'reference')->orderBy('created_at', 'desc')->get();
+            return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
+        }
+
     }
 
     public function store(CreateRequest $request)
