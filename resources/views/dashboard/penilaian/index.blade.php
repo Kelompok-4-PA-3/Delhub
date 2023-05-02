@@ -41,6 +41,76 @@
             </ul>
         </div>
 
+        <div class="card">
+            <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
+                <h5 class="py-sm-2 my-sm-1">Nilai Mahasiswa</h5><br>
+                <div class="mt-2 mt-sm-0 ms-sm-auto">
+                </div>
+            </div>
+            <div class="card-body">
+                @if ($poin_penilaian->where('is_verified',false)->count() > 0)
+                   <div class="py-5 w-100 text-center">
+                        <h3 class="text-muted"><i class="ph-warning mb-1"></i> Poin penilaian belum diverifikasi <i class="ph-warning mb-1"></i></h3>
+                        <i class="text-warning">Penilaian tidak dapat dilakukan karena poin penilaian belum diverifikasi</i>
+                   </div>
+                @else
+                <table class="table">
+                    <tr>
+                        <th>NIM</th>
+                        <th>Nama Mahasiswa</th>
+                            @foreach($poin_penilaian as $pp)
+                            <th>
+                                <div class="fw-semibold d-flex">
+                                   
+                                    <a  @if($pp->komponen_penilaian->where('is_verified',false)->count() > 0 || $pp->komponen_penilaian->count() > 0)  href="/kelompok/{{$kelompok->id}}/penilaian/{{$pp->id}}" @endif>{{$pp->nama_poin}}</a>
+                                    @if ($pp->komponen_penilaian->where('is_verified',false)->count() > 0 || $pp->komponen_penilaian->count() <= 0)
+                                        <a href="#" class="ph-warning-circle px-1 text-warning" data-bs-popup="tooltip" title="Komponen penilaian pada poin ini belum tersedia atau belum terverifikasi"></a>
+                                    @endif
+                                </div>
+                                <div>
+                                    <small class="text-muted">{{$pp->bobot}} %</small>
+                                </div>
+                            </th>
+                            @endforeach
+                        {{-- @else
+                            <td>
+                                <small><i class="text-warning">Komponen penilaian pada penilaian ini belum diverifikasi</i></small><br>
+                                <small><i><a class="" href="">Cek komponen disini</a></i></small>
+                            </td>
+                        @endif --}}
+                        <th>Total</th>
+                    </tr>
+                        @foreach($kelompok->kelompok_mahasiswa as $kkm)
+                        <tr>
+                            <td>{{$kkm->mahasiswa->nim}}</td>
+                            <td>{{$kkm->mahasiswa->user->nama}}</td>
+                         {{-- @if ($poin_penilaian->where('is_verified',false)->count() == 0)  --}}
+                            @foreach($poin_penilaian as $pp)
+                                <td>
+                                    -
+                                </td>
+                             @endforeach
+                        {{-- @else
+                            <td>
+                                <small><i class="text-warning">Komponen penilaian pada penilaian ini belum diverifikasi</i></small><br>
+                            </td>
+                        @endif --}}
+                        <td>-</td>
+                        </tr>
+                        @endforeach
+                        <td></td>
+                    
+                    {{-- <tr>
+                        <th>NIM</th>
+                        <th>Nama Mahasiswa</th>
+                    </tr> --}}
+                </table>
+                @endif
+            </div>
+        </div>
+
+  
+
         @foreach ($poin_regulasi as $p)
         <div class="card">
             <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
@@ -155,6 +225,34 @@
         @endforeach
 
         <div class="col-xl-8">
+
+            <div class="card">
+                <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
+                    <h5 class="py-sm-2 my-sm-1">Penilaian Mahasiswa</h5><br>
+                    <div class="mt-2 mt-sm-0 ms-sm-auto">
+                    </div>
+                </div>
+                <div class="card-body">
+                    @foreach($poin_penilaian as $pp)
+                    <div class="p-1">
+                        <div class="d-flex mb-2">
+                            <a href="#" class="bg-info bg-opacity-10 text-info lh-1 rounded-pill p-2 me-3">
+                                <i class="ph-note"></i>
+                            </a>
+                            <div>
+                                <div class="fw-semibold">
+                                    <a href="/kelompok/{{$pp->id}}">{{$pp->nama_poin}}</a>
+                                </div>
+                                <div>
+                                    <small class="text-muted">{{$pp->bobot}} %</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-75 mx-auto mb-3" id="new-visitors"></div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
 
             @foreach ($poin_regulasi as $p)
                 <div class="p-2 card">

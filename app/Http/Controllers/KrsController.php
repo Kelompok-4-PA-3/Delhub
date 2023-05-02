@@ -52,16 +52,13 @@ class KrsController extends Controller
             'mk_id' => 'required',
             'config_id' => 'required',
             'dosen_mk' => 'required',
+            'dosen_mk_2' => 'nullable',
             'prodi_id' => 'required',
             'angkatan' => 'required',
         ];
         $validasi = $request->validate($data);
         $krs = Krs::create($validasi);
         $mahasiswa = Mahasiswa::where('prodi_id', $validasi['prodi_id'])->where('angkatan',$validasi['angkatan'])->get();
-        // return $mahasiswa;
-        // return $validasi['angkatan'];
-        // return Mahasiswa::all();
-        // return $mahasiswa->count();
 
         if($mahasiswa->count() > 0){
             $krs_mahasiswa = new KrsUser();
@@ -111,6 +108,7 @@ class KrsController extends Controller
             'mk_id' => 'required',
             'config_id' => 'required',
             'dosen_mk' => 'required',
+            'dosen_mk_2' => 'nullable',
             'prodi_id' => 'required',
             'angkatan' => 'required',
         ];

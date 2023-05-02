@@ -40,4 +40,9 @@ class Krs extends Model
     public function krs_user(){
         return $this->hasMany(KrsUser::class);
     }
+
+    public function krs_role(){
+        return $this->hasMany(RoleGroupKelompok::class, 'krs_id', 'id');
+    }
+
 }

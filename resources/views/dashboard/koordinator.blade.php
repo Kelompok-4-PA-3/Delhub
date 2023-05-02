@@ -170,6 +170,18 @@
 								</a>
 							</li>
 							<li class="nav-item">
+								<a href="/krs/{{$krs->id}}/poin_penilaian" class="nav-link">
+									<i class="ph-list-checks me-2"></i>
+									Poin Penilaian
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="/krs/{{$krs->id}}/role_group" class="nav-link">
+									<i class="ph-list-checks me-2"></i>
+									Role Group
+								</a>
+							</li>
+							<li class="nav-item">
 								<a href="#" class="nav-link">
 									<i class="ph-circles-three-plus me-2"></i>
 									Create project

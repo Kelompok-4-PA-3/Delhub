@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('komponen_penilaians', function (Blueprint $table) {
+        Schema::create('role_group_kelompoks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('poin_regulasi_id');
-            $table->foreign('poin_regulasi_id')->references('id')->on('poin_regulasis')->onUpdate('cascade')->onDelete('cascade');
-            $table->Text('komponen_penilaian');
+            $table->string('nama');
+            $table->unsignedBigInteger('krs_id');
+            $table->foreign('krs_id')->references('id')->on('krs')->onUpdate('cascade')->onDelete('cascade');
             $table->double('bobot');
             $table->boolean('is_verified')->default(false);
             $table->boolean('active')->default(true);
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('komponen_penilaians');
+        Schema::dropIfExists('role_group_kelompoks');
     }
 };

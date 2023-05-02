@@ -17,6 +17,10 @@ class Kelompok extends Model
 
     protected $dates = ['deleted_at'];
 
+    public function kelompok_role(){
+        return $this->hasOne(RoleGroupKelompok::class, 'kelompok_id', 'id');
+    }
+
     public function kelompok_mahasiswa()
     {
         return $this->hasMany(KelompokMahasiswa::class);

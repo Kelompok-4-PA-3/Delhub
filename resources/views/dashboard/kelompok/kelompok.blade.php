@@ -9,10 +9,10 @@
 	<script src="{{asset('/assets/demo/pages/datatables_api.js')}}"></script>
     <script src="{{asset('/assets/js/vendor/tables/datatables/extensions/buttons.min.js')}}"></script>
     {{-- <script src="{{asset('/assets/demo/pages/picker_date.js')}}"></script> --}}
-    {{-- <script src="{{asset('/assets/js/vendor/ui/fab.min.js')}}"></script>
-	<script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script> --}}
+    <script src="{{asset('/assets/js/vendor/ui/fab.min.js')}}"></script>
+	<script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script>
 	<script src="{{asset('/assets/demo/pages/extra_fab.js')}}"></script>
-    {{-- <script src="{{asset('/assets/js/jquery/jquery.min.js')}}"></script> --}}
+    <script src="{{asset('/assets/js/jquery/jquery.min.js')}}"></script>
 	{{-- <script src="{{asset('/assets/js/vendor/uploaders/fileinput/fileinput.min.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/uploaders/fileinput/plugins/sortable.min.js')}}"></script>
 	<script src="{{asset('/assets/demo/pages/uploader_bootstrap.js')}}"></script>
@@ -92,6 +92,78 @@
             <div class="p-2 card">
                 <div class="d-lg-flex">
                     <ul class="nav nav-tabs nav-tabs-vertical nav-tabs-vertical-start wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
+                        @foreach ($kelompok->krs->krs_role as $kkk)
+                        <li class="nav-item">
+                            <a href="#pembimbing{{$kkk->id}}" class="nav-link {{$loop->first ? 'active' : ''}}" data-bs-toggle="tab">
+                                <i class="ph-user-circle me-2"></i>
+                               {{$kkk->nama}}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#edit-pembimbing{{$kkk->id}}" class="nav-link" data-bs-toggle="tab">
+                                <i class="ph-pencil me-2"></i>
+                                Edit
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
+                    
+                    <div class="tab-content flex-lg-fill">
+                        @foreach ($kelompok->krs->krs_role as $kkk)
+                        <div class="tab-pane fade show  {{$loop->first ? 'active' : ''}}" id="pembimbing{{$kkk->id}}">
+                            @if ($kkk->role_kelompok != NULL)
+                            <div class="d-flex px-1 ">
+                                <div class="ms-auto ">
+                                    <small class="" data bs-popup="tooltip" title="hapus"> <a href="#" class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kkk->role_kelompok->id }}"><i class="ph-trash"></i></a></small>
+                                </div>
+                            </div>
+                                <div>
+                                    <div class="d-flex px-2 mt-2">
+                                        <small class="text-muted">{{$kkk->nama}} </small>
+                                    </div>
+                                    <div class="px-2">
+                                        <h5>
+                                            {{$kkk->role_kelompok->dosen->user->nama}}
+                                        </h5>
+                                    </div>
+                                </div>
+                            @else 
+                                <i>Kelompok ini belum memilki {{$kkk->nama}}</i>
+                            @endif
+                        </div>
+                        @endforeach
+                        @foreach ($kelompok->krs->krs_role as $kkk)
+                        <div class="tab-pane fade" id="edit-pembimbing{{$kkk->id}}">
+                            <form action="{{Route('kelompok_role.add',[ 'kelompok' => $kelompok->id, 'roleGroupKelompok' => $kkk->id])}}" method="post">
+                             @csrf
+                             <div class="py-1">
+                                 <select data-placeholder="{{$kkk->nama}}" name="nidn" class="form-control select" required>
+                                     <option></option>
+                                     <optgroup label="Daftar Dosen">
+                                         @foreach($dosen as $d)
+                                         <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
+                                             @if($kkk->role_kelompok != NULL)
+                                                 <option value="{{$d->nidn}}" {{$kkk->role_kelompok->dosen->nidn == $d->nidn ? 'selected' : ''}} >{{Str::limit($d->user->nama,30)}}</option>
+                                             @else
+                                                 <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
+                                             @endif
+                                         @endforeach
+                                     </optgroup>
+                                 </select>
+                             </div> 
+                             <div class="p-1">
+                                 <button class="btn btn-sm btn-primary w-100">Submit</button>
+                             </div>
+                            </form>
+                         </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 card d-none">
+                <div class="d-lg-flex">
+                    <ul class="nav nav-tabs nav-tabs-vertical nav-tabs-vertical-start wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
                         <li class="nav-item">
                             <a href="#pembimbing" class="nav-link {{session()->has('penguji') ? '' : 'active' }}" data-bs-toggle="tab">
                                 <i class="ph-user-circle me-2"></i>
@@ -139,7 +211,7 @@
                                         <div class="px-2">
                                             <h5>
                                                 {{$kelompok->pembimbings->pembimbing_1_dosen->user->nama}}
-                                                {{$kelompok->pembimbings->pembimbing_1_dosen->user->getRoleNames()}}
+                                                {{--$kelompok->pembimbings->pembimbing_1_dosen->user->getRoleNames()--}}
                                             </h5>
                                         </div>
                                     </div>
@@ -153,7 +225,7 @@
                                         <div class="px-2">
                                             <h5>
                                                 {{$kelompok->pembimbings->pembimbing_2_dosen->user->nama}}
-                                                {{$kelompok->pembimbings->pembimbing_2_dosen->user->getRoleNames()}}
+                                                {{--$kelompok->pembimbings->pembimbing_2_dosen->user->getRoleNames()--}}
 
                                             </h5>
                                         </div>

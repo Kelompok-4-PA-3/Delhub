@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\KomponenPenilaian;
-use App\Models\PoinRegulasi;
+use App\Models\PoinPenilaian;
+use App\Models\Krs;
 use Illuminate\Http\Request;
 
 class KomponenPenilaianController extends Controller
@@ -11,20 +12,26 @@ class KomponenPenilaianController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(PoinRegulasi $poinRegulasi)
+    public function index(Krs $kr,PoinPenilaian $poinPenilaian)
     {
-        $komponen = KomponenPenilaian::where('poin_regulasi_id', $poinRegulasi->id)->get();
-        // return $komponen;
-        // return $poinRegulasi;
-        return view('poin_regulasi.komponen_penilaian.index', [
-            'title' => $poinRegulasi->nama,
-            'poin_regulasi' => $poinRegulasi,
-            'komponen' => $komponen
+        // $komponen = KomponenPenilaian::where('poin_regulasi_id', $poinRegulasi->id)->get();
+        // return view('poin_regulasi.komponen_penilaian.index', [
+        //     'title' => $poinRegulasi->nama,
+        //     'poin_regulasi' => $poinRegulasi,
+        //     'komponen' => $komponen
+        // ]);
+        $komponen_penilaian = KomponenPenilaian::where('poin_penilaian_id', $poinPenilaian->id)->get();
+        return view('dashboard.poinpenilaian.komponen_penilaian.index',[
+            'komponen_penilaian' => $komponen_penilaian,
+            'title' => $poinPenilaian->nama_poin,
+            'krs' => $kr,
+            'poin_penilaian' => $poinPenilaian,
         ]);
     }
 
-    public function verifikasi_komponen_penilaian(PoinRegulasi $poinRegulasi){
-        $komponen = KomponenPenilaian::where('poin_regulasi_id', $poinRegulasi->id);
+    public function verifikasi_komponen_penilaian(Krs $kr,PoinPenilaian $poinPenilaian){
+        $komponen = KomponenPenilaian::where('poin_penilaian_id', $poinPenilaian->id);
+        // return $komponen->get();
         if($komponen->sum('bobot') != 100){
             return  back()->with('failed','Sepertinya jumlah bobot tidak mencapai 100% atau melebihinya, pastikan jumlah keseluruhan bobot mencapai tepat 100%');
         }
@@ -46,16 +53,15 @@ class KomponenPenilaianController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, PoinRegulasi $poinRegulasi)
+    public function store(Request $request,Krs $kr,PoinPenilaian $poinPenilaian)
     {
         $data = [
-            'komponen_penilaian' => 'required',
+            'nama_komponen' => 'required',
             'bobot' => 'required|numeric'
         ];
 
         $validasi = $request->validate($data);
-        $validasi['poin_regulasi_id'] = $poinRegulasi->id;
-        // return $validasi['poin_regulasi'];
+        $validasi['poin_penilaian_id'] = $poinPenilaian->id;
 
         KomponenPenilaian::create($validasi);
         return back()->with('success','Komponen penilai telah berhasil ditambahkan');
@@ -80,19 +86,18 @@ class KomponenPenilaianController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,PoinRegulasi $poinRegulasi ,KomponenPenilaian $komponenPenilaian)
+    public function update(Request $request, Krs $kr, PoinPenilaian $poinPenilaian, KomponenPenilaian $komponenPenilaian)
     {
         // return $poinRegulasi.$komponenPenilaian;
+        // return $komponenPenilaian;
         $data = [
-            'komponen_penilaian' => 'required',
+            'nama_komponen' => 'required',
             'bobot' => 'required|numeric'
         ];
 
         $validasi = $request->validate($data);
-        $validasi['poin_regulasi_id'] = $poinRegulasi->id;
         $komponen = KomponenPenilaian::find($komponenPenilaian->id);
-        // return $komponen;
-        $komponen->komponen_penilaian = $validasi['komponen_penilaian'];
+        $komponen->nama_komponen = $validasi['nama_komponen'];
         $komponen->bobot = $validasi['bobot'];
         $komponen->is_verified = false;
         $komponen->save();
@@ -103,16 +108,19 @@ class KomponenPenilaianController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(PoinRegulasi $poinRegulasi ,KomponenPenilaian $komponenPenilaian)
+    public function delete(Krs $kr, PoinPenilaian $poinPenilaian, KomponenPenilaian $komponenPenilaian)
     {
+        // return $komponenPenilaian;
         $komponen = KomponenPenilaian::where('id',$komponenPenilaian->id)->delete();
-        $komponen_all = KomponenPenilaian::where('poin_regulasi_id', $poinRegulasi->id);
+        // return $komponen;
+        // ->delete();
+        $komponen_all = KomponenPenilaian::where('poin_penilaian_id', $poinPenilaian->id);
         if($komponen_all->sum('bobot') != 100){
             $komponen_all->update([
                 'is_verified' => false,
             ]);
         }
-        return back()->with('success','Komponen penilai telah berhasil dihapus');
+        return back()->with('success','Komponen penilaian telah berhasil dihapus');
 
     }
 }

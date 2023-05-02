@@ -21,6 +21,7 @@ use App\Models\KomponenPenilaian;
 use App\Models\ConfigPenilaian;
 use App\Models\NilaiMahasiswa;
 use App\Models\DetailNilaiMahasiswa;
+use App\Models\PoinPenilaian;
 use Illuminate\Http\Request;
 
 class KelompokController extends Controller
@@ -253,6 +254,7 @@ class KelompokController extends Controller
     public function penilaian(Kelompok $kelompok){
         $poin_regulasi = $kelompok->krs->kategori->kategori->poin_regulasi;
         $konfigurasi =  ConfigPenilaian::where('krs_id', $kelompok->krs->id)->first();
+        $poin_penilaian = PoinPenilaian::where('krs_id', $kelompok->krs->id)->get();
 
         // return $poin_regulasi;
         // ->komponen_penilaian;
@@ -261,6 +263,7 @@ class KelompokController extends Controller
         return view('dashboard.penilaian.index',[
             'kelompok' => $kelompok,
             'poin_regulasi' => $poin_regulasi,
+            'poin_penilaian' => $poin_penilaian,
             'konfigurasi' => $konfigurasi,
         ]);
     }

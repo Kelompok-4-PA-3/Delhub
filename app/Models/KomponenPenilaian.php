@@ -10,6 +10,8 @@ use Wildside\Userstamps\Userstamps;
 class KomponenPenilaian extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    use Userstamps;
     // use HasFactory;
 
     protected $guarded = ['id'];
@@ -21,5 +23,4 @@ class KomponenPenilaian extends Model
     public function detail_nilai_mahasiswa(){
         return $this->hasMany(DetailNilaiMahasiswa::class, 'komponen_id','id');
     }
-
 }

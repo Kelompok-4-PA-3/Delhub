@@ -66,6 +66,21 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label">Kooridnator 2</label>
+                                <select data-placeholder="Pilih Konfigurasi" class="form-control select" name="dosen_mk_2">
+                                    <option></option>
+                                    <optgroup label="Daftar Dosen">
+                                        @foreach($dosen as $d)
+                                            <option @if(old('dosen_mk_2') == $d->nidn) selected @endif value="{{$d->nidn}}">{{$d->user->nama}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                </select>
+                                @error('dosen_mk_2')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
                                 <label class="form-label">Program Studi</label>
                                 <select data-placeholder="Pilih program studi" class="form-control select" name="prodi_id">
                                     <option></option>
