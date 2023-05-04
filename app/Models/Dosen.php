@@ -39,10 +39,14 @@ class Dosen extends Model
 
     public function pembimbing_1(){
         return $this->hasMany(Pembimbing::class, 'pembimbing_1', 'nidn');
-    }
+    }   
 
     public function pembimbing_2(){
         return $this->hasMany(Pembimbing::class, 'pembimbing_2', 'nidn');
+    }
+
+    public function role_kelompok($kelompok){
+        return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn')->where('kelompok_id',$kelompok)->first();
     }
 
     public function getRouteKeyName()

@@ -109,120 +109,7 @@
             </div>
         </div>
 
-  
 
-        @foreach ($poin_regulasi as $p)
-        <div class="card">
-            <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
-                <h5 class="py-sm-2 my-sm-1">Nilai Mahasiswa {{$p->nama}}</h5><br>
-                <div class="mt-2 mt-sm-0 ms-sm-auto">
-                </div>
-            </div>
-            <div class="card-body">
-                <table class="table">
-                    <tr>
-                        <th>No</th>
-                        <th>NIM</th>
-                        <th>Mahasiswa</th>
-                        <th>Total Nilai</th>
-                        <th>Aksi</th>
-                    </tr>
-                    @foreach ($kelompok->kelompok_mahasiswa as $km)
-                        <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$km->mahasiswa->nim}}</td>
-                            <td>{{$km->mahasiswa->user->nama}}</td>
-                            <td>
-                                @php
-                                    $jumlah_nilai= ''.$p->id;
-                                    $$jumlah_nilai = 0;
-
-                                    // $get_nilai_mahasiswa = ''.$p->id;
-                                    // $$get_nilai_mahasiswa = $km->mahasiswa->nilai->where('kelompok_id',$kelompok->id)->where('poin_regulasi_id', $p->id)->first()->detail_nilai;
-                                @endphp
-                                {{-- {{$$nilai_mahasiswa}} --}}
-                                @foreach ($km->mahasiswa->nilai->where('kelompok_id',$kelompok->id)->where('poin_regulasi_id', $p->id)->first()->detail_nilai as $kmm)
-                                    @php
-                                       $$jumlah_nilai += $kmm->nilai * ( $kmm->komponen_nilai->bobot / 100);
-                                    @endphp
-                                @endforeach
-                                {{ $$jumlah_nilai}}
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <a  data-bs-toggle="offcanvas" data-bs-target="#tambah_penilaian{{$km->mahasiswa->nim}}" class="btn btn-primary">Beri nilai</a>
-                                </div>
-                            </td>
-                        </tr>
-
-                         <!-- Large panel -->
-                         <div id="tambah_penilaian{{$km->mahasiswa->nim}}" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
-                            <div class="offcanvas-header">
-                                <h5 class="offcanvas-title fw-semibold">Tambah Komponen Penilaian</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-                            </div>
-
-                            <div class="offcanvas-body p-2">
-                                @foreach ($poin_regulasi as $p)
-                                <div class="card">
-                                    <div class="card-header container">
-                                        <h6>Penilaian {{$p->nama}}</h6>
-                                    </div>
-                                    <form action="/kelompok/{{$kelompok->id}}/{{$km->mahasiswa->nim}}/penilaian" method="post">
-                                        @csrf
-                                        @foreach($p->komponen_penilaian as $pk)
-                                        @php 
-                                            $role_penilaian = app('role_penilaian')->role_penilaian($kelompok);
-                                        @endphp
-                                        <input type="hidden" name="poin_regulasi_id" value="{{$p->id}}">
-                                        @if ($konfigurasi != NULL)
-                                            <input type="hidden" name="role_penilaian" value="
-                                                @if($role_penilaian == 'pembimbing_1')
-                                                    {{$konfigurasi->pembimbing_1}}
-                                                @elseif($role_penilaian == 'pembimbing_2')
-                                                    {{$konfigurasi->pembimbing_2}}
-                                                @elseif($role_penilaian == 'penguji_1')
-                                                    {{$konfigurasi->penguji_1}}
-                                                @elseif($role_penilaian == 'penguji_2')
-                                                    {{$konfigurasi->penguji_2}}
-                                                @endif
-                                            ">
-                                        @endif
-                                        
-                                        <input type="hidden" name="role" value="">
-                                        <div class="row container">
-                                            <div class="col-7 mb-1">
-                                                <p>{!!$pk->komponen_penilaian!!}</p>
-                                            </div>
-                                            <div class="col-2 mb-1">
-                                                <p>{{$pk->bobot}}%</p>
-                                            </div>
-                                            <div class="col-3 mb-1">
-                                                {{$pk->detail_nilai_mahasiswa}}
-                                                {{-- <input type="number" class="form-control" name="nilai{{$pk->id}}" placeholder="nilai" max="100" required  --}}
-                                                {{-- @if ($km->mahasiswa->nilai->where('kelompok_id',$kelompok->id)->where('poin_regulasi_id', $p->id)->first() != NULL) --}}
-                                                    {{-- @foreach ($km->mahasiswa->nilai->where('kelompok_id',$kelompok->id)->where('poin_regulasi_id', $p->id)->first()->detail_nilai as $kmm)  --}}
-                                                        {{-- value="{{old('nilai'.$p->id, $pk->nilai_mahasiswa->where())}}"" --}}
-                                                    {{-- @endforeach --}}
-                                                {{-- @endif --}}
-                                                {{-- >
-                                            </div> --}}
-                                        </div>
-                                        @endforeach
-                                        <div class="border-top p-3">
-                                            <button type="submit" class="btn btn-primary w-100">Submit</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        <!-- /large panel -->
-                    @endforeach
-                </table>
-            </div>
-        </div>
-        @endforeach
 
         <div class="col-xl-8">
 
@@ -232,7 +119,7 @@
                     <div class="mt-2 mt-sm-0 ms-sm-auto">
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body"> 
                     @foreach($poin_penilaian as $pp)
                     <div class="p-1">
                         <div class="d-flex mb-2">
@@ -254,30 +141,7 @@
                 </div>
             </div>
 
-            @foreach ($poin_regulasi as $p)
-                <div class="p-2 card">
-                    <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
-                        <h5 class="py-sm-2 my-sm-1">Komponen penilaian {{$p->nama}}</h5><br>
-                        <div class="mt-2 mt-sm-0 ms-sm-auto">
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <tr>
-                                <th>Komponen penilaian</th>
-                                <th>Bobot</th>
-                            </tr>
-                            @foreach($p->komponen_penilaian as $pk)
-                            <tr>
-                                <td>{!!$pk->komponen_penilaian!!}</td>
-                                <td>{!!$pk->bobot!!} %</td>
-                            </tr>
-                            @endforeach
-                        </table>
-                        {{-- {{$p->komponen_penilaian}} --}}
-                    </div>
-                </div>
-            @endforeach
+          
 
         </div>
 

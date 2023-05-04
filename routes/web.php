@@ -104,9 +104,11 @@ Route::middleware([
     Route::get('/kelompok/{kelompok}/penilaian', [KelompokController::class, 'penilaian']);
     // Nilai Mahasiswa
     Route::get('/kelompok/{kelompok}/penilaian/{penilaian}', [NilaiMahasiswaController::class, 'index'])->name('nilai_mahasiswa');
+    Route::post('/kelompok/{kelompok}/penilaian/{penilaian}/mahasiswa/{mahasiswa}', [NilaiMahasiswaController::class, 'store'])->name('nilai_mahasiswa.store');
     // Route::get('/kelompok/{kelompok}/penilaian/{penilaian}/mahasiswa/{mahasiswa}', [NilaiMahasiswaController::class, 'index'])->name('nilai_mahasiswa');
     // Role Kelompoke assign dosen
-    Route::post('/kelompok/{kelompok}/role/{roleGroupKelompok}/add', [RoleKelompokController::class, 'store'])->name('kelompok_role.add');
+    Route::post('/kelompok/{kelompok}/role/add', [RoleKelompokController::class, 'store'])->name('kelompok_role.add');
+    Route::post('/kelompok/{kelompok}/role/{roleKelompok}/delete', [RoleKelompokController::class, 'delete'])->name('kelompok_role.delete');
 
     // Route::post('/kelompok/{kelompok}/{mahasiswa}/penilaian', [NilaiMahasiswaController::class, 'index'])->name('nilai_mahasiswa');
     // Kelompok Bimbingan

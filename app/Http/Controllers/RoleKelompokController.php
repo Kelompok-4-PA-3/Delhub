@@ -31,15 +31,16 @@ class RoleKelompokController extends Controller
     public function store(Request $request, Kelompok $kelompok, RoleGroupKelompok $roleGroupKelompok)
     {
         // return $request;
-        $data = [
-            'nidn' => 'required'
+        $data = [   
+            'nidn' => 'required',
+            'role_group_id' => 'required'
         ];
 
         $validasi = $request->validate($data);
         $role = new RoleKelompok;
         $role->nidn = $validasi['nidn'];
+        $role->role_group_id = $validasi['role_group_id'];
         $role->kelompok_id = $kelompok->id;
-        $role->role_group_id = $roleGroupKelompok->id;
         $role->save();
 
         return back()->with('success', 'Data role telah berhasil dibuat');
@@ -74,8 +75,9 @@ class RoleKelompokController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RoleKelompok $roleKelompok)
+    public function delete(Request $request, Kelompok $kelompok, RoleKelompok $roleKelompok)
     {
-        //
+        $role = RoleKelompok::where('id', $roleKelompok->id)->delete();
+        return back()->with('success', 'Data role dosen telah berhasil dihapus');
     }
 }

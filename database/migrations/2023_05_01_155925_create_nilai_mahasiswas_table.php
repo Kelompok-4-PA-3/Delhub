@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreign('kelompok_id')->references('id')->on('kelompoks')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('poin_penilaian_id');
             $table->foreign('poin_penilaian_id')->references('id')->on('poin_penilaians')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('role_dosen_kelompok_id');
-            $table->foreign('role_dosen_kelompok_id')->references('id')->on('role_dosen_kelompok_id')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('role_dosen_kelompok_id');
+            $table->foreign('role_dosen_kelompok_id')->references('id')->on('role_kelompoks')->onUpdate('cascade')->onDelete('cascade');
             $table->string('nim');
             $table->foreign('nim')->references('nim')->on('mahasiswas')->onUpdate('cascade')->onDelete('cascade');
             $table->double('nilai');

@@ -92,9 +92,110 @@
             <div class="p-2 card">
                 <div class="d-lg-flex">
                     <ul class="nav nav-tabs nav-tabs-vertical nav-tabs-vertical-start wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
-                        @foreach ($kelompok->krs->krs_role as $kkk)
                         <li class="nav-item">
-                            <a href="#pembimbing{{$kkk->id}}" class="nav-link {{$loop->first ? 'active' : ''}}" data-bs-toggle="tab">
+                            <a href="#pembimbing_penguji" class="nav-link active" data-bs-toggle="tab">
+                                <i class="ph-user-circle me-2"></i>
+                            </a>
+                        </li>  
+                        <li class="nav-item">
+                            <a href="#edit_pembimbing_penguji" class="nav-link" data-bs-toggle="tab">
+                                <i class="ph-pencil me-2"></i>
+                            </a>
+                        </li>  
+                    </ul>
+                    <div class="tab-content flex-lg-fill">
+                        <div class="tab-pane fade show active" id="pembimbing_penguji">
+                            @foreach($kelompok->role_kelompok as $kr)
+                                <div>
+                                    <div class="d-flex px-2 mt-2">
+                                        <small class="text-muted">{{$kr->role_group->nama}} </small>
+                                        <div class="ms-auto ">
+                                            <small class="" data bs-popup="tooltip" title="hapus"> <a href="#" class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kr->id }}"><i class="ph-trash"></i></a></small>
+                                        </div>
+                                    </div>
+                                    <div class="px-2">
+                                        <h5>
+                                            {{$kr->dosen->user->nama}}
+                                        </h5>
+                                    </div>
+                                </div>
+
+                                  <!-- Delete Modal -->
+                                  <div id="modal_hapus{{ $kr->id }}" class="modal fade" tabindex="-1">
+                                    <div class="modal-dialog modal-xs">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                Apakah anda yakin ingin menghapus data pembimbing saat ini ?
+                                            </div>
+
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                <form action="{{Route('kelompok_role.delete', ['kelompok' => $kelompok->id, 'roleKelompok' => $kr->id])}}" method="post">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary">Ya</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Delete Modal -->
+
+                            @endforeach
+                        </div>
+                        <div class="tab-pane fade show" id="edit_pembimbing_penguji">
+                            <form action="{{Route('kelompok_role.add',[ 'kelompok' => $kelompok->id])}}" method="post">
+                                @csrf
+                                <div class="py-1">
+                                    <select data-placeholder="Pilih dosen" name="nidn" class="form-control select" required>
+                                        <option></option>
+                                        <optgroup label="Daftar Dosen">
+                                            @foreach($dosen as $d)
+                                                <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
+                                                {{-- @if($role_dosen_edit != NULL)
+                                                    <option value="{{$d->nidn}}" {{$role_dosen_edit->dosen->nidn == $d->nidn ? 'selected' : ''}} >{{Str::limit($d->user->nama,30)}}</option>
+                                                @else
+                                                    <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
+                                                @endif --}}
+                                            @endforeach
+                                        </optgroup>
+                                    </select>
+                                </div> 
+                                <div class="py-1">
+                                    <select name="role_group_id" class="form-control" required>
+                                        <option></option>
+                                        <optgroup label="Daftar role">
+                                            <option selected>Pilih role</option>
+                                            @foreach($kelompok->krs->krs_role as $kkk)
+                                                @if (!in_array($kkk->id, $kkk->role_kelompok->where('kelompok_id',$kelompok->id)->get()->pluck('role_group_id')->toArray()))
+                                                    <option value="{{$kkk->id}}">{{Str::limit($kkk->nama,30)}}</option> 
+                                                @endif
+                                            @endforeach
+                                        </optgroup>
+                                    </select>
+                                </div> 
+                                <div class="p-1">
+                                    <button class="btn btn-sm btn-primary w-100">Submit</button>
+                                </div>
+                               </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 card">
+                <div class="d-lg-flex">
+                    <ul class="nav nav-tabs nav-tabs-vertical nav-tabs-vertical-start wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
+                        @foreach ($kelompok->krs->krs_role as $kkk)
+                        @php
+                            $role_dosen = $kkk->role_kelompok->where('kelompok_id',$kelompok->id)->first()
+                        @endphp
+                        <li class="nav-item">
+                            <a href="#{{$kkk->nama}}" class="nav-link" data-bs-toggle="tab">
                                 <i class="ph-user-circle me-2"></i>
                                {{$kkk->nama}}
                             </a>
@@ -109,24 +210,51 @@
                     </ul>
                     
                     <div class="tab-content flex-lg-fill">
+                        {{-- @foreach ($kelompok->role_kelompok as $kr)
+                        <div class="tab-pane fade show  {{$loop->first ? 'active' : ''}}" id="pembimbing{{$kr->role_group->id}}">
+                            @if ($kr->role_kelompok->where('kelompok_id',$kelompok->id)->count() != NULL)
+                            <div class="d-flex px-1 ">
+                                <div class="ms-auto ">
+                                    <small class="" data bs-popup="tooltip" title="hapus"> <a href="#" class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kr->role_kelompok->id }}"><i class="ph-trash"></i></a></small>
+                                </div>
+                            </div>
+                                <div>
+                                    <div class="d-flex px-2 mt-2">
+                                        <small class="text-muted">{{$kr->nama}} </small>
+                                    </div>
+                                    <div class="px-2">
+                                        <h5>
+                                            {{$kr->role_kelompok->dosen->user->nama}}
+                                        </h5>
+                                    </div>
+                                </div>
+                            @else 
+                                <i>Kelompok ini belum memilki {{$kr->nama}}</i>
+                            @endif
+                        </div>
+                        @endforeach --}}
                         @foreach ($kelompok->krs->krs_role as $kkk)
-                        <div class="tab-pane fade show  {{$loop->first ? 'active' : ''}}" id="pembimbing{{$kkk->id}}">
-                            @if ($kkk->role_kelompok != NULL)
+                        <div class="tab-pane fade show " id="{{$kkk->nama}}">
+                            {{-- {{$kkk->role_kelompok->where('kelompok_id',$kelompok->id)->get()}} --}}
+                            @php
+                                $role_dosen = $kkk->role_kelompok->where('kelompok_id',$kelompok->id)->first()
+                            @endphp
+                            @if ($role_dosen != NULL)
                             <div class="d-flex px-1 ">
                                 <div class="ms-auto ">
                                     <small class="" data bs-popup="tooltip" title="hapus"> <a href="#" class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kkk->role_kelompok->id }}"><i class="ph-trash"></i></a></small>
                                 </div>
                             </div>
-                                <div>
-                                    <div class="d-flex px-2 mt-2">
-                                        <small class="text-muted">{{$kkk->nama}} </small>
-                                    </div>
-                                    <div class="px-2">
-                                        <h5>
-                                            {{$kkk->role_kelompok->dosen->user->nama}}
-                                        </h5>
-                                    </div>
+                            <div>
+                                <div class="d-flex px-2 mt-2">
+                                    <small class="text-muted">{{$role_dosen->role_group->nama}} </small>
                                 </div>
+                                <div class="px-2">
+                                    <h5>
+                                        {{$role_dosen->dosen->user->nama}}
+                                    </h5>
+                                </div>
+                            </div>
                             @else 
                                 <i>Kelompok ini belum memilki {{$kkk->nama}}</i>
                             @endif
@@ -134,6 +262,9 @@
                         @endforeach
                         @foreach ($kelompok->krs->krs_role as $kkk)
                         <div class="tab-pane fade" id="edit-pembimbing{{$kkk->id}}">
+                            @php
+                                $role_dosen_edit = $kkk->role_kelompok->where('kelompok_id',$kelompok->id)->first()
+                            @endphp
                             <form action="{{Route('kelompok_role.add',[ 'kelompok' => $kelompok->id, 'roleGroupKelompok' => $kkk->id])}}" method="post">
                              @csrf
                              <div class="py-1">
@@ -142,8 +273,8 @@
                                      <optgroup label="Daftar Dosen">
                                          @foreach($dosen as $d)
                                          <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
-                                             @if($kkk->role_kelompok != NULL)
-                                                 <option value="{{$d->nidn}}" {{$kkk->role_kelompok->dosen->nidn == $d->nidn ? 'selected' : ''}} >{{Str::limit($d->user->nama,30)}}</option>
+                                             @if($role_dosen_edit != NULL)
+                                                 <option value="{{$d->nidn}}" {{$role_dosen_edit->dosen->nidn == $d->nidn ? 'selected' : ''}} >{{Str::limit($d->user->nama,30)}}</option>
                                              @else
                                                  <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
                                              @endif
@@ -192,9 +323,6 @@
 
                     <div class="tab-content flex-lg-fill">
                         <div class="tab-pane fade show  {{session()->has('penguji') ?  '' : 'active' }}" id="pembimbing">
-                            {{-- @can('pembimbing-kelompok',$kelompok)
-                                user ini bisa
-                            @endcan --}}
                             @if ($kelompok->pembimbings != NULL)
                                 <div class="d-flex px-1 ">
                                     <div class="ms-auto ">
@@ -225,8 +353,6 @@
                                         <div class="px-2">
                                             <h5>
                                                 {{$kelompok->pembimbings->pembimbing_2_dosen->user->nama}}
-                                                {{--$kelompok->pembimbings->pembimbing_2_dosen->user->getRoleNames()--}}
-
                                             </h5>
                                         </div>
                                     </div>
