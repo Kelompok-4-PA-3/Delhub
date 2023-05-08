@@ -23,7 +23,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'status' => 'required|exists:references,value',
-            'waktu' => 'required|date_format:Y-m-d H:i:s',
+            'waktu' => 'required|date_format:Y-m-d H:i',
         ];
     }
 }
