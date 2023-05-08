@@ -17,7 +17,7 @@ class Kelompok extends Model
 
     protected $dates = ['deleted_at'];
 
-  
+
     public function kelompok_mahasiswa()
     {
         return $this->hasMany(KelompokMahasiswa::class);

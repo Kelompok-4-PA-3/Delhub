@@ -21,7 +21,7 @@ class RequestController extends Controller
     {
         if (auth()->user()->hasRole('mahasiswa')) {
             $kelompok_id = User::find(auth()->user()->id)->mahasiswa->kelompok_mahasiswa->where('status', '1')->first()->kelompok->id ?? null;
-            $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference')->orderBy('created_at', 'desc')->get();
+            $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference', 'kelompok')->orderBy('created_at', 'desc')->get();
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
         } else if (auth()->user()->hasRole('dosen')) {
             $krs_id = $request->krs_id;
@@ -33,7 +33,7 @@ class RequestController extends Controller
                 $query->whereHas('pembimbings', function ($query) use ($dosen) {
                     $query->where('pembimbing_1', $dosen)->orWhere('pembimbing_2', $dosen);
                 });
-            })->with('ruangan', 'reference')->orderBy('created_at', 'desc')->get();
+            })->with('ruangan', 'reference', 'kelompok')->orderBy('created_at', 'desc')->get();
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
         }
     }
@@ -65,12 +65,12 @@ class RequestController extends Controller
 
     public function show($id)
     {
-        $request = Request::find($id);
+        $request = Request::find($id)->load('ruangan', 'reference', 'kelompok');
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil diambil');
     }
 
     public function update(UpdateRequest $request, $id){
-        $bimbingan = Request::find($id);
+        $bimbingan = Request::find($id)->load('ruangan', 'reference', 'kelompok');
         $ref = Reference::where('value', $request->status)->first();
         $bimbingan->status = $ref->id;
         if ($request->waktu != null) {
