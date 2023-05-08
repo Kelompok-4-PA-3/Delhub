@@ -68,12 +68,11 @@ class RequestController extends Controller
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil diambil');
     }
 
-    public function update($status, $id){
+    public function update(Request $request, $id){
         $bimbingan = Request::find($id);
-        $bimbingan->status = $status;
-        // return $bimbingan->reference->value;
+        $ref = Reference::where('value', $request->status)->first();
+        $bimbingan->status = $ref->id;
         $bimbingan->save();
-        $ref = Reference::find($status);
 
         // send email to mahasiswa
         $kelompok = $bimbingan->kelompok;
