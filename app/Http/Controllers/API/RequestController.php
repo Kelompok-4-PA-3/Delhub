@@ -9,9 +9,10 @@ use App\Models\Reference;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateRequest;
-use App\Http\Resources\RequestCollection;
 use App\Http\Resources\RequestResource;
+use App\Http\Resources\RequestCollection;
 use App\Notifications\RequestNotification;
+use App\Notifications\UpdateRequestNotification;
 
 class RequestController extends Controller
 {
@@ -65,5 +66,24 @@ class RequestController extends Controller
     {
         $request = Request::find($id);
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil diambil');
+    }
+
+    public function update($status, $id){
+        $bimbingan = Request::find($id);
+        $bimbingan->status = $status;
+        // return $bimbingan->reference->value;
+        $bimbingan->save();
+        $ref = Reference::find($status);
+
+        // send email to mahasiswa
+        $kelompok = $bimbingan->kelompok;
+        // get all mahasiswa in kelompok mahasiswa
+        $mahasiswa = $kelompok->kelompok_mahasiswa;
+        foreach ($mahasiswa as $mhs) {
+            $mhs->mahasiswa->user->notify(new UpdateRequestNotification(
+                $bimbingan,
+                $ref->value,
+            ));
+        }
     }
 }

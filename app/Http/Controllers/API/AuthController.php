@@ -23,7 +23,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
-        $user = User::whereEmail($request->email)->first();
+        $user = User::whereEmail($request->email)->first()->load('mahasiswa', 'dosen');
 
         if (!$user) {
             return ResponseFormatter::error([
@@ -49,54 +49,6 @@ class AuthController extends Controller
             'access_token' => $tokenResult,
             'user' => new UserResource($user)
         ], 'Login berhasil');
-    }
-
-    /**
-     * Get data mahasiswa
-     *
-     * @return ResponseFormatter
-     */
-    public function getMahasiswa(){
-        $mahasiswa = auth()->user()->mahasiswa;
-        if ($mahasiswa) {
-            return ResponseFormatter::success(new MahasiswaResource($mahasiswa), 'Data mahasiswa berhasil diambil');
-        } else {
-            return ResponseFormatter::error([
-                'message' => 'Data mahasiswa tidak ditemukan'
-            ], 'Data mahasiswa gagal diambil', 404);
-        }
-    }
-
-    /**
-     * Get data kelompok
-     *
-     * @return ResponseFormatter
-     */
-    public function getKelompok(){
-        $kelompok = auth()->user()->mahasiswa->kelompok_mahasiswa->where('status', '1')->first()->kelompok ?? null;
-        if ($kelompok) {
-            return ResponseFormatter::success(new KelompokResource($kelompok), 'Data kelompok berhasil diambil');
-        } else {
-            return ResponseFormatter::error([
-                'message' => 'Data kelompok tidak ditemukan'
-            ], 'Data kelompok gagal diambil', 404);
-        }
-    }
-
-    /**
-     * Get data dosen
-     *
-     * @return ResponseFormatter
-     */
-    public function getDosen(){
-        $dosen = auth()->user()->dosen;
-        if ($dosen) {
-            return ResponseFormatter::success(new DosenResource($dosen), 'Data dosen berhasil diambil');
-        } else {
-            return ResponseFormatter::error([
-                'message' => 'Data dosen tidak ditemukan'
-            ], 'Data dosen gagal diambil', 404);
-        }
     }
 
     /**
