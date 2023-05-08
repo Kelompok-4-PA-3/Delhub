@@ -73,6 +73,9 @@ class RequestController extends Controller
         $bimbingan = Request::find($id);
         $ref = Reference::where('value', $request->status)->first();
         $bimbingan->status = $ref->id;
+        if ($request->waktu != null) {
+            $bimbingan->waktu = $request->waktu;
+        }
         $bimbingan->save();
 
         if (auth()->user()->hasRole('dosen')) {
