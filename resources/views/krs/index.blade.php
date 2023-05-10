@@ -42,7 +42,8 @@
                 <tr>
                     <th>No</th>
                     <th>Kategori</th>
-                    <th>Dosen</th>
+                    <th>Koordinator 1</th>
+                    <th>Koordinator 2</th>
                     <th>Program studi</th>
                     <th>Angkatan</th>
                     <th class="text-center">Actions</th>
@@ -50,7 +51,8 @@
                 <tr>
                     <th></th>
                     <th>Kategori</th>
-                    <th>Dosen</th>
+                    <th>Koordinator 1</th>
+                    <th>Koordinator 2</th>
                     <th>Program studi</th>
                     <th>Angkatan</th>
                     <th></th>
@@ -62,6 +64,7 @@
                     <td>{{$loop->iteration}}</td>
                     <td>{{$k->kategori->nama_mk}}</td>
                     <td>{{$k->dosen->user->nama}}</td>
+                    <td>{{$k->dosen2->user->nama}}</td>
                     <td>{{$k->prodi->nama}}</td>
                     <td>{{$k->angkatan}}</td>
                     <td class="text-center">

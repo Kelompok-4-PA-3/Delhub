@@ -33,6 +33,14 @@ class Dosen extends Model
         return $this->hasMany(Krs::class, 'dosen_mk', 'nidn');
     }
 
+    public function krs2(){
+        return $this->hasMany(Krs::class, 'dosen_mk_2', 'nidn');
+    }
+
+    // public function krs(){
+    //     return $this->hasMany(Krs::class, 'dosen_mk', 'nidn');
+    // }
+
     public function kelompok(){
         return $this->hasMany(Kelompok::class ,'pembimbing', 'nidn');
     }
@@ -45,8 +53,12 @@ class Dosen extends Model
         return $this->hasMany(Pembimbing::class, 'pembimbing_2', 'nidn');
     }
 
-    public function role_kelompok($kelompok){
-        return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn')->where('kelompok_id',$kelompok)->first();
+    public function role_kelompok(){
+        return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn');
+    }
+
+    public function all_role_kelompok(){
+        return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn');
     }
 
     public function getRouteKeyName()

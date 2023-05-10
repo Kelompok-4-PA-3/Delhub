@@ -12,7 +12,7 @@ use Auth;
 class MyProjectController extends Controller
 {
     public function koordintor(){
-        $krs = Krs::where('dosen_mk','=', Auth::user()->dosen->nidn)->first();
+        $krs = Krs::where('dosen_mk','=', Auth::user()->dosen->nidn)->orWhere('dosen_mk_2','=', Auth::user()->dosen->nidn)->first();
         $kelompok = Kelompok::where('krs_id','=', $krs->id)->get();
         $mahasiswa = Mahasiswa::latest()->get();
         // return $krs->count();

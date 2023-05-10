@@ -8,17 +8,7 @@
 	<script src="{{asset('/assets/js/vendor/tables/datatables/datatables.min.js')}}"></script>
 	<script src="{{asset('/assets/demo/pages/datatables_api.js')}}"></script>
     <script src="{{asset('/assets/js/vendor/tables/datatables/extensions/buttons.min.js')}}"></script>
-    {{-- <script src="{{asset('/assets/demo/pages/picker_date.js')}}"></script> --}}
-    {{-- <script src="{{asset('/assets/js/vendor/ui/fab.min.js')}}"></script>
-	<script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script> --}}
 	<script src="{{asset('/assets/demo/pages/extra_fab.js')}}"></script>
-    {{-- <script src="{{asset('/assets/js/jquery/jquery.min.js')}}"></script> --}}
-	{{-- <script src="{{asset('/assets/js/vendor/uploaders/fileinput/fileinput.min.js')}}"></script>
-	<script src="{{asset('/assets/js/vendor/uploaders/fileinput/plugins/sortable.min.js')}}"></script>
-	<script src="{{asset('/assets/demo/pages/uploader_bootstrap.js')}}"></script>
-    <script src="{{asset('/assets/js/vendor/ui/moment/moment.min.js')}}"></script> --}}
-    {{-- <script src="{{asset('/assets/js/vendor/pickers/daterangepicker.js')}}"></script>
-	<script src="{{asset('/assets/js/vendor/pickers/datepicker.min.js')}}"></script> --}}
     <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
 @endpush
@@ -37,7 +27,25 @@
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
                 <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
-                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/penilaian" class="nav-link"><i class="ph-notebook"></i> &nbsp; Penilaian</a></li>
+                {{-- @if (Auth::user()->dosen() != NULL)
+                    @if (array_intersect(Auth::user()->dosen->role_kelompok($kelompok->id)->pluck('id')->toArray(), $kelompok->role_kelompok->pluck('id')->toArray())) --}}
+                <li class="nav-item">
+                    <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
+                    <div class="dropdown-menu">
+                        @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
+                            <a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}}</a>
+                        @endforeach
+                        {{-- {{Auth::user()->dosen->all_role_kelompok}} --}}
+                    </div>
+                </li>
+                    {{-- @endif
+                @endif --}}
+                {{-- {{Auth::user()->dosen->role_kelompok($kelompok->id)}} --}}
+                @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
+                    <li class="nav-item">
+                        <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
+                    </li>
+                @endif  
             </ul>
         </div>
 
@@ -55,14 +63,30 @@
                    </div>
                 @else
                 <table class="table">
+                    @php
+                    $btn_approve = true;  
+                    foreach ($kelompok->kelompok_mahasiswa as $kkm) {
+                    foreach ($poin_penilaian as $pp) {
+                            if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $pp->id) != NULL) {
+                                $btn_approve = false;
+                            }
+                    }
+                    }
+                @endphp
                     <tr>
                         <th>NIM</th>
                         <th>Nama Mahasiswa</th>
+                        <th>
+                            {{-- {{}} --}}
+                            <a href="/kelompok/{{$kelompok->id}}/penilaian/role_kelompok/{{$role_dosen->id}}/{{$role_dosen->role_group->id}}">{{$role_dosen->role_group->nama}}</a>
+                            <div>
+                                <small class="text-muted">{{$role_dosen->role_group->bobot}} %</small>
+                            </div>
+                        </th>
                             @foreach($poin_penilaian as $pp)
                             <th>
                                 <div class="fw-semibold d-flex">
-                                   
-                                    <a  @if($pp->komponen_penilaian->where('is_verified',false)->count() > 0 || $pp->komponen_penilaian->count() > 0)  href="/kelompok/{{$kelompok->id}}/penilaian/{{$pp->id}}" @endif>{{$pp->nama_poin}}</a>
+                                    <a  @if($pp->komponen_penilaian->where('is_verified',false)->count() > 0 || $pp->komponen_penilaian->count() > 0)  href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$pp->id}}" @endif>{{$pp->nama_poin}}</a>
                                     @if ($pp->komponen_penilaian->where('is_verified',false)->count() > 0 || $pp->komponen_penilaian->count() <= 0)
                                         <a href="#" class="ph-warning-circle px-1 text-warning" data-bs-popup="tooltip" title="Komponen penilaian pada poin ini belum tersedia atau belum terverifikasi"></a>
                                     @endif
@@ -72,38 +96,104 @@
                                 </div>
                             </th>
                             @endforeach
-                        {{-- @else
-                            <td>
-                                <small><i class="text-warning">Komponen penilaian pada penilaian ini belum diverifikasi</i></small><br>
-                                <small><i><a class="" href="">Cek komponen disini</a></i></small>
-                            </td>
-                        @endif --}}
-                        <th>Total</th>
+                        <th>Total
+                            <form action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/approved" class="mt-1" method="post">
+                                {{-- {{$myrole}} --}}
+                                @csrf
+                                @php
+                                $all_approved = $kelompok->nilai_mahasiswa->pluck('approved_status')->every(function($status){
+                                    // return $status != 1;
+                                    if ($status == 0) {
+                                        return 1;
+                                    }elseif($status == 1){
+                                        return 0; 
+                                    }else{
+                                        return 3;
+                                    }
+                                });
+                                // $all_not_approved = $kelompok->nilai_mahasiswa->pluck('approved_status')->every(function($status){
+                                //     return $statis == 1;
+                                // });
+                                @endphp 
+                                {{-- {{$all_approved}} --}}
+                                <input type="hidden" name="approved_status" value="
+                                    @if ((int)$all_approved != 3)
+                                        {{(int)$all_approved}}
+                                    @endif
+                                ">
+                                {{-- {{$all_approved}} --}}
+                                @if ((int)$all_approved == 0)
+                                    <button type="button"  class="btn btn-warning btn-sm border-0 fw-semibold" data-bs-toggle="modal" data-bs-target="#cancel_approve"><i class="ph-x-circle"></i> &nbsp; Batalkan</button> 
+                                @elseif((int)$all_approved == 1)
+                                    <button type="submit" class="btn btn-success btn-sm border-0 fw-semibold {{$btn_approve == 1 ? 'disabled' : ''}}" ><i class="ph-circle-wavy-check"></i> &nbsp;Approve</button>   
+                                @endif
+                            </form>
+                        </th>
                     </tr>
-                        @foreach($kelompok->kelompok_mahasiswa as $kkm)
-                        <tr>
-                            <td>{{$kkm->mahasiswa->nim}}</td>
-                            <td>{{$kkm->mahasiswa->user->nama}}</td>
-                         {{-- @if ($poin_penilaian->where('is_verified',false)->count() == 0)  --}}
-                            @foreach($poin_penilaian as $pp)
-                                <td>
-                                    -
-                                </td>
-                             @endforeach
-                        {{-- @else
-                            <td>
-                                <small><i class="text-warning">Komponen penilaian pada penilaian ini belum diverifikasi</i></small><br>
-                            </td>
-                        @endif --}}
+
+                    <!-- Delete Modal -->
+                    <div id="cancel_approve" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog modal-xs">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    Apakah anda yakin ingin membatalkan approve seluruh nilai? 
+                                </div>
+
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                    <form action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/approved" method="post">
+                                        @csrf
+                                        <input type="hidden" name="approved_status" value="0" />
+                                        <button type="submit" class="btn btn-primary">Ya</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Delete Modal -->
+
+                    @foreach($kelompok->kelompok_mahasiswa as $kkm)
+                    @php  
+                        ${"total_nilai".$kkm->nim} = 0;
+                    @endphp
+                    <tr>
+                        <td>{{$kkm->mahasiswa->nim}}</td>
+                        <td>{{$kkm->mahasiswa->user->nama}}</td>
                         <td>-</td>
-                        </tr>
-                        @endforeach
-                        <td></td>
-                    
-                    {{-- <tr>
-                        <th>NIM</th>
-                        <th>Nama Mahasiswa</th>
-                    </tr> --}}
+                        @foreach($poin_penilaian as $pp)
+                            <td>
+                                @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $pp->id) != NULL)
+                                    @if ($pp->id == $kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $pp->id)->poin_penilaian_id)
+                                        @php
+                                            ${"total_nilai".$kkm->nim} += (($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $pp->id)->nilai) * ($pp->bobot / 100));
+                                            // / ((double)$role_dosen->role_group->bobot / 100)
+                                        @endphp
+                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $pp->id)->nilai}}
+                                    @else 
+                                    0 
+                                    @endif
+                                @else 
+                                    -
+                                @endif
+                            </td>
+                         @endforeach
+                        <td class="
+                            @if ((int)$all_approved == 3)
+                                text-primary
+                            @elseif((int)$all_approved == 0)
+                                bg-success
+                            @elseif((int)$all_approved == 1)
+                                bg-warning
+                            @endif
+                        ">{{number_format(${"total_nilai".$kkm->nim}, 2, '.', '')}}</td>
+                    </tr>
+                    @endforeach
+                    <td></td>
                 </table>
                 @endif
             </div>
@@ -112,7 +202,6 @@
 
 
         <div class="col-xl-8">
-
             <div class="card">
                 <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
                     <h5 class="py-sm-2 my-sm-1">Penilaian Mahasiswa</h5><br>
@@ -172,6 +261,7 @@
                          </li>
                     </ul>
                     <!-- /tabs -->
+
                     <!-- Tabs content -->
                     <div class="tab-content card-body">
                         <div class="tab-pane active fade show" id="daftar-konfigurasi">
@@ -258,11 +348,8 @@
                                 </div>
                             </form>
                         </div>
-                        
                     </div>
                     <!-- /tabs content -->
-
-                   
                 </div>
 
                 <div class="chart mb-2" id="app_sales"></div>

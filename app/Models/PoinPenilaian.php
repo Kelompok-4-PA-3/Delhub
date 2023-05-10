@@ -9,11 +9,15 @@ use Wildside\Userstamps\Userstamps;
 
 class PoinPenilaian extends Model
 {
-    use HasFactory;
+use HasFactory;
     use SoftDeletes;
     use Userstamps;
 
     public function komponen_penilaian(){
         return $this->hasMany(KomponenPenilaian::class, 'poin_penilaian_id', 'id');
+    }
+
+    public function nilai_mahasiswa_all(){
+        return $this->hasMany(NilaiMahasiswa::class, 'poin_penilaian_id', 'id');
     }
 }

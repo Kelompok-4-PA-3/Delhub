@@ -84,7 +84,7 @@
 @endsection
 
 @if(Auth::user()->dosen->count() > 0)
-@if($krs->dosen_mk == Auth::user()->dosen->nidn)
+@if($krs->dosen_mk == Auth::user()->dosen->nidn || $krs->dosen_mk_2 == Auth::user()->dosen->nidn)
 @section('right-sidebar')
  <!-- Right sidebar -->
 		<div class="sidebar sidebar-end sidebar-expand-lg sidebar-collapsed">
@@ -179,6 +179,12 @@
 								<a href="/krs/{{$krs->id}}/role_group" class="nav-link">
 									<i class="ph-list-checks me-2"></i>
 									Role Group
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="/krs/{{$krs->id}}/hasil_penilaian" class="nav-link">
+									<i class="ph-list-checks me-2"></i>
+									Hasil Penilaian
 								</a>
 							</li>
 							<li class="nav-item">

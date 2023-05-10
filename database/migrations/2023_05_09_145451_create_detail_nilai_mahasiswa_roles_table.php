@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('role_kelompoks', function (Blueprint $table) {
+        Schema::create('detail_nilai_mahasiswa_roles', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('role_group_id');
-            $table->foreign('role_group_id')->references('id')->on('role_group_kelompoks')->onUpdate('cascade')->onDelete('cascade');
-            $table->unsignedBigInteger('kelompok_id');
-            $table->foreign('kelompok_id')->references('id')->on('kelompoks')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('nidn');
-            $table->foreign('nidn')->references('nidn')->on('dosens')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('nama_role');
-            $table->boolean('is_verified');
+            $table->unsignedBigInteger('nilai_role_id');
+            $table->foreign('nilai_role_id')->references('id')->on('nilai_mahasiswa_roles')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('komponen_role_penilaian_id');
+            $table->foreign('komponen_role_penilaian_id')->references('id')->on('role_kelompok_penilaians')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('role_kelompoks');
+        Schema::dropIfExists('detail_nilai_mahasiswa_roles');
     }
 };

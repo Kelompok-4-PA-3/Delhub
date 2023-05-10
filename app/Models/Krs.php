@@ -29,6 +29,10 @@ class Krs extends Model
         return $this->belongsTo(Dosen::class, 'dosen_mk', 'nidn');
     }
 
+    public function dosen2(){
+        return $this->belongsTo(Dosen::class, 'dosen_mk_2', 'nidn');
+    }
+
     public function prodi(){
         return $this->belongsTo(Prodi::class, 'prodi_id');
     }

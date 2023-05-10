@@ -36,12 +36,30 @@
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
                 <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
-                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/penilaian" class="nav-link"><i class="ph-notebook"></i> &nbsp; Penilaian</a></li>
+                {{-- @if (Auth::user()->dosen() != NULL)
+                    @if (array_intersect(Auth::user()->dosen->role_kelompok($kelompok->id)->pluck('id')->toArray(), $kelompok->role_kelompok->pluck('id')->toArray())) --}}
+                <li class="nav-item">
+                    <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
+                    <div class="dropdown-menu">
+                        {{-- {{}} --}}
+                        @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
+                            <a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}}</a>
+                        @endforeach
+                        {{-- {{Auth::user()->dosen->all_role_kelompok}} --}}
+                    </div>
+                </li>
+                    {{-- @endif
+                @endif --}}
+                {{-- {{Auth::user()->dosen->role_kelompok($kelompok->id)}} --}}
+                @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
+                    <li class="nav-item">
+                        <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
+                    </li>
+                @endif  
             </ul>
         </div>
 
         <div class="col-xl-7">
-
             <div class="p-2 card">
                 <div class="d-lg-flex">
                     <ul class="nav nav-tabs nav-tabs-vertical nav-tabs-vertical-start wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
@@ -105,13 +123,37 @@
                     </ul>
                     <div class="tab-content flex-lg-fill">
                         <div class="tab-pane fade show active" id="pembimbing_penguji">
+                            @php
+                                if($kelompok->role_kelompok->where('is_verified',false)->count() > 0){
+                                    $verified = false;
+                                }else{
+                                    $verified = true;
+                                }
+                            @endphp
+                            <div class="d-flex mb-1">
+                                <div class="d-flex">
+                                    <small class="mt-1">Total : </small>&nbsp;
+                                    <h5 class="{{$kelompok->role_kelompok->sum('bobot') == 100 ? 'text-primary' : 'text-warning'}}"> {{$kelompok->role_kelompok->sum('bobot')}} %</h5> 
+                                </div>
+                                @if($verified)
+                                    <div class="d-flex ms-auto">    
+                                        <span class="rounded-pill bg-opacity-10 text-success"><i class="ph-circle-wavy-check"></i>&nbsp; sudah diverifikasi</span>
+                                    </div>
+                                @else 
+                                    <div class="d-flex ms-auto">    
+                                        <span class="rounded-pill bg-opacity-10 text-danger"><i class="ph-circle-wavy-warning"></i>&nbsp; belum diverifikasi</span>
+                                    </div>
+                                @endif
+                            </div>
                             @foreach($kelompok->role_kelompok as $kr)
                                 <div>
                                     <div class="d-flex px-2 mt-2">
                                         <small class="text-muted">{{$kr->role_group->nama}} </small>
-                                        <div class="ms-auto ">
-                                            <small class="" data bs-popup="tooltip" title="hapus"> <a href="#" class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kr->id }}"><i class="ph-trash"></i></a></small>
-                                        </div>
+                                        @if(!$verified)
+                                            <div class="ms-auto ">
+                                                <small class="" data bs-popup="tooltip" title="hapus"> <a href="#" class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kr->id }}"><i class="ph-trash"></i></a></small>
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="px-2">
                                         <h5>
@@ -144,8 +186,27 @@
                                     </div>
                                 </div>
                                 <!-- /Delete Modal -->
-
                             @endforeach
+                            @if(!$verified)
+                            <div>
+                                <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
+                                    @csrf
+                                    <i class="text-warning">{{$kelompok->role_kelompok->sum('bobot') != 100 ? 'Tidak dapat melakukan verifikasi karena jumlah bobot belum mencapai 100%'  : ''}}</i>
+                                    <div class="d-flex">
+                                        <button class="btn btn-primary btn-sm fw-semibold ms-auto {{$kelompok->role_kelompok->sum('bobot') == 100 ? '' : 'disabled'}}"><i class="ph-circle-wavy-warning"></i>&nbsp; Verifikasi&nbsp;&nbsp;&nbsp; <span class="bg-warning px-1 fw-semibold">{{$kelompok->role_kelompok->count()}}</span></button>
+                                    </div>
+                                </form>
+                            </div>
+                            @else 
+                                <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
+                                    @csrf
+                                    <i class="text-warning">{{$kelompok->role_kelompok->sum('bobot') != 100 ? 'Tidak dapat melakukan verifikasi karena jumlah bobot belum mencapai 100%'  : ''}}</i>
+                                    <div class="d-flex">
+                                        <input type="hidden" name="status" value="not_verified">
+                                        <button class="btn btn-warning btn-sm fw-semibold ms-auto {{$kelompok->role_kelompok->sum('bobot') == 100 ? '' : 'disabled'}}">Batalkan verifikasi</span></button>
+                                    </div>
+                                </form>
+                            @endif
                         </div>
                         <div class="tab-pane fade show" id="edit_pembimbing_penguji">
                             <form action="{{Route('kelompok_role.add',[ 'kelompok' => $kelompok->id])}}" method="post">
@@ -171,7 +232,7 @@
                                         <optgroup label="Daftar role">
                                             <option selected>Pilih role</option>
                                             @foreach($kelompok->krs->krs_role as $kkk)
-                                                @if (!in_array($kkk->id, $kkk->role_kelompok->where('kelompok_id',$kelompok->id)->get()->pluck('role_group_id')->toArray()))
+                                                @if (!in_array($kkk->id, $kelompok->role_kelompok->pluck('role_group_id')->toArray()))
                                                     <option value="{{$kkk->id}}">{{Str::limit($kkk->nama,30)}}</option> 
                                                 @endif
                                             @endforeach
@@ -191,9 +252,9 @@
                 <div class="d-lg-flex">
                     <ul class="nav nav-tabs nav-tabs-vertical nav-tabs-vertical-start wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
                         @foreach ($kelompok->krs->krs_role as $kkk)
-                        @php
+                        {{-- @php
                             $role_dosen = $kkk->role_kelompok->where('kelompok_id',$kelompok->id)->first()
-                        @endphp
+                        @endphp --}}
                         <li class="nav-item">
                             <a href="#{{$kkk->nama}}" class="nav-link" data-bs-toggle="tab">
                                 <i class="ph-user-circle me-2"></i>
@@ -236,22 +297,22 @@
                         @foreach ($kelompok->krs->krs_role as $kkk)
                         <div class="tab-pane fade show " id="{{$kkk->nama}}">
                             {{-- {{$kkk->role_kelompok->where('kelompok_id',$kelompok->id)->get()}} --}}
-                            @php
+                            {{-- @php
                                 $role_dosen = $kkk->role_kelompok->where('kelompok_id',$kelompok->id)->first()
-                            @endphp
+                            @endphp --}}
                             @if ($role_dosen != NULL)
                             <div class="d-flex px-1 ">
                                 <div class="ms-auto ">
-                                    <small class="" data bs-popup="tooltip" title="hapus"> <a href="#" class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kkk->role_kelompok->id }}"><i class="ph-trash"></i></a></small>
+                                    {{-- <small class="" data bs-popup="tooltip" title="hapus"> <a href="#" class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kkk->role_kelompok->id }}"><i class="ph-trash"></i></a></small> --}}
                                 </div>
                             </div>
                             <div>
                                 <div class="d-flex px-2 mt-2">
-                                    <small class="text-muted">{{$role_dosen->role_group->nama}} </small>
+                                    {{-- <small class="text-muted">{{$role_dosen->role_group->nama}} </small> --}}
                                 </div>
                                 <div class="px-2">
                                     <h5>
-                                        {{$role_dosen->dosen->user->nama}}
+                                        {{-- {{$role_dosen->dosen->user->nama}} --}}
                                     </h5>
                                 </div>
                             </div>
@@ -262,23 +323,23 @@
                         @endforeach
                         @foreach ($kelompok->krs->krs_role as $kkk)
                         <div class="tab-pane fade" id="edit-pembimbing{{$kkk->id}}">
-                            @php
+                            {{-- @php
                                 $role_dosen_edit = $kkk->role_kelompok->where('kelompok_id',$kelompok->id)->first()
-                            @endphp
+                            @endphp --}}
                             <form action="{{Route('kelompok_role.add',[ 'kelompok' => $kelompok->id, 'roleGroupKelompok' => $kkk->id])}}" method="post">
                              @csrf
                              <div class="py-1">
                                  <select data-placeholder="{{$kkk->nama}}" name="nidn" class="form-control select" required>
                                      <option></option>
                                      <optgroup label="Daftar Dosen">
-                                         @foreach($dosen as $d)
+                                         {{-- @foreach($dosen as $d)
                                          <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
                                              @if($role_dosen_edit != NULL)
                                                  <option value="{{$d->nidn}}" {{$role_dosen_edit->dosen->nidn == $d->nidn ? 'selected' : ''}} >{{Str::limit($d->user->nama,30)}}</option>
                                              @else
                                                  <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
                                              @endif
-                                         @endforeach
+                                         @endforeach --}}
                                      </optgroup>
                                  </select>
                              </div> 

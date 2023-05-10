@@ -41,11 +41,30 @@
     <div class="row">
         <div class="mb-2">
             <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
-                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}" class="nav-link {{ (request()->is('/kelompok/{id}')) ? 'active' : '' }}"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
+                <li class="nav-item"><a href="#" class="nav-link active"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
-                <li class="nav-item"><a href="#" class="nav-link {{ (request()->is('/kelompok/orang')) ? 'active' : '' }}"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
-                <li class="nav-item"><a href="/kelompok" class="nav-link  active"> <i class="ph-users"></i> &nbsp; Orang</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
+                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
+                {{-- @if (Auth::user()->dosen() != NULL)
+                    @if (array_intersect(Auth::user()->dosen->role_kelompok($kelompok->id)->pluck('id')->toArray(), $kelompok->role_kelompok->pluck('id')->toArray())) --}}
+                <li class="nav-item">
+                    <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
+                    <div class="dropdown-menu">
+						@foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
+							<a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}}</a>
+						@endforeach
+                        {{-- {{Auth::user()->dosen->all_role_kelompok}} --}}
+                    </div>
+                </li>
+                    {{-- @endif
+                @endif --}}
+                {{-- {{Auth::user()->dosen->role_kelompok($kelompok->id)}} --}}
+                @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
+                    <li class="nav-item">
+                        <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
+                    </li>
+                @endif  
             </ul>
         </div>
 		
@@ -59,7 +78,7 @@
 					</a>
 				</li>
 				@if(Auth::user()->dosen()->count() > 0)
-					@if($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn)
+					@if($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nidn)
 						<li class="nav-item">
 							<a href="#tambah-anggota" class="nav-link" data-bs-toggle="tab">
 								<i class="ph-users-three me-2"></i>
@@ -86,7 +105,7 @@
 									<td>
 										<div class="d-flex">
 											<div class="px-2">
-									x			<img src="../../../assets/images/demo/users/face11.jpg" class="w-32px h-32px rounded-pill" alt="">
+												<img src="../../../assets/images/demo/users/face11.jpg" class="w-32px h-32px rounded-pill" alt="">
 											</div>
 										<div>
 											<a class="fw-semibold" href="">{{$a->mahasiswa->user->nama}}</a><br>
@@ -116,7 +135,7 @@
 				</div>
 			</div>
 			@if(Auth::user()->dosen()->count() > 0)
-					@if($kelompok->krs->dosen_mk  == Auth::user()->dosen->nidn)
+			@if($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nidn)
 						<div class="tab-pane fade show" id="tambah-anggota">
 							<div class="card p-3">
 								<div class="p-3">

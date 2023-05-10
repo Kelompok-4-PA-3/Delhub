@@ -72,6 +72,7 @@ const CKEditorClassic = function() {
                 ]
             }
         }).then(editor => {
+            config.skin = 'moono-lisa';
             window.editor = editor;
             const editorElement = document.querySelector("#ckeditor_classic_readonly_toggle");
             let isReadOnly = false;

@@ -67,6 +67,7 @@
                 </thead>
                 <tbody>
                     @foreach ($role_group as $rg)
+                        {{-- @if ($rg->krs_id == $krs->id) --}}
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $rg->nama }}</td>
@@ -88,7 +89,7 @@
                                         data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $rg->id }}">
                                         <i class="ph-trash"></i>
                                     </a>
-                                    <a href="{{route('role_group.index', ['kr' => $krs->id, 'roleGroupKelompok' => $rg->id])}}" class="text-body" data-bs-popup="tooltip" title="Komponen penilaian">
+                                    <a href="{{route('role_kelompok_penilaian.index',['kr' => $krs->id, 'role' => $rg->id])}}" class="text-body" data-bs-popup="tooltip" title="Komponen penilaian">
                                         <i  class="ph-notebook"></i>
                                     </a>
                                 </div>
@@ -163,6 +164,7 @@
                             </div>
                         <!-- /large panel -->
                         <!-- /sticky footer -->
+                        {{-- @endif --}}
 
                     @endforeach 
                 </tbody>

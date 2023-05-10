@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('nim');
             $table->foreign('nim')->references('nim')->on('mahasiswas')->onUpdate('cascade')->onDelete('cascade');
             $table->double('nilai');
+            $table->int('approved_status');
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

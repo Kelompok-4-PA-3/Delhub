@@ -14,8 +14,9 @@ class PoinPenilaianController extends Controller
      */
     public function index(Krs $kr)
     {   
-
-        $poin_penilaian = PoinPenilaian::latest()->get();
+        // return $kr;
+        $poin_penilaian = PoinPenilaian::where('krs_id',$kr->id)->get();
+        // return $poin_penilaian;
 
         return view('dashboard.poinpenilaian.index',[
             'title' => $kr->kategori->nama_mk,

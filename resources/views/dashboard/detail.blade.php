@@ -84,7 +84,7 @@
 @endsection
 
 @if(Auth::user()->dosen()->count() > 0)
-@if($krs->dosen_mk == Auth::user()->dosen->nidn)
+@if($krs->dosen_mk == Auth::user()->dosen->nidn || $krs->dosen_mk_2 == Auth::user()->dosen->nidn)
 @section('right-sidebar')
  <!-- Right sidebar -->
 		<div class="sidebar sidebar-end sidebar-expand-lg sidebar-collapsed">

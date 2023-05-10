@@ -18,4 +18,12 @@ class RoleGroupKelompok extends Model
     public function role_kelompok(){
         return $this->hasOne(RoleKelompok::class, 'role_group_id', 'id');
     }
+
+    public function komponen_penilaian_role(){
+        return $this->belongsTo(RoleKelompokPenilaian::class, 'role_group_id', 'id');
+    }
+
+    public function komponen_penilaian(){
+        return $this->hasMany(RoleKelompokPenilaian::class, 'role_group_id', 'id');
+    }
 }

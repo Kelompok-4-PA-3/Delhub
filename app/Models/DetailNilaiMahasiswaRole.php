@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class NilaiMahasiswa extends Model
+class DetailNilaiMahasiswaRole extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -17,11 +17,12 @@ class NilaiMahasiswa extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function role_kelompok(){
-        return $this->belongsTo(RoleKelompok::class, 'role_dosen_kelompok_id', 'id');
+    public function nilai_role(){
+        return $this->belongsTo(NilaiMahasiswaRole::class, 'nilai_role_id', 'id');
     }
-    
-    public function poin_penilaian(){
-        return $this->belongsTo(PoinPenilaian::class, 'poin_penilaian_id', 'id');
+
+    public function komponen_role_penilaian(){
+        return $this->belongsTo(RoleKelompokPenilaians::class, 'komponen_role_penilaian_id', 'id');
     }
+
 }

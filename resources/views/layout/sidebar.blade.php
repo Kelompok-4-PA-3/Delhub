@@ -72,9 +72,16 @@
                 @endrole
                 {{-- {{Auth::user()->dosen}} --}}
                 @role('dosen')
-                @if (Auth::user()->dosen->krs->count() > 0)
+                @if (Auth::user()->dosen->krs->count() > 0 || Auth::user()->dosen->krs2->count() > 0)
+                    @php
+                    if (Auth::user()->dosen->krs->count() > 0) {
+                        $mykrs = Auth::user()->dosen->krs->first()->id;
+                    }else{
+                        $mykrs = Auth::user()->dosen->krs2->first()->id;
+                    }
+                    @endphp
                     <li class="nav-item">
-                        <a href="/koordinator/proyeksaya/{{Auth::user()->dosen->krs->first()->id}}" class="nav-link">
+                        <a href="/koordinator/proyeksaya/{{$mykrs}}" class="nav-link">
                             <i class="ph-list-dashes"></i>
                             <span>
                                Koordinator
@@ -85,15 +92,35 @@
                 {{-- {{Auth::user()->dosen->pembimbing_penguji}} --}}
                 {{-- {{Auth::user()->dosen->pembimbing_1}}
                 {{Auth::user()->dosen->pembimbing_2}} --}}
-                @if (Auth::user()->dosen->pembimbing_1->count() > 0 || Auth::user()->dosen->pembimbing_2->count() > 0 )
-                    <li class="nav-item">
-                        <a href="/pembimbing/{{Auth::user()->dosen->nidn}}" class="nav-link">
-                            <i class="ph-list-dashes"></i>
-                            <span>
-                            Pembimbing
-                            </span>
-                        </a>
+                @if (Auth::user()->dosen->all_role_kelompok->count() > 0 )
+                    <li class="nav-item-header">
+                        <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">PEKERJAAN SAYA</div>
+                        <i class="ph-dots-three sidebar-resize-show"></i>
                     </li>
+                    @foreach (Auth::user()->dosen->all_role_kelompok as $role)
+                        <li class="nav-item">
+                            <a href="/kelompok/{{$role->kelompok->id}}" class="nav-link">
+                                <i class="ph-browsers text-warning"></i>
+                                <div>
+                                      {{-- <span>
+                                    {{
+                                        $role->role_group->nama
+                                    }}
+                                </span> --}}
+                                <small class="text-primary">{{$role->kelompok->nama_kelompok}}</small>
+                               
+
+                                {{-- @foreach ($role->kelompok as $rk) --}}
+                                    
+                                {{-- @endforeach --}}<br>
+                                <div>
+                                    <small class="text-light"> <i> {{$role->role_group->nama}}</i></small>
+                                </div>
+                                </div>
+                            </a>
+                            
+                        </li>
+                    @endforeach
                 @endif
 
                 {{-- @if (Auth::user()->dosen->pembimbing_penguji->where('reference_id','=',4)->count() > 0)

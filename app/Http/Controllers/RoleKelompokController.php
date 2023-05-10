@@ -51,6 +51,20 @@ class RoleKelompokController extends Controller
     /**
      * Display the specified resource.
      */
+    public function verification(Request $request, Kelompok $kelompok)
+    {   
+        // return $request;
+        $status = true;
+        if ($request->status == 'not_verified') {
+            $status = false;
+        }
+        RoleKelompok::where('kelompok_id',$kelompok->id)->update([
+            'is_verified' => $status
+        ]);
+
+        return back()->with('success', 'Verifikasi role dosen telah berhasil');
+    }
+
     public function show(RoleKelompok $roleKelompok)
     {
         //

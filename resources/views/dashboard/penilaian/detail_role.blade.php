@@ -56,7 +56,7 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
-                    <h5 class="py-sm-2 my-sm-1">Penilaian {{$penilaian->nama_poin}}</h5><br>
+                    <h5 class="py-sm-2 my-sm-1">Penilaian {{$roleGroup->nama}}</h5><br>
                     <div class="mt-2 mt-sm-0 ms-sm-auto">
                     </div>
                 </div>
@@ -88,8 +88,8 @@
                                     
                                 @endphp
                                 <td>
-                                    @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id) != NULL)
-                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id)->nilai}} 
+                                    @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $roleGroup->id) != NULL)
+                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $roleGroup->id)->nilai}} 
                                     @else 
                                         0
                                     @endif
@@ -107,18 +107,18 @@
                                     </div>
                                     <div class="offcanvas-body p-2">
                                         {{-- {{$role_dosen->id}} --}}
-                                        <form class="container" action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$penilaian->id}}/mahasiswa/{{$kkm->mahasiswa->nim}}" method="post">
+                                        <form class="container" action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$roleGroup->id}}/mahasiswa/{{$kkm->mahasiswa->nim}}" method="post">
                                            @csrf
-                                           @foreach ($penilaian->komponen_penilaian as $pkp)
+                                           @foreach ($roleGroup->komponen_penilaian as $rkp)
                                                 <div class="row">
                                                     <div class="col-7">
-                                                        {!!$pkp->nama_komponen!!}
+                                                        {!!$rkp->nama_komponen!!}
                                                     </div>
                                                     <div class="col-2">
-                                                        {{$pkp->bobot.'%'}}
+                                                        {{$rkp->bobot.'%'}}
                                                     </div>
                                                     <div class="col-3">
-                                                        <input type="number" class="form-control" name="komponen{{$pkp->id}}" max="100" min="0" required>
+                                                        <input type="number" class="form-control" name="komponen{{$rkp->id}}" max="100" min="0" required>
                                                     </div>
                                                 </div>
                                             @endforeach

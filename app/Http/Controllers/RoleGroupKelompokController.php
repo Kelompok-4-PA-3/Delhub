@@ -13,7 +13,10 @@ class RoleGroupKelompokController extends Controller
      */
     public function index(Krs $kr)
     {
-        $role_group = RoleGroupKelompok::latest()->get();
+        // return $kr;
+        $role_group = RoleGroupKelompok::where('krs_id',$kr->id)->get();
+        // return $kr;
+        // return $role_group;
         return view('dashboard.rolegroup.index',[
             'role_group' => $role_group,
             'krs' => $kr

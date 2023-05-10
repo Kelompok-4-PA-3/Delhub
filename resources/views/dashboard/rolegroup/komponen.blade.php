@@ -1,20 +1,19 @@
 @extends('main')
 
 @section('title')
-    <title>Manajemen Komponen Regulasis</title>
+    <title>Manajemen Poin Regulasis</title>
 @endsection
 
 @push('datatable_js')
-    <script src="{{ asset('/assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+        <script src="{{ asset('/assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('/assets/demo/pages/datatables_api.js') }}"></script>
     <script src="{{ asset('/assets/js/vendor/tables/datatables/extensions/buttons.min.js') }}"></script>
     <script src="{{ asset('/assets/demo/pages/form_select2.js') }}"></script>
-    <script src="{{ asset('/assets/js/vendor/forms/selects/select2.min.js') }}"></script>
     <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
-    <script src="{{asset('/assets/js/vendor/editors/ckeditor/ckeditor_classic.js')}}"></script>
-	<script src="{{asset('/assets/demo/pages/editor_ckeditor_classic.js')}}"></script>
-    <link href="{{asset('/assets/fonts/inter/inter.css')}}" rel="stylesheet" type="text/css">
-
+    <script src="{{ asset('/assets/js/vendor/forms/selects/select2.min.js') }}"></script>
+    <script src="../../../../../assets/js/vendor/editors/ckeditor/ckeditor_classic.js"></script>
+	<script src="../../../../../assets/demo/pages/editor_ckeditor_classic.js"></script>
+    <link href="../../../../../assets/fonts/inter/inter.css" rel="stylesheet" type="text/css">
 @endpush
 
 @section('breadscrumb', Breadcrumbs::render('pengguna'))
@@ -22,7 +21,7 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <h5 class="mb-0">Komponen Penilaian {!!$title!!}</h5>
+            <h5 class="mb-0">Poin Penilaian {{$title}}</h5>
             <div class="ms-auto d-flex">
                 <label class="form-check form-switch form-check-reverse">
                     <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#tambah_komponen_penilaian"><i class="ph-plus-circle"></i>&nbsp; TAMBAH KOMPONEN PENILAIAN</a>
@@ -55,43 +54,43 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Komponen Penilaian</th>
+                        <th>Poin Penilaian</th>
                         <th>Bobot</th>
                         <th>Status</th>
                         <th class="text-center">Actions</th>
                     </tr>
                     <tr>
                         <th></th>
-                        <th>Komponen Penilaian</th>
+                        <th>Poin Penilaian</th>
                         <th>Bobot</th>
                         <th>Status</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($komponen_penilaian as $kp)
+                    @foreach ($role_komponen as $rk)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{!! $kp->nama_komponen !!}</td>
-                            <td class="text-center">{{ $kp->bobot }} %</td>
+                            <td>{!! $rk->nama!!}</td>
+                            <td class="text-center">{{ $rk->bobot }} %</td>
                             <td class="text-center">
-                            @if ($kp->is_verified)
+                                @if ($rk->is_verified)
                                     <span class="badge p-2 bg-success rounded-pill bg-opacity-10 text-success">sudah diverifikasi</span>
-                             @else
+                                @else
                                     <span class="badge p-2 bg-danger rounded-pill bg-opacity-10 text-danger">belum diverifikasi</span>
-                             @endif
+                                @endif
                             </td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
                                     <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
-                                        data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $kp->id }}">
+                                        data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $rk->id }}">
                                         <i class="ph-pen"></i>
                                     </a>
                                     <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus"
-                                        data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kp->id }}">
+                                        data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $rk->id }}">
                                         <i class="ph-trash"></i>
                                     </a>
-                                    <a href="{{route('komponen_penilaian.index', ['kr' => $krs->id, 'poinPenilaian' => $poin_penilaian->id])}}" class="text-body" data-bs-popup="tooltip" title="Komponen penilaian">
+                                    <a href="/krs/{{$krs->id}}/role_group/role/{{$role->id}}/komponen" class="text-body" data-bs-popup="tooltip" title="Komponen penilaian">
                                         <i  class="ph-notebook"></i>
                                     </a>
                                 </div>
@@ -99,7 +98,7 @@
                         </tr>
 
                         <!-- Delete Modal -->
-                        <div id="modal_hapus{{ $kp->id }}" class="modal fade" tabindex="-1">
+                        <div id="modal_hapus{{ $rk->id }}" class="modal fade" tabindex="-1">
                             <div class="modal-dialog modal-xs">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -113,7 +112,7 @@
 
                                     <div class="modal-footer justify-content-between">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                        <form action="{{route('komponen_penilaian.delete', ['kr' => $krs->id, 'poinPenilaian' => $poin_penilaian->id, 'komponenPenilaian' => $kp->id])}}" method="post">
+                                        <form action="{{route('role_kelompok_penilaian.delete', ['kr' => $krs->id, 'role' => $role->id ,'rolePenilaian' => $rk->id])}}" method="post">
                                             @csrf
                                             <button type="submit" class="btn btn-primary">Ya</button>
                                         </form>
@@ -125,30 +124,32 @@
 
                         <!-- Sticky footer -->  
                           <!-- Large panel -->
-                            <div id="form-edit{{$kp->id}}" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
+                            <div id="form-edit{{$rk->id}}" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
                                 <div class="offcanvas-header">
-                                    <h5 class="offcanvas-title fw-semibold">Edit Komponen Penilaian</h5>
+                                    <h5 class="offcanvas-title fw-semibold">Edit Poin Penilaian</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
                                 </div>
 
                                 <div class="offcanvas-body p-2">
-                                    <form action="{{route('komponen_penilaian.edit', ['kr' => $krs->id, 'poinPenilaian' => $poin_penilaian->id, 'komponenPenilaian' => $kp->id])}}" method="post">
-                                        {{-- /krs/{{$krs->id}}/poin_penilaian/{{$kp->id}}/edit --}}
+                                    <form action="{{route('role_kelompok_penilaian.update', ['kr' => $krs->id, 'role' => $role->id ,'rolePenilaian' => $rk->id])}}" method="post">
+                                        {{-- /krs/{{$krs->id}}/role_group/role/{{$role->id}}/komponen//{{$rk->id}}/edit --}}
                                         @csrf
                                         <div class="modal-body">
                                             <div class="mb-3">
                                                 <div class="mt-2">
-                                                    <label class="form-label">Komponen Penilaian</label>
-                                                    <textarea class="form-control" id="ckeditor_classic_edit{!!$kp->id!!}" name="nama_komponen" placeholder="Masukkan poin penilaian anda disini..." required>{{old('nama_komponen',$kp->nama_komponen)}}</textarea>
-                                                    @error('nama_komponen')
+                                                    <label class="form-label">Poin Penilaian</label>
+                                                    <textarea id="ckeditor_classic_edit{{$rk->id}}" class="form-control" value="{{old('nama',$rk->nama)}}" name="nama" placeholder="Masukkan poin penilaian anda disini..." required>
+                                                        {!!$rk->nama!!}
+                                                    </textarea>
+                                                    @error('nama')
                                                         <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
                                                         </div>
                                                     @enderror
                                                 </div>
                                                 <div class="mt-2">
-                                                    <label class="form-label">Komponen Penilaian</label>
+                                                    <label class="form-label">Poin Penilaian</label>
                                                     <div class="form-control-feedback form-control-feedback-end mb-3">
-                                                        <input type="number" class="form-control" value="{{old('bobot',$kp->bobot)}}" name="bobot" placeholder="Masukkan bobot penilaian anda disini..." step="0.01" min="0" max="100">
+                                                        <input type="number" class="form-control" value="{{old('bobot',$rk->bobot)}}" name="bobot" placeholder="Masukkan bobot penilaian anda disini..." step="0.01" min="0" max="100">
                                                         <div class="form-control-feedback-icon">
                                                             <i class="ph-percent ph-sm"></i>
                                                         </div>
@@ -168,9 +169,9 @@
                             </div>
                         <!-- /large panel -->
                         <!-- /sticky footer -->
-
                         <script>
-                            CKEDITOR.replace('ckeditor_classic_edit{{$kp->id}}', {
+                            // Initialize first editor instance with custom configuration options
+                            CKEDITOR.replace('ckeditor_classic_edit{{$rk->id}}', {
                                 toolbar: 'Basic'
                             });
                         </script>
@@ -179,12 +180,12 @@
                 </tbody>
             </table>
             <br>
-            @if ($komponen_penilaian->where('is_verified',false)->count())
+            @if ($role_komponen->where('is_verified',false)->count())
                 <div style="position:relative">
                     <div class="d-flex p-1">
-                        <form action="{{route('komponen_penilaian.verifikasi', ['kr' => $krs->id, 'poinPenilaian' => $poin_penilaian->id])}}" class="ms-auto" method="post">
+                        <form action="/krs/{{$krs->id}}/role_group/role/{{$role->id}}/komponen/verifikasi" class="ms-auto" method="post">
                             @csrf
-                            <button class=" btn btn-sm btn-success" type="submit"><i class="ph-upload"></i>&nbsp;<i class="fw-semibold"> VERIFIKASI SELURUH POIN PENILAIAN</i> &nbsp;<span class="bg-danger px-1 fw-semibold">{{$komponen_penilaian->where('is_verified',false)->count()}}</span></butt>
+                            <button class=" btn btn-sm btn-success" type="submit"><i class="ph-upload"></i>&nbsp;<i class="fw-semibold"> VERIFIKASI SELURUH POIN PENILAIAN</i> &nbsp;<span class="bg-danger px-1 fw-semibold">{{$role_komponen->where('is_verified',false)->count()}}</span></butt>
                         </form>
                     </div>
                 </div>
@@ -198,27 +199,27 @@
     <!-- Large panel -->
 	<div id="tambah_komponen_penilaian" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
 		<div class="offcanvas-header">
-			<h5 class="offcanvas-title fw-semibold">Tambah Komponen Penilaian</h5>
+			<h5 class="offcanvas-title fw-semibold">Tambah Poin Penilaian</h5>
 			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
 		</div>
 
 		<div class="offcanvas-body p-2">
-            <form action="{{route('komponen_penilaian.store', ['kr' => $krs->id, 'poinPenilaian' => $poin_penilaian->id])}}" method="post">
+            <form action="/krs/{{$krs->id}}/role_group/role/{{$role->id}}/komponen/store" method="post">
                 @csrf
+                {{-- <input type="hidden" name="role_group_id" value="{{$role->id}}"> --}}
                 <div class="modal-body">
                     <div class="mb-3">
                         <div class="mt-2">
-                            <label class="form-label">Komponen Penilaian</label>
-                            <textarea class="form-control" id="ckeditor_classic_empty" name="nama_komponen" placeholder="Masukkan poin penilaian anda disini..."></textarea>
-                            @error('nama_komponen')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
-                                </div>
+                            <label class="form-label">Nama Penilaian</label>
+                            <textarea id="ckeditor_classic_empty" class="form-control" name="nama" value="{{old('nama')}}" placeholder="Masukkan poin penilaian anda disini..."></textarea>
+                            @error('nama')
+                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mt-2">
                             <label class="form-label">Bobot</label>
                             <div class="form-control-feedback form-control-feedback-end mb-3">
-                                <input type="number" class="form-control" name="bobot" placeholder="Masukkan bobot penilaian anda disini..." step="0.01" min="0" max="100">
+                                <input type="number" class="form-control" value="{{old('bobot')}}" name="bobot" placeholder="Masukkan bobot penilaian anda disini..." step="0.01" min="0" max="100">
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-percent ph-sm"></i>
                                 </div>
@@ -267,7 +268,7 @@
        </div>
     </div> --}}
 
-    @if($komponen_penilaian->where('is_verified', false)->count() > 0)
+    @if($role_komponen->where('is_verified', false)->count() > 0)
      <!-- Top panel -->
 	<div id="panel_top" class="offcanvas offcanvas-top show" tabindex="-1">
 		<div class="offcanvas-body">
@@ -280,9 +281,9 @@
                     <br><i>Note : Pastikan jumlah seluruh bobot tepat 100%</i>
                 </span>
 				<div class="ms-lg-auto mt-3 mt-lg-auto mb-lg-auto flex-nowrap">
-                    <form action="{{route('komponen_penilaian.verifikasi', ['kr' => $krs->id, 'poinPenilaian' => $poin_penilaian->id])}}" class="ms-auto" method="post">
+                     <form action="/krs/{{$krs->id}}/role_group/role/{{$role->id}}/komponen/verifikasi" class="ms-auto" method="post">
                             @csrf
-                            <button class=" btn btn-sm btn-success" type="submit"><i class="ph-upload"></i>&nbsp;<i class="fw-semibold"> VERIFIKASI </i> &nbsp;<span class="bg-danger px-1 fw-semibold">{{$komponen_penilaian->where('is_verified',false)->count()}}</span></button>
+                            <button class=" btn btn-sm btn-success" type="submit"><i class="ph-upload"></i>&nbsp;<i class="fw-semibold"> VERIFIKASI </i> &nbsp;<span class="bg-danger px-1 fw-semibold">{{$role_komponen->where('is_verified',false)->count()}}</span></button>
 					        <button type="button" class="btn btn-link ms-2" data-bs-dismiss="offcanvas">Nanti</button>
                     </form>
 				</div>
