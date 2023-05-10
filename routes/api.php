@@ -37,6 +37,7 @@ Route::group([
     Route::get('/', [RequestController::class, 'index']);
     Route::post('/', [RequestController::class, 'store']);
     Route::get('/{id}', [RequestController::class, 'show']);
+    Route::put('/{id}', [RequestController::class, 'update']);
 });
 
 Route::group([

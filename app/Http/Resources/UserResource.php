@@ -22,6 +22,7 @@ class UserResource extends JsonResource
                 'name' => $this->nama,
                 'email' => $this->email,
                 'role' => $role,
+                'dosen' => new DosenResource($this->dosen),
             ];
         } else if ($role == 'mahasiswa') {
             return [
@@ -29,6 +30,7 @@ class UserResource extends JsonResource
                 'name' => $this->nama,
                 'email' => $this->email,
                 'role' => $role,
+                'mahasiswa' => new MahasiswaResource($this->mahasiswa),
             ];
         }
     }
