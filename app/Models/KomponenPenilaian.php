@@ -20,7 +20,9 @@ class KomponenPenilaian extends Model
         return $this->belongsTo(PoinRegulasi::class, 'poin_regulasi_id','id');
     }
 
-    public function detail_nilai_mahasiswa(){
-        return $this->hasMany(DetailNilaiMahasiswa::class, 'komponen_id','id');
+    public function detail_nilai_mahasiswa($nim, $role, $penilaian){
+        return $this->hasMany(DetailNilaiMahasiswa::class, 'komponen_id','id')
+                    ->join('nilai_mahasiswas', 'detail_nilai_mahasiswas.nilai_id', 'nilai_mahasiswas.id')
+                    ->select('nilai_mahasiswas.*', 'detail_nilai_mahasiswas.*');
     }
 }

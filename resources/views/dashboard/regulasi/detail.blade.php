@@ -140,24 +140,6 @@
                                         <td class="text-center"><small><i class="ph-minus"></i></small></td>
                                     @endif
                                     <td>
-                                        {{-- <form action="">
-                                            @if (!$seminar && !$proposal && !$prasidang && !$sidang)
-                                                <h4 class="text-center">🔒</h4>
-                                            @else
-                                                <form action="">
-                                                    <div>
-                                                        @if ($seminar)
-                                                            <a class="btn btn-sm btn-success">Seminar</a>
-                                                        @endif
-                                                        
-                                                        <a class="btn btn-sm btn-success">Proposal</a>
-                                                        <a class="btn btn-sm btn-success">Prasidang</a>
-                                                        <a class="btn btn-sm btn-success">Sidangr</a>
-
-                                                    </div>
-                                                </form>
-                                            @endif
-                                        </form> --}}
                                     </td>
                                    
                                 </tr>

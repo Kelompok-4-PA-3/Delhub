@@ -14,12 +14,56 @@
     <script src="{{asset('/assets/js/vendor/editors/ckeditor/ckeditor_classic.js')}}"></script>
 	<script src="{{asset('/assets/demo/pages/editor_ckeditor_classic.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/css/jquery-editable.css" rel="stylesheet"/>
+    <script>$.fn.poshytip={defaults:null}</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
 @endpush
 
 
 @section('breadscrumb', Breadcrumbs::render('pengguna'))
 
 @section('content')
+    <style>
+        .editableform{
+            background: white;
+            box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+            padding: 12px;
+            /* border: 1px solid rgb(130, 130, 130); */
+            border-radius: 3px;
+        }
+
+        .editable-buttons button{
+            padding: 5px;
+            padding-left: 12px;
+            padding-right: 12px;
+            border: 0;
+            border-radius: 5px;
+        }
+
+        .editable-submit{
+            background-color: rgb(9, 87, 231);
+            color: white;
+        }
+
+        .editable-cancel{
+            background-color: rgb(230, 48, 20);
+            color: white;
+        }
+
+        .input-mini{
+            border: 0;
+            padding: 3px;
+            max-width: 75px;
+        }
+        .input-mini:focus{
+            outline: none;
+            border: none;
+            max-width: 75px;
+            /* background-color: black; */
+        }
+    </style>
 
     <div class="row">
 
@@ -67,6 +111,42 @@
                                 <th>No</th>
                                 <th>NIM</th>
                                 <th>Nama Mahasiswa</th>
+                                @foreach ($penilaian->komponen_penilaian as $pkp)
+                                    <th>
+                                       <a href="" data-bs-toggle="modal" data-bs-target="#detail_komponen_{{$pkp->id}}">
+                                            N{{$loop->iteration}}
+                                       </a><br>
+                                        <small class="fw-light">{{$pkp->bobot}} %</small>
+                                    </th>
+
+                                    <!-- Modal with h5 -->
+                                    <div id="detail_komponen_{{$pkp->id}}" class="modal fade" tabindex="-1">
+                                        <div class="modal-dialog modal-xs">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Penilaian {{$penilaian->nama_poin}}</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <small class="fw-bold">Komponen penilaian : </small>
+                                                        <p>{!!$pkp->nama_komponen!!}</p>
+                                                        <hr>
+                                                        <small class="fw-bold">Bobot : </small>
+                                                        <p>{!!$pkp->bobot!!} %</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Tutup</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /modal with h5 -->
+
+                                @endforeach
                                 <th>Nilai</th>
                                 <th>Aksi</th>
                             </tr>
@@ -74,7 +154,10 @@
                                 <th></th>
                                 <th>NIM</th>
                                 <th>Nama Mahasiswa</th>
-                                <th>Nilai</th>
+                                @foreach ($penilaian->komponen_penilaian as $item)
+                                    <th>N{{$loop->iteration}}</th>
+                                @endforeach
+                                <th></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -87,6 +170,34 @@
                                 @php
                                     
                                 @endphp
+                                @if ($penilaian->komponen_penilaian->count() > 0)
+                                @foreach ($penilaian->komponen_penilaian as $pkp)
+                                    <td class="add_nilai text-primary" data-name="komponen" data-pkp_id="{{$pkp->id}}" data-mahasiswa={{$kkm->mahasiswa->nim}}  data-type="number" data-max="100" style="cursor:pointer;">
+                                       {{-- {{$pkp->nilai_mahasiswa->where('kelompok_id',$kelompok->id  )}} --}}
+                                       
+                                       @php
+                                           $nilai_komponen_mahasiswa = $pkp->detail_nilai_mahasiswa($kkm->mahasiswa->nim, $role_dosen->id, $penilaian->id)
+                                                ->where('kelompok_id',$kelompok->id)
+                                                ->where('komponen_id', $pkp->id)
+                                                ->where('nim', $kkm->mahasiswa->nim)
+                                                ->first();
+                                       @endphp
+                                        
+                                       @if ( $nilai_komponen_mahasiswa != NULL)
+                                            {{  $nilai_komponen_mahasiswa->nilai / ($pkp->bobot / 100) }}
+                                       @endif
+                                       {{-- {{  $nilai_komponen_mahasiswa->nilai / ($pkp->bobot / 100)}} --}}
+
+                                    </td>
+                                @endforeach
+                                @endif
+                                {{-- <td>
+                                    @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id) != NULL)
+                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id)->nilai}} 
+                                    @else 
+                                        0
+                                    @endif
+                                </td> --}}
                                 <td>
                                     @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id) != NULL)
                                         {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id)->nilai}} 
@@ -135,6 +246,7 @@
                                         toolbar: 'Basic'
                                     });
                                 </script> --}}
+
                          @endforeach
                         </tbody>
                     </table>
@@ -142,4 +254,45 @@
             </div>
         </div>
 
+
+        <script type="text/javascript">
+            $.fn.editable.defaults.mode = 'inline';
+        
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            });
+        
+            $('.add_nilai').editable({
+                url : "/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$penilaian->id}}/komponen/store",
+                type: 'number',
+                pk: function(){
+                    return $(this).data('pkp_id');
+                },
+                mahasiswa:function(){
+                    return $(this).data('mahasiswa');
+                },
+                name: 'komponen',
+                title: 'Enter Field',
+                // url: function(params) {
+                //     // var rkp_id = $(this).data('rkp_id');
+                //     return "/kelompok/{{$kelompok->id}}/penilaian/role_kelompok/{{$role_dosen->id}}/{{$penilaian->id}}/komponen/store";
+                // },
+                params: function(params) {
+                    params.mahasiswa = $(this).editable().data('mahasiswa'); // add the new attribute to the AJAX request
+                    return params;
+                },
+                success: function(response, newValue) {
+                    console.log("Data submitted successfully!");
+                    console.log("Response:", response);
+                    console.log("New value:", response.data);
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error submitting data:", error);
+                    console.log("Status:", status);
+                    console.log("XHR object:", xhr);
+                }
+            });
+        </script>
 @endsection

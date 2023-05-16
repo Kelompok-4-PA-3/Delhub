@@ -56,6 +56,13 @@ class Mahasiswa extends Model
                     ->first();
     }
 
+    public function nilai_mahasiswa_role($role, $kelompok){
+        return $this->hasMany(NilaiMahasiswaRole::class, 'nim', 'nim')
+                    ->where('role_kelompok_id', $role)
+                    ->where('kelompok_id', $kelompok)
+                    ->first();
+    }
+
         
     public function hasil_nilai_mahasiswa($role, $kelompok){    
         // $roleID = RoleKelompok::find($role);

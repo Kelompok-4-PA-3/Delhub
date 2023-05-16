@@ -107,9 +107,12 @@ class RoleKelompokPenilaianController extends Controller
      */
     public function delete(Request $request, Krs $kr, RoleGroupKelompok $role, RoleKelompokPenilaian $rolePenilaian)
     {
-        $komponen_nilai = RoleKelompokPenilaian::wherer('id',$rolePenilaian->id);
+        // return "mantap";
+        $komponen_nilai = RoleKelompokPenilaian::where('id',$rolePenilaian->id);
+        $komponen_nilai_all = RoleKelompokPenilaian::where('role_group_id',$role->id);
+        // return $komponen_nilai->get();
         $komponen_nilai->delete();
-        $komponen_nilai->update([
+        $komponen_nilai_all->update([
             'is_verified' => false
         ]);
         return back()->with('success','Data telah berhasil dihapus');

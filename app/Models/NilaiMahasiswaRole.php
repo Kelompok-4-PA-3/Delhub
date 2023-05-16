@@ -25,4 +25,5 @@ class NilaiMahasiswaRole extends Model
         return $this->belongsTo(Mahasiswa::class, 'nim', 'nim');
     }
 
+
 }

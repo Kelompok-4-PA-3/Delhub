@@ -108,12 +108,13 @@ Route::middleware([
     Route::get('/kelompok/{kelompok}/penilaian/role/{role}', [KelompokController::class, 'penilaian']);
     //Nilai Mahasiswa Role
     Route::get('/kelompok/{kelompok}/penilaian/role_kelompok/{role}/{roleGroup}', [NilaiMahasiswaRoleController::class, 'index'])->name('nilai_mahasiswa_role');
+    Route::post('/kelompok/{kelompok}/penilaian/role_kelompok/{role}/{roleGroup}/komponen/store', [NilaiMahasiswaRoleController::class, 'store'])->name('nilai_mahasiswa_role.store');
+    // Route::post('/addData', [NilaiMahasiswaRoleController::class, 'create'])->name('nilai_mahasiswa_role.create');
     // Nilai Mahasiswa
     Route::get('/kelompok/{kelompok}/penilaian/role/{role}/{penilaian}', [NilaiMahasiswaController::class, 'index'])->name('nilai_mahasiswa');
     Route::post('/kelompok/{kelompok}/penilaian/role/{role}/approved', [NilaiMahasiswaController::class, 'update_status'])->name('nilai_mahasiswa.update_status');
-    // kelompok/2/penilaian/role/11/approved
-    // /kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$pp->id}}
-    Route::post('/kelompok/{kelompok}/penilaian/role/{role}/{penilaian}/mahasiswa/{mahasiswa}', [NilaiMahasiswaController::class, 'store'])->name('nilai_mahasiswa.store');
+    Route::post('/kelompok/{kelompok}/penilaian/role/{role}/{penilaian}/komponen/store', [NilaiMahasiswaController::class, 'store'])->name('nilai_mahasiswa.store');
+    // http://localhost:8000/kelompok/25/penilaian/role/22/11/komponen/store
     // Route::get('/kelompok/{kelompok}/penilaian/{penilaian}/mahasiswa/{mahasiswa}', [NilaiMahasiswaController::class, 'index'])->name('nilai_mahasiswa');
     // Role Kelompoke assign dosen
     Route::post('/kelompok/{kelompok}/verfikasi/role', [RoleKelompokController::class, 'verification'])->name('kelompok_role.verfication');
@@ -150,10 +151,11 @@ Route::middleware([
     Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/komponen/verifikasi', [KomponenPenilaianController::class, 'verifikasi_komponen_penilaian'])->name('komponen_penilaian.verifikasi');
     // Role Group Kelompok
     Route::get('/krs/{kr}/role_group', [RoleGroupKelompokController::class, 'index'])->name('role_group.index');
+    // Route::post('/krs/{kr}/role_group/store/koordinator', [RoleGroupKelompokController::class, 'store_koordinator'])->name('role_group_koordinator.store');
     Route::post('/krs/{kr}/role_group/store', [RoleGroupKelompokController::class, 'store'])->name('role_group.store');
     Route::post('/krs/{kr}/role_group/{roleGroupKelompok}/edit', [RoleGroupKelompokController::class, 'edit'])->name('role_group.edit');
     Route::post('/krs/{kr}/role_group/{roleGroupKelompok}/delete', [RoleGroupKelompokController::class, 'delete'])->name('role_group.delete');
-    Route::post('/krs/{kr}/role_group/verifikasi',[RoleGroupKelompokController::class, 'verifikasi_role_group'])->name('role_group.verification');
+    Route::post('/krs/{kr}/role_group/verifikasi/{role}',[RoleGroupKelompokController::class, 'verifikasi_role_group'])->name('role_group.verification');
     Route::get('/krs/{kr}/role_group/role/{role}/komponen/',[RoleKelompokPenilaianController::class, 'index'])->name('role_kelompok_penilaian.index');
     Route::post('/krs/{kr}/role_group/role/{role}/komponen/store',[RoleKelompokPenilaianController::class, 'store'])->name('role_kelompok_penilaian.store');
     Route::post('/krs/{kr}/role_group/role/{role}/komponen/{rolePenilaian}/edit',[RoleKelompokPenilaianController::class, 'update'])->name('role_kelompok_penilaian.update');
@@ -163,7 +165,8 @@ Route::middleware([
 
     Route::resource('/kategori_proyek', KategoriProyekController::class)->name('kategori_proyek', 'kategori_proyek.index');
     Route::resource('/poin_regulasi', PoinRegulasiController::class)->name('poin_regulasi', 'poin_regulasi.index');
-    Route::get('/koordinator/proyeksaya/{id}', [MyProjectController::class, 'koordintor']);
+    Route::get('/koordinator/proyeksaya/{id}', [MyProjectController::class, 'koordinator']);
+    Route::get('/koordinator/myproject', [MyProjectController::class, 'koordintor_job_list']);
     Route::get('/pembimbing/{nidn}/', [MyProjectController::class, 'pembimbing']);
     Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
     Route::get('/poin_regulasi/{poinRegulasi}/komponen_penilaian',[KomponenPenilaianController::class, 'index']);

@@ -52,51 +52,114 @@ class NilaiMahasiswaController extends Controller
     {
         // return $request;
        $data = [];
-       $komponen = $penilaian->komponen_penilaian;
-       foreach($komponen as $pkp){
-            $data['komponen'.$pkp->id] = 'required';
-       }
 
-       $validasi = $request->validate($data);
+       $komponen_nilai = KomponenPenilaian::where('id',  $request->pk)->first();
        $total = 0;
-       foreach($komponen as $pkp){
-            $total += $validasi['komponen'.$pkp->id] * ($pkp->bobot / 100);
-       }
 
-    //    return $kelompok->role_kelompok->where('nidn',Auth::user()->dosen->nidn);
-    //    ->role_kelompok;
-    // $role = $role->role_group;
-    // return $bobot;
-    // ->role_group->bobot
+    //    $komponen = $penilaian->komponen_penilaian;
+    //    foreach($komponen as $pkp){
+    //         $data['komponen'.$pkp->id] = 'required';
+    //    }
+
+    //    $validasi = $request->validate($data);
+    //    $total = 0;
+    //    foreach($komponen as $pkp){
+    //         $total += $validasi['komponen'.$pkp->id] * ($pkp->bobot / 100);
+    //    }
+
+       $request->value *= ( $komponen_nilai->bobot / 100 );
+
        $nilai = new NilaiMahasiswa;
-    //    return $role->id;
-       $old_nilai = NilaiMahasiswa::where('nim',$mahasiswa->nim)->where('poin_penilaian_id',$penilaian->id)->where('role_dosen_kelompok_id',$role->id)->where('kelompok_id',$kelompok->id)->first();
+
+       $old_nilai = NilaiMahasiswa::where('nim',$request->mahasiswa)
+                                       ->where('role_dosen_kelompok_id',$role->id)
+                                       ->where('poin_penilaian_id',$penilaian->id)
+                                       ->where('kelompok_id',$kelompok->id)
+                                       ->first();   
+                                       
        if ($old_nilai != NULL){
-         $nilai = NilaiMahasiswa::find($old_nilai->id);
-       }
+            $nilai = NilaiMahasiswa::find($old_nilai->id);
+       }        
+
        $nilai->kelompok_id = $kelompok->id;
-       $nilai->poin_penilaian_id = $penilaian->id;
        $nilai->role_dosen_kelompok_id = $role->id;
-    //    Auth;
-       $nilai->nim = $mahasiswa->nim;
-       $nilai->nilai = $total;
-    //    * ($role->role_group->bobot / 100);
-        // * ($role->role_group->bobot / 100);
+       $nilai->poin_penilaian_id = $penilaian->id;
+       $nilai->nim = $request->mahasiswa;
+       $nilai->nilai = 0;
        $nilai->save();
 
-       foreach($komponen as $pkp){
-           $old_komponen = DetailNilaiMahasiswa::where('nilai_id',$nilai->id)->where('komponen_id',$pkp->id)->first();
-           $detail_nilai = new DetailNilaiMahasiswa;
-           if ($old_komponen != NULL) {
-                $detail_nilai = DetailNilaiMahasiswa::find($old_komponen->id);
-           }
-           $detail_nilai->nilai_id = $nilai->id;
-           $detail_nilai->komponen_id = $pkp->id;
-           $detail_nilai->nilai = $validasi['komponen'.$pkp->id];
-           $detail_nilai->save();
+       $old_komponen = DetailNilaiMahasiswa::where('nilai_id',$nilai->id)
+                                            ->where('komponen_id',$request->pk)
+                                            ->first();
+
+       $detail_nilai = new DetailNilaiMahasiswa;
+
+       if ($old_komponen != NULL) {    
+            $detail_nilai = DetailNilaiMahasiswa::find($old_komponen->id);
        }
 
-       return back()->with('success','Nilai mahasiswa berhasil ditambahkan');
+       try {
+            $detail_nilai->nilai_id = $nilai->id;
+            $detail_nilai->komponen_id = $request->pk;
+            $detail_nilai->nilai =  $request->value;
+            $detail_nilai->save();
+
+            $total_nilai = 0;
+            $komponen_nilai = DetailNilaiMahasiswa::where('nilai_id',$nilai->id)->get();
+            // return $komponen_nilai;
+            foreach ($komponen_nilai as $kn) {
+                // return $kn->komponen_role_penilaian->bobot;
+                $total_nilai +=  $kn->nilai;
+                // * ($kn->komponen_role_penilaian->bobot / 100);
+            }
+
+        // return $total_nilai;
+        } catch (\Throwable $th) {
+            return $th;
+        }
+
+        $nilai->nilai = $total_nilai;
+        $nilai->save();
+
+        return $nilai;
+
+
+
+
+
+
+
+
+
+
+       // lama
+
+    //    $nilai = new NilaiMahasiswa;
+    //    $old_nilai = NilaiMahasiswa::where('nim',$mahasiswa->nim)->where('poin_penilaian_id',$penilaian->id)->where('role_dosen_kelompok_id',$role->id)->where('kelompok_id',$kelompok->id)->first();
+    //    if ($old_nilai != NULL){
+    //      $nilai = NilaiMahasiswa::find($old_nilai->id);
+    //    }
+    //    $nilai->kelompok_id = $kelompok->id;
+    //    $nilai->poin_penilaian_id = $penilaian->id;
+    //    $nilai->role_dosen_kelompok_id = $role->id;
+    // //    Auth;
+    //    $nilai->nim = $mahasiswa->nim;
+    //    $nilai->nilai = $total;
+    //    $nilai->save();
+
+    //    foreach($komponen as $pkp){
+    //        $old_komponen = DetailNilaiMahasiswa::where('nilai_id',$nilai->id)->where('komponen_id',$pkp->id)->first();
+    //        $detail_nilai = new DetailNilaiMahasiswa;
+    //        if ($old_komponen != NULL) {
+    //             $detail_nilai = DetailNilaiMahasiswa::find($old_komponen->id);
+    //        }
+    //        $detail_nilai->nilai_id = $nilai->id;
+    //        $detail_nilai->komponen_id = $pkp->id;
+    //        $detail_nilai->nilai = $validasi['komponen'.$pkp->id];
+    //        $detail_nilai->save();
+    //    }
+
+    //    return back()->with('success','Nilai mahasiswa berhasil ditambahkan');
 
     }
 

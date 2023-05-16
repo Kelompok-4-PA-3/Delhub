@@ -17,6 +17,10 @@ use HasFactory;
         return $this->hasMany(KomponenPenilaian::class, 'poin_penilaian_id', 'id');
     }
 
+    public function role_group_penilaian(){
+        return $this->hasMany(RoleGroupPenilaian::class, 'poin_penilaian_id', 'id');
+    }
+
     public function nilai_mahasiswa_all(){
         return $this->hasMany(NilaiMahasiswa::class, 'poin_penilaian_id', 'id');
     }

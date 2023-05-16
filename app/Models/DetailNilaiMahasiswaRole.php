@@ -22,7 +22,7 @@ class DetailNilaiMahasiswaRole extends Model
     }
 
     public function komponen_role_penilaian(){
-        return $this->belongsTo(RoleKelompokPenilaians::class, 'komponen_role_penilaian_id', 'id');
+        return $this->belongsTo(RoleKelompokPenilaian::class, 'komponen_role_penilaian_id', 'id');
     }
 
 }

@@ -40,10 +40,7 @@
                             <td rowspan="{{$kk->kelompok_mahasiswa->count() + 1}}">{{$kk->nama_kelompok}}</td>
                             @foreach ($kk->kelompok_mahasiswa as $kkm)
                             <tr>
-                                <td>{{$kkm->mahasiswa->user->nama}}</td>
-                                {{-- @php
-                                    $nilai_mahasiswa = 
-                                @endphp --}}
+                                <td>{{$kkm->mahasiswa->user->nama}}</td>    
                                 @foreach ($krs->krs_role as $krl)
                                     <td>
                                         @if ($kkm->mahasiswa->hasil_nilai_mahasiswa($krl->id, $kk->id)->sum('nilai'))
@@ -55,41 +52,16 @@
                                                     $nilai = 0;
                                                 }
                                             @endphp
-                                            {{-- {{number_format($total / $kkm->mahasiswa->hasil_nilai_mahasiswa($krl->id, $kk->id)-count(), 2, '.', '')}} --}}
                                             {{$total}}
                                         @else 
                                             0
                                         @endif
                                     </td>
                                 @endforeach
-                                {{-- <td>{{$kkm->mahasiswa->nilai_mahasiswa($ro)}}</td> --}}
                             </tr>
                             @endforeach
-                            {{-- @foreach ($kk->role_kelompok as $kkr)
-                                <td rowspan="{{$kk->kelompok_mahasiswa->count() + 1}}">{{$kkr->dosen->nama_singkat}}</td>
-                            @endforeach --}}
                         </tr>
                     @endforeach
-                    {{-- @foreach ($krs->krs_role as $krl)
-                        <td>{{$krl->}}</td>
-                    @endforeach --}}
-                    {{-- <tr>    
-                        <td rowspan="3">kelompok1</td>
-                        <td>
-                            <tr>
-                                <td>dasdas</td>
-                            </tr>
-                            <tr>
-                                <td>dasdas</td>
-                            </tr>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>kelompok1</td>
-                    </tr>
-                    <tr>
-                        <td>kelompok1</td>
-                    </tr> --}}
                </table>
             </div>
         </div>

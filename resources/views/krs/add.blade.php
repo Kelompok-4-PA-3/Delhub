@@ -41,7 +41,7 @@
                                     <option></option>
                                     <optgroup label="Daftar Konfigurasi">
                                         @foreach($config as $c)
-                                            <option @if(old('config_id') == $c->id) selected @endif value="{{$c->id}}">{{$c->tahun_aktif}}</option>
+                                            <option @if(old('config_id') == $c->id) selected @endif value="{{$c->id}}">{{$c->tahun_aktif}} - {{$c->semester}}</option>
                                         @endforeach
                                     </optgroup>
                                 </select>

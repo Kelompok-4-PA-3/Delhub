@@ -74,14 +74,32 @@
                 @role('dosen')
                 @if (Auth::user()->dosen->krs->count() > 0 || Auth::user()->dosen->krs2->count() > 0)
                     @php
-                    if (Auth::user()->dosen->krs->count() > 0) {
-                        $mykrs = Auth::user()->dosen->krs->first()->id;
-                    }else{
-                        $mykrs = Auth::user()->dosen->krs2->first()->id;
-                    }
+                        if (Auth::user()->dosen->krs->count() > 0) {
+                            $mykrs = Auth::user()->dosen->krs->first()->id;
+                        }else{
+                            $mykrs = Auth::user()->dosen->krs2->first()->id;
+                        }
+                        // if (Auth::user()->dosen->krs->count() > 0) {
+                        //     $mykrsa = Auth::user()->dosen->krs->config->where('active', 'true');
+                        // }else{
+                        //     $mykrsa = Auth::user()->dosen->krs2->config->where('active', 'true');
+                        // }
                     @endphp
+
+                    {{-- @foreach ($mykrsa as $m)
+                        
+                    @endforeach --}}
                     <li class="nav-item">
                         <a href="/koordinator/proyeksaya/{{$mykrs}}" class="nav-link">
+                            <i class="ph-list-dashes"></i>
+                            <span>
+                               Koordinator
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/koordinator/myproject" class="nav-link">
                             <i class="ph-list-dashes"></i>
                             <span>
                                Koordinator

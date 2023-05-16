@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\RoleGroupKelompok;
-use App\Models\Krs;
+use App\Models\RoleKelompok;
+use App\Models\Krs; 
 use Illuminate\Http\Request;
 
 class RoleGroupKelompokController extends Controller
@@ -15,22 +16,31 @@ class RoleGroupKelompokController extends Controller
     {
         // return $kr;
         $role_group = RoleGroupKelompok::where('krs_id',$kr->id)->get();
-        // return $kr;
-        // return $role_group;
+        // $role_kelompok = RoleKelompok::latest()();
+        // return $role_kelompok;
         return view('dashboard.rolegroup.index',[
             'role_group' => $role_group,
-            'krs' => $kr
+            'krs' => $kr,
         ]);
     }
 
-    public function verifikasi_role_group(Krs $kr)
+    public function verifikasi_role_group(Request $request, Krs $kr, RoleGroupKelompok $role)
     {
-        $role_group_all =RoleGroupKelompok::where('krs_id', $kr->id);
-        if($role_group_all->sum('bobot') != 100){
+        $role_group =RoleGroupKelompok::find($role->id);
+
+        if($request->cancel){
+            $role_group->update([
+                'is_verified' => false,
+            ]);
+
+            return back()->with('success','Verifikasi bobot role telah berhasil dibatalkan');
+        }
+
+        if($role_group->komponen_penilaian->sum('bobot') != 100){
             return  back()->with('failed','Sepertinya jumlah bobot tidak mencapai 100% atau melebihinya, pastikan jumlah keseluruhan bobot mencapai tepat 100%');
         }
 
-        $role_group_all->where('is_verified',false)->update([
+        $role_group->update([
             'is_verified' => true,
         ]);
 
@@ -44,11 +54,38 @@ class RoleGroupKelompokController extends Controller
     {
        $data = [
             'nama' => 'required',
-            'bobot' => 'required',
+            'bobot' => 'required|numeric|max:100|min:0',
        ];
-       $validasi = $request->validate($data);
-       $validasi['krs_id'] = $kr->id;
-       RoleGroupKelompok::create($validasi);
+   
+
+       if ($request->koordinator) {
+            $validasi = $request->validate($data);
+            // $validasi['krs_id'] = $kr->id;
+            // $validasi['nama'] = 'Koordinator';
+            // RoleGroupKelompok::create($validasi);
+            $koordinator = new RoleGroupKelompok;
+            $koordinator->nama = $validasi['nama'];
+            $koordinator->bobot = $validasi['bobot'];
+            $koordinator->krs_id = $kr->id;
+            $koordinator->save();
+
+            foreach ($kr->kelompok as $krk) {
+                RoleKelompok::create([
+                    'role_group_id' => $koordinator->id,
+                    'kelompok_id' => $krk->id,
+                    'nidn' => $kr->dosen_mk,
+                ]);
+            }
+
+       }else{
+            if (strtolower($request->nama) == 'koordinator') {
+                return back()->with('failed', 'Role koordinator telah terdaftar pada KRS ini');
+            }
+            
+            $validasi = $request->validate($data);
+            $validasi['krs_id'] = $kr->id;
+            RoleGroupKelompok::create($validasi);
+       }
 
        return back()->with('success', 'Data role group berhasil ditambahkan');
 
@@ -63,6 +100,11 @@ class RoleGroupKelompokController extends Controller
             'nama' => 'required',
             'bobot' => 'required',
        ];
+
+       if (strtolower($request->nama) == 'koordinator') {
+            return back()->with('failed', 'Role koordinator telah terdaftar pada KRS ini');
+       }
+
        $validasi = $request->validate($data);
        $validasi['krs_id'] = $kr->id;
        $role_group = RoleGroupKelompok::find($roleGroupKelompok->id);

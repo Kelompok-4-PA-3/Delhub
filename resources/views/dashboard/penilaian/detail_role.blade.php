@@ -1,7 +1,7 @@
 @extends('main')
    
 @section('title')
-    <title>Manajemen Mahasiswa</title>
+    <title>Manajemen Mahasiswa as</title>
 @endsection
 
 @push('datatable_js')
@@ -14,13 +14,57 @@
     <script src="{{asset('/assets/js/vendor/editors/ckeditor/ckeditor_classic.js')}}"></script>
 	<script src="{{asset('/assets/demo/pages/editor_ckeditor_classic.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+ 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/css/jquery-editable.css" rel="stylesheet"/>
+    <script>$.fn.poshytip={defaults:null}</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
 @endpush
 
 
 @section('breadscrumb', Breadcrumbs::render('pengguna'))
 
 @section('content')
+    <style>
+        .editableform{
+            background: white;
+            box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+            padding: 12px;
+            /* border: 1px solid rgb(130, 130, 130); */
+            border-radius: 3px;
+        }
 
+        .editable-buttons button{
+            padding: 5px;
+            padding-left: 12px;
+            padding-right: 12px;
+            border: 0;
+            border-radius: 5px;
+        }
+
+        .editable-submit{
+            background-color: rgb(9, 87, 231);
+            color: white;
+        }
+
+        .editable-cancel{
+            background-color: rgb(230, 48, 20);
+            color: white;
+        }
+
+        .input-mini{
+            border: 0;
+            padding: 3px;
+            max-width: 75px;
+        }
+        .input-mini:focus{
+             outline: none;
+             border: none;
+             max-width: 75px;
+             /* background-color: black; */
+        }
+    </style>
     <div class="row">
 
         <div class="mb-2">
@@ -61,20 +105,70 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table datatable-users">
+                    <table class="table datatable-penilaian">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>NIM</th>
                                 <th>Nama Mahasiswa</th>
-                                <th>Nilai</th>
+                                @if ($roleGroup->komponen_penilaian->count() > 0)
+                                    @foreach ($roleGroup->komponen_penilaian as $rkp)
+                                    <th>
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#detail_komponen_{{$rkp->id}}">
+                                             N{{$loop->iteration}}
+                                        </a><br>
+                                         <small class="fw-light">{{$rkp->bobot}} %</small>
+                                     </th>
+                                        {{-- <th>
+                                            <div>
+                                            <small class="fw-light">{!!$rkp->nama!!}</small>
+                                            </div>
+                                            <small class="">{{$rkp->bobot}} %</small>
+                                        </th> --}}
+
+                                         <!-- Modal with h5 -->
+                                        <div id="detail_komponen_{{$rkp->id}}" class="modal fade" tabindex="-1">
+                                            <div class="modal-dialog modal-xs">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Penilaian {{$roleGroup->nama}}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <small class="fw-bold">Komponen penilaian : </small>
+                                                            <p>{!!$rkp->nama!!}</p>
+                                                            <hr>
+                                                            <small class="fw-bold">Bobot : </small>
+                                                            <p>{!!$rkp->bobot!!} %</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-link" data-bs-dismiss="modal">Tutup</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /modal with h5 -->
+                                    @endforeach
+                                @endif
+                                <th>Total</th>
                                 <th>Aksi</th>
                             </tr>
                             <tr>
                                 <th></th>
                                 <th>NIM</th>
                                 <th>Nama Mahasiswa</th>
-                                <th>Nilai</th>
+                                @if ($roleGroup->komponen_penilaian->count() > 0)
+                                @foreach ($roleGroup->komponen_penilaian as $rkp)
+                                    <th>
+                                        {!!$rkp->nama!!}
+                                    </th>
+                                @endforeach
+                                @endif
+                                <th>Total</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -84,12 +178,28 @@
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{$kkm->mahasiswa->nim}}</td>
                                 <td>{{$kkm->mahasiswa->user->nama}}</td>
-                                @php
-                                    
-                                @endphp
+                                @if ($roleGroup->komponen_penilaian->count() > 0)
+                                @foreach ($roleGroup->komponen_penilaian as $rkp)
+                                    <td class="add_nilai text-primary" data-name="komponen" data-rkp_id="{{$rkp->id}}" data-mahasiswa={{$kkm->mahasiswa->nim}}  data-type="number" data-max="100" style="cursor:pointer;">
+                                       {{-- {{$rkp->nilai_mahasiswa->where('kelompok_id',$kelompok->id  )}} --}}
+                                       
+                                       @php
+                                           $nilai_komponen_mahasiswa = $rkp->nilai_mahasiswa_role($kkm->mahasiswa->nim, $role_dosen->id)
+                                                ->where('kelompok_id',$kelompok->id)
+                                                ->where('komponen_role_penilaian_id', $rkp->id)
+                                                // ->where('nim', $kkm->mahasiswa->nim)
+                                                ->first();
+                                       @endphp
+                                       @if ( $nilai_komponen_mahasiswa != NULL)
+                                            {{  $nilai_komponen_mahasiswa->nilai / ($rkp->bobot / 100) }}
+                                       @endif
+                                       {{-- {{  $nilai_komponen_mahasiswa->nilai / ($rkp->bobot / 100)}} --}}
+                                    </td>
+                                @endforeach
+                                @endif
                                 <td>
-                                    @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $roleGroup->id) != NULL)
-                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $roleGroup->id)->nilai}} 
+                                    @if ($kkm->mahasiswa->nilai_mahasiswa_role($role_dosen->id, $kelompok->id) != NULL)
+                                        {{$kkm->mahasiswa->nilai_mahasiswa_role($role_dosen->id, $kelompok->id)->nilai}} 
                                     @else 
                                         0
                                     @endif
@@ -109,10 +219,11 @@
                                         {{-- {{$role_dosen->id}} --}}
                                         <form class="container" action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$roleGroup->id}}/mahasiswa/{{$kkm->mahasiswa->nim}}" method="post">
                                            @csrf
+                                           @if ($roleGroup->komponen_penilaian->count() > 0)
                                            @foreach ($roleGroup->komponen_penilaian as $rkp)
                                                 <div class="row">
                                                     <div class="col-7">
-                                                        {!!$rkp->nama_komponen!!}
+                                                        {!!$rkp->nama!!}
                                                     </div>
                                                     <div class="col-2">
                                                         {{$rkp->bobot.'%'}}
@@ -120,8 +231,13 @@
                                                     <div class="col-3">
                                                         <input type="number" class="form-control" name="komponen{{$rkp->id}}" max="100" min="0" required>
                                                     </div>
-                                                </div>
+                                                </div><hr>
                                             @endforeach
+                                            @else
+                                                <div class="text-center">
+                                                    <small class="text-warning">{{$roleGroup->nama}} belum memiliki komponen penilaian</small>
+                                                </div>
+                                            @endif
                                             <div class="border-top p-3">
                                                 <button type="submit" class="btn btn-primary w-100">Submit</button>
                                             </div>
@@ -141,5 +257,49 @@
                 </div>
             </div>
         </div>
+        {{-- @if ($roleGroup->komponen_penilaian->count() > 0)
+        @foreach ($roleGroup->komponen_penilaian as $rkp) --}}
+        <script type="text/javascript">
+            $.fn.editable.defaults.mode = 'inline';
+        
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            });
+        
+            $('.add_nilai').editable({
+                url : "/kelompok/{{$kelompok->id}}/penilaian/role_kelompok/{{$role_dosen->id}}/{{$roleGroup->id}}/komponen/store",
+                type: 'number',
+                pk: function(){
+                    return $(this).data('rkp_id');
+                },
+                mahasiswa:function(){
+                    return $(this).data('mahasiswa');
+                },
+                name: 'komponen',
+                title: 'Enter Field',
+                // url: function(params) {
+                //     // var rkp_id = $(this).data('rkp_id');
+                //     return "/kelompok/{{$kelompok->id}}/penilaian/role_kelompok/{{$role_dosen->id}}/{{$roleGroup->id}}/komponen/store";
+                // },
+                params: function(params) {
+                    params.mahasiswa = $(this).editable().data('mahasiswa'); // add the new attribute to the AJAX request
+                    return params;
+                },
+                success: function(response, newValue) {
+                    console.log("Data submitted successfully!");
+                    console.log("Response:", response);
+                    console.log("New value:", response.data);
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error submitting data:", error);
+                    console.log("Status:", status);
+                    console.log("XHR object:", xhr);
+                }
+            });
+        </script>
+          {{-- @endforeach
+          @endif --}}
 
 @endsection

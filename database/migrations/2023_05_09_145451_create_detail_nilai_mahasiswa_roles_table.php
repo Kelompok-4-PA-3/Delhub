@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('nilai_role_id')->references('id')->on('nilai_mahasiswa_roles')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('komponen_role_penilaian_id');
             $table->foreign('komponen_role_penilaian_id')->references('id')->on('role_kelompok_penilaians')->onUpdate('cascade')->onDelete('cascade');
+            $table->double('nilai');
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

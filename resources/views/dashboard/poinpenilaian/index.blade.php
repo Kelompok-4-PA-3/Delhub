@@ -80,16 +80,17 @@
                             </td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
-                                    <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
-                                        data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $pp->id }}">
+                                    <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah" data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $pp->id }}">
                                         <i class="ph-pen"></i>
                                     </a>
-                                    <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus"
-                                        data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pp->id }}">
+                                    <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pp->id }}">
                                         <i class="ph-trash"></i>
                                     </a>
-                                    <a href="{{route('komponen_penilaian.index', ['kr' => $krs->id, 'poinPenilaian' => $pp->id])}}" class="text-body" data-bs-popup="tooltip" title="Komponen penilaian">
-                                        <i  class="ph-notebook"></i>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal_edit{{ $pp->id }}" class="text-body" data-bs-popup="tooltip" title="detail">
+                                        <i class="ph-eye"></i>
+                                    </a>
+                                    <a href="{{route('komponen_penilaian.index', ['kr' => $krs->id, 'poinPenilaian' => $pp->id])}}" class="text-body mx-2" data-bs-popup="tooltip" title="Komponen penilaian">
+                                        <i class="ph-notebook"></i>
                                     </a>
                                 </div>
                             </td>
@@ -114,6 +115,67 @@
                                             @csrf
                                             <button type="submit" class="btn btn-primary">Ya</button>
                                         </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Delete Modal -->
+
+                        <!-- Delete Modal -->
+                        <div id="modal_edit{{ $pp->id }}" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"><i class="ph-warning text-warning"></i> {{$pp->nama_poin}}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Poin penilaian 
+                                            </div>
+                                            <div class="col-1">
+                                                 :
+                                            </div>
+                                            <div class="col-6">
+                                                {{$pp->nama_poin}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Bobot 
+                                            </div>
+                                            <div class="col-1">
+                                                :
+                                           </div>
+                                           <div class="col-6">
+                                               {{$pp->bobot}}
+                                           </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                Role Penilai 
+                                            </div>
+                                            <div class="col-1">
+                                                :
+                                            </div>
+                                            <div class="col-6">
+                                                @if ($pp->role_group_penilaian->count() > 0)
+                                                    @foreach ($pp->role_group_penilaian as $prl)
+                                                    @if ($prl->role_group != NULL)
+                                                        <small>{{$prl->role_group->nama}}</small><br>
+                                                    @endif
+                                                    @endforeach
+                                                @else 
+                                                    <small>Belum diassign ke role manapun</small>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
                                     </div>
                                 </div>
                             </div>
@@ -155,6 +217,23 @@
                                                         </div>
                                                     @enderror
                                                 </div>
+                                                <div class="mt-2">
+                                                    <label class="form-label">Pilih role</label>
+                                                    <select data-placeholder="Pilih dosen" multiple="multiple" name="role_group_id[]" class="form-control select" required>
+                                                        <option></option>
+                                                        <optgroup label="Daftar Dosen">
+                                                            @foreach($role_krs as $rl)
+                                                                <option value="{{$rl->id}}"
+                                                                    {{ in_array($rl->id, old('role_group_id', $pp->role_group_penilaian->pluck('role_group_id')->toArray())) ? 'selected' : '' }}
+                                                                    >{{Str::limit($rl->nama,30)}}</option>
+                                                            @endforeach
+                                                        </optgroup>
+                                                    </select>
+                                                    @error('nidn')
+                                                        <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="border-top p-3">
@@ -192,7 +271,7 @@
 			<h5 class="offcanvas-title fw-semibold">Tambah Poin Penilaian</h5>
 			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
 		</div>
-
+        
 		<div class="offcanvas-body p-2">
             <form action="/krs/{{$krs->id}}/poin_penilaian/store" method="post">
                 @csrf
@@ -203,8 +282,7 @@
                             <label class="form-label">Poin Penilaian</label>
                             <input class="form-control" name="nama_poin" value="{{old('nama_poin')}}" placeholder="Masukkan poin penilaian anda disini...">
                             @error('nama_poin')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
-                                </div>
+                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mt-2">
@@ -216,8 +294,23 @@
                                 </div>
                             </div>
                             @error('bobot')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
-                                </div>
+                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label">Pilih role</label>
+                            <select data-placeholder="Pilih dosen" multiple="multiple" name="role_group_id[]" class="form-control select" required>
+                                <option></option>
+                                <optgroup label="Daftar Dosen">
+                                    @foreach($role_krs as $rl)
+                                        <option value="{{$rl->id}}"
+                                            {{ in_array($rl->id, old('role_group_id', [])) ? 'selected' : '' }}
+                                            >{{Str::limit($rl->nama,30)}}</option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
+                            @error('role_group_id')
+                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
@@ -228,36 +321,6 @@
             </form>
 		</div>
 	</div>
-	<!-- /large panel -->
-    {{-- <style>
-        .verification-area{
-            top: 80;
-            right: 20;
-            position: absolute;
-            position: fixed
-        }
-
-        .verification-button{
-            background-color: #F1C40F;
-            width: 50px;
-            height: 50px;
-            border-radius: 100%;
-            box-shadow: rgba(244, 230, 40, 0.745) 0px 4px 6px -1px, rgba(255, 196, 32, 0.06) 0px 2px 4px -1px;
-            transition: 0.3s;
-        }
-
-        .verification-button:hover{ 
-            transform: scale(1.05);
-        }
-    </style>
-    <div class="verification-area d-flex">
-       <div class="card p-1 mt-1 me-1">
-            <i>Terdapat beberapa poin penilaian yang belum diverifikasi,<br> silahkan verifikasi ulang poin penilaian agar dapat digunakan pada penilaian</i>
-       </div>
-       <div class="verification-button"  data-bs-popup="tooltip" title="Terdapat beberapa poin penilaian yang belum diverifikasi, silahkan verifikasi ulang poin penilaian agar dapat digunakan pada penilaian">
-            <h1 class="text-center"> <button class="bg-transparent border-0 fw-bold">!</button></h1>
-       </div>
-    </div> --}}
 
     @if($poin_penilaian->where('is_verified', false)->count() > 0)
      <!-- Top panel -->

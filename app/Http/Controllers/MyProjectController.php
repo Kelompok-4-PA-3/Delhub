@@ -11,8 +11,8 @@ use Auth;
 
 class MyProjectController extends Controller
 {
-    public function koordintor(){
-        $krs = Krs::where('dosen_mk','=', Auth::user()->dosen->nidn)->orWhere('dosen_mk_2','=', Auth::user()->dosen->nidn)->first();
+    public function koordinator($id){
+        $krs = Krs::where('id',$id)->first();
         $kelompok = Kelompok::where('krs_id','=', $krs->id)->get();
         $mahasiswa = Mahasiswa::latest()->get();
         // return $krs->count();
@@ -22,6 +22,22 @@ class MyProjectController extends Controller
                 'krs' => $krs,
                 'kelompok' => $kelompok,
                 'mahasiswa' => $mahasiswa
+            ]);
+        }
+        return back();
+    }
+
+    public function koordintor_job_list(){
+        $krs = Krs::where('dosen_mk','=', Auth::user()->dosen->nidn)->orWhere('dosen_mk_2','=', Auth::user()->dosen->nidn)->get();
+        // $kelompok = Kelompok::where('krs_id','=', $krs->id)->get();
+        // $mahasiswa = Mahasiswa::latest()->get();
+        // return $krs->count();
+        if ($krs->count() > 0) {
+            return view('dashboard.koordinator_krs',[
+                'title' =>  'My Project',
+                'krs' => $krs,
+                // 'kelompok' => $kelompok,
+                // 'mahasiswa' => $mahasiswa
             ]);
         }
         return back();

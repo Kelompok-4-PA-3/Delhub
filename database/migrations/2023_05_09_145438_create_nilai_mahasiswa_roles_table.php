@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('nilai_mahasiswa_roles', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('kelompok_id');    
+            $table->foreign('kelompok_id')->references('id')->on('kelompoks')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('role_kelompok_id');    
-            $table->foreign('role_kelompok_id')->references('id')->on('role_kelompoks')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('role_dosen_kelompok_id')->references('id')->on('role_kelompoks')->onUpdate('cascade')->onDelete('cascade');
             $table->string('nim');    
             $table->foreign('nim')->references('nim')->on('mahasiswas')->onUpdate('cascade')->onDelete('cascade');
             $table->double('nilai');

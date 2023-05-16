@@ -77,28 +77,44 @@
                         <th>NIM</th>
                         <th>Nama Mahasiswa</th>
                         <th>
-                            {{-- {{}} --}}
-                            <a href="/kelompok/{{$kelompok->id}}/penilaian/role_kelompok/{{$role_dosen->id}}/{{$role_dosen->role_group->id}}">{{$role_dosen->role_group->nama}}</a>
+                            <div class="fw-semibold d-flex">
+                                <a
+                                @if ($role_dosen->role_group->komponen_penilaian->where('is_verified',false)->count() > 0 || $role_dosen->role_group->komponen_penilaian->count() <= 0)
+                                @else
+                                    href="/kelompok/{{$kelompok->id}}/penilaian/role_kelompok/{{$role_dosen->id}}/{{$role_dosen->role_group->id}}"
+                                @endif
+                                >{{$role_dosen->role_group->nama}}</a>
+                                @if ($role_dosen->role_group->komponen_penilaian->where('is_verified',false)->count() > 0 || $role_dosen->role_group->komponen_penilaian->count() <= 0)
+                                    <a href="#" class="ph-warning-circle px-1 text-warning" data-bs-popup="tooltip" title="Komponen penilaian pada poin ini belum tersedia atau belum terverifikasi"></a>
+                                @endif
+                            </div>
                             <div>
                                 <small class="text-muted">{{$role_dosen->role_group->bobot}} %</small>
                             </div>
                         </th>
-                            @foreach($poin_penilaian as $pp)
+                        {{-- {{$role_dosen->role_group->role_group_penilaian}} --}}
+                            @foreach($role_dosen->role_group->role_group_penilaian as $rr)
                             <th>
                                 <div class="fw-semibold d-flex">
-                                    <a  @if($pp->komponen_penilaian->where('is_verified',false)->count() > 0 || $pp->komponen_penilaian->count() > 0)  href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$pp->id}}" @endif>{{$pp->nama_poin}}</a>
-                                    @if ($pp->komponen_penilaian->where('is_verified',false)->count() > 0 || $pp->komponen_penilaian->count() <= 0)
+                                    {{-- {{$rr->poin_penilaian->komponen_penilaian->where('is_verified',false)->count()}} --}}
+                                    <a  @if($rr->poin_penilaian->komponen_penilaian->where('is_verified',false)->count() > 0 
+                                            || $rr->poin_penilaian->komponen_penilaian->count() > 0)
+                                            href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$rr->poin_penilaian->id}}"
+                                        @endif>
+                                        {{$rr->poin_penilaian->nama_poin}}
+                                    </a>
+                                    @if ($rr->poin_penilaian->komponen_penilaian->where('is_verified',false)->count() > 0
+                                     || $rr->poin_penilaian->komponen_penilaian->count() <= 0)
                                         <a href="#" class="ph-warning-circle px-1 text-warning" data-bs-popup="tooltip" title="Komponen penilaian pada poin ini belum tersedia atau belum terverifikasi"></a>
                                     @endif
                                 </div>
                                 <div>
-                                    <small class="text-muted">{{$pp->bobot}} %</small>
+                                    <small class="text-muted">{{$rr->poin_penilaian->bobot}} %</small>
                                 </div>
                             </th>
                             @endforeach
-                        <th>Total
+                        {{-- <th>Total
                             <form action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/approved" class="mt-1" method="post">
-                                {{-- {{$myrole}} --}}
                                 @csrf
                                 @php
                                 $all_approved = $kelompok->nilai_mahasiswa->pluck('approved_status')->every(function($status){
@@ -111,24 +127,19 @@
                                         return 3;
                                     }
                                 });
-                                // $all_not_approved = $kelompok->nilai_mahasiswa->pluck('approved_status')->every(function($status){
-                                //     return $statis == 1;
-                                // });
                                 @endphp 
-                                {{-- {{$all_approved}} --}}
                                 <input type="hidden" name="approved_status" value="
                                     @if ((int)$all_approved != 3)
                                         {{(int)$all_approved}}
                                     @endif
                                 ">
-                                {{-- {{$all_approved}} --}}
                                 @if ((int)$all_approved == 0)
                                     <button type="button"  class="btn btn-warning btn-sm border-0 fw-semibold" data-bs-toggle="modal" data-bs-target="#cancel_approve"><i class="ph-x-circle"></i> &nbsp; Batalkan</button> 
                                 @elseif((int)$all_approved == 1)
                                     <button type="submit" class="btn btn-success btn-sm border-0 fw-semibold {{$btn_approve == 1 ? 'disabled' : ''}}" ><i class="ph-circle-wavy-check"></i> &nbsp;Approve</button>   
                                 @endif
                             </form>
-                        </th>
+                        </th> --}}
                     </tr>
 
                     <!-- Delete Modal -->
@@ -164,16 +175,20 @@
                     <tr>
                         <td>{{$kkm->mahasiswa->nim}}</td>
                         <td>{{$kkm->mahasiswa->user->nama}}</td>
-                        <td>-</td>
-                        @foreach($poin_penilaian as $pp)
+                        <td>
+                            @if ($kkm->mahasiswa->nilai_mahasiswa_role($role_dosen->id, $kelompok->id) != NULL)
+                                {{$kkm->mahasiswa->nilai_mahasiswa_role($role_dosen->id, $kelompok->id)->nilai}}
+                            @endif
+                        </td>
+                        @foreach($role_dosen->role_group->role_group_penilaian as $rrr)
                             <td>
-                                @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $pp->id) != NULL)
-                                    @if ($pp->id == $kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $pp->id)->poin_penilaian_id)
+                                @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $rrr->poin_penilaian->id) != NULL)
+                                    @if ($rrr->poin_penilaian->id == $kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id,  $rrr->poin_penilaian->id)->poin_penilaian_id)
                                         @php
-                                            ${"total_nilai".$kkm->nim} += (($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $pp->id)->nilai) * ($pp->bobot / 100));
+                                            ${"total_nilai".$kkm->nim} += (($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id,  $rrr->poin_penilaian->id)->nilai) * ($rrr->poin_penilaian->bobot / 100));
                                             // / ((double)$role_dosen->role_group->bobot / 100)
                                         @endphp
-                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $pp->id)->nilai}}
+                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id,  $rrr->poin_penilaian->id)->nilai}}
                                     @else 
                                     0 
                                     @endif
@@ -182,7 +197,7 @@
                                 @endif
                             </td>
                          @endforeach
-                        <td class="
+                        {{-- <td class="
                             @if ((int)$all_approved == 3)
                                 text-primary
                             @elseif((int)$all_approved == 0)
@@ -190,7 +205,7 @@
                             @elseif((int)$all_approved == 1)
                                 bg-warning
                             @endif
-                        ">{{number_format(${"total_nilai".$kkm->nim}, 2, '.', '')}}</td>
+                        ">{{number_format(${"total_nilai".$kkm->nim}, 2, '.', '')}}</td> --}}
                     </tr>
                     @endforeach
                     <td></td>
