@@ -14,7 +14,13 @@
 @endpush
 
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+	<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+	<a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+	<a href="/kelompok/{{$kelompok->id}}" class="breadcrumb-item py-2"> {{$kelompok->nama_kelompok}}</a>
+	<span class="breadcrumb-item active py-2">{{$role_dosen->role_group->nama}}</span>
+@endsection
+
 
 @section('content')
 
@@ -33,7 +39,9 @@
                     <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
                     <div class="dropdown-menu">
                         @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
-                            <a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}}</a>
+                            @if ($myrole->role_group != NULL)
+                                <a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}}</a>
+                            @endif
                         @endforeach
                         {{-- {{Auth::user()->dosen->all_role_kelompok}} --}}
                     </div>
@@ -76,7 +84,7 @@
                     <tr>
                         <th>NIM</th>
                         <th>Nama Mahasiswa</th>
-                        <th>
+                        {{-- <th>
                             <div class="fw-semibold d-flex">
                                 <a
                                 @if ($role_dosen->role_group->komponen_penilaian->where('is_verified',false)->count() > 0 || $role_dosen->role_group->komponen_penilaian->count() <= 0)
@@ -91,28 +99,34 @@
                             <div>
                                 <small class="text-muted">{{$role_dosen->role_group->bobot}} %</small>
                             </div>
-                        </th>
+                        </th> --}}
                         {{-- {{$role_dosen->role_group->role_group_penilaian}} --}}
+                        @if ($role_dosen->role_group != NULL)
                             @foreach($role_dosen->role_group->role_group_penilaian as $rr)
                             <th>
-                                <div class="fw-semibold d-flex">
-                                    {{-- {{$rr->poin_penilaian->komponen_penilaian->where('is_verified',false)->count()}} --}}
-                                    <a  @if($rr->poin_penilaian->komponen_penilaian->where('is_verified',false)->count() > 0 
-                                            || $rr->poin_penilaian->komponen_penilaian->count() > 0)
-                                            href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$rr->poin_penilaian->id}}"
-                                        @endif>
-                                        {{$rr->poin_penilaian->nama_poin}}
-                                    </a>
-                                    @if ($rr->poin_penilaian->komponen_penilaian->where('is_verified',false)->count() > 0
-                                     || $rr->poin_penilaian->komponen_penilaian->count() <= 0)
-                                        <a href="#" class="ph-warning-circle px-1 text-warning" data-bs-popup="tooltip" title="Komponen penilaian pada poin ini belum tersedia atau belum terverifikasi"></a>
-                                    @endif
-                                </div>
-                                <div>
-                                    <small class="text-muted">{{$rr->poin_penilaian->bobot}} %</small>
-                                </div>
+                                @if ($rr->poin_penilaian != NULL)
+                                    <div class="fw-semibold d-flex">
+                                        <a  @if($rr->poin_penilaian->komponen_penilaian->where('is_verified',false)->count() <= 0 
+                                                && $rr->poin_penilaian->komponen_penilaian->count() > 0 && $rr->poin_penilaian->role_group_penilaian->where('is_verified',false)->count() <= 0)
+                                                href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$rr->poin_penilaian->id}}"
+                                            @endif>
+                                            {{$rr->poin_penilaian->nama_poin}}
+                                        </a>
+                                        @if ($rr->poin_penilaian->komponen_penilaian->where('is_verified',false)->count() > 0
+                                        || $rr->poin_penilaian->komponen_penilaian->count() <= 0 ||  $rr->poin_penilaian->role_group_penilaian->where('is_verified',false)->count() > 0)
+                                            <a href="#" class="ph-warning-circle px-1 text-warning" data-bs-popup="tooltip" title="Komponen penilaian pada poin ini belum tersedia atau belum terverifikasi"></a>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <small class="text-muted">{{$rr->poin_penilaian->bobot}} %</small>
+                                    </div>
+                                @else
+                                    <small> {{$rr}} ( <i>Belum memiliki komponen penilaian</i> )</small>
+                                @endif
                             </th>
                             @endforeach
+                        @endif
+                           
                         {{-- <th>Total
                             <form action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/approved" class="mt-1" method="post">
                                 @csrf
@@ -175,28 +189,34 @@
                     <tr>
                         <td>{{$kkm->mahasiswa->nim}}</td>
                         <td>{{$kkm->mahasiswa->user->nama}}</td>
-                        <td>
+                        {{-- <td>
                             @if ($kkm->mahasiswa->nilai_mahasiswa_role($role_dosen->id, $kelompok->id) != NULL)
                                 {{$kkm->mahasiswa->nilai_mahasiswa_role($role_dosen->id, $kelompok->id)->nilai}}
                             @endif
-                        </td>
-                        @foreach($role_dosen->role_group->role_group_penilaian as $rrr)
-                            <td>
-                                @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $rrr->poin_penilaian->id) != NULL)
-                                    @if ($rrr->poin_penilaian->id == $kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id,  $rrr->poin_penilaian->id)->poin_penilaian_id)
-                                        @php
-                                            ${"total_nilai".$kkm->nim} += (($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id,  $rrr->poin_penilaian->id)->nilai) * ($rrr->poin_penilaian->bobot / 100));
-                                            // / ((double)$role_dosen->role_group->bobot / 100)
-                                        @endphp
-                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id,  $rrr->poin_penilaian->id)->nilai}}
+                        </td> --}}
+                        @if ($role_dosen->role_group != NULL)
+                            @foreach($role_dosen->role_group->role_group_penilaian as $rrr)
+                                <td>
+                                    @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $rrr->poin_penilaian->id) != NULL)
+                                        @if ($rrr->poin_penilaian->id == $kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id,  $rrr->poin_penilaian->id)->poin_penilaian_id)
+                                            @php
+                                                ${"total_nilai".$kkm->nim} += (($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id,  $rrr->poin_penilaian->id)->nilai) * ($rrr->poin_penilaian->bobot / 100));
+                                                // / ((double)$role_dosen->role_group->bobot / 100)
+                                            @endphp
+                                            {{
+                                                $kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id,  $rrr->poin_penilaian->id)->nilai /
+                                                ($role_dosen->role_group->role_group_penilaian->where('poin_penilaian_id',$rrr->poin_penilaian->id)->first()->bobot / 100)
+                                            }}
+                                            {{-- {{$rrr->poin_penilaian->nama_poin}} --}}
+                                        @else 
+                                        0 
+                                        @endif
                                     @else 
-                                    0 
+                                        -
                                     @endif
-                                @else 
-                                    -
-                                @endif
-                            </td>
-                         @endforeach
+                                </td>
+                            @endforeach
+                         @endif
                         {{-- <td class="
                             @if ((int)$all_approved == 3)
                                 text-primary

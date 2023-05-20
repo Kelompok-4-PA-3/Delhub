@@ -22,7 +22,13 @@
 @endpush
 
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+	<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+	<a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+	<a href="/kelompok/{{$kelompok->id}}" class="breadcrumb-item py-2"> {{$kelompok->nama_kelompok}}</a>
+	<a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}" class="breadcrumb-item py-2">{{$role_dosen->role_group->nama}}</a>
+	<span class="breadcrumb-item active py-2">{{$penilaian->nama_poin}}</span>
+@endsection
 
 @section('content')
     <style>
@@ -98,6 +104,9 @@
             </div>
         </div>
         <div class="col-xl-12">
+            {{-- <table>
+
+            </table> --}}
             <div class="card">
                 <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
                     <h5 class="py-sm-2 my-sm-1">Penilaian {{$penilaian->nama_poin}}</h5><br>
@@ -147,7 +156,16 @@
                                     <!-- /modal with h5 -->
 
                                 @endforeach
-                                <th>Nilai</th>
+                                <th class="bg-warning bg-opacity-10 text-warning">
+                                    Nilai
+                                    <div>
+                                        <form action="">
+                                            <button class="badge border-0 bg-success mt-1 fw-light">
+                                                approve
+                                            </button>
+                                        </form>
+                                    </div>
+                                </th>
                                 <th>Aksi</th>
                             </tr>
                             <tr>
@@ -157,7 +175,7 @@
                                 @foreach ($penilaian->komponen_penilaian as $item)
                                     <th>N{{$loop->iteration}}</th>
                                 @endforeach
-                                <th></th>
+                                <th class="bg-warning bg-opacity-10 text-warning"></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -180,11 +198,13 @@
                                                 ->where('kelompok_id',$kelompok->id)
                                                 ->where('komponen_id', $pkp->id)
                                                 ->where('nim', $kkm->mahasiswa->nim)
+                                                ->where('role_dosen_kelompok_id', $role_dosen->id)
                                                 ->first();
                                        @endphp
                                         
                                        @if ( $nilai_komponen_mahasiswa != NULL)
                                             {{  $nilai_komponen_mahasiswa->nilai / ($pkp->bobot / 100) }}
+                                            {{-- {{$role_dosen}} --}}
                                        @endif
                                        {{-- {{  $nilai_komponen_mahasiswa->nilai / ($pkp->bobot / 100)}} --}}
 
@@ -198,9 +218,11 @@
                                         0
                                     @endif
                                 </td> --}}
-                                <td>
+                                <td class="bg-warning bg-opacity-10 text-warning fw-semibold">
                                     @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id) != NULL)
-                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id)->nilai}} 
+                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id)->nilai / 
+                                        ($role_dosen->role_group->role_group_penilaian->where('poin_penilaian_id',$penilaian->id)->first()->bobot / 100)}} 
+                                        {{-- {{$role_dosen->role_group->role_group_penilaian->where('poin_penilaian_id',$penilaian->id)->first()->bobot / 100}} --}}
                                     @else 
                                         0
                                     @endif

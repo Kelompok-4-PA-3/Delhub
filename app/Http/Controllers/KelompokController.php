@@ -113,6 +113,7 @@ class KelompokController extends Controller
         $status_bimbingan = Reference::where('kategori', '=', 'status_bimbingan')->get();
         $regulasi = Regulasi::where('krs_id', '=', $kelompok->krs_id)->first();
         $mahasiswa = KrsUser::where('krs_id',$kelompok->krs_id)->get();
+        // return "selesai";
 
         return view('dashboard.kelompok.kelompok',[
             'title' => $kelompok->nama_kelompok,

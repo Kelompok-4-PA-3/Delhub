@@ -120,17 +120,7 @@
                             <a href="/kelompok/{{$role->kelompok->id}}" class="nav-link">
                                 <i class="ph-browsers text-warning"></i>
                                 <div>
-                                      {{-- <span>
-                                    {{
-                                        $role->role_group->nama
-                                    }}
-                                </span> --}}
-                                <small class="text-primary">{{$role->kelompok->nama_kelompok}}</small>
-                               
-
-                                {{-- @foreach ($role->kelompok as $rk) --}}
-                                    
-                                {{-- @endforeach --}}<br>
+                                <small class="text-primary">{{$role->kelompok->nama_kelompok}}</small><br>
                                 <div>
                                     <small class="text-light"> <i> {{$role->role_group->nama}}</i></small>
                                 </div>
@@ -138,22 +128,8 @@
                             </a>
                             
                         </li>
-                    @endforeach
+                    @endforeach 
                 @endif
-
-                {{-- @if (Auth::user()->dosen->pembimbing_penguji->where('reference_id','=',4)->count() > 0)
-                <li class="nav-item">
-                    <a href="/kategori" class="nav-link">
-                        <i class="ph-squares-four"></i>
-                    <a href="/koordinator" class="nav-link">
-                        <i class="ph-list-dashes"></i>
-                        <span>
-                        Penguji
-                        </span>
-                    </a>
-                </li>
-                @endif --}}
-               
 
                 @endrole
                 @can('history bimbingan')
@@ -174,7 +150,7 @@
                     </a>
 				<ul class="nav-group-sub collapse">
                 <li class="nav-item-header pt-0">
-                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">     PENGGUNA</div>
+                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">PENGGUNA</div>
                     <i class="ph-dots-three sidebar-resize-show"></i>
                 </li>
 

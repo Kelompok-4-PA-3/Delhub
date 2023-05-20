@@ -1,7 +1,7 @@
 @extends('main')
    
 @section('title')
-    <title>Manajemen Mahasiswa</title>
+    <title>Koordinator - My Course</title>
 @endsection
 
 @push('datatable_js')
@@ -13,7 +13,9 @@
     {{-- <script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script> --}}
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <span class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</span>
+@endsection
 
 @section('content')
     <div class="row">

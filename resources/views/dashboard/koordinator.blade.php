@@ -1,7 +1,7 @@
 @extends('main')
    
 @section('title')
-    <title>Manajemen Mahasiswa</title>
+    <title>Koordinator - {{$krs->kategori->nama_singkat}}</title>
 @endsection
 
 @push('datatable_js')
@@ -13,7 +13,10 @@
     {{-- <script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script> --}}
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+	<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+	<span class="breadcrumb-item active py-2">{{$krs->kategori->nama_singkat}}</span>
+@endsection
 
 @section('content')
 
@@ -173,6 +176,12 @@
 								<a href="/krs/{{$krs->id}}/poin_penilaian" class="nav-link">
 									<i class="ph-list-checks me-2"></i>
 									Poin Penilaian
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="/krs/{{$krs->id}}/kategori_role" class="nav-link">
+									<i class="ph-list-checks me-2"></i>
+									Kategori Role 
 								</a>
 							</li>
 							<li class="nav-item">

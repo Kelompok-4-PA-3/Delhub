@@ -19,7 +19,7 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <h5 class="mb-0">Role Group</h5>
+            <h5 class="mb-0">Role Group {{$kategori->nama}}</h5>
             <div class="ms-auto d-flex">
                 <label class="form-check form-switch form-check-reverse">
                     <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#tambah_role_group"><i class="ph-plus-circle"></i>&nbsp; TAMBAH ROLE GROUP</a>
@@ -47,23 +47,25 @@
                 </div>
             @endif
             {{-- {{ $role_group->where}} --}}
-            @if ($role_group->count() > 0 && $role_group->where('nama','Koordinator')->where('deleted_at','==',NULL)->count() > 0)
+            {{-- @if ($role_group->count() > 0 && $role_group->where('nama','Koordinator')->where('deleted_at','==',NULL)->count() > 0) --}}
             <table class="table datatable-users w-100">
                 <thead>
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Bobot</th>
+                        {{-- <th>Bobot</th>
                         <th>Akumulasi bobot</th>
-                        <th>Status</th>
+                        <th>Status</th> --}}
+                        {{-- <th>Kategori</th> --}}
                         <th class="text-center">Actions</th>
                     </tr>
                     <tr>
                         <th></th>
                         <th>Nama</th>
-                        <th>Bobot</th>
+                        {{-- <th>Bobot</th>
                         <th>Akumulasi bobot</th>
-                        <th>Status</th>
+                        <th>Status</th> --}}
+                        {{-- <th>Kategori</th> --}}
                         <th></th>
                     </tr>
                 </thead>
@@ -76,26 +78,24 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $rg->nama }}</td>
-                            <td>{{ $rg->bobot }} %</td>
-                            <td class="">
+                            {{-- <td>{{ $rg->bobot }} %</td> --}}
+                            {{-- <td class="">
                                 @if ($rg->komponen_penilaian->count() > 0)
                                     @php
                                         $total_bobot = $rg->komponen_penilaian->sum('bobot');
                                     @endphp
                                     <div class="d-flex">
                                         <p class=" text-primary "> <img src="{{asset('/img/R1.gif')}}" alt="" style="max-width: 50px;"> {{$total_bobot}} %</p>
-                                        {{-- <p>{{$rg}}</p> --}}
                                     </div>
                                 @else 
                                     <p class="fw-bold text-center">-</p>
                                 @endif
-                            </td>
-                            @if ($rg->komponen_penilaian->count() > 0)
+                            </td> --}}
+                            {{-- @if ($rg->komponen_penilaian->count() > 0)
                                 @if (!$rg->is_verified)
                                     @if ($total_bobot == 100)
                                         @if ($rg->komponen_penilaian->where('is_verified',false)->count() < 1)
                                             <td class="text-center bg-success bg-opacity-10">
-                                                {{-- <small class="fw-semibold text-success"> <i class="ph-checks"></i> Memenuhi</small> --}}
                                                 <form action="/krs/{{$krs->id}}/role_group/verifikasi/{{$rg->id}}" class="ms-auto" method="post">
                                                     @csrf
                                                     <button class="btn btn-sm btn-success">Buka akses penilaian</button>
@@ -116,9 +116,6 @@
                                             <small class="fw-semibold text-danger">Melebihi</small>
                                         </td>
                                     @endif
-                                    {{-- @php
-                                        $total_bobot = 0;
-                                    @endphp --}}
                                 @else 
                                     <td class="text-center bg-success bg-opacity-10">
                                          <small class="fw-semibold text-success"> <i class="ph-checks"></i> Memenuhi</small>
@@ -128,16 +125,16 @@
                                 <td class="text-center bg-secondary bg-opacity-10">
                                     <small class="fw-semibold text-secondary">__</small>
                                 </td>
-                            @endif
+                            @endif --}}
                                 
                                 {{-- @if ($rg->is_verified)
                                      <span class="badge p-2 bg-success rounded-pill bg-opacity-10 text-success">sudah diverifikasi</span>
                               @else
-                                     <span class="badge p-2 bg-danger rounded-pill bg-opacity-10 text-danger">belum diverifikasi</span>
+                              <span class="badge p-2 bg-danger rounded-pill bg-opacity-10 text-danger">belum diverifikasi</span>
                               @endif --}}
-                            {{-- <td>
-                                <button class="btn btn-sm btn-outline-success">verifikasi</button>
-                            </td> --}}
+                              {{-- <td>
+                                  <button class="btn btn-sm btn-outline-success">verifikasi</button>
+                                </td> --}}
                             <td class="text-center">
                                 <div class="d-inline-flex">
                                     <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
@@ -149,7 +146,7 @@
                                         data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $rg->id }}">
                                         <i class="ph-trash"></i>
                                     </a>
-
+{{-- 
                                     @if (!$rg->is_verified)
                                     <a href="{{route('role_kelompok_penilaian.index',['kr' => $krs->id, 'role' => $rg->id])}}" class="text-body" data-bs-popup="tooltip" title="Komponen penilaian">
                                         <i  class="ph-notebook"></i>
@@ -159,8 +156,6 @@
 
                                         <div class="btn-group">
                                             <a class="text-warning fw-bold" href="" data-bs-toggle="dropdown"><i class="ph-warning-circle"></i></a>
-                                            {{-- <a href="#" class="btn btn-primary dropdown-toggle" >Submenu on click</a> --}}
-    
                                             <div class="dropdown-menu">
                                                 <div class="px-2">
                                                     <small>
@@ -177,7 +172,7 @@
                                             </div>
 
                                         </div>
-                                    @endif
+                                    @endif --}}
 
                                 </div>
                             </td>
@@ -197,7 +192,7 @@
 
                                     <div class="modal-footer justify-content-between">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                        <form action="{{route('role_group.delete', ['kr' => $krs->id, 'roleGroupKelompok' => $rg->id])}}" method="post">
+                                        <form action="/krs/{{$krs->id}}/role_group/{{$kategori->id}}/{{$rg->id}}/delete" method="post">
                                             @csrf
                                             <button type="submit" class="btn btn-primary">Ya</button>
                                         </form>
@@ -216,7 +211,7 @@
                                 </div>
 
                                 <div class="offcanvas-body p-2">
-                                    <form action="{{route('role_group.edit', ['kr' => $krs->id, 'roleGroupKelompok' => $rg->id])}}" method="post">
+                                    <form action="/krs/{{$krs->id}}/role_group/{{$kategori->id}}/{{$rg->id}}/edit" method="post">
                                         @csrf
                                         <div class="modal-body">
                                             <div class="mb-3">
@@ -228,7 +223,7 @@
                                                         </div>
                                                     @enderror
                                                 </div>
-                                                <div class="mt-2">
+                                                {{-- <div class="mt-2">
                                                     <label class="form-label">Bobot</label>
                                                     <div class="form-control-feedback form-control-feedback-end mb-3">
                                                         <input type="number" class="form-control" value="{{old('bobot',$rg->bobot)}}" name="bobot" placeholder="Masukkan bobot penilaian anda disini..." step="0.01" min="0" max="100">
@@ -240,7 +235,7 @@
                                                         <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
                                                         </div>
                                                     @enderror
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                         <div class="border-top p-3">
@@ -256,7 +251,7 @@
                     @endforeach 
                 </tbody>
             </table>
-            @else 
+            {{-- @else 
                 <!-- Top panel -->
                 <div id="panel_top" class="offcanvas offcanvas-top show" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
                     <div class="offcanvas-body">
@@ -286,10 +281,10 @@
                     </div>
                 </div>
                 <!-- /top panel -->
-            @endif
+            @endif --}}
             
             <br>
-            @if ($role_group->where('is_verified',false)->count())
+            {{-- @if ($role_group->where('is_verified',false)->count())
                 <div style="position:relative">
                     <div class="d-flex p-1">
                         <form action="/krs/{{$krs->id}}/role_group/verifikasi" class="ms-auto" method="post">
@@ -298,7 +293,7 @@
                         </form>
                     </div>
                 </div>
-            @endif
+            @endif --}}
             <br>
         </div>
         <div class="chart position-relative" id="traffic-sources"></div>
@@ -308,13 +303,14 @@
     <!-- Large panel -->
 	<div id="tambah_role_group" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
 		<div class="offcanvas-header">
-			<h5 class="offcanvas-title fw-semibold">Tambah Role Group</h5>
+			<h5 class="offcanvas-title fw-semibold">Tambah Role</h5>
 			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
 		</div>
 
 		<div class="offcanvas-body p-2">
-            <form action="/krs/{{$krs->id}}/role_group/store" method="post">
+            <form action="/krs/{{$krs->id}}/role_group/{{$kategori->id}}/store" method="post">
                 @csrf
+                <input type="hidden" name="krs_id">
                 <input type="hidden" name="krs_id" value="{{$krs->id}}">
                 <div class="modal-body">
                     <div class="mb-3">
@@ -326,7 +322,7 @@
                                 </div>
                             @enderror
                         </div>
-                        <div class="mt-2">
+                        {{-- <div class="mt-2">
                             <label class="form-label">Bobot</label>
                             <div class="form-control-feedback form-control-feedback-end mb-3">
                                 <input type="number" class="form-control" value="{{old('bobot')}}" name="bobot" placeholder="Masukkan bobot penilaian anda disini..." step="0.01" min="0" max="100">
@@ -338,7 +334,7 @@
                                 <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
                                 </div>
                             @enderror
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="border-top p-3">
@@ -348,7 +344,7 @@
 		</div>
 	</div>
 
-    @if($role_group->where('is_verified', false)->count() > 0)
+    {{-- @if($role_group->where('is_verified', false)->count() > 0)
     <!-- Top panel -->
    <div id="panel_top" class="offcanvas offcanvas-top show" tabindex="-1">
        <div class="offcanvas-body">
@@ -363,7 +359,6 @@
                <div class="ms-lg-auto mt-3 mt-lg-auto mb-lg-auto flex-nowrap">
                     <form action="/krs/{{$krs->id}}/role_group/verifikasi/" class="ms-auto" method="post">
                            @csrf
-                           {{-- <button class=" btn btn-sm btn-success" type="submit"><i class="ph-upload"></i>&nbsp;<i class="fw-semibold"> VERIFIKASI </i> &nbsp;<span class="bg-danger px-1 fw-semibold">{{$role_group->where('is_verified',false)->count()}}</span></button> --}}
                            <button type="button" class="btn btn-link ms-2" data-bs-dismiss="offcanvas">Saya mengerti</button>
                    </form>
                </div>
@@ -371,6 +366,6 @@
        </div>
    </div>
    <!-- /top panel -->
-   @endif
+   @endif --}}
    
 @endsection

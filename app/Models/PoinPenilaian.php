@@ -24,4 +24,11 @@ use HasFactory;
     public function nilai_mahasiswa_all(){
         return $this->hasMany(NilaiMahasiswa::class, 'poin_penilaian_id', 'id');
     }
+
+    public function nilai_mahasiswa($nim, $kelompok){
+        return $this->hasMany(NilaiMahasiswa::class, 'poin_penilaian_id', 'id')
+                                                ->where('nim', $nim)
+                                                ->where('kelompok_id', $kelompok)
+                                                ->get();
+    }
 }

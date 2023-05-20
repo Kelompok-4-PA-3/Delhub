@@ -16,13 +16,17 @@
 
 @section('breadscrumb', Breadcrumbs::render('pengguna'))
 
+@section('main0nava')
+
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">
             <h5 class="mb-0">Poin Penilaian {{$title}}</h5>
             <div class="ms-auto d-flex">
                 <label class="form-check form-switch form-check-reverse">
-                    <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#tambah_komponen_penilaian"><i class="ph-plus-circle"></i>&nbsp; TAMBAH KOMPONEN PENILAIAN</a>
+                    <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#tambah_komponen_penilaian"><i class="ph-plus-circle"></i>&nbsp; TAMBAH POIN PENILAIAN</a>
                 </label>
             </div>
         </div>
@@ -46,6 +50,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
+           
 
             <!-- /individual column searching (text inputs) -->
             <table class="table datatable-users w-100">
@@ -69,7 +74,9 @@
                     @foreach ($poin_penilaian as $pp)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{!! $pp->nama_poin !!}</td>
+                            <td>
+                                {!! $pp->nama_poin !!}
+                            </td>
                             <td class="text-center">{{ $pp->bobot }} %</td>
                             <td class="text-center">
                                @if ($pp->is_verified)
@@ -92,9 +99,171 @@
                                     <a href="{{route('komponen_penilaian.index', ['kr' => $krs->id, 'poinPenilaian' => $pp->id])}}" class="text-body mx-2" data-bs-popup="tooltip" title="Komponen penilaian">
                                         <i class="ph-notebook"></i>
                                     </a>
+                                    @if ($pp->is_verified)
+                                        <div class="status-indicator-container">
+                                            <a href="" class="text-body" data-bs-popup="tooltip" title="Bobot Role" data-bs-toggle="offcanvas" data-bs-target="#tambah_role_penilaian{{$pp->id}}">
+                                                <i class="ph-user-list"></i>
+                                            </a>
+                                            @if ($pp->role_group_penilaian->where('is_verified',false)->count() > 0 || $pp->role_group_penilaian->count() <= 0)
+                                                <span class="status-indicator bg-warning" data-bs-popup="tooltip" title="Role belum diverfikasi"></span>
+                                            @else
+                                                <span class="status-indicator bg-success" data-bs-popup="tooltip" title="Role sudah diverfikasi"></span>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
+
+                         <!-- tambah penilaian -->
+                        <div id="tambah_role_penilaian{{$pp->id}}" class="offcanvas offcanvas-end offcanvas-size-lg  @if (session()->has("store"))  {{session('store') == $pp->id ? 'show' : ''}} @endif" tabindex="-1">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title fw-semibold">Tambah Poin Penilaian</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                            </div>
+                            <div class="offcanvas-body p-2">
+                              <!-- Tabs -->
+                              <ul class="nav nav-tabs nav-tabs-underline nav-justified">
+                                    <li class="nav-item">
+                                        <a href="#list-role{{$pp->id}}" class="nav-link active" data-bs-toggle="tab">
+                                            Daftar
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#tambah-role{{$pp->id}}" class="nav-link" data-bs-toggle="tab">
+                                            Request
+                                        </a>
+                                    </li>
+                                </ul>
+                                <!-- /tabs -->
+
+                                <div class="tab-content card-body">
+                                    <div class="tab-pane active fade show" id="list-role{{$pp->id}}">
+                                        <div class="d-flex mb-1">
+                                            <span>Total : </span>&nbsp;
+                                            <h3 class="fw-semibold text-primary">{{$pp->role_group_penilaian->sum('bobot')}} %</h3>
+                                            @if ($pp->role_group_penilaian->where('is_verified',false)->count() > 0 || $pp->role_group_penilaian->count() <= 0)
+                                                <div class="ms-auto">
+                                                    <form action="/krs/{{$krs->id}}/poin_penilaian/store/{{$pp->id}}/role/verifikasi" method="post">
+                                                        @csrf
+                                                        <button class="btn btn-primary btn-sm " type="submit">Verifikasi &nbsp;<span class="px-1 bg-warning rounded-pill">{{$pp->role_group_penilaian->count()}}</span></button>
+                                                    </form>
+                                                </div>
+                                            @else
+                                                <div class="ms-auto">
+                                                    <form action="/krs/{{$krs->id}}/poin_penilaian/store/{{$pp->id}}/role/verifikasi" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="cancel" value="1">
+                                                        <button class="btn btn-warning btn-sm " type="submit">Batalkan verifikasi</button>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                            
+                                        </div>
+                                        @if ($pp->role_group_penilaian->where('is_verified',false)->count() > 0 || $pp->role_group_penilaian->count() <= 0)
+                                            <small class="fw-semibold text-warning">
+                                                [ <i class="ph-warning-circle"></i> not verified ]
+                                            </small>
+                                        @else
+                                            <small class="fw-semibold text-success">
+                                                [ <i class="ph-check-circle"></i> verified ]
+                                            </small>
+                                        @endif
+                                        <div class="list-group">
+                                          
+                                        @foreach ($pp->role_group_penilaian as $prp)
+                                            {{-- @if ($prp->role_group_penilaian) --}}
+                                                <div class="list-group-item d-flex">
+                                                    <div>
+                                                        {{-- @if ($prp->role_group_penilaian)
+                                                            @if ($prp->role_group_penilaian->nama) --}}
+                                                                <h5 class="fw-light">{{$prp->role_group->nama}}</h5>
+                                                            {{-- @endif
+                                                        @endif --}}
+                                                        Bobot : <span class="fw-semibold">{{$prp->bobot}} %</span>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $prp->id }}">
+                                                            <i class="ph-trash"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {{-- @endif --}}
+                                        @endforeach
+											{{-- <a href="#" class="list-group-item list-group-item-action">Pembimbing</a> --}}
+										</div>
+                                    </div>
+                                    <div class="tab-pane fade show {{session()->has("poin".$pp->id) ? 'active' : ''}}" id="tambah-role{{$pp->id}}">
+                                        <form action="/krs/{{$krs->id}}/poin_penilaian/store/{{$pp->id}}/role" method="post">
+                                            @csrf
+                                            <input type="hidden" name="krs_id" value="{{$krs->id}}">
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <div class="mt-2">
+                                                        <label class="form-label">Pilih role</label>
+                                                        <select data-placeholder="Pilih dosen" name="role_group_id" class="form-control select" required>
+                                                            <option></option>
+                                                            <optgroup label="Daftar Dosen">
+                                                                @foreach($role_krs as $rl)
+                                                                    <option value="{{$rl->id}}"
+                                                                        {{ in_array($rl->id, old('role_group_id', [])) ? 'selected' : '' }}
+                                                                        >{{Str::limit($rl->nama,30)}}</option>
+                                                                @endforeach
+                                                            </optgroup>
+                                                        </select>
+                                                        @error('role_group_id')
+                                                            <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <label class="form-label">Bobot</label>
+                                                        <div class="form-control-feedback form-control-feedback-end mb-3">
+                                                            <input type="number" class="form-control" value="{{old('bobot')}}" name="bobot" placeholder="Masukkan bobot penilaian anda disini..." step="0.01" min="0" max="100">
+                                                            <div class="form-control-feedback-icon">
+                                                                <i class="ph-percent ph-sm"></i>
+                                                            </div>
+                                                        </div>
+                                                        @error('bobot')
+                                                            <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="border-top p-3">
+                                                <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- tambah penilaian --}}
+                        @foreach ($pp->role_group_penilaian as $prp)
+                             <!-- Delete Modal -->
+                             <div id="modal_hapus{{ $prp->id }}" class="modal fade" tabindex="-1">
+                                <div class="modal-dialog modal-xs">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            Apakah anda yakin ingin menghapus data ini ?
+                                        </div>
+
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                            <form action="/krs/{{$krs->id}}/poin_penilaian/delete/{{$pp->id}}/role/{{$prp->id}}" method="post">
+                                                @csrf
+                                                <button type="submit" class="btn btn-primary">Ya</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Delete Modal -->
+                        @endforeach
 
                         <!-- Delete Modal -->
                         <div id="modal_hapus{{ $pp->id }}" class="modal fade" tabindex="-1">
@@ -265,63 +434,6 @@
     </div>
 
 
-    <!-- Large panel -->
-	<div id="tambah_komponen_penilaian" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
-		<div class="offcanvas-header">
-			<h5 class="offcanvas-title fw-semibold">Tambah Poin Penilaian</h5>
-			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-		</div>
-        
-		<div class="offcanvas-body p-2">
-            <form action="/krs/{{$krs->id}}/poin_penilaian/store" method="post">
-                @csrf
-                <input type="hidden" name="krs_id" value="{{$krs->id}}">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <div class="mt-2">
-                            <label class="form-label">Poin Penilaian</label>
-                            <input class="form-control" name="nama_poin" value="{{old('nama_poin')}}" placeholder="Masukkan poin penilaian anda disini...">
-                            @error('nama_poin')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mt-2">
-                            <label class="form-label">Bobot</label>
-                            <div class="form-control-feedback form-control-feedback-end mb-3">
-                                <input type="number" class="form-control" value="{{old('bobot')}}" name="bobot" placeholder="Masukkan bobot penilaian anda disini..." step="0.01" min="0" max="100">
-                                <div class="form-control-feedback-icon">
-                                    <i class="ph-percent ph-sm"></i>
-                                </div>
-                            </div>
-                            @error('bobot')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mt-2">
-                            <label class="form-label">Pilih role</label>
-                            <select data-placeholder="Pilih dosen" multiple="multiple" name="role_group_id[]" class="form-control select" required>
-                                <option></option>
-                                <optgroup label="Daftar Dosen">
-                                    @foreach($role_krs as $rl)
-                                        <option value="{{$rl->id}}"
-                                            {{ in_array($rl->id, old('role_group_id', [])) ? 'selected' : '' }}
-                                            >{{Str::limit($rl->nama,30)}}</option>
-                                    @endforeach
-                                </optgroup>
-                            </select>
-                            @error('role_group_id')
-                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-                <div class="border-top p-3">
-                    <button type="submit" class="btn btn-primary w-100">Submit</button>
-                </div>
-            </form>
-		</div>
-	</div>
-
     @if($poin_penilaian->where('is_verified', false)->count() > 0)
      <!-- Top panel -->
 	<div id="panel_top" class="offcanvas offcanvas-top show" tabindex="-1">
@@ -346,5 +458,67 @@
 	</div>
 	<!-- /top panel -->
     @endif
-   
+
+    <!-- Sticky footer -->  
+        <!-- Large panel -->
+        <div id="tambah_komponen_penilaian" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
+          <div class="offcanvas-header">
+              <h5 class="offcanvas-title fw-semibold">Tambah Poin Penilaian</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+          </div>
+
+          <div class="offcanvas-body p-2">
+              <form action="{{route('poin-penilaian-store', ['kr' => $krs->id])}}" method="post">
+                  {{-- /krs/{{$krs->id}}/poin_penilaian/{{$pp->id}}/edit --}}
+                  @csrf
+                  <div class="modal-body">
+                      <div class="mb-3">
+                          <div class="mt-2">
+                              <label class="form-label">Poin Penilaian</label>
+                              <input class="form-control" value="{{old('nama_poin')}}" name="nama_poin" placeholder="Masukkan poin penilaian anda disini..." required>
+                              @error('nama_poin')
+                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
+                                </div>
+                              @enderror
+                          </div>
+                          <div class="mt-2">
+                              <label class="form-label">Bobot Penilaian</label>
+                              <div class="form-control-feedback form-control-feedback-end mb-3">
+                                    <input type="number" class="form-control" value="{{old('bobot')}}" name="bobot" placeholder="Masukkan bobot penilaian anda disini..." step="0.01" min="0" max="100">
+                                    <div class="form-control-feedback-icon">
+                                        <i class="ph-percent ph-sm"></i>
+                                    </div>
+                              </div>
+                              @error('komponen_penilaian')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
+                                    </div>
+                              @enderror
+                          </div>
+                          {{-- <div class="mt-2">
+                              <label class="form-label">Pilih role</label>
+                              <select data-placeholder="Pilih dosen" multiple="multiple" name="role_group_id[]" class="form-control select" required>
+                                <option></option>
+                                <optgroup label="Daftar Dosen">
+                                    @foreach($role_krs as $rl)
+                                        <option value="{{$rl->id}}"
+                                            {{ in_array($rl->id, old('role_group_id')) ? 'selected' : '' }}
+                                            >{{Str::limit($rl->nama,30)}}</option>
+                                    @endforeach
+                                </optgroup>
+                              </select>
+                              @error('nidn')
+                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
+                                </div>
+                              @enderror
+                          </div> --}}
+                      </div>
+                  </div>
+                  <div class="border-top p-3">
+                      <button type="submit" class="btn btn-primary w-100">Submit</button>
+                  </div>
+              </form>
+          </div>
+        </div>
+        <!-- /large panel -->
+        <!-- /sticky footer -->
 @endsection

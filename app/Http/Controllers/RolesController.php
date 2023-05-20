@@ -111,7 +111,7 @@ class RolesController extends Controller
         $role = Role::find($id);
         $role->syncPermissions([]);
 
-        if ($request->name_edit != $role->name) {
+        if ($request->name_edit == $role->name) {
             $data['name_edit'] = 'required|unique:roles,name';
         }
 

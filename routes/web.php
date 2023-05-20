@@ -23,6 +23,7 @@ use App\Http\Controllers\PoinPenilaianController;
 use App\Http\Controllers\RoleGroupKelompokController;
 use App\Http\Controllers\NilaiMahasiswaController;
 use App\Http\Controllers\NilaiMahasiswaRoleController;
+use App\Http\Controllers\KategoriRoleController;
 use App\Http\Controllers\RoleKelompokController;
 use App\Http\Controllers\RoleKelompokPenilaianController;
 use App\Http\Controllers\PenilaianController;
@@ -140,6 +141,9 @@ Route::middleware([
     // Poin Penilaian
     Route::get('/krs/{kr}/poin_penilaian', [PoinPenilaianController::class, 'index'])->name('poin-penilaian', 'poin-penilaian.index');
     Route::post('/krs/{kr}/poin_penilaian/store', [PoinPenilaianController::class, 'store'])->name('poin-penilaian-store', 'poin-penilaian.store');
+    Route::post('/krs/{kr}/poin_penilaian/store/{penilaian}/role', [PoinPenilaianController::class, 'store_role'])->name('poin-penilaian-role', 'poin-penilaian.role');
+    Route::post('/krs/{kr}/poin_penilaian/store/{penilaian}/role/verifikasi', [PoinPenilaianController::class, 'role_verifikasi'])->name('poin-penilaian-role.verifikasi', 'poin-penilaian.role-verifikasi');
+    Route::post('/krs/{kr}/poin_penilaian/delete/{penilaian}/role/{role_penilaian}', [PoinPenilaianController::class, 'delete_role'])->name('poin-penilaian-role.delete', 'poin-penilaian.role-delete');
     Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/edit', [PoinPenilaianController::class, 'update'])->name('poin-penilaian.edit');
     Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/delete', [PoinPenilaianController::class, 'delete'])->name('poin-penilaian.delete');
     Route::post('/krs/{kr}/poin_penilaian/verifikasi',[PoinPenilaianController::class, 'verifikasi_poin_penilaian']);
@@ -150,23 +154,29 @@ Route::middleware([
     Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/komponen/{komponenPenilaian}/delete', [KomponenPenilaianController::class, 'delete'])->name('komponen_penilaian.delete');
     Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/komponen/verifikasi', [KomponenPenilaianController::class, 'verifikasi_komponen_penilaian'])->name('komponen_penilaian.verifikasi');
     // Role Group Kelompok
-    Route::get('/krs/{kr}/role_group', [RoleGroupKelompokController::class, 'index'])->name('role_group.index');
+    Route::get('/krs/{kr}/role_group/{kategori}', [RoleGroupKelompokController::class, 'index'])->name('role_group.index');
     // Route::post('/krs/{kr}/role_group/store/koordinator', [RoleGroupKelompokController::class, 'store_koordinator'])->name('role_group_koordinator.store');
-    Route::post('/krs/{kr}/role_group/store', [RoleGroupKelompokController::class, 'store'])->name('role_group.store');
-    Route::post('/krs/{kr}/role_group/{roleGroupKelompok}/edit', [RoleGroupKelompokController::class, 'edit'])->name('role_group.edit');
-    Route::post('/krs/{kr}/role_group/{roleGroupKelompok}/delete', [RoleGroupKelompokController::class, 'delete'])->name('role_group.delete');
-    Route::post('/krs/{kr}/role_group/verifikasi/{role}',[RoleGroupKelompokController::class, 'verifikasi_role_group'])->name('role_group.verification');
+    Route::post('/krs/{kr}/role_group/{kategori}/store/', [RoleGroupKelompokController::class, 'store'])->name('role_group.store');
+    Route::post('/krs/{kr}/role_group/{kategori}/{roleGroupKelompok}/edit', [RoleGroupKelompokController::class, 'edit'])->name('role_group.edit');
+    Route::post('/krs/{kr}/role_group/{kategori}/{roleGroupKelompok}/delete', [RoleGroupKelompokController::class, 'delete'])->name('role_group.delete');
+    Route::post('/krs/{kr}/role_group/{kategori}/verifikasi/{role}',[RoleGroupKelompokController::class, 'verifikasi_role_group'])->name('role_group.verification');
     Route::get('/krs/{kr}/role_group/role/{role}/komponen/',[RoleKelompokPenilaianController::class, 'index'])->name('role_kelompok_penilaian.index');
     Route::post('/krs/{kr}/role_group/role/{role}/komponen/store',[RoleKelompokPenilaianController::class, 'store'])->name('role_kelompok_penilaian.store');
     Route::post('/krs/{kr}/role_group/role/{role}/komponen/{rolePenilaian}/edit',[RoleKelompokPenilaianController::class, 'update'])->name('role_kelompok_penilaian.update');
     Route::post('/krs/{kr}/role_group/role/{role}/komponen/{rolePenilaian}/delete',[RoleKelompokPenilaianController::class, 'delete'])->name('role_kelompok_penilaian.delete');
     Route::post('/krs/{kr}/role_group/role/{role}/komponen/verifikasi',[RoleKelompokPenilaianController::class, 'verifikasi_kompnen_penilaian'])->name('role_kelompok_penilaian.verification');
 
+    // Kategori Role
+    Route::get('/krs/{kr}/kategori_role', [KategoriRoleController::class, 'index'])->name('kategori_role.index');
+    Route::post('/krs/{kr}/kategori_role/store', [KategoriRoleController::class, 'store'])->name('kategori_role.store');
+    Route::post('/krs/{kr}/kategori_role/{kategori}/edit', [KategoriRoleController::class, 'update'])->name('kategori_role.edit');
+    Route::post('/krs/{kr}/kategori_role/{kategori}/delete', [KategoriRoleController::class, 'delete'])->name('kategori_role.delete');
+
 
     Route::resource('/kategori_proyek', KategoriProyekController::class)->name('kategori_proyek', 'kategori_proyek.index');
     Route::resource('/poin_regulasi', PoinRegulasiController::class)->name('poin_regulasi', 'poin_regulasi.index');
-    Route::get('/koordinator/proyeksaya/{id}', [MyProjectController::class, 'koordinator']);
-    Route::get('/koordinator/myproject', [MyProjectController::class, 'koordintor_job_list']);
+    Route::get('/koordinator/proyeksaya/{id}', [MyProjectController::class, 'koordinator'])->name('koordinator_myproject_detail');
+    Route::get('/koordinator/myproject', [MyProjectController::class, 'koordintor_job_list'])->name('koordinator_myproject');
     Route::get('/pembimbing/{nidn}/', [MyProjectController::class, 'pembimbing']);
     Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
     Route::get('/poin_regulasi/{poinRegulasi}/komponen_penilaian',[KomponenPenilaianController::class, 'index']);

@@ -25,4 +25,9 @@ class KomponenPenilaian extends Model
                     ->join('nilai_mahasiswas', 'detail_nilai_mahasiswas.nilai_id', 'nilai_mahasiswas.id')
                     ->select('nilai_mahasiswas.*', 'detail_nilai_mahasiswas.*');
     }
+
+    // ->where('kelompok_id',$kelompok->id)
+    // ->where('komponen_id', $pkp->id)
+    // ->where('nim', $kkm->mahasiswa->nim)
+    // ->join('nilai_mahasiswas', 'detail_nilai_mahasiswas.nilai_id','nilai_mahasiswas.id')
 }

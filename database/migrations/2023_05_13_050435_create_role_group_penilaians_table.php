@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('role_group_id')->references('id')->on('role_group_kelompoks')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('poin_penilaian_id');
             $table->foreign('poin_penilaian_id')->references('id')->on('poin_penilaians')->onUpdate('cascade')->onDelete('cascade');
+            $table->boolean('is_verified')->default(false);
+            $table->double('bobot');
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

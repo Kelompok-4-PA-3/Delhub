@@ -26,12 +26,9 @@ const DatatableAPI = function() {
 
         // Setting datatable defaults
         $.extend( $.fn.dataTable.defaults, {
-            // autoWidth: false,
-            // scrollY: false,
             columnDefs: [{ 
                 orderable: false,
                 width: 100,
-                // targets: [ 5 ]
             }],
             dom: '<"datatable-header justify-content-start"f<"ms-sm-auto"l><"ms-sm-3"B>><"datatable-scroll-wrap"t><"datatable-footer"ip>',
             language: {
@@ -69,13 +66,9 @@ const DatatableAPI = function() {
             $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
         });
         $('.datatable-users').DataTable({
-            // fixedHeader: true,
-            // orderCellsTop: true,
-            // autoWidth: true,
             orderCellsTop: true,
             paging: true,
             scrollY: true,
-            // scrollX: true,
             "columns td:first-child": [
                 { "width": "5%" },
               ],
@@ -132,9 +125,68 @@ const DatatableAPI = function() {
 
 
         $('.datatable-penilaian').DataTable({
-            // fixedHeader: true,
-            // orderCellsTop: true,
-            // autoWidth: false,
+            orderCellsTop: true,
+            editable: true,
+            paging: true,
+            scrollY: true,
+            scrollX: true,
+            // "columns td:first-child": [
+            //     { "width": "5%" },
+            //   ],
+            buttons: {
+                dom: {
+                    button: {
+                        className: 'btn btn-light'
+                    }
+                },
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export to Excel <i class="ph-file-xls ms-2"></i>',
+                        autoFilter: true,
+                        sheetName: 'Sheet 1',
+                        exportOptions: {
+                            columns: 'th:not(:last-child)'
+                         }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="ph-printer me-2"></i> Print table',
+                        className: 'btn btn-light',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="ph-list"></i>',
+                        className: 'btn btn-light btn-icon dropdown-toggle'
+                    }
+                ]
+            },
+            initComplete: function () {
+                this.api()
+                    .columns()
+                    .every(function (index) {
+                        const that = this;
+     
+                        $('.column-search').on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that.column($(this).parent().index() + ':visible').search(this.value).draw();
+                            }
+                        });
+
+                      
+                    });
+            }
+        });
+
+        $('.datatable-hasil-nilai thead tr:eq(1) th').each(function () {
+            const title = $(this).text();
+            $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
+        });
+        
+        $('.datatable-hasil-nilai').DataTable({
             orderCellsTop: true,
             editable: true,
             paging: true,

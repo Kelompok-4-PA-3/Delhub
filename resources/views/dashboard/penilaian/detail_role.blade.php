@@ -62,7 +62,6 @@
              outline: none;
              border: none;
              max-width: 75px;
-             /* background-color: black; */
         }
     </style>
     <div class="row">
@@ -75,8 +74,6 @@
                     <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
                     <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
                     <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
-                    {{-- @if (Auth::user()->dosen() != NULL)
-                        @if (array_intersect(Auth::user()->dosen->role_kelompok($kelompok->id)->pluck('id')->toArray(), $kelompok->role_kelompok->pluck('id')->toArray())) --}}
                     <li class="nav-item">
                         <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
                         <div class="dropdown-menu">
@@ -86,9 +83,6 @@
                             {{-- {{Auth::user()->dosen->all_role_kelompok}} --}}
                         </div>
                     </li>
-                        {{-- @endif
-                    @endif --}}
-                    {{-- {{Auth::user()->dosen->role_kelompok($kelompok->id)}} --}}
                     @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
                         <li class="nav-item">
                             <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
@@ -119,12 +113,6 @@
                                         </a><br>
                                          <small class="fw-light">{{$rkp->bobot}} %</small>
                                      </th>
-                                        {{-- <th>
-                                            <div>
-                                            <small class="fw-light">{!!$rkp->nama!!}</small>
-                                            </div>
-                                            <small class="">{{$rkp->bobot}} %</small>
-                                        </th> --}}
 
                                          <!-- Modal with h5 -->
                                         <div id="detail_komponen_{{$rkp->id}}" class="modal fade" tabindex="-1">
@@ -181,19 +169,16 @@
                                 @if ($roleGroup->komponen_penilaian->count() > 0)
                                 @foreach ($roleGroup->komponen_penilaian as $rkp)
                                     <td class="add_nilai text-primary" data-name="komponen" data-rkp_id="{{$rkp->id}}" data-mahasiswa={{$kkm->mahasiswa->nim}}  data-type="number" data-max="100" style="cursor:pointer;">
-                                       {{-- {{$rkp->nilai_mahasiswa->where('kelompok_id',$kelompok->id  )}} --}}
                                        
                                        @php
                                            $nilai_komponen_mahasiswa = $rkp->nilai_mahasiswa_role($kkm->mahasiswa->nim, $role_dosen->id)
                                                 ->where('kelompok_id',$kelompok->id)
                                                 ->where('komponen_role_penilaian_id', $rkp->id)
-                                                // ->where('nim', $kkm->mahasiswa->nim)
                                                 ->first();
                                        @endphp
                                        @if ( $nilai_komponen_mahasiswa != NULL)
                                             {{  $nilai_komponen_mahasiswa->nilai / ($rkp->bobot / 100) }}
                                        @endif
-                                       {{-- {{  $nilai_komponen_mahasiswa->nilai / ($rkp->bobot / 100)}} --}}
                                     </td>
                                 @endforeach
                                 @endif
@@ -245,20 +230,12 @@
                                         
                                     </div>
                                 </div>
-                                <!-- /large panel -->
-                                {{-- <script>
-                                    CKEDITOR.replace('#tambah_penilaian{{$kkm->mahasiswa->nim}}', {
-                                        toolbar: 'Basic'
-                                    });
-                                </script> --}}
                          @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        {{-- @if ($roleGroup->komponen_penilaian->count() > 0)
-        @foreach ($roleGroup->komponen_penilaian as $rkp) --}}
         <script type="text/javascript">
             $.fn.editable.defaults.mode = 'inline';
         
@@ -279,12 +256,8 @@
                 },
                 name: 'komponen',
                 title: 'Enter Field',
-                // url: function(params) {
-                //     // var rkp_id = $(this).data('rkp_id');
-                //     return "/kelompok/{{$kelompok->id}}/penilaian/role_kelompok/{{$role_dosen->id}}/{{$roleGroup->id}}/komponen/store";
-                // },
                 params: function(params) {
-                    params.mahasiswa = $(this).editable().data('mahasiswa'); // add the new attribute to the AJAX request
+                    params.mahasiswa = $(this).editable().data('mahasiswa'); 
                     return params;
                 },
                 success: function(response, newValue) {
@@ -299,7 +272,5 @@
                 }
             });
         </script>
-          {{-- @endforeach
-          @endif --}}
 
 @endsection

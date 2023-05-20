@@ -24,9 +24,14 @@
 @endpush
 
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+	<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+	<a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+	<span class="breadcrumb-item active py-2">{{$kelompok->nama_kelompok}}</span>
+@endsection
 
 @section('content')
+    {{-- @dd($kelompok) --}}
     <div class="row">
 
         <div class="mb-2">
@@ -41,19 +46,14 @@
                 <li class="nav-item">
                     <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
                     <div class="dropdown-menu">
-                        {{-- {{}} --}} 
                         @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
-                        <ul class="list-group">
-                            <li class="list-group-item list-group-item-action">
-                                <a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" class="dropdown-item {{!$myrole->is_verified ? 'disabled' : '' }}"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}}</a><i class="ph-warning-circle text-warning" data-bs-popup="tooltip" title="Role anda belum diverfikasi"></i>
-                            </li>
-                        </ul>
-                        <div class="list-group">
-                            <div class="d-flex">
-                                <a @if($myrole->is_verified) href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" @endif  class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}} &nbsp; @if(!$myrole->is_verified) <i class="ph-warning-circle text-warning" style="cursor:pointer;" data-bs-popup="tooltip" title="Role anda belum diverfikasi"></i> @endif</a>
+                        @if ($myrole->role_group != NULL)
+                            <div class="list-group">
+                                <div class="d-flex">
+                                    <a @if($myrole->is_verified) href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" @endif  class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}} &nbsp; @if(!$myrole->is_verified) <i class="ph-warning-circle text-warning" style="cursor:pointer;" data-bs-popup="tooltip" title="Role anda belum diverfikasi"></i> @endif</a>
+                                </div>
                             </div>
-                        </div>
-
+                        @endif
                         @endforeach
                         {{-- {{Auth::user()->dosen->all_role_kelompok}} --}}
                         {{-- data-bs-popup="tooltip" title="hapus" --}}
@@ -120,6 +120,14 @@
             </div>
 
             <div class="p-2 card">
+                @php
+                    if($kelompok->role_kelompok->where('is_verified',false)->count() > 0 || $kelompok->role_kelompok->count() <= 0){
+                        $verified = false;
+                    }else{
+                        $verified = true;
+                    }
+                    // $verified = false;
+                @endphp
                 <div class="d-lg-flex">
                     <ul class="nav nav-tabs nav-tabs-vertical nav-tabs-vertical-start wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
                         <li class="nav-item">
@@ -127,22 +135,42 @@
                                 <i class="ph-user-circle me-2"></i>
                             </a>
                         </li>  
-                        <li class="nav-item">
-                            <a href="#edit_pembimbing_penguji" class="nav-link" data-bs-toggle="tab">
-                                <i class="ph-pencil me-2"></i>
-                            </a>
-                        </li>  
+                        @if (!$verified)
+                            <li class="nav-item">
+                                <a href="#edit_pembimbing_penguji" class="nav-link" data-bs-toggle="tab">
+                                    <i class="ph-pencil me-2"></i>
+                                </a>
+                            </li>  
+                        @endif
+
                     </ul>
                     <div class="tab-content flex-lg-fill">
                         <div class="tab-pane fade show active" id="pembimbing_penguji">
-                            @php
-                                if($kelompok->role_kelompok->where('is_verified',false)->count() > 0 || $kelompok->role_kelompok->count() <= 0){
-                                    $verified = false;
-                                }else{
-                                    $verified = true;
-                                }
-                            @endphp
-                            <div class="d-flex mb-1">
+                            @if ($kelompok->role_kelompok->count() > 0)
+                                @if(!$verified)
+                                <div>
+                                    <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
+                                        @csrf
+                                        {{-- <i class="text-warning">{{$kelompok->role_kelompok->sum('bobot') != 100 ? 'Tidak dapat melakukan verifikasi karena jumlah bobot belum mencapai atau melebihi 100%'  : ''}}</i> --}}
+                                        <div class="d-flex">
+                                            <span class="text-primary text-warning bg-warning bg-opacity-10 p-1 px-3 rounded-pill fw-semibold"><i class="ph-warning-circle"></i> not verified</span>
+                                            <button class="btn btn-primary btn-sm fw-semibold ms-auto"><i class="ph-circle-wavy-warning"></i>&nbsp; Verifikasi&nbsp;&nbsp;&nbsp; <span class="bg-warning px-1 fw-semibold">{{$kelompok->role_kelompok->count()}}</span></button>
+                                        </div>
+                                    </form>
+                                </div>
+                                @else 
+                                <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
+                                    @csrf
+                                    {{-- <i class="text-warning">{{$kelompok->role_kelompok->sum('bobot') != 100 ? 'Tidak dapat melakukan verifikasi karena jumlah bobot belum mencapai 100%'  : ''}}</i> --}}
+                                    <div class="d-flex">
+                                        <input type="hidden" name="status" value="not_verified">
+                                        <span class="text-primary text-success bg-success bg-opacity-10 p-1 px-3 rounded-pill fw-semibold"><i class="ph-checks"></i> verified</span>
+                                            <button class="btn btn-warning btn-sm fw-semibold ms-auto">Batalkan verifikasi</span></button>
+                                        </div>
+                                    </form>
+                                @endif
+                            @endif
+                            {{-- <div class="d-flex mb-1">
                                 <div class="d-flex">
                                     <small class="mt-1">Total : </small>&nbsp;
                                     <h5 class="{{$kelompok->role_kelompok->sum('bobot') == 100 ? 'text-primary' : 'text-warning'}}"> {{$kelompok->role_kelompok->sum('bobot')}} %</h5> 
@@ -156,8 +184,12 @@
                                         <span class="rounded-pill bg-opacity-10 text-danger"><i class="ph-circle-wavy-warning"></i>&nbsp; belum diverifikasi</span>
                                     </div>
                                 @endif
-                            </div>
-                            @foreach($kelompok->role_kelompok as $kr)
+                            </div> --}}
+
+
+                            
+                            @if ($kelompok->role_kelompok->count() > 0)
+                                @foreach($kelompok->role_kelompok as $kr)
                                 <div>
                                     <div class="d-flex px-2 mt-2">
                                         <small class="text-muted">{{$kr->role_group != NULL ? $kr->role_group->nama : ''}} </small>
@@ -174,8 +206,8 @@
                                     </div>
                                 </div>
 
-                                  <!-- Delete Modal -->
-                                  <div id="modal_hapus{{ $kr->id }}" class="modal fade" tabindex="-1">
+                                <!-- Delete Modal -->
+                                <div id="modal_hapus{{ $kr->id }}" class="modal fade" tabindex="-1">
                                     <div class="modal-dialog modal-xs">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -198,27 +230,11 @@
                                     </div>
                                 </div>
                                 <!-- /Delete Modal -->
-                            @endforeach
-                            @if(!$verified)
-                            <div>
-                                <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
-                                    @csrf
-                                    <i class="text-warning">{{$kelompok->role_kelompok->sum('bobot') != 100 ? 'Tidak dapat melakukan verifikasi karena jumlah bobot belum mencapai atau melebihi 100%'  : ''}}</i>
-                                    <div class="d-flex">
-                                        <button class="btn btn-primary btn-sm fw-semibold ms-auto {{$kelompok->role_kelompok->sum('bobot') == 100 ? '' : 'disabled'}}"><i class="ph-circle-wavy-warning"></i>&nbsp; Verifikasi&nbsp;&nbsp;&nbsp; <span class="bg-warning px-1 fw-semibold">{{$kelompok->role_kelompok->count()}}</span></button>
-                                    </div>
-                                </form>
-                            </div>
+                             @endforeach
                             @else 
-                                <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
-                                    @csrf
-                                    <i class="text-warning">{{$kelompok->role_kelompok->sum('bobot') != 100 ? 'Tidak dapat melakukan verifikasi karena jumlah bobot belum mencapai 100%'  : ''}}</i>
-                                    <div class="d-flex">
-                                        <input type="hidden" name="status" value="not_verified">
-                                        <button class="btn btn-warning btn-sm fw-semibold ms-auto {{$kelompok->role_kelompok->sum('bobot') == 100 ? '' : 'disabled'}}">Batalkan verifikasi</span></button>
-                                    </div>
-                                </form>
+                                <h6 class="fw-light text-secondary text-center p-2">Belum terdapat role dosen</h6>
                             @endif
+                          
                         </div>
                         <div class="tab-pane fade show" id="edit_pembimbing_penguji">
                             <form action="{{Route('kelompok_role.add',[ 'kelompok' => $kelompok->id])}}" method="post">
@@ -229,11 +245,6 @@
                                         <optgroup label="Daftar Dosen">
                                             @foreach($dosen as $d)
                                                 <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
-                                                {{-- @if($role_dosen_edit != NULL)
-                                                    <option value="{{$d->nidn}}" {{$role_dosen_edit->dosen->nidn == $d->nidn ? 'selected' : ''}} >{{Str::limit($d->user->nama,30)}}</option>
-                                                @else
-                                                    <option value="{{$d->nidn}}">{{Str::limit($d->user->nama,30)}}</option>
-                                                @endif --}}
                                             @endforeach
                                         </optgroup>
                                     </select>
@@ -661,7 +672,7 @@
                     <div class="tab-content card-body">
                         <div class="tab-pane active fade show" id="list-bimbingan">
                             <div class="">
-                                <table class="table text-nowrap">
+                                <table class="table text-nowrap">   
                                     <tbody>
                                         @if($kelompok->bimbingan->count() > 0)
                                         @foreach($kelompok->bimbingan as $kb)

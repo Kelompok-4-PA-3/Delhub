@@ -49,4 +49,8 @@ class Krs extends Model
         return $this->hasMany(RoleGroupKelompok::class, 'krs_id', 'id');
     }
 
+    public function poin_penilaian(){
+        return $this->hasMany(PoinPenilaian::class, 'krs_id', 'id');
+    }
+
 }

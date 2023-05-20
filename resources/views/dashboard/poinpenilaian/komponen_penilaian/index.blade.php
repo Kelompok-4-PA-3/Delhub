@@ -91,9 +91,9 @@
                                         data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kp->id }}">
                                         <i class="ph-trash"></i>
                                     </a>
-                                    <a href="{{route('komponen_penilaian.index', ['kr' => $krs->id, 'poinPenilaian' => $poin_penilaian->id])}}" class="text-body" data-bs-popup="tooltip" title="Komponen penilaian">
+                                    {{-- <a href="{{route('komponen_penilaian.index', ['kr' => $krs->id, 'poinPenilaian' => $poin_penilaian->id])}}" class="text-body" data-bs-popup="tooltip" title="Komponen penilaian">
                                         <i  class="ph-notebook"></i>
-                                    </a>
+                                    </a> --}}
                                 </div>
                             </td>
                         </tr>

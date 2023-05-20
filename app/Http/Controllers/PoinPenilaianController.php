@@ -15,7 +15,10 @@ class PoinPenilaianController extends Controller
     public function index(Krs $kr)
     {   
         $poin_penilaian = PoinPenilaian::where('krs_id',$kr->id)->get();
-        $role_krs = RoleGroupKelompok::where('krs_id',$kr->id)->get();
+        $role_krs = RoleGroupKelompok::join('kategori_roles','role_group_kelompoks.kategori_id','kategori_roles.id')
+                                        ->where('kategori_roles.krs_id',$kr->id)
+                                        ->select('role_group_kelompoks.*')->get();
+        // return $role_krs;
 
         return view('dashboard.poinpenilaian.index',[
             'title' => $kr->kategori->nama_mk,
@@ -36,7 +39,6 @@ class PoinPenilaianController extends Controller
     {   
         // return $request;
         $data = [
-            'krs_id' => 'required',
             'nama_poin' => 'required',
             'bobot' => 'required',
         ];
@@ -44,18 +46,76 @@ class PoinPenilaianController extends Controller
         $validasi = $request->validate($data);
 
         $poin_penilaian = new PoinPenilaian();
-        $poin_penilaian->krs_id = $validasi['krs_id'];
+        $poin_penilaian->krs_id =  $kr->id;
         $poin_penilaian->nama_poin = $validasi['nama_poin'];
         $poin_penilaian->bobot= $validasi['bobot'];
-        $poin_penilaian->save();
-        foreach ($request->role_group_id as $rg) {
-            RoleGroupPenilaian::create([
-                'role_group_id' => $rg,
-                'poin_penilaian_id' => $poin_penilaian->id
-            ]);
-        }       
+        $poin_penilaian->save();      
 
         return back()->with('success','Poin penilaian telah berhasil dibuat');
+    }
+
+    public function store_role(Request $request, Krs $kr, PoinPenilaian $penilaian)
+    {   
+        // return $request; 
+        $data = [
+            'role_group_id' => 'required',
+            'bobot' => 'required',
+        ];
+
+        $validasi = $request->validate($data);
+        $validasi['krs_id'] = $kr->id;
+        $validasi['poin_penilaian_id'] = $penilaian->id;
+
+        $cek_role = RoleGroupPenilaian::where('poin_penilaian_id', $penilaian->id)
+                                        ->where('role_group_id', $validasi['role_group_id'])->first();
+        // return $cek_role;
+
+        if($cek_role != NULL){  
+            // return "samaa";
+            return back()->with('failed','Role tersebut telah terdaftar pada poin penilaian ini')->with("store", $penilaian->id);
+        }
+
+        // foreach ($request->role_group_id as $rg) {
+         RoleGroupPenilaian::create($validasi);
+        // }       
+
+        return back()->with('success','Poin penilaian telah berhasil dibuat')->with("store", $penilaian->id);
+    }
+
+    public function role_verifikasi(Request $request, Krs $kr, PoinPenilaian $penilaian)
+    {   
+        // return $request; 
+        $rolePenilaian = RoleGroupPenilaian::where('poin_penilaian_id', $penilaian->id);
+
+        if($request->cancel){
+            $rolePenilaian->update([
+                'is_verified' => false
+            ]);
+
+            return back()->with('success','Verfikasi telah berhasil dibatalkan');
+        }
+        // return $rolePenilaian->get();
+        if($rolePenilaian->sum('bobot') == 100){
+            $rolePenilaian->update([
+                'is_verified' => true
+            ]);
+
+            return back()->with('success','Verfikasi telah berhasil dilakukan');
+        }
+
+        return back()->with('failed','Total bobot role tidak mencapai atau melebihi 100%');
+    }
+
+    public function delete_role(Request $request, Krs $kr, PoinPenilaian $penilaian, RoleGroupPenilaian $role_penilaian)
+    {  
+        $rolePenilaian = RoleGroupPenilaian::where('poin_penilaian_id', $penilaian->id);
+
+        $rolePenilaian->update([
+            'is_verified' => false
+        ]);
+
+        RoleGroupPenilaian::where('id', $role_penilaian->id)->delete();
+        return back()->with('success','Role telah berhasil dihapus')->with("store", $penilaian->id);
     }
 
     public function verifikasi_poin_penilaian(Krs $kr){
@@ -86,6 +146,7 @@ class PoinPenilaianController extends Controller
 
     public function update(Request $request,Krs $kr,PoinPenilaian $poinPenilaian)
     {
+        // return $data;
         $data = [
             'nama_poin' => 'required',
             'bobot' => 'required',

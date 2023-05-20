@@ -117,8 +117,8 @@ class NilaiMahasiswaController extends Controller
         } catch (\Throwable $th) {
             return $th;
         }
-
-        $nilai->nilai = $total_nilai;
+        $bobot_role =  $role->role_group->role_group_penilaian->where('poin_penilaian_id',$penilaian->id)->first();
+        $nilai->nilai = $total_nilai * ($bobot_role->bobot / 100);
         $nilai->save();
 
         return $nilai;
