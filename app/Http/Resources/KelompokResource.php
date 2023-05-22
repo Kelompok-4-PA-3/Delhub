@@ -18,7 +18,7 @@ class KelompokResource extends JsonResource
             'id' => $this->id,
             'name' => $this->nama_kelompok,
             'topik' => $this->topik ? $this->topik->nama : "Belum ada topik",
-            'pembimbing' => $this->pembimbings->first() ? $this->pembimbings->first()->user->nama : "Belum ada pembimbing",
+            'pembimbing' => $this->pembimbings->first() ? new DosenResource($this->pembimbings->first()->dosen) : "Belum ada pembimbing",
         ];
     }
 }
