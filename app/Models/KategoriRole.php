@@ -15,7 +15,8 @@ class KategoriRole extends Model
 
     protected $guarded = ['id'];
 
-    public function role_group(){
+    public function role_group()
+    {
         return $this->hasMany(RoleGroupKelompok::class, 'kategori_id', 'id');
     }
 

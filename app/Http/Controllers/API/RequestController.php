@@ -14,10 +14,12 @@ use App\Http\Resources\RequestResource;
 use App\Http\Resources\RequestCollection;
 use App\Notifications\RequestNotification;
 use App\Notifications\UpdateRequestNotification;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request as HttpRequest;
 
 class RequestController extends Controller
 {
-    public function index(Request $request)
+    public function index(HttpRequest $request)
     {
         if (auth()->user()->hasRole('mahasiswa')) {
             $kelompok_id = User::find(auth()->user()->id)->mahasiswa->kelompok_mahasiswa->where('status', '1')->first()->kelompok->id ?? null;
@@ -25,15 +27,22 @@ class RequestController extends Controller
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
         } else if (auth()->user()->hasRole('dosen')) {
             $krs_id = $request->krs_id;
-            $dosen = User::find(auth()->user()->id)->dosen->nidn;
-            // get request where pembimbing 1 or pembimbing 2 is dosen and krs in kelompok is $krs_id
-            $requests = Request::whereHas('kelompok', function ($query) use ($krs_id) {
-                $query->where('krs_id', 'LIKE', '%' . $krs_id . '%');
-            })->whereHas('kelompok', function ($query) use ($dosen) {
-                $query->whereHas('pembimbings', function ($query) use ($dosen) {
-                    $query->where('pembimbing_1', $dosen)->orWhere('pembimbing_2', $dosen);
-                });
-            })->with('ruangan', 'reference', 'kelompok')->orderBy('created_at', 'desc')->get();
+            $dosen = User::find(auth()->user()->id)->dosen;
+
+            $requests = DB::table('requests')
+                ->join('kelompoks', 'requests.kelompok_id', '=', 'kelompoks.id')
+                ->join('role_kelompoks', 'kelompoks.id', '=', 'role_kelompoks.kelompok_id')
+                ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', '=', 'role_group_kelompoks.id')
+                ->join('kategori_roles', 'role_group_kelompoks.kategori_id', '=', 'kategori_roles.id')
+                ->where('kategori_roles.nama', 'pembimbing')
+                ->where('role_kelompoks.nidn', $dosen->nidn)
+                ->where('kelompoks.krs_id', 'LIKE', '%' . $krs_id . '%')
+                ->select('requests.*')
+                ->get();
+
+            // convert to eloquent model
+            $requests = Request::hydrate($requests->toArray());
+
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
         }
     }
@@ -46,18 +55,9 @@ class RequestController extends Controller
         $request = Request::create($data);
 
         $kelompok = Kelompok::find($data['kelompok_id']);
-        $pembimbing1 = $kelompok->pembimbings->pembimbing_1_dosen;
-        $pembimbing2 = $kelompok->pembimbings->pembimbing_2_dosen;
-
-        if ($pembimbing1 == null && $pembimbing2 == null) {
-            return ResponseFormatter::error(null, 'Pembimbing tidak ditemukan', 500);
-        }
-
-        // send email to pembimbing
-        $pembimbing1->user->notify(new RequestNotification($request, $kelompok));
-
-        if ($pembimbing2 != null) {
-            $pembimbing2->user->notify(new RequestNotification($request, $kelompok));
+        $pembimbings = $kelompok->pembimbings;
+        foreach ($pembimbings as $pembimbing) {
+            $pembimbing->user->notify(new RequestNotification($request, $kelompok));
         }
 
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil ditambahkan');
@@ -69,12 +69,20 @@ class RequestController extends Controller
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil diambil');
     }
 
-    public function update(UpdateRequest $request, $id){
+    public function update(UpdateRequest $request, $id)
+    {
         $bimbingan = Request::find($id)->load('ruangan', 'reference', 'kelompok');
         $ref = Reference::where('value', $request->status)->first();
         $bimbingan->status = $ref->id;
         if ($request->waktu != null) {
             $bimbingan->waktu = $request->waktu;
+        }
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/files', $filename);
+            $bimbingan->file_bukti = $filename;
+            $bimbingan->is_done = 1;
         }
         $bimbingan->save();
 
