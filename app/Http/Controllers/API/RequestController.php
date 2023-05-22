@@ -14,10 +14,12 @@ use App\Http\Resources\RequestResource;
 use App\Http\Resources\RequestCollection;
 use App\Notifications\RequestNotification;
 use App\Notifications\UpdateRequestNotification;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request as HttpRequest;
 
 class RequestController extends Controller
 {
-    public function index(Request $request)
+    public function index(HttpRequest $request)
     {
         if (auth()->user()->hasRole('mahasiswa')) {
             $kelompok_id = User::find(auth()->user()->id)->mahasiswa->kelompok_mahasiswa->where('status', '1')->first()->kelompok->id ?? null;
@@ -25,13 +27,22 @@ class RequestController extends Controller
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
         } else if (auth()->user()->hasRole('dosen')) {
             $krs_id = $request->krs_id;
-            $dosen = User::find(auth()->user()->id)->dosen->nidn;
-            // get request where dosen is pembimbing
-            $requests = Request::whereHas('kelompok', function ($query) use ($dosen) {
-                $query->whereHas('pembimbings', function ($query) use ($dosen) {
-                    $query->where('nidn', $dosen);
-                });
-            })->with('ruangan', 'reference', 'kelompok')->orderBy('created_at', 'desc')->get();
+            $dosen = User::find(auth()->user()->id)->dosen;
+
+            $requests = DB::table('requests')
+                ->join('kelompoks', 'requests.kelompok_id', '=', 'kelompoks.id')
+                ->join('role_kelompoks', 'kelompoks.id', '=', 'role_kelompoks.kelompok_id')
+                ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', '=', 'role_group_kelompoks.id')
+                ->join('kategori_roles', 'role_group_kelompoks.kategori_id', '=', 'kategori_roles.id')
+                ->where('kategori_roles.nama', 'pembimbing')
+                ->where('role_kelompoks.nidn', $dosen->nidn)
+                ->where('kelompoks.krs_id', 'LIKE', '%' . $krs_id . '%')
+                ->select('requests.*')
+                ->get();
+
+            // convert to eloquent model
+            $requests = Request::hydrate($requests->toArray());
+
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
         }
     }
