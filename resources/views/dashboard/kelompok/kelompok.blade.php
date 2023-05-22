@@ -182,7 +182,6 @@
                                 <div>
                                     <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
                                         @csrf
-                                        {{-- <i class="text-warning">{{$kelompok->role_kelompok->sum('bobot') != 100 ? 'Tidak dapat melakukan verifikasi karena jumlah bobot belum mencapai atau melebihi 100%'  : ''}}</i> --}}
                                         <div class="d-flex">
                                             <span class="text-primary text-warning bg-warning bg-opacity-10 p-1 px-3 rounded-pill fw-semibold"><i class="ph-warning-circle"></i> not verified</span>
                                             <button class="btn btn-primary btn-sm fw-semibold ms-auto"><i class="ph-circle-wavy-warning"></i>&nbsp; Verifikasi&nbsp;&nbsp;&nbsp; <span class="bg-warning px-1 fw-semibold">{{$kelompok->role_kelompok->count()}}</span></button>
@@ -192,7 +191,6 @@
                                 @else 
                                 <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
                                     @csrf
-                                    {{-- <i class="text-warning">{{$kelompok->role_kelompok->sum('bobot') != 100 ? 'Tidak dapat melakukan verifikasi karena jumlah bobot belum mencapai 100%'  : ''}}</i> --}}
                                     <div class="d-flex">
                                         <input type="hidden" name="status" value="not_verified">
                                         <span class="text-primary text-success bg-success bg-opacity-10 p-1 px-3 rounded-pill fw-semibold"><i class="ph-checks"></i> verified</span>
@@ -201,23 +199,6 @@
                                     </form>
                                 @endif
                             @endif
-                            {{-- <div class="d-flex mb-1">
-                                <div class="d-flex">
-                                    <small class="mt-1">Total : </small>&nbsp;
-                                    <h5 class="{{$kelompok->role_kelompok->sum('bobot') == 100 ? 'text-primary' : 'text-warning'}}"> {{$kelompok->role_kelompok->sum('bobot')}} %</h5> 
-                                </div>
-                                @if($verified == true)
-                                    <div class="d-flex ms-auto">    
-                                        <span class="rounded-pill bg-opacity-10 text-success"><i class="ph-circle-wavy-check"></i>&nbsp; sudah diverifikasi</span>
-                                    </div>
-                                @else 
-                                    <div class="d-flex ms-auto">    
-                                        <span class="rounded-pill bg-opacity-10 text-danger"><i class="ph-circle-wavy-warning"></i>&nbsp; belum diverifikasi</span>
-                                    </div>
-                                @endif
-                            </div> --}}
-
-
                             
                             @if ($kelompok->role_kelompok->count() > 0)
                                 @foreach($kelompok->role_kelompok as $kr)
