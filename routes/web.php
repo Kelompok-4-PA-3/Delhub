@@ -113,7 +113,7 @@ Route::middleware([
     // Route::post('/addData', [NilaiMahasiswaRoleController::class, 'create'])->name('nilai_mahasiswa_role.create');
     // Nilai Mahasiswa
     Route::get('/kelompok/{kelompok}/penilaian/role/{role}/{penilaian}', [NilaiMahasiswaController::class, 'index'])->name('nilai_mahasiswa');
-    Route::post('/kelompok/{kelompok}/penilaian/role/{role}/approved', [NilaiMahasiswaController::class, 'update_status'])->name('nilai_mahasiswa.update_status');
+    Route::post('/kelompok/{kelompok}/penilaian/role/{role}/{penilaian}/approved', [NilaiMahasiswaController::class, 'update_status'])->name('nilai_mahasiswa.update_status');
     Route::post('/kelompok/{kelompok}/penilaian/role/{role}/{penilaian}/komponen/store', [NilaiMahasiswaController::class, 'store'])->name('nilai_mahasiswa.store');
     // http://localhost:8000/kelompok/25/penilaian/role/22/11/komponen/store
     // Route::get('/kelompok/{kelompok}/penilaian/{penilaian}/mahasiswa/{mahasiswa}', [NilaiMahasiswaController::class, 'index'])->name('nilai_mahasiswa');
@@ -131,6 +131,7 @@ Route::middleware([
     Route::post('/jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
     // Hasil penilaian
     Route::get('/krs/{kr}/hasil_penilaian', [PenilaianController::class, 'index'])->name('penilaian', 'penilaian.index');
+    Route::get('/krs/{kr}/hasil_penilaian/penilaian/{penilaian}', [PenilaianController::class, 'detail_hasil_nilai'])->name('penilaian.detail', 'penilaian.detail');
     // Reguasi
     Route::get('/krs/{id}/regulasi', [RegulasiController::class, 'index'])->name('regulasi', 'regulasi.index');
     Route::get('/krs/{id}/regulasi/add', [RegulasiController::class, 'create'])->name('regulasi-add', 'regulasi.add');

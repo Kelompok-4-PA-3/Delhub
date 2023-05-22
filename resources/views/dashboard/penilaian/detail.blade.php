@@ -109,12 +109,28 @@
             </table> --}}
             <div class="card">
                 <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
+                    @php
+                        $status_nilai = true;
+                        if ($penilaian->nilai_mahasiswa_kelompok($kelompok->id)->where('role_dosen_kelompok_id',$role_dosen->id)->where('approved_status',false)->count() > 0 || $penilaian->nilai_mahasiswa_kelompok($kelompok->id)->where('role_dosen_kelompok_id',$role_dosen->id)->count() < 1) {
+                            $status_nilai = false;
+                        }
+                    @endphp
+                    {{-- {{$penilaian->nilai_mahasiswa_kelompok($kelompok->id)->where('role_dosen_kelompok_id',$role_dosen->id)}} --}}
                     <h5 class="py-sm-2 my-sm-1">Penilaian {{$penilaian->nama_poin}}</h5><br>
                     <div class="mt-2 mt-sm-0 ms-sm-auto">
+                        @if (!$status_nilai)
+                            <span class="bg-warning text-warning bg-opacity-10 p-2 px-2 rounded-pill">
+                                <i class="ph-warning-circle"></i> NILAI BELUM DIAPPROVED
+                            </span>
+                        @else 
+                            <span class="bg-success text-success bg-opacity-10 p-2 px-2 rounded-pill">
+                                <i class="ph-check-circle"></i> NILAI SUDAH DIAPPROVED
+                            </span>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table datatable-users">
+                    <table class="table datatable-penilaian">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -156,14 +172,43 @@
                                     <!-- /modal with h5 -->
 
                                 @endforeach
-                                <th class="bg-warning bg-opacity-10 text-warning">
+
+                                <th class="{{$status_nilai ? '' : 'bg-warning bg-opacity-10 text-warning'}}">
                                     Nilai
                                     <div>
-                                        <form action="">
-                                            <button class="badge border-0 bg-success mt-1 fw-light">
-                                                approve
-                                            </button>
-                                        </form>
+                                        @if (!$status_nilai)
+                                            <form action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$penilaian->id}}/approved" method="post">
+                                                @csrf
+                                                @if ($penilaian->nilai_mahasiswa_kelompok($kelompok->id)->count() > 0)
+                                                    <button type="submit" class="badge border-0 bg-success mt-1 fw-light">
+                                                        approve
+                                                    </button>
+                                                @endif
+                                            </form>
+                                        @else 
+                                            <small class="text-success"><i class="ph-checks"></i> approved</small>
+                                            
+                                            <div class="btn-group">
+                                                {{-- <a href="#" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">Submenu on click</a> --}}
+                                                <small class="text-warning" data-bs-toggle="dropdown" data-bs-popup="tooltip" title="Apakah anda ingin membatalkan approve penilaian?"><i class="ph-warning-circle"></i></small>
+        
+                                                <div class="dropdown-menu" class="w-100">
+                                                    <form action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$penilaian->id}}/approved" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="unapproved" value="cancel">
+                                                        <div class="p-1">
+                                                            <i class="fw-light">
+                                                                <small>Apakah anda yakin ingin <br> membatalkan approve nilai?</small> 
+                                                            </i>
+                                                            <div class="d-flex justify-content-right">
+                                                                <button class="text-primary border-0 badge bg-primary bg-opacity-10"><small>Ya</small></button>&nbsp;&nbsp;
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                        @endif
                                     </div>
                                 </th>
                                 <th>Aksi</th>
@@ -175,7 +220,7 @@
                                 @foreach ($penilaian->komponen_penilaian as $item)
                                     <th>N{{$loop->iteration}}</th>
                                 @endforeach
-                                <th class="bg-warning bg-opacity-10 text-warning"></th>
+                                <th class="{{!$status_nilai ? 'bg-warning bg-opacity-10 text-warning' : ''}}"></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -185,47 +230,36 @@
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{$kkm->mahasiswa->nim}}</td>
                                 <td>{{$kkm->mahasiswa->user->nama}}</td>
-                                @php
-                                    
-                                @endphp
                                 @if ($penilaian->komponen_penilaian->count() > 0)
-                                @foreach ($penilaian->komponen_penilaian as $pkp)
-                                    <td class="add_nilai text-primary" data-name="komponen" data-pkp_id="{{$pkp->id}}" data-mahasiswa={{$kkm->mahasiswa->nim}}  data-type="number" data-max="100" style="cursor:pointer;">
-                                       {{-- {{$pkp->nilai_mahasiswa->where('kelompok_id',$kelompok->id  )}} --}}
-                                       
-                                       @php
-                                           $nilai_komponen_mahasiswa = $pkp->detail_nilai_mahasiswa($kkm->mahasiswa->nim, $role_dosen->id, $penilaian->id)
-                                                ->where('kelompok_id',$kelompok->id)
-                                                ->where('komponen_id', $pkp->id)
-                                                ->where('nim', $kkm->mahasiswa->nim)
-                                                ->where('role_dosen_kelompok_id', $role_dosen->id)
-                                                ->first();
-                                       @endphp
+                                    @php
+                                        $nilai_akhir = 0;
+                                    @endphp
+                                    @foreach ($penilaian->komponen_penilaian as $pkp)
+                                        <td class="{{!$status_nilai ? 'add_nilai text-primary' : ''}}" data-name="komponen" data-pkp_id="{{$pkp->id}}" data-mahasiswa={{$kkm->mahasiswa->nim}}  data-type="number" data-max="100" style="cursor:pointer;">
+                                        {{-- {{$pkp->nilai_mahasiswa->where('kelompok_id',$kelompok->id  )}} --}}
                                         
-                                       @if ( $nilai_komponen_mahasiswa != NULL)
-                                            {{  $nilai_komponen_mahasiswa->nilai / ($pkp->bobot / 100) }}
-                                            {{-- {{$role_dosen}} --}}
-                                       @endif
-                                       {{-- {{  $nilai_komponen_mahasiswa->nilai / ($pkp->bobot / 100)}} --}}
+                                        @php
+                                            $nilai_komponen_mahasiswa = $pkp->detail_nilai_mahasiswa()
+                                                    ->where('nilai_mahasiswas.kelompok_id',$kelompok->id)
+                                                    ->where('komponen_id', $pkp->id)
+                                                    ->where('nim', $kkm->mahasiswa->nim)
+                                                    ->where('role_dosen_kelompok_id', $role_dosen->id)
+                                        @endphp
+                                            
+                                        @if ( $nilai_komponen_mahasiswa->first() != NULL)
+                                                {{  $nilai_komponen_mahasiswa->first()->nilai / ($pkp->bobot / 100) }}
+                                                @php
+                                                    $nilai_akhir +=  $nilai_komponen_mahasiswa->first()->nilai;
+                                                @endphp
+                                                {{-- {{$role_dosen}} --}}
+                                        @endif
+                                        {{-- {{  $nilai_komponen_mahasiswa->nilai / ($pkp->bobot / 100)}} --}}
 
-                                    </td>
-                                @endforeach
+                                        </td>
+                                    @endforeach
                                 @endif
-                                {{-- <td>
-                                    @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id) != NULL)
-                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id)->nilai}} 
-                                    @else 
-                                        0
-                                    @endif
-                                </td> --}}
-                                <td class="bg-warning bg-opacity-10 text-warning fw-semibold">
-                                    @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id) != NULL)
-                                        {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $penilaian->id)->nilai / 
-                                        ($role_dosen->role_group->role_group_penilaian->where('poin_penilaian_id',$penilaian->id)->first()->bobot / 100)}} 
-                                        {{-- {{$role_dosen->role_group->role_group_penilaian->where('poin_penilaian_id',$penilaian->id)->first()->bobot / 100}} --}}
-                                    @else 
-                                        0
-                                    @endif
+                                <td class="{{!$status_nilai ? 'bg-warning bg-opacity-10 text-warning' : '' }} fw-semibold">
+                                    {{$nilai_akhir}}
                                 </td>
                                 <td>
                                     <button data-bs-toggle="offcanvas" data-bs-target="#tambah_penilaian{{$kkm->mahasiswa->nim}}" class="btn btn-sm btn-primary fw-semibold">Nilai</button>    

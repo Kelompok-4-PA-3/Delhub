@@ -130,9 +130,9 @@ const DatatableAPI = function() {
             paging: true,
             scrollY: true,
             scrollX: true,
-            // "columns td:first-child": [
-            //     { "width": "5%" },
-            //   ],
+            // columnDefs: [
+            //     { targets: 1, width: '100px' }
+            // ],
             buttons: {
                 dom: {
                     button: {

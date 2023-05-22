@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\RoleKelompok;
 use App\Models\RoleGroupKelompok;
+use App\Models\KategoriRole;
 use App\Models\Kelompok;
 use Illuminate\Http\Request;
 
@@ -53,7 +54,18 @@ class RoleKelompokController extends Controller
      */
     public function verification(Request $request, Kelompok $kelompok)
     {   
-        // return $request;
+        $check = true;
+        $all_role = RoleGroupKelompok::join('kategori_roles', 'role_group_kelompoks.kategori_id', 'kategori_roles.id')
+                                    ->where('kategori_roles.krs_id',$kelompok->krs_id)
+                                    ->select('role_group_kelompoks.*')
+                                    ->get();
+
+        foreach ($all_role  as $ar) {
+            if ($ar->role_kelompok->where('kelompok_id', $kelompok->id)->count() <= 0 && $ar->is_main) {
+                return back()->with('failed', 'Terdapat beberapa role wajib yang belum diassign');
+            }
+        }
+        
         $status = true;
         if ($request->status == 'not_verified') {
             $status = false;

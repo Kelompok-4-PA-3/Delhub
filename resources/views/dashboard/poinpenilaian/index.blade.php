@@ -14,7 +14,10 @@
 
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <span class="breadcrumb-item active py-2"> Poin Penilaian </span>
+@endsection     
 
 @section('main0nava')
 
@@ -386,7 +389,7 @@
                                                         </div>
                                                     @enderror
                                                 </div>
-                                                <div class="mt-2">
+                                                {{-- <div class="mt-2">
                                                     <label class="form-label">Pilih role</label>
                                                     <select data-placeholder="Pilih dosen" multiple="multiple" name="role_group_id[]" class="form-control select" required>
                                                         <option></option>
@@ -402,7 +405,7 @@
                                                         <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
                                                         </div>
                                                     @enderror
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                         <div class="border-top p-3">

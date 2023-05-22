@@ -59,7 +59,7 @@ class RoleGroupKelompokController extends Controller
             // 'bobot' => 'required|numeric|max:100|min:0',
        ];
        
-
+       
 
     //    if ($request->koordinator) {
     //         $validasi = $request->validate($data);
@@ -87,6 +87,9 @@ class RoleGroupKelompokController extends Controller
             
             $validasi = $request->validate($data);
             $validasi['kategori_id'] = $kategori->id;
+            if($request->is_main){
+                $validasi['is_main'] = 1;
+            }
             RoleGroupKelompok::create($validasi);
     //    }
 
@@ -101,21 +104,20 @@ class RoleGroupKelompokController extends Controller
     {
         $data = [
             'nama' => 'required',
-            // 'bobot' => 'required',
        ];
        $role_group = RoleGroupKelompok::find($roleGroupKelompok->id);
-    //    if ($role_group->nama != $request->nama) {
-    //         if (strtolower($request->nama) == 'koordinator') {
-    //             return back()->with('failed', 'Role koordinator telah terdaftar pada KRS ini');
-    //         }
-    //    }
        
 
        $validasi = $request->validate($data);
+       if($request->is_main){
+            // return 
+            $validasi['is_main'] = 1;
+       }else{
+            $validasi['is_main'] = 0;
+       }
        $validasi['kategori_id'] = $kategori->id;
        $role_group->nama = $validasi['nama'];
-    //    $role_group->bobot = $validasi['bobot'];
-       $role_group->is_verified = false;
+       $role_group->is_main = $validasi['is_main'];
        $role_group->save();
 
        return back()->with('success', 'Data role group berhasil diperbarui');

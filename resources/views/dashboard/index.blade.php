@@ -22,7 +22,7 @@
             <!-- Traffic sources -->
             <div class="card">
                 <div class="card-header d-flex align-items-center">
-                    <h5 class="mb-0">Proyek saya</h5>
+                    <h5 class="mb-0">Dashboard</h5>
                     <div class="ms-auto">
                         <label class="form-check form-switch form-check-reverse">
                             <input type="checkbox" class="form-check-input" checked>
@@ -34,21 +34,58 @@
                 <div class="card-body pb-0">
                     <div class="project-list">
 
+						
+					@if (Auth::user()->dosen->all_role_kelompok->count() > 0 )
+						<div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide p-1">PEKERJAAN SAYA</div>
+						@foreach (Auth::user()->dosen->all_role_kelompok as $role)
+							@if (strtolower($role->role_group->nama) != 'koordinator' && $role->role_group->role_kategori->krs->config->active)
+								<div class="p-1">
+									<div class="d-flex mb-2">
+										<a href="#" class="bg-success bg-opacity-10 text-success lh-1 rounded-pill p-2 me-3">
+											<i class="ph-notepad"></i>
+										</a>
+										<div>
+											<div class="fw-semibold">
+												<a href="/kelompok/{{$role->kelompok->id}}">{{$role->kelompok->nama_kelompok}}</a>
+											</div>
+											<span class="text-muted">{{$role->role_group->nama}}</span>
+										</div>
+									</div>
+									<div class="w-75 mx-auto mb-3" id="new-visitors"></div>
+								</div>
+							@endif
+							
+
+							{{-- <li class="nav-item">
+								<a href="/kelompok/{{$role->kelompok->id}}" class="nav-link">
+									<i class="ph-browsers text-warning"></i>
+									<div>
+									<small class="text-primary">{{$role->kelompok->nama_kelompok}}</small><br>
+									<div>
+										<small class="text-light"> <i> {{$role->role_group->nama}}</i></small>
+									</div>
+									</div>
+								</a>
+								
+							</li> --}}
+						@endforeach 
+					@endif
+
 						@foreach ($krs as $k)
-						<div class="p-1">
-                            <div class="d-flex mb-2">
-                                <a href="#" class="bg-success bg-opacity-10 text-success lh-1 rounded-pill p-2 me-3">
-                                    <i class="ph-notepad"></i>
-                                </a>
-                                <div>
-                                    <div class="fw-semibold">
-                                        <a href="/dashboard/{{$k->id}}">{{$k->kategori->nama_mk}}</a>
-                                    </div>
-                                    <span class="text-muted">{{$k->dosen->user->nama}}</span>
-                                </div>
-                            </div>
-                            <div class="w-75 mx-auto mb-3" id="new-visitors"></div>
-                        </div>
+							<div class="p-1">
+								<div class="d-flex mb-2">
+									<a href="#" class="bg-success bg-opacity-10 text-success lh-1 rounded-pill p-2 me-3">
+										<i class="ph-notepad"></i>
+									</a>
+									<div>
+										<div class="fw-semibold">
+											<a href="/dashboard/{{$k->id}}">{{$k->kategori->nama_mk}}</a>
+										</div>
+										<span class="text-muted">{{$k->dosen->user->nama}}</span>
+									</div>
+								</div>
+								<div class="w-75 mx-auto mb-3" id="new-visitors"></div>
+							</div>
 						@endforeach
 
                         <div class="p-1">

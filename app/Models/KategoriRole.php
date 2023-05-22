@@ -18,4 +18,8 @@ class KategoriRole extends Model
     public function role_group(){
         return $this->hasMany(RoleGroupKelompok::class, 'kategori_id', 'id');
     }
+
+    public function krs(){
+        return $this->belongsTo(Krs::class, 'krs_id', 'id');
+    }
 }

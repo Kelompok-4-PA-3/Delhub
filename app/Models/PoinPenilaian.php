@@ -31,4 +31,10 @@ use HasFactory;
                                                 ->where('kelompok_id', $kelompok)
                                                 ->get();
     }
+
+    public function nilai_mahasiswa_kelompok($kelompok){
+        return $this->hasMany(NilaiMahasiswa::class, 'poin_penilaian_id', 'id')
+                                                ->where('kelompok_id', $kelompok)
+                                                ->get();
+    }
 }

@@ -15,9 +15,9 @@ class RoleGroupKelompok extends Model
 
     protected $guarded = ['id'];
 
-    // public function role_kelompok(){
-    //     return $this->hasOne(RoleKelompok::class, 'role_group_id', 'id');
-    // }
+    public function role_kelompok(){
+        return $this->hasMany(RoleKelompok::class, 'role_group_id', 'id');
+    }
 
     public function komponen_penilaian_role(){
         return $this->belongsTo(RoleKelompokPenilaian::class, 'role_group_id', 'id');

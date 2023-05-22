@@ -17,25 +17,6 @@ class DashboardController extends Controller
         
         $role = auth()->user()->getRoleNames()->toArray();
         $krs = Krs::latest()->get();
-        // return $role;
-
-        // di KRS harus ada user id jadi semua data krs yang terikat ke krs yang akan dipanggil
-
-        // if(in_array('Dosen', $role)){
-        //     return "iya dosen";
-        // }else if(in_array('Mahasiswa', $role)){
-        //     return 'bukan dosen';
-        // }else{
-        //     return 'bukan dosen';
-        // }
-
-        // return auth()->user()->getRoleNames();
-        // user;
-        // ->roles;
-        // return $user->dosen;
-        // if($user->dosen > 0)
-        // $krs = Krs::where('dosen_ml', $id)->get();
-        // return $krs;
         return view('dashboard.index',[
             'title' => 'Dashboardss',
             'krs' => $krs,
@@ -43,7 +24,6 @@ class DashboardController extends Controller
     }
 
     public function show($id){
-        // return $id;
        $krs = Krs::where('id', $id)->first();
        $mahasiswa = Mahasiswa::latest()->get();
        $kelompok = Kelompok::where('krs_id',$id)->orderBy('created_at')->get();

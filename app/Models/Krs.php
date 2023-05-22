@@ -40,13 +40,26 @@ class Krs extends Model
     public function kelompok(){
         return $this->hasMany(Kelompok::class, 'krs_id', 'id');
     }
+    
+    public function kelompok_mahasiswa(){
+        return $this->hasMany(Kelompok::class, 'krs_id', 'id')
+                                    ->join('kelompok_mahasiswas', 'kelompoks.id', 'kelompok_mahasiswas.kelompok_id')
+                                    ->select('kelompoks.nama_kelompok', 'kelompoks.id', 'kelompok_mahasiswas.*');
+    }
 
     public function krs_user(){
         return $this->hasMany(KrsUser::class);
     }
 
-    public function krs_role(){
-        return $this->hasMany(RoleGroupKelompok::class, 'krs_id', 'id');
+    public function kategori_role(){
+        return $this->hasMany(KategoriRole::class, 'krs_id', 'id');
+    }
+
+    public function kategori_role_get_role(){
+        return $this->hasMany(KategoriRole::class, 'krs_id', 'id')
+                                            ->join('role_group_kelompoks', 'kategori_roles.id', 'role_group_kelompoks.kategori_id')
+                                            ->where('role_group_kelompoks.deleted_at',NULL)
+                                            ->select('role_group_kelompoks.*');
     }
 
     public function poin_penilaian(){

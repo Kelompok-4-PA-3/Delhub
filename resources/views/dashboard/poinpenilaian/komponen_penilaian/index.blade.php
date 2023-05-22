@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('title')
-    <title>Manajemen Komponen Regulasis</title>
+    <title>Manajemen Komponen Penilaian</title>
 @endsection
 
 @push('datatable_js')
@@ -17,7 +17,11 @@
 
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <a href="/krs/{{$krs->id}}/poin_penilaian" class="breadcrumb-item py-2"> Poin Penilaian</a>
+    <span class="breadcrumb-item active py-2"> {{$poin_penilaian->nama_poin}}</span>
+@endsection
 
 @section('content')
     <div class="card">
@@ -51,11 +55,11 @@
             @endif
 
             <!-- /individual column searching (text inputs) -->
-            <table class="table datatable-users w-100">
+            <table class="table datatable-penilaian w-100">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Komponen Penilaian</th>
+                        <th class="" >Komponen Penilaian</th>
                         <th>Bobot</th>
                         <th>Status</th>
                         <th class="text-center">Actions</th>

@@ -75,6 +75,8 @@ class PoinPenilaianController extends Controller
             return back()->with('failed','Role tersebut telah terdaftar pada poin penilaian ini')->with("store", $penilaian->id);
         }
 
+        // return $
+
         // foreach ($request->role_group_id as $rg) {
          RoleGroupPenilaian::create($validasi);
         // }       
@@ -157,16 +159,7 @@ class PoinPenilaianController extends Controller
         $poin_penilaian->nama_poin = $validasi['nama_poin'];
         $poin_penilaian->bobot = $validasi['bobot'];
         $poin_penilaian->is_verified = false;
-        $poin_penilaian->save();
-
-        RoleGroupPenilaian::where('poin_penilaian_id', $poin_penilaian->id)->delete();
-        // return $request->role_group_id;
-        foreach ($request->role_group_id as $rg) {
-            RoleGroupPenilaian::create([
-                'role_group_id' => $rg,
-                'poin_penilaian_id' => $poin_penilaian->id
-            ]);
-        }    
+        $poin_penilaian->save(); 
 
         return back()->with('success','poin penilaian telah berhasil duperbarui');
     }

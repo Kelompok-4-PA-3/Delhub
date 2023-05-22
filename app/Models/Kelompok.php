@@ -63,7 +63,7 @@ class Kelompok extends Model
     public function role_kelompok(){
         return $this->hasMany(RoleKelompok::class, 'kelompok_id', 'id')
         ->join('role_group_kelompoks','role_kelompoks.role_group_id','role_group_kelompoks.id')
-        ->select('role_kelompoks.*','role_group_kelompoks.bobot','role_group_kelompoks.nama');
+        ->select('role_kelompoks.*','role_group_kelompoks.nama');
     }
 
     public function nilai_mahasiswa(){
