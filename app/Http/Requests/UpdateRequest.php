@@ -24,6 +24,7 @@ class UpdateRequest extends FormRequest
         return [
             'status' => 'required|exists:references,value',
             'waktu' => 'nullable|date_format:Y-m-d H:i',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,jpg,jpeg,png|max:2048'
         ];
     }
 }

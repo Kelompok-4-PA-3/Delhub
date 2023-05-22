@@ -29,7 +29,7 @@
                             <tr>
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
-                                        Dear kelompok {{ $kelompok->nama_kelompok }}<br><br>
+                                        Dear kelompok {{ $bimbingan->kelompok->nama_kelompok }}<br><br>
                                         Permintaan bimbingan dari kelompok Anda telah di- {{ $status }}
                                         oleh dosen pembimbing pada tanggal {{ \Carbon\Carbon::now()->format('d F Y') }}.
                                         <br>

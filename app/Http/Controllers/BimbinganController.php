@@ -87,18 +87,9 @@ class BimbinganController extends Controller
         ]);
 
         $kelompok = Kelompok::find($validasi['kelompok_id']);
-        $pembimbing1 = $kelompok->pembimbings->pembimbing_1_dosen;
-        $pembimbing2 = $kelompok->pembimbings->pembimbing_2_dosen;
-
-        if ($pembimbing1 == null && $pembimbing2 == null) {
-            return redirect()->back()->with('failed', 'Pembimbing tidak ditemukan');
-        }
-
-        // send email to pembimbing
-        $pembimbing1->user->notify(new RequestNotification($bimbingan, $kelompok));
-
-        if ($pembimbing2 != null) {
-            $pembimbing2->user->notify(new RequestNotification($bimbingan, $kelompok));
+        $pembimbings = $kelompok->pembimbings;
+        foreach ($pembimbings as $pembimbing) {
+            $pembimbing->user->notify(new RequestNotification($bimbingan, $kelompok));
         }
         return redirect()->back()->with('success', 'Request bimbingan telah berhasil dibuat');
     }

@@ -46,18 +46,9 @@ class RequestController extends Controller
         $request = Request::create($data);
 
         $kelompok = Kelompok::find($data['kelompok_id']);
-        $pembimbing1 = $kelompok->pembimbings->pembimbing_1_dosen;
-        $pembimbing2 = $kelompok->pembimbings->pembimbing_2_dosen;
-
-        if ($pembimbing1 == null && $pembimbing2 == null) {
-            return ResponseFormatter::error(null, 'Pembimbing tidak ditemukan', 500);
-        }
-
-        // send email to pembimbing
-        $pembimbing1->user->notify(new RequestNotification($request, $kelompok));
-
-        if ($pembimbing2 != null) {
-            $pembimbing2->user->notify(new RequestNotification($request, $kelompok));
+        $pembimbings = $kelompok->pembimbings;
+        foreach ($pembimbings as $pembimbing) {
+            $pembimbing->user->notify(new RequestNotification($request, $kelompok));
         }
 
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil ditambahkan');
@@ -69,12 +60,20 @@ class RequestController extends Controller
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil diambil');
     }
 
-    public function update(UpdateRequest $request, $id){
+    public function update(UpdateRequest $request, $id)
+    {
         $bimbingan = Request::find($id)->load('ruangan', 'reference', 'kelompok');
         $ref = Reference::where('value', $request->status)->first();
         $bimbingan->status = $ref->id;
         if ($request->waktu != null) {
             $bimbingan->waktu = $request->waktu;
+        }
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/files', $filename);
+            $bimbingan->file_bukti = $filename;
+            $bimbingan->is_done = 1;
         }
         $bimbingan->save();
 

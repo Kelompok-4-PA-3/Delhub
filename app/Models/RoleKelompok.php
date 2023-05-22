@@ -15,16 +15,23 @@ class RoleKelompok extends Model
 
     protected $guarded = ['id'];
 
-    public function dosen(){
+    public function dosen()
+    {
         return $this->hasOne(Dosen::class, 'nidn', 'nidn');
     }
 
-    public function role_group(){
+    public function role_group()
+    {
         return $this->belongsTo(RoleGroupKelompok::class, 'role_group_id', 'id');
     }
 
-    public function kelompok(){
+    public function kelompok()
+    {
         return $this->belongsTo(Kelompok::class, 'kelompok_id', 'id');
     }
 
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class, 'kategori_id', 'id');
+    }
 }
