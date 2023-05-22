@@ -26,12 +26,10 @@ class RequestController extends Controller
         } else if (auth()->user()->hasRole('dosen')) {
             $krs_id = $request->krs_id;
             $dosen = User::find(auth()->user()->id)->dosen->nidn;
-            // get request where pembimbing 1 or pembimbing 2 is dosen and krs in kelompok is $krs_id
-            $requests = Request::whereHas('kelompok', function ($query) use ($krs_id) {
-                $query->where('krs_id', 'LIKE', '%' . $krs_id . '%');
-            })->whereHas('kelompok', function ($query) use ($dosen) {
+            // get request where dosen is pembimbing
+            $requests = Request::whereHas('kelompok', function ($query) use ($dosen) {
                 $query->whereHas('pembimbings', function ($query) use ($dosen) {
-                    $query->where('pembimbing_1', $dosen)->orWhere('pembimbing_2', $dosen);
+                    $query->where('nidn', $dosen);
                 });
             })->with('ruangan', 'reference', 'kelompok')->orderBy('created_at', 'desc')->get();
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
