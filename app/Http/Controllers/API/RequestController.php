@@ -80,7 +80,7 @@ class RequestController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/files', $filename);
+            $file->move(public_path('uploads/bimbingan'), $filename);
             $bimbingan->file_bukti = $filename;
             $bimbingan->is_done = 1;
         }
