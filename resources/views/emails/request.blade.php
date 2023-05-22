@@ -30,8 +30,9 @@
                                 <td style="padding: 30px">
                                     <div style="padding-bottom: 30px; font-size: 17px;">
                                         Kepada Yth. <br>
-                                        Bapak/Ibu {{ $kelompok->pembimbings->pembimbing_1_dosen->user->nama }} <br>
-                                        Bapak/Ibu {{ $kelompok->pembimbings->pembimbing_2_dosen->user->nama }} <br><br>
+                                        @foreach ($kelompok->pembimbings as $pembimbing)
+                                            Bapak/Ibu {{ $pembimbing->user->nama }} <br>
+                                        @endforeach
 
                                         Melalui email ini, kami dari {{ $kelompok->nama_kelompok }} ingin melakukan
                                         request bimbingan untuk Bapak/Ibu
