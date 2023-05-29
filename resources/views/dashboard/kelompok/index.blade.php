@@ -1,7 +1,7 @@
 @extends('main')
    
 @section('title')
-    <title>Manajemen Mahasiswa</title>
+    <title>Manajemen Anggota</title>
 @endsection
 
 @push('datatable_js')
@@ -15,7 +15,16 @@
     {{-- <script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script> --}}
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+	@role('dosen')
+		<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+		<a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+	@endrole
+	@role('mahasiswa')
+		<a href="/home" class="breadcrumb-item py-2"> Home</a>
+	@endrole
+	<span class="breadcrumb-item active py-2">{{$kelompok->nama_kelompok}}</span>
+@endsection
 
 @section('content')
 
@@ -41,30 +50,41 @@
     <div class="row">
         <div class="mb-2">
             <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
-                <li class="nav-item"><a href="#" class="nav-link active"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
+                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}" class="nav-link"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
-                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
+                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link active"> <i class="ph-users"></i> &nbsp; Orang</a></li>
                 {{-- @if (Auth::user()->dosen() != NULL)
                     @if (array_intersect(Auth::user()->dosen->role_kelompok($kelompok->id)->pluck('id')->toArray(), $kelompok->role_kelompok->pluck('id')->toArray())) --}}
-                <li class="nav-item">
-                    <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
-                    <div class="dropdown-menu">
-						@foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
-							<a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}}</a>
-						@endforeach
-                        {{-- {{Auth::user()->dosen->all_role_kelompok}} --}}
-                    </div>
-                </li>
+                
+                @role('dosen')
+                    <li class="nav-item">
+                        <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
+                        <div class="dropdown-menu">
+                            @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
+                            @if ($myrole->role_group != NULL)
+                                <div class="list-group">
+                                    <div class="d-flex">
+                                        <a @if($myrole->is_verified) href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" @endif  class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}} &nbsp; @if(!$myrole->is_verified) <i class="ph-warning-circle text-warning" style="cursor:pointer;" data-bs-popup="tooltip" title="Role anda belum diverfikasi"></i> @endif</a>
+                                    </div>
+                                </div>
+                            @endif
+                            @endforeach
+                        </div>
+                    </li>
+                @endrole
+                
                     {{-- @endif
                 @endif --}}
                 {{-- {{Auth::user()->dosen->role_kelompok($kelompok->id)}} --}}
-                @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
-                    <li class="nav-item">
-                        <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
-                    </li>
-                @endif  
+                @role('dosen')
+                    @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
+                        <li class="nav-item">
+                            <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
+                        </li>
+                    @endif  
+                @endrole
             </ul>
         </div>
 		
@@ -101,7 +121,9 @@
 						<tbody>
 							@foreach ($anggota as $a)
 								<tr>
-									<td><div class="container"><input type="checkbox" class="form-check-input"></div></td>
+									<td>
+										{{-- <div class="container"><input type="checkbox" class="form-check-input"></div> --}}
+									</td>
 									<td>
 										<div class="d-flex">
 											<div class="px-2">
@@ -118,6 +140,7 @@
 											<div class="px-4">
 												<small class="text-muted">{{ucfirst($a->reference->value)}}</small>
 											</div>
+											@role('dosen')
 											<small>
 												<form action="/kelompok/people/delete" method="post">
 													@csrf
@@ -126,6 +149,8 @@
 													<button class="text-danger bg-transparent border-0" type="submit"><i class="ph-trash"></i></button>
 												</form>
 											</small>
+											@endrole
+
 										</div>
 									</td>
 							   	</tr>
@@ -178,145 +203,7 @@
 		</div>
 
     </div>
-
-	{{-- @if (session()->has('success'))
-	<div class="border rounded p-2 p-lg-4 mb-4">
-		<div class="toast bg-success text-white border-0 fade show" role="alert" aria-live="assertive" aria-atomic="true" style="margin: auto;">
-			<div class="toast-header bg-black bg-opacity-10 text-white">
-				<div class="fw-semibold me-auto">Berhasil !!</div>
-				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-			</div>
-			<div class="toast-body">
-				{{session('success')}}
-			</div>
-		</div>
-	</div>
-	@endif --}}
 @endsection
-
-@section('right-sidebar')
- <!-- Right sidebar -->
-		<div class="sidebar sidebar-end sidebar-expand-lg sidebar-collapsed">
-
-			<!-- Expand button -->
-			<button type="button" class="btn btn-sidebar-expand sidebar-control sidebar-end-toggle h-100">
-				<i class="ph-caret-left"></i>
-			</button>
-			<!-- /expand button -->
-
-
-			<!-- Sidebar content -->
-			<div class="sidebar-content">
-
-				<!-- Header -->
-				<div class="sidebar-section sidebar-section-body d-flex align-items-center pb-2">
-					<h5 class="mb-0">Sidebar</h5>
-					<div class="ms-auto">
-						<button type="button" class="btn btn-light border-transparent btn-icon rounded-pill btn-sm sidebar-control sidebar-end-toggle d-none d-lg-inline-flex">
-							<i class="ph-arrows-left-right"></i>
-						</button>
-
-						<button type="button" class="btn btn-light border-transparent btn-icon rounded-pill btn-sm sidebar-mobile-end-toggle d-lg-none">
-							<i class="ph-x"></i>
-						</button>
-					</div>
-				</div>
-				<!-- /header -->
-
-				<!-- Sub navigation -->
-				<div class="sidebar-section">
-					<div class="sidebar-section-header border-bottom">
-						<span class="fw-semibold">Navigation</span>
-						<div class="ms-auto">
-	                		<a href="#sidebar-navigation" class="text-reset" data-bs-toggle="collapse">
-								<i class="ph-caret-down collapsible-indicator"></i>
-	                		</a>
-	                	</div>
-					</div>
-
-					<div class="collapse show" id="sidebar-navigation">
-						<ul class="nav nav-sidebar mt-2" data-nav-type="accordion">
-							<li class="nav-item-header opacity-50">Actions</li>
-							<li class="nav-item">
-                                <div class="btn-group">
-                                    <a href="#" class="nav-link" data-bs-toggle="dropdown">
-                                        <i class="ph-users-three me-2"></i>
-                                        Buat kelompok
-                                    </a>
-                                </div>
-
-							</li>
-							<li class="nav-item">
-								<a href="/kelompok" class="nav-link">
-									<i class="ph-plus-circle me-2"></i>
-									Create task
-								</a>
-							</li>
-							<li class="nav-item">
-								<a href="#" class="nav-link">
-									<i class="ph-circles-three-plus me-2"></i>
-									Create project
-								</a>
-							</li>
-							<li class="nav-item">
-								<a href="#" class="nav-link">
-									<i class="ph-pencil me-2"></i>
-									Edit task list
-								</a>
-							</li>
-							<li class="nav-item">
-								<a href="#" class="nav-link">
-									<i class="ph-user-plus me-2"></i>
-									Assign users
-									<span class="badge bg-primary rounded-pill ms-auto">94 online</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<!-- /sub navigation -->
-
-
-				<!-- Online users -->
-				<div class="sidebar-section">
-					<div class="sidebar-section-header border-bottom">
-						<span class="fw-semibold">Mahasiswa</span>
-						<div class="ms-auto">
-	                		<a href="#sidebar-users" class="text-reset" data-bs-toggle="collapse">
-								<i class="ph-caret-down collapsible-indicator"></i>
-	                		</a>
-	                	</div>
-					</div>
-
-					<div class="collapse show" id="sidebar-users">
-						<div class="sidebar-section-body">
-						</div>
-					</div>
-				</div>
-				<!-- /online users -->
-
-			</div>
-			<!-- /sidebar content -->
-
-		</div>
-		<!-- /right sidebar -->
-
-@endsection
-
-{{-- @if (session()->has('success'))
-<div class="toast-container position-fixed top-0 end-0 p-3">
-  <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-	<div class="toast-header bg-light text-success">
-	  <i class="ph-circle-wavy-check"></i>
-	  <strong class="me-auto">&nbsp;Berhasil</strong>
-	  <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
-	</div>
-	<div class="toast-body d-flex">
-	  <h5>&#128522;</h5>&nbsp;<small class="text-muted">{{session('success')}}</small>
-	</div>
-  </div>
-</div>
-@endif --}}
 
 @push('remove-scroll')
 <script>

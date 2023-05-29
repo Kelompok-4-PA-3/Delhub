@@ -51,6 +51,34 @@ class NilaiMahasiswaController extends Controller
         return back()->with('success','Seluruh nilai telah berhasil diapprove');   
     }
 
+    public function update_status_koordinator(Request $request, Kelompok $kelompok, PoinPenilaian $penilaian)
+    {
+        // return $request;
+        $role = RoleKelompok::where('role_group_id', $request->role_group_id)->where('kelompok_id',$kelompok->id)->first();
+
+        if($role == NULL){
+            return back()->with('failed', 'Kelompok '.$kelompok->nama_kelompok.' tidak memiliki role tersebut');
+        }
+        // return $role->dosen->user->nama;
+        $nilai_mahasiswa_kelompok = NilaiMahasiswa::where('kelompok_id',$kelompok->id)
+                                                ->where('role_dosen_kelompok_id',$role->id)
+                                                ->where('poin_penilaian_id',$penilaian->id);
+
+        // if ($request->unapproved) {
+            $nilai_mahasiswa_kelompok->update([
+                'approved_status' => false
+            ]);
+
+            return back()->with('success','Seluruh nilai telah berhasil diunapprove');   
+
+        // }
+        // $nilai_mahasiswa_kelompok->update([
+        //     'approved_status' => true
+        // ]);
+                                                // ->get();
+        return back()->with('success','Seluruh nilai telah berhasil diapprove');   
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -83,7 +111,8 @@ class NilaiMahasiswaController extends Controller
             $bobot_not_main = 0;
             foreach ($role_not_main as $rnm) {
                 if ($rnm->role_kelompok->where('kelompok_id',$kelompok->id)->count() < 1) {
-                    $bobot_not_main += $rnm->role_group_penilaian->sum('bobot');
+                    // return $rnm->role_group_penilaian;
+                    $bobot_not_main += $rnm->role_group_penilaian->where('poin_penilaian_id', $penilaian->id)->sum('bobot');
 
                     // if ($rnm->role_kelompok->where('kelompok_id',$kelompok->id)->count() < 1) {
                     //     $bobot_not_main += $rnm->role_group_penilaian->sum('bobot');
@@ -137,6 +166,7 @@ class NilaiMahasiswaController extends Controller
         // if ($role) {
         //     # code...
         // }
+        // return $bobot_role;
         $nilai->nilai = $total_nilai * ($bobot_role / 100);
         $nilai->save();
 

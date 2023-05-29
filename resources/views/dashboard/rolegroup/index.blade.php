@@ -14,7 +14,12 @@
 
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2">{{$krs->kategori->nama_singkat}}</a>
+    <a href="/krs/{{$krs->id}}/kategori_role" class="breadcrumb-item py-2">Kategori Role</a>
+    <span class="breadcrumb-item active py-2"> {{$kategori->nama}}</span>
+@endsection
 
 @section('content')
     <div class="card">
@@ -63,7 +68,7 @@
                     @foreach ($role_group as $rg)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $rg->nama }} <small class="text-primary">{{$rg->is_main ? '( Role utama )' : ''}}</small> </td>
+                            <td>{{ $rg->nama }} <small class="{{$rg->is_main ? 'text-primary' : 'text-warning'}}">{{$rg->is_main ? '( wajib )' : '(opsional)'}}</small> </td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
                                     <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
@@ -191,5 +196,8 @@
             </form>
 		</div>
 	</div>
+
+
+ 
    
 @endsection

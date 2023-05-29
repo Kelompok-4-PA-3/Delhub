@@ -1,32 +1,30 @@
 @extends('main')
 
 @section('title')
-    <title>Manajemen Mahasiswa</title>
+    <title>{{$kelompok->nama_kelompok}}</title>
 @endsection
 
 @push('datatable_js')
 	<script src="{{asset('/assets/js/vendor/tables/datatables/datatables.min.js')}}"></script>
 	<script src="{{asset('/assets/demo/pages/datatables_api.js')}}"></script>
     <script src="{{asset('/assets/js/vendor/tables/datatables/extensions/buttons.min.js')}}"></script>
-    {{-- <script src="{{asset('/assets/demo/pages/picker_date.js')}}"></script> --}}
     <script src="{{asset('/assets/js/vendor/ui/fab.min.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/ui/prism.min.js')}}"></script>
 	<script src="{{asset('/assets/demo/pages/extra_fab.js')}}"></script>
     <script src="{{asset('/assets/js/jquery/jquery.min.js')}}"></script>
-	{{-- <script src="{{asset('/assets/js/vendor/uploaders/fileinput/fileinput.min.js')}}"></script>
-	<script src="{{asset('/assets/js/vendor/uploaders/fileinput/plugins/sortable.min.js')}}"></script>
-	<script src="{{asset('/assets/demo/pages/uploader_bootstrap.js')}}"></script>
-    <script src="{{asset('/assets/js/vendor/ui/moment/moment.min.js')}}"></script> --}}
-    {{-- <script src="{{asset('/assets/js/vendor/pickers/daterangepicker.js')}}"></script>
-	<script src="{{asset('/assets/js/vendor/pickers/datepicker.min.js')}}"></script> --}}
     <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
 @endpush
 
 
 @section('breadscrumb')
-	<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
-	<a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+    @role('dosen')
+	    <a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+	    <a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+    @endrole
+	@role('mahasiswa')
+		<a href="/home" class="breadcrumb-item py-2"> Home</a>
+	@endrole
 	<span class="breadcrumb-item active py-2">{{$kelompok->nama_kelompok}}</span>
 @endsection
 
@@ -43,31 +41,34 @@
                 <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
                 {{-- @if (Auth::user()->dosen() != NULL)
                     @if (array_intersect(Auth::user()->dosen->role_kelompok($kelompok->id)->pluck('id')->toArray(), $kelompok->role_kelompok->pluck('id')->toArray())) --}}
-                <li class="nav-item">
-                    <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
-                    <div class="dropdown-menu">
-                        @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
-                        @if ($myrole->role_group != NULL)
-                            <div class="list-group">
-                                <div class="d-flex">
-                                    <a @if($myrole->is_verified) href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" @endif  class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}} &nbsp; @if(!$myrole->is_verified) <i class="ph-warning-circle text-warning" style="cursor:pointer;" data-bs-popup="tooltip" title="Role anda belum diverfikasi"></i> @endif</a>
+                
+                @role('dosen')
+                    <li class="nav-item">
+                        <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
+                        <div class="dropdown-menu">
+                            @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
+                            @if ($myrole->role_group != NULL)
+                                <div class="list-group">
+                                    <div class="d-flex">
+                                        <a @if($myrole->is_verified) href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" @endif  class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}} &nbsp; @if(!$myrole->is_verified) <i class="ph-warning-circle text-warning" style="cursor:pointer;" data-bs-popup="tooltip" title="Role anda belum diverfikasi"></i> @endif</a>
+                                    </div>
                                 </div>
-                            </div>
-                        @endif
-                        @endforeach
-                        {{-- {{Auth::user()->dosen->all_role_kelompok}} --}}
-                        {{-- data-bs-popup="tooltip" title="hapus" --}}
-
-                    </div>
-                </li>
+                            @endif
+                            @endforeach
+                        </div>
+                    </li>
+                @endrole
+                
                     {{-- @endif
                 @endif --}}
                 {{-- {{Auth::user()->dosen->role_kelompok($kelompok->id)}} --}}
-                @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
-                    <li class="nav-item">
-                        <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
-                    </li>
-                @endif  
+                @role('dosen')
+                    @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
+                        <li class="nav-item">
+                            <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
+                        </li>
+                    @endif  
+                @endrole
             </ul>
         </div>
 
@@ -83,12 +84,12 @@
                         </li>
                         <li class="nav-item">
                             {{-- @can('kelola topik kelompok') --}}
-                                @if (app('is_kelompok_leader')->is_kelompok_leader($kelompok->id))
+                                {{-- @if (app('is_kelompok_leader')->is_kelompok_leader($kelompok->id)) --}}
                                     <a href="#edit-topik" class="nav-link" data-bs-toggle="tab">
                                         <i class="ph-pencil me-2"></i>
                                         Edit
                                     </a>
-                                @endif
+                                {{-- @endif --}}
                             {{-- @endcan --}}
                         </li>
                     </ul>
@@ -177,29 +178,42 @@
                         </div>
                         
                         <div class="tab-pane fade show active" id="pembimbing_penguji">
+                            @role('dosen')
+                            {{-- @if (Auth::user()->dosen->krs->count() > 0 || Auth::user()->dosen->krs2->count() > 0) --}}
                             @if ($kelompok->role_kelompok->count() > 0)
                                 @if(!$verified)
                                 <div>
-                                    <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
-                                        @csrf
-                                        <div class="d-flex">
-                                            <span class="text-primary text-warning bg-warning bg-opacity-10 p-1 px-3 rounded-pill fw-semibold"><i class="ph-warning-circle"></i> not verified</span>
-                                            <button class="btn btn-primary btn-sm fw-semibold ms-auto"><i class="ph-circle-wavy-warning"></i>&nbsp; Verifikasi&nbsp;&nbsp;&nbsp; <span class="bg-warning px-1 fw-semibold">{{$kelompok->role_kelompok->count()}}</span></button>
-                                        </div>
-                                    </form>
+                                    <div class="d-flex">
+                                        <span class="text-primary text-warning p-1 px-3 rounded-pill fw-semibold"><i class="ph-warning-circle"></i> not verified</span>
+                                        @if (Auth::user()->dosen->krs->count() > 0 || Auth::user()->dosen->krs2->count() > 0) 
+                                            <div class="ms-auto">
+                                                <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
+                                                    @csrf
+                                                    <button class="btn btn-primary btn-sm fw-semibold ms-auto"><i class="ph-circle-wavy-warning"></i>&nbsp; Verifikasi&nbsp;&nbsp;&nbsp; <span class="bg-warning px-1 fw-semibold">{{$kelompok->role_kelompok->count()}}</span></button>
+                                                </form>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                                 @else 
-                                <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
-                                    @csrf
-                                    <div class="d-flex">
-                                        <input type="hidden" name="status" value="not_verified">
-                                        <span class="text-primary text-success bg-success bg-opacity-10 p-1 px-3 rounded-pill fw-semibold"><i class="ph-checks"></i> verified</span>
-                                            <button class="btn btn-warning btn-sm fw-semibold ms-auto">Batalkan verifikasi</span></button>
+                                <div class="d-flex">
+                                    <span class="text-primary text-success p-1 px-3 rounded-pill fw-semibold mt-1"><i class="ph-checks"></i> verified</span>
+                                    @if (Auth::user()->dosen->krs->count() > 0 || Auth::user()->dosen->krs2->count() > 0)
+                                        <div class="ms-auto">
+                                            <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
+                                                @csrf
+                                                <div class="d-flex">
+                                                    <input type="hidden" name="status" value="not_verified">
+                                                    <button class="btn btn-warning btn-sm fw-semibold ms-auto">Batalkan verifikasi</span></button>
+                                                </div>
+                                            </form>
                                         </div>
-                                    </form>
+                                    @endif
+                                </div>
                                 @endif
+                            {{-- @endif --}}
                             @endif
-                            
+                            @endrole
                             @if ($kelompok->role_kelompok->count() > 0)
                                 @foreach($kelompok->role_kelompok as $kr)
                                 <div>
@@ -295,11 +309,13 @@
                                 Daftar
                             </a>
                         </li>
-                         <li class="nav-item">
-                             <a href="#tambah-bimbingan" class="nav-link" data-bs-toggle="tab">
-                                 Request
-                             </a>
-                         </li>
+                        @role('mahasiswa')    
+                            <li class="nav-item">
+                                <a href="#tambah-bimbingan" class="nav-link" data-bs-toggle="tab">
+                                    Request
+                                </a>
+                            </li>
+                        @endrole
                     </ul>
                     <!-- /tabs -->
 
@@ -310,7 +326,7 @@
                                 <table class="table text-nowrap">   
                                     <tbody>
                                         @if($kelompok->bimbingan->count() > 0)
-                                        @foreach($kelompok->bimbingan as $kb)
+                                        @foreach($kelompok->bimbingan->sortByDesc('created_at') as $kb)
                                         <tr>
                                             <td class="text-center">
                                                 <h6 class="mb-0">{{Carbon\Carbon::parse($kb->waktu)->format('d')}}</h6>
@@ -341,10 +357,18 @@
                                                 @if (!$kb->is_done)
                                                     <div class="dropdown">
                                                         <a href="#" class="text-body" data-bs-toggle="dropdown">
-                                                            <i class="ph-list"></i>
+                                                            <i class="ph-list">
+                                                                @role('dosen')
+                                                                    @if ($kb->file_bukti)
+                                                                        <small><i style="font-size: 14px;" data-bs-popup="tooltip" title="Cek MOM yang telah diuppload" class="text-warning ph-warning-circle"></i></small>
+                                                                    @endif
+                                                                @endrole
+                                                            </i>
+                                                            {{-- $kb->file_bukti --}}
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-end">
 
+                                                            @role('dosen')
                                                             {{-- @can('update status bimbingan') --}}
                                                                 {{-- @if (app('is_pembimbing')->is_pembimbing($kelompok->id)) --}}
                                                                 {{-- @can('pembimbing-kelompok',$kelompok) --}}
@@ -363,22 +387,36 @@
                                                                         @endforeach
                                                                     @endif
                                                                 {{-- @endcan --}}
-                                                                
+                                                                @endrole
 
-                                                                    @if($kb->reference->value == 'approved' && !$kb->is_done)
+                                                                @if ($kb->file_bukti == NULL)
+                                                                    @role('mahasiswa')
+                                                                        @if($kb->reference->value == 'approved' && !$kb->is_done)
+                                                                            <a href="#" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#upload_bukti{{$kb->id}}">
+                                                                                <i class="ph-microsoft-excel-logo me-2"></i>
+                                                                                upload MOM
+                                                                            </a>
+                                                                        @endif
+                                                                    @endrole
+                                                                @else
+                                                                    {{-- @role('dosen') --}}
+                                                                        @if($kb->reference->value == 'approved' && !$kb->is_done)
                                                                         <a href="#" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#upload_bukti{{$kb->id}}">
                                                                             <i class="ph-microsoft-excel-logo me-2"></i>
-                                                                            {{$kb->file_bukti == NULL ? 'upload MOM' : 'Lihat MOM'}}
+                                                                            Lihat MOM
                                                                         </a>
-                                                                    @endif
+                                                                        @endif
+                                                                    {{-- @endrole --}}
+                                                                @endif
                                                                 {{-- @endif --}}
                                                             {{-- @endcan --}}
-
-                                                            @if($kb->reference->value == 'waiting')
-                                                                <a href="#" class="text-danger dropdown-item" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$kb->id}}">
-                                                                    <i class="ph-trash me-2"></i> Batal
-                                                                </a>
-                                                            @endif
+                                                            @role('mahasiswa')
+                                                                @if($kb->reference->value == 'waiting')
+                                                                    <a href="#" class="text-danger dropdown-item" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$kb->id}}">
+                                                                        <i class="ph-trash me-2"></i> Batal
+                                                                    </a>
+                                                                @endif
+                                                            @endrole
                                                             {{-- @endif --}}
 
                                                         </div>
@@ -388,8 +426,6 @@
                                                        <i class="ph-circle-wavy-check text-success"></i>
                                                     </div>
                                                 @endif
-
-
                                             </td>
                                         </tr>
 
@@ -425,29 +461,60 @@
                                                 @else
 
                                                 <div class="py-1">
-                                                    <div class="mb-1">
-                                                        <small class=""><i>Silahkan konfirmasi jika bimbingan telah selesai dan dokumen pendukung sudah benar</i></small>
-                                                    </div>
+                                                   <small>File bukti bimbingan</small>
                                                 </div>
 
-                                                    <a href="{{asset('/storage/bukti-bimbingan/'.$kb->file_bukti)}}" download class="navbar-nav-link navbar-nav-link-icon text-primary bg-primary bg-opacity-10 fw-semibold rounded p-2" target="_blank">
+                                                <div class=" bg-primary bg-opacity-10 fw-semibold rounded p-2 d-flex">
+                                                    <a href="{{asset('/storage/public/bukti-bimbingan/'.$kb->file_bukti)}}" download class="navbar-nav-link navbar-nav-link-icon text-primary" target="_blank">
                                                         <div class="d-flex align-items-center mx-md-1">
                                                             <i class="ph-file"></i>
                                                             <span class="d-none d-md-inline-block ms-2">{{$kb->file_bukti}}</span>
                                                         </div>
                                                     </a>
-
+                                                    <div class="ms-auto">
+                                                        <small class="fw-light" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$kb->id}}_file"><a href="#" class="text-secondary">Hapus</a></small>
+                                                    </div>
+                                                </div>
+                                                    @role('dosen')
                                                     <form action="/bimbingan/approve/{{$kb->id}}" method="post" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="border-top p-3">
                                                             <button type="submit" class="btn btn-success w-100">Approve</button>
                                                         </div>
                                                     </form>
+                                                    @endrole
+
                                                 @endif
 
                                             </div>
                                         </div>
                                         <!-- /sticky footer -->
+
+                                           <!-- Delete Modal -->
+                                           <div id="modal_hapus{{$kb->id}}_file" class="modal fade" tabindex="-1">
+                                            <div class="modal-dialog modal-xs">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        Apakah anda yakin ingin menghapus file ini ?
+                                                    </div>
+
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                        <form action="/request/{{$kb->id}}/delete-file" method="post">
+                                                            @csrf
+                                                            <input type="hidden" name="old_file" value="{{$kb->file_bukti}}">
+                                                            <button type="submit" class="btn btn-primary">Ya</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /Delete Modal -->
 
                                          <!-- Delete Modal -->
                                         <div id="modal_hapus{{$kb->id}}" class="modal fade" tabindex="-1">

@@ -181,7 +181,7 @@ const DatatableAPI = function() {
             }
         });
 
-        $('.datatable-hasil-nilai thead tr:eq(1) th').each(function () {
+        $('.datatable-hasil-nilai thead tr:eq(1) th').not(':last-child').each(function () {
             const title = $(this).text();
             $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
         });
@@ -207,9 +207,9 @@ const DatatableAPI = function() {
                         text: 'Export to Excel <i class="ph-file-xls ms-2"></i>',
                         autoFilter: true,
                         sheetName: 'Sheet 1',
-                        exportOptions: {
-                            columns: 'th:not(:last-child)'
-                         }
+                        // exportOptions: {
+                        //     columns: 'th:not(:last-child)'
+                        //  }
                     },
                     {
                         extend: 'print',
@@ -281,10 +281,9 @@ const DatatableAPI = function() {
             $(this).html('<select class="column-check form-control"><option value=""> <button class="btn bg-white shadow-sm"> Semua </button></option><option value="Success"> <button class="btn bg-check-success shadow-sm"> Terpenuhi </button></option></select>');
         });
 
-        $('.datatable-regulasi thead tr:eq(1) th:not(:first-child).pembimbing-column').each(function () {
+        $('.datatable-regulasi thead tr:eq(1) th:not(:first-child):not(.regulasi-column).pembimbing-column').each(function () {
             const title = $(this).text();
             $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
-
         });
 
         $('.datatable-regulasi').DataTable({

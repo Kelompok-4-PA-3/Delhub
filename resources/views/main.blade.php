@@ -42,6 +42,13 @@
 
 <body>
 
+    <style>
+        .card{
+            box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+            border: 0;
+        }
+    </style>
+
     @include('layout.navbar')
 
     <!-- Page content -->
@@ -51,7 +58,7 @@
         @include('layout.sidebar')
 
         <!-- Main content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="background-color: #e9f3ff">
 
             <!-- Inner content -->
             <div class="content-inner">
@@ -318,6 +325,8 @@
             </div>
         </div>
     @endif
+    
+    @include('sweetalert::alert')
 
     @stack('remove-scroll')
 

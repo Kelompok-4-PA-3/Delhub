@@ -44,8 +44,15 @@ class Mahasiswa extends Model
         return $this->belongsTo(Jadwal::class);
     }
 
-    public function kelompokMahasiswa(){
-        return $this->hasMany(KelompokMahasiswa::class);
+    // public function kelompokMahasiswa(){
+    //     return $this->hasMany(KelompokMahasiswa::class);
+    // }
+
+    public function kelompokMahasiswaKrs(){
+        return $this->hasMany(KelompokMahasiswa::class, 'nim', 'nim')
+                    ->join('kelompoks','kelompok_mahasiswas.kelompok_id','kelompoks.id')
+                    ->join('krs','kelompoks.krs_id','krs.id')
+                    ->select('kelompoks.*','krs.*');
     }
 
     public function nilai_mahasiswa($role, $kelompok, $penilaian){

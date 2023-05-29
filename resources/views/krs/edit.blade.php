@@ -1,5 +1,9 @@
 @extends('main')
 
+@section('title')
+    <title>Kartu Rencana Studi</title>
+@endsection
+
 @push('select_js')
     <script src="{{asset('../../../assets/js/jquery/jquery.min.js')}}"></script>
 	<script src="{{asset('../../../assets/js/vendor/forms/selects/select2.min.js')}}"></script>
@@ -8,15 +12,18 @@
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
 @endpush
 
+@section('breadscrumb')
+    <a href="/krs" class="breadcrumb-item active py-2"><i class="ph-squares-four"></i>&nbsp;Manajemen KRS</a>
+    <span class="breadcrumb-item active py-2">Edit KRS</span>
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <h5 class="mb-0">Tambah KRS</h5>
+            <h5 class="mb-0">Edit KRS</h5>
         </div>
 
         <div class="card-body pb-0">
-            <div class="card">
-                <div class="card-body border-top">
                     <form action="/krs/{{$krs->id}}" method="post">
                         @method('put')
                         @csrf
@@ -42,7 +49,7 @@
                                     <option></option>
                                     <optgroup label="Daftar Konfigurasi">
                                         @foreach($config as $c)
-                                            <option @if(old('config_id',$krs->config_id) == $c->id) selected @endif value="{{$c->id}}">{{$c->tahun_aktif}} - {{$c->semester}}</option>
+                                            <option @if(old('config_id',$krs->config_id) == $c->id) selected @endif value="{{$c->id}}">{{$c->tahun_aktif}} - {{$c->semester == '1' ? 'Gasal' : 'Genap'}}</option>
                                         @endforeach
                                     </optgroup>
                                 </select>
@@ -121,8 +128,6 @@
                             <button type="submit" class="btn btn-primary">Submit <i class="ph-paper-plane-tilt ms-2"></i></button>
                         </div>
                     </form>
-                </div>
-            </div>
         </div>
 
         <div class="chart position-relative" id="traffic-sources"></div>

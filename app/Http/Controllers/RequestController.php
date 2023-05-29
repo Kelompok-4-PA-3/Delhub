@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
 use App\Models\Request as Bimbingan;
 use App\Models\Kelompok;
+use Storage;
 use App\Models\Pembimbing;
 use Auth;
 
@@ -56,14 +57,27 @@ class RequestController extends Controller
     {
     }
 
-    public function update(Request $request, $id)
-    // : RedirectResponse
+    public function update(Request $request, Bimbingan $bimbingan)
     {
+        // return $bimbingan;
+        $requests = Bimbingan::find($bimbingan->id);
+        $path = 'public/bukti-bimbingan/'.$request->old_file;
+        // return $path;
+        if (Storage::disk('public')->exists($path)) {
+            Storage::delete($path);
+            // return "File deleted successfully.";
+        } else {
+            return back()->with('failed','File tidak ditemukan');
+        }
+        $requests->file_bukti = NULL;
+        $requests->save();
+
+        return back();
     }
 
     public function destroy($id)
     {
-        $requests = request::find($id);
+        $requests = Bimbingan::find($id);
         $requests->delete();
 
         return back();

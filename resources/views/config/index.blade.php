@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('title')
-    <title>Manajemen Roles</title>
+    <title>Manajemen Konfigurasi</title>
 @endsection
 
 @push('datatable_js')
@@ -12,7 +12,9 @@
     <script src="{{ asset('/assets/js/vendor/forms/selects/select2.min.js') }}"></script>
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <span href="/krs" class="breadcrumb-item active py-2"><i class="ph-list-dashes"></i>&nbsp;Manajemen Konfigurasi</span>
+@endsection
 
 @section('content')
     <div class="card">

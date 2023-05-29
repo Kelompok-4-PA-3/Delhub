@@ -58,7 +58,10 @@ class Dosen extends Model
     }
 
     public function all_role_kelompok(){
-        return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn');
+        return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn')
+        ->join('kelompoks','role_kelompoks.kelompok_id', 'kelompoks.id')
+        ->join('krs','kelompoks.krs_id', 'krs.id')
+        ->where('krs.deleted_at',NULL);
     }
 
     public function getRouteKeyName()

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\KategoriRole;
+use App\Models\RoleGroupKelompok;
+use App\Models\RoleKelompok;
 use App\Models\Krs;
 use Illuminate\Http\Request;
 
@@ -38,11 +40,52 @@ class KategoriRoleController extends Controller
             'nama' => 'required'
         ];
 
-        $validasi = $request->validate($data);
-        $validasi['krs_id'] = $kr->id;
-        KategoriRole::create($validasi);
+        if ($request->koordinator) {
 
-        return back()->with('success', 'Data kategori role berhasil ditambahkan');
+                if($kr->kelompok->count() < 1){
+                    return back()->with('failed','KRS belum ini memiliki kelompok');
+                }
+
+                $koordinator_role = new KategoriRole;
+                $koordinator_role->krs_id = $kr->id;
+                $koordinator_role->nama = 'koordinator';
+                $koordinator_role->save();
+               
+
+                $role_group = new RoleGroupKelompok;
+                $role_group->kategori_id = $koordinator_role->id;
+                $role_group->nama = 'koordinator';
+                $role_group->is_main = true;
+                $role_group->save();
+
+                // $koordinator = new RoleKelompok;
+                // $koordinator->nama = 'koordinator';
+                // $koordinator->role_group_id = $koordinator_role->id;
+                // $koordinator->kelompok_id = $koordinator_role->id;
+                // $koordinator->is_main = true;
+                // $koordinator->save();
+
+                foreach ($kr->kelompok as $krk) {
+                    RoleKelompok::create([
+                        'role_group_id' => $role_group->id,
+                        'kelompok_id' => $krk->id,
+                        'nidn' => $kr->dosen_mk,
+                    ]);
+                }
+         
+                return back()->with('success', 'Role koordinator telah berhasil ditambah pada KRS ini');
+
+        }else{
+            if (strtolower($request->nama) == 'koordinator') {
+                return back()->with('failed', 'Role koordinator telah terdaftar pada KRS ini');
+            }
+            
+            $validasi = $request->validate($data);
+            $validasi['krs_id'] = $kr->id;
+            KategoriRole::create($validasi);
+    
+            return back()->with('success', 'Data kategori role berhasil ditambahkan');
+       }
 
     }
 

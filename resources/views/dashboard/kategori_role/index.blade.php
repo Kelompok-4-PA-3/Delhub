@@ -14,7 +14,11 @@
 
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2">{{$krs->kategori->nama_singkat}}</a>
+    <span class="breadcrumb-item active py-2"> Kategori Role</span>
+@endsection
 
 @section('content')
     <div class="card">
@@ -212,5 +216,30 @@
             </form>
 		</div>
 	</div>
+
+    @if ($kategori->where('nama',strtolower('koordinator'))->first() == NULL)
+        <!-- Large panel -->
+        <div id="tambah_role_group_koordinator" class="offcanvas offcanvas-top offcanvas-size-lg show" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel">
+            <div class="offcanvas-header">
+            </div>
+
+            <div class="offcanvas-body p-2">
+                <div class="container">
+                    <h1 class="text-center"><i class="ph-warning text-warning ph-2x"></i> </h1>
+                    <h4 class="fw-light text-center">
+                        Sepertinya role Koordinator belum terdapat di krs ini pastikan untuk membuat role tersebut terlabih dahulu
+                    </h4>
+                </div>
+                <form action="/krs/{{$krs->id}}/kategori_role/store" method="post">
+                    @csrf
+                    <input type="hidden" name="koordinator" value="koordinator">
+                    <div class="border-top p-3">
+                        <button type="submit" class="btn btn-primary w-100">Lanjutkan</button>
+                        <a href="/koordinator/proyeksaya/{{$krs->id}}" class="btn btn-muted w-100 mt-2">Kembali</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
    
 @endsection

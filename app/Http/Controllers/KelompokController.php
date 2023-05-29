@@ -23,6 +23,7 @@ use App\Models\NilaiMahasiswa;
 use App\Models\DetailNilaiMahasiswa;
 use App\Models\PoinPenilaian;
 use App\Models\RoleKelompok;
+use App\Models\KategoriRole;
 use Illuminate\Http\Request;
 
 class KelompokController extends Controller
@@ -38,7 +39,7 @@ class KelompokController extends Controller
         $role_kelompok = Reference::where('kategori', '=', 'role_kelompok')->get();
 
         return view('dashboard.kelompok.index',[
-            'title' => 'Kelompok',
+            'title' => $kelompok->nama_kelompok,
             'kelompok' => $kelompok,
             'anggota' => $anggota,
             'mahasiswa' => $mahasiswa,
@@ -64,6 +65,13 @@ class KelompokController extends Controller
             'krs_name' => 'required',
             'krs_id' => 'required',
         ];
+
+        // $kategori_role = KategoriRole::where('nama',strtolower('koordinator'))->where('krs_id',$request->krs_id)->first();
+
+        // if ($kategori_role == NULL) {
+        //     $koordinator = new KategoriRole();
+        // }
+
         $validasi = $request->validate($data);
         $jlh_kelompok = Kelompok::where('krs_id','=', $request->krs_id)->get();
         if ($jlh_kelompok->count() > 0) {

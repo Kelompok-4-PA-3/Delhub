@@ -6,6 +6,11 @@
     <script src="{{ asset('assets/demo/pages/form_layouts.js') }}"></script>
 @endpush
 
+@section('breadscrumb')
+    <a href="/mhsInterest" class="breadcrumb-item active py-2"><i class="ph-heart"></i>&nbsp; Kelola Antusias Mahasiswa</a>
+    <span class="breadcrumb-item active py-2">Tambah Antusias</span>
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">

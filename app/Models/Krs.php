@@ -62,6 +62,14 @@ class Krs extends Model
                                             ->select('role_group_kelompoks.*');
     }
 
+    public function kategori_role_get_pembimbing(){
+        return $this->hasMany(KategoriRole::class, 'krs_id', 'id')
+                                            ->where('kategori_roles.nama',strtolower('pembimbing'))
+                                            ->join('role_group_kelompoks', 'kategori_roles.id', 'role_group_kelompoks.kategori_id')
+                                            ->where('role_group_kelompoks.deleted_at',NULL)
+                                            ->select('role_group_kelompoks.*');
+    }
+
     public function poin_penilaian(){
         return $this->hasMany(PoinPenilaian::class, 'krs_id', 'id');
     }

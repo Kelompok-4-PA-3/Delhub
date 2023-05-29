@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('title')
-    <title>Manajemen Poin Regulasis</title>
+    <title>Manajemen Poin Regulasi</title>
 @endsection
 
 @push('datatable_js')
@@ -12,7 +12,9 @@
     <script src="{{ asset('/assets/js/vendor/forms/selects/select2.min.js') }}"></script>
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <span class="breadcrumb-item active py-2"><i class="ph-squares-four"></i>&nbsp;Manajemen Regulasi</a>
+@endsection
 
 @section('content')
     <div class="card">
@@ -75,7 +77,7 @@
                                     <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
                                         data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $pr->id }}">
                                         <i class="ph-pen"></i>
-                                    </a>
+                                    </>
                                     <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus"
                                         data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pr->id }}">
                                         <i class="ph-trash"></i>

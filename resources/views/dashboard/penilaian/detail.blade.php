@@ -1,7 +1,7 @@
 @extends('main')
    
 @section('title')
-    <title>Manajemen Mahasiswa</title>
+    <title>Penilaian {{$penilaian->nama_poin}}</title>
 @endsection
 
 @push('datatable_js')
@@ -129,8 +129,8 @@
                         @endif
                     </div>
                 </div>
-                <div class="card-body">
-                    <table class="table datatable-penilaian">
+                <div class="card-body table-responsive">
+                    <table class="table datatable-hasil-nilai w-100 scrollable-table table-bordered ">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -188,8 +188,7 @@
                                         @else 
                                             <small class="text-success"><i class="ph-checks"></i> approved</small>
                                             
-                                            <div class="btn-group">
-                                                {{-- <a href="#" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">Submenu on click</a> --}}
+                                            {{-- <div class="btn-group">
                                                 <small class="text-warning" data-bs-toggle="dropdown" data-bs-popup="tooltip" title="Apakah anda ingin membatalkan approve penilaian?"><i class="ph-warning-circle"></i></small>
         
                                                 <div class="dropdown-menu" class="w-100">
@@ -206,12 +205,12 @@
                                                         </div>
                                                     </form>
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                         @endif
                                     </div>
                                 </th>
-                                <th>Aksi</th>
+                                {{-- <th>Aksi</th> --}}
                             </tr>
                             <tr>
                                 <th></th>
@@ -220,8 +219,12 @@
                                 @foreach ($penilaian->komponen_penilaian as $item)
                                     <th>N{{$loop->iteration}}</th>
                                 @endforeach
-                                <th class="{{!$status_nilai ? 'bg-warning bg-opacity-10 text-warning' : ''}}"></th>
-                                <th></th>
+                                <th class="{{!$status_nilai ? 'bg-warning bg-opacity-10 text-warning' : ''}}">
+                                    <div>
+                                       <a href="" class="btn btn-sm btn-primary"><i class="ph-arrows-clockwise"></i> &nbsp;Calculate</a>
+                                    </div>
+                                </th>
+                                {{-- <th></th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -236,73 +239,27 @@
                                     @endphp
                                     @foreach ($penilaian->komponen_penilaian as $pkp)
                                         <td class="{{!$status_nilai ? 'add_nilai text-primary' : ''}}" data-name="komponen" data-pkp_id="{{$pkp->id}}" data-mahasiswa={{$kkm->mahasiswa->nim}}  data-type="number" data-max="100" style="cursor:pointer;">
-                                        {{-- {{$pkp->nilai_mahasiswa->where('kelompok_id',$kelompok->id  )}} --}}
-                                        
-                                        @php
-                                            $nilai_komponen_mahasiswa = $pkp->detail_nilai_mahasiswa()
-                                                    ->where('nilai_mahasiswas.kelompok_id',$kelompok->id)
-                                                    ->where('komponen_id', $pkp->id)
-                                                    ->where('nim', $kkm->mahasiswa->nim)
-                                                    ->where('role_dosen_kelompok_id', $role_dosen->id)
-                                        @endphp
-                                            
-                                        @if ( $nilai_komponen_mahasiswa->first() != NULL)
-                                                {{  $nilai_komponen_mahasiswa->first()->nilai / ($pkp->bobot / 100) }}
-                                                @php
-                                                    $nilai_akhir +=  $nilai_komponen_mahasiswa->first()->nilai;
-                                                @endphp
-                                                {{-- {{$role_dosen}} --}}
-                                        @endif
-                                        {{-- {{  $nilai_komponen_mahasiswa->nilai / ($pkp->bobot / 100)}} --}}
-
+                                            @php
+                                                $nilai_komponen_mahasiswa = $pkp->detail_nilai_mahasiswa()
+                                                        ->where('nilai_mahasiswas.kelompok_id',$kelompok->id)
+                                                        ->where('komponen_id', $pkp->id)
+                                                        ->where('nim', $kkm->mahasiswa->nim)
+                                                        ->where('role_dosen_kelompok_id', $role_dosen->id)
+                                            @endphp
+                                                
+                                            @if ( $nilai_komponen_mahasiswa->first() != NULL)
+                                                    {{  $nilai_komponen_mahasiswa->first()->nilai / ($pkp->bobot / 100) }}
+                                                    @php
+                                                        $nilai_akhir +=  $nilai_komponen_mahasiswa->first()->nilai;
+                                                    @endphp
+                                            @endif
                                         </td>
                                     @endforeach
                                 @endif
                                 <td class="{{!$status_nilai ? 'bg-warning bg-opacity-10 text-warning' : '' }} fw-semibold">
                                     {{$nilai_akhir}}
                                 </td>
-                                <td>
-                                    <button data-bs-toggle="offcanvas" data-bs-target="#tambah_penilaian{{$kkm->mahasiswa->nim}}" class="btn btn-sm btn-primary fw-semibold">Nilai</button>    
-                                </td>
                             </tr>
-
-                                <!-- Large panel -->
-                                <div id="tambah_penilaian{{$kkm->mahasiswa->nim}}" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
-                                    <div class="offcanvas-header">
-                                        <h5 class="offcanvas-title fw-semibold">Tambah Komponen Penilaian</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-                                    </div>
-                                    <div class="offcanvas-body p-2">
-                                        {{-- {{$role_dosen->id}} --}}
-                                        <form class="container" action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$penilaian->id}}/mahasiswa/{{$kkm->mahasiswa->nim}}" method="post">
-                                           @csrf
-                                           @foreach ($penilaian->komponen_penilaian as $pkp)
-                                                <div class="row">
-                                                    <div class="col-7">
-                                                        {!!$pkp->nama_komponen!!}
-                                                    </div>
-                                                    <div class="col-2">
-                                                        {{$pkp->bobot.'%'}}
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <input type="number" class="form-control" name="komponen{{$pkp->id}}" max="100" min="0" required>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                            <div class="border-top p-3">
-                                                <button type="submit" class="btn btn-primary w-100">Submit</button>
-                                            </div>
-                                        </form>
-                                        
-                                    </div>
-                                </div>
-                                <!-- /large panel -->
-                                {{-- <script>
-                                    CKEDITOR.replace('#tambah_penilaian{{$kkm->mahasiswa->nim}}', {
-                                        toolbar: 'Basic'
-                                    });
-                                </script> --}}
-
                          @endforeach
                         </tbody>
                     </table>

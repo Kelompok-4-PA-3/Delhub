@@ -12,7 +12,9 @@
     <script src="{{ asset('/assets/js/vendor/forms/selects/select2.min.js') }}"></script>
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <span class="breadcrumb-item active py-2"><i class="ph-user-list"></i>&nbsp;Manajemen Roles</span>
+@endsection
 
 @section('content')
     <div class="card">

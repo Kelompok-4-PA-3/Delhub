@@ -16,6 +16,7 @@
 
 @section('breadscrumb')
     <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2">{{$krs->kategori->nama_singkat}}</a>
     <span class="breadcrumb-item active py-2"> Poin Penilaian </span>
 @endsection     
 
@@ -63,6 +64,7 @@
                         <th>Poin Penilaian</th>
                         <th>Bobot</th>
                         <th>Status</th>
+                        <th>Akumulasi Bobot</th>
                         <th class="text-center">Actions</th>
                     </tr>
                     <tr>
@@ -70,6 +72,7 @@
                         <th>Poin Penilaian</th>
                         <th>Bobot</th>
                         <th>Status</th>
+                        <th>Akumulasi Bobot</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -84,9 +87,12 @@
                             <td class="text-center">
                                @if ($pp->is_verified)
                                     <span class="badge p-2 bg-success rounded-pill bg-opacity-10 text-success">sudah diverifikasi</span>
-                             @else
+                                @else
                                     <span class="badge p-2 bg-danger rounded-pill bg-opacity-10 text-danger">belum diverifikasi</span>
-                             @endif
+                                @endif
+                            </td>
+                            <td class="text-primary text-center">
+                                {{$pp->komponen_penilaian->sum('bobot')}} %
                             </td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
@@ -121,7 +127,7 @@
                          <!-- tambah penilaian -->
                         <div id="tambah_role_penilaian{{$pp->id}}" class="offcanvas offcanvas-end offcanvas-size-lg  @if (session()->has("store"))  {{session('store') == $pp->id ? 'show' : ''}} @endif" tabindex="-1">
                             <div class="offcanvas-header">
-                                <h5 class="offcanvas-title fw-semibold">Tambah Poin Penilaian</h5>
+                                <h5 class="offcanvas-title fw-semibold">Tambah Role Penilaian</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
                             </div>
                             <div class="offcanvas-body p-2">

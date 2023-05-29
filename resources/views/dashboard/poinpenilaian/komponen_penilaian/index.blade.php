@@ -19,6 +19,7 @@
 
 @section('breadscrumb')
     <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2">{{$krs->kategori->nama_singkat}}</a>
     <a href="/krs/{{$krs->id}}/poin_penilaian" class="breadcrumb-item py-2"> Poin Penilaian</a>
     <span class="breadcrumb-item active py-2"> {{$poin_penilaian->nama_poin}}</span>
 @endsection

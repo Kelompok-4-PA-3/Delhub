@@ -1,5 +1,9 @@
 @extends('main')
 
+@section('title')
+    <title>Manajamen Pengguna</title>
+@endsection
+
 @push('select_js')
     <script src="{{asset('../../../assets/js/jquery/jquery.min.js')}}"></script>
 	<script src="{{asset('../../../assets/js/vendor/forms/selects/select2.min.js')}}"></script>
@@ -7,6 +11,12 @@
     <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
 @endpush
+
+@section('breadscrumb')
+    <a href="/users" class="breadcrumb-item active py-2"><i class="ph-users"></i>&nbsp;Manajemen Pengguna</a>
+    <span class="breadcrumb-item active py-2">Tambah Pengguna</span>
+@endsection
+
 
 @section('content')
     <div class="card">

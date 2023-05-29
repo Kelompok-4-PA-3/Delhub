@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Krs;
 use App\Models\PoinPenilaian;
+use App\Exports\DetailNilaiExportView;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class PenilaianController extends Controller
 {
@@ -21,4 +24,15 @@ class PenilaianController extends Controller
             'penilaian' => $penilaian
         ]);
     }
+
+        public function export_excel_nilai(Krs $kr, PoinPenilaian $penilaian){
+
+            // return view('dashboard.penilaian.table_detail_nilai_format', [
+            //     'krs' => $kr,
+            //     'penilaian' => $penilaian
+            // ]);
+            // return DetailNilaiExportView::view($kr,$penilaian);
+            return Excel::download(new DetailNilaiExportView($kr,$penilaian), 'detail_nilai.xlsx');
+        }
+
 }

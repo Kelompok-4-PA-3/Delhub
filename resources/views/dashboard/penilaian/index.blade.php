@@ -187,9 +187,23 @@
                         ${"total_nilai".$kkm->nim} = 0;
                     @endphp
                     <tr>
-                        <td>{{$kkm->mahasiswa->nim}}</td>
+                    <td>{{$kkm->mahasiswa->nim}}</td>   
                         <td>{{$kkm->mahasiswa->user->nama}}</td>
-                        @if ($role_dosen->role_group != NULL)
+                        @foreach($role_dosen->role_group->role_group_penilaian as $rr)
+                            @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $rr->poin_penilaian->id) != NULL)
+                                <td>
+                                    {{$kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $rr->poin_penilaian->id)->detail_nilai_mahasiswa->sum('nilai')}}
+                                    {{-- {{$role_dosen->id}} --}}
+                                </td>
+                            @else 
+                                <td>
+                                    <small class="text-secondary"><i>Nilai belum diassign</i></small>
+                                </td>
+                            @endif
+                        @endforeach
+
+
+                        {{-- @if ($role_dosen->role_group != NULL)
                             @foreach($role_dosen->role_group->role_group_penilaian as $rrr)
                                 <td>
                                     @if ($kkm->mahasiswa->nilai_mahasiswa($role_dosen->id, $kelompok->id, $rrr->poin_penilaian->id) != NULL)
@@ -209,17 +223,7 @@
                                     @endif
                                 </td>
                             @endforeach
-                            {{-- @foreach($role_dosen->role_group->role_group_penilaian as $rrr)
-                                <td>
-                                   {{$rrr}}
-                                </td>
-                            @endforeach --}}
-                            {{-- @if ($rr->poin_penilaian->komponen_penilaian->count() > 0)
-                                @foreach ($penilaian->komponen_penilaian as $pkp)
-
-                                @endforeach
-                            @endif --}}
-                         @endif
+                         @endif --}}
                     </tr>
                     @endforeach
                     <td></td>

@@ -10,15 +10,19 @@ use App\Models\Mahasiswa;
 use Spatie\Permission\Models\Role;
 use Auth;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class DashboardController extends Controller
 {
     public function index(){
+// 
+        // return Auth::user()->getRoleNames();
         
         $role = auth()->user()->getRoleNames()->toArray();
         $krs = Krs::latest()->get();
+        
         return view('dashboard.index',[
-            'title' => 'Dashboardss',
+            'title' => 'Dashboards',
             'krs' => $krs,
         ]);
     }
@@ -34,6 +38,7 @@ class DashboardController extends Controller
         'kelompok' => $kelompok,
         'mahasiswa' => $mahasiswa
        ]);
+
        return view('dashboard.detail');
     }
 
@@ -44,7 +49,6 @@ class DashboardController extends Controller
         ];
 
         $validasi = $request->validate($data);
-        // $krs_user = new KrsUser();
         foreach($request->mahasiswa as $m){
             KrsUser::create([
                 'user_id' => $m,

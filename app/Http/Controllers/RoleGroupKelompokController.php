@@ -16,6 +16,7 @@ class RoleGroupKelompokController extends Controller
     public function index(Krs $kr, KategoriRole $kategori)
     {
         // return $kr;
+        // return $kategori;
         $role_group = RoleGroupKelompok::where('kategori_id',$kategori->id)->get();
         // $role_kelompok = RoleKelompok::latest()();
         // return $role_kelompok;

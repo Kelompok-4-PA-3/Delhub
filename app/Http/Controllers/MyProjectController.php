@@ -18,7 +18,7 @@ class MyProjectController extends Controller
         // return $krs->count();
         if ($krs->count() > 0) {
             return view('dashboard.koordinator',[
-                'title' =>  $krs->kategori->nama_singkat,
+                'title' =>  $krs->kategori->nama_mk,
                 'krs' => $krs,
                 'kelompok' => $kelompok,
                 'mahasiswa' => $mahasiswa

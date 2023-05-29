@@ -1,5 +1,9 @@
 @extends('main')
 
+@section('title')
+    <title>Kartu Rencana Studi</title>
+@endsection
+
 @push('select_js')
     <script src="{{asset('../../../assets/js/jquery/jquery.min.js')}}"></script>
 	<script src="{{asset('../../../assets/js/vendor/forms/selects/select2.min.js')}}"></script>
@@ -7,6 +11,11 @@
     <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
 @endpush
+
+@section('breadscrumb')
+    <a href="/krs" class="breadcrumb-item active py-2"><i class="ph-squares-four"></i>&nbsp;Manajemen KRS</a>
+    <span class="breadcrumb-item active py-2">Tambah KRS</span>
+@endsection
 
 @section('content')
     <div class="card">
@@ -36,12 +45,12 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Konfigurasi</label>
+                                <label class="form-label">Tahun Ajaran</label>
                                 <select data-placeholder="Pilih Konfigurasi" class="form-control select" name="config_id">
                                     <option></option>
                                     <optgroup label="Daftar Konfigurasi">
                                         @foreach($config as $c)
-                                            <option @if(old('config_id') == $c->id) selected @endif value="{{$c->id}}">{{$c->tahun_aktif}} - {{$c->semester}}</option>
+                                            <option @if(old('config_id') == $c->id) selected @endif value="{{$c->id}}">{{$c->tahun_aktif}} - {{$c->semester == '1' ? 'Gasal' : 'Genap'}}</option>
                                         @endforeach
                                     </optgroup>
                                 </select>

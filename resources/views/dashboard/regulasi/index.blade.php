@@ -8,6 +8,12 @@
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
 @endpush
 
+@section('breadscrumb')
+    <a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2">{{$krs->kategori->nama_singkat}}</a>
+    <span class="breadcrumb-item active py-2">Regulasi</span>
+@endsection
+
 @section('content')
 
         <style>
@@ -19,248 +25,10 @@
         </style>
 
         <div class="row">
-
-            <div class="col-xl-4 d-none">
-                <div class="card">
-                    <div class="card-header d-flex align-items-center">
-                        <h5 class="mb-0">Regulasi</h5>
-                        {{-- <div class="ms-auto nav-tabs-responsive">
-                            <ul class="nav nav-tabs nav-tabs-underline flex-nowrap">
-                                <li class="nav-item">
-                                    @if ($regulasi != NULL)
-                                        @if ($regulasi->count() < 0)
-                                           
-                                        @else
-                                            <a href="#ubah-regulasi" id="btn-buat-regulasi" class="btn btn-sm btn-primary fw-semibold" data-bs-toggle="tab"> <i class="ph-pencil"></i> Edit Regulasi</a>
-                                        @endif
-                                            <a href="#regulasi" id="btn-regulasi" class="btn btn-sm btn-danger fw-semibold active" data-bs-toggle="tab">X Batal</a>
-                                    @else 
-                                        <a href="#buat-regulasi" id="btn-buat-regulasi" class="btn btn-sm btn-primary fw-semibold" data-bs-toggle="tab"> + Buat Regulasi</a>
-                                        <a href="#regulasi" id="btn-regulasi" class="btn btn-sm btn-danger fw-semibold active" data-bs-toggle="tab">X Batal</a>
-                                    @endif
-                                </li>
-                            </ul>
-                        </div> --}}
-                    </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <tr>
-                                <th>Nama</th>
-                                <th>Poin</th>
-                            </tr>
-                            @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
-                            <tr>
-                                <td>{{$kkkp->nama}}</td>
-                                <td>{{$kkkp->poin}}</td>
-                            </tr>
-                            @endforeach
-                        </table>
-                        <div>
-                            {{-- {{$krs->kategori->kategori->poin_regulasi}} --}}
-                           
-                        </div>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="regulasi">
-                            @if($regulasi != NULL)
-                                @php
-                                    $total_bimbingan = $regulasi->seminar + $regulasi->proposal + $regulasi->prasidang + $regulasi->sidang;
-                                @endphp
-                                @if ($regulasi->count() > 0)
-                                    <table class="" cellpadding="5">
-                                        <tr>
-                                            <td><small class="fw-semibold">Jumlah Bimbingan</small></td>
-                                            <td>  </td>
-                                            <td> {{$total_bimbingan}} </td>
-                                        </tr>
-                                        <tr><td></td></tr>
-                                        <tr>
-                                            <td><small class="text-muted">Rincian</small></td>
-                                            <td><small class="text-muted">Minimum</small></td>
-                                        </tr>
-                                        <tr >
-                                            <td><small class="">Seminar</small></td>
-                                            <td> {{$regulasi->seminar}} </td>
-                                        </tr>
-                                        <tr >
-                                            <td><small class="">Proposal</small></td>
-                                            <td> {{$regulasi->proposal}} </td>
-                                        </tr>
-                                        <tr>
-                                            <td><small class="">Prasidang</small></td>
-                                            <td> {{$regulasi->prasidang}} </td>
-                                        </tr>
-                                        <tr>
-                                            <td><small class="">Sidang</small></td>
-                                            <td> {{$regulasi->sidang}} </td>
-                                        </tr>
-                                    </table>
-                                @else
-                                    <div>
-                                        <small><i class="text-muted">Anda belum membuat regulasi!</i></small>
-                                    </div>
-                                @endif
-                            @endif
-                            </div>
-                            <div class="tab-pane fade show" id="buat-regulasi">
-                                <form action="/krs/{{$krs->id}}/regulasi/add" method="post">
-                                    <input type="hidden" name="krs_id" value="{{$krs->id}}">
-                                    @csrf
-                                    <table class="" cellpadding="4">
-                                        <tr>
-                                            <td><label for="">Seminar</label></td>
-                                            <td></td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                        <i class="ph-minus ph-sm"></i>
-                                                    </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="seminar" value="0" min="0">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                        <i class="ph-plus ph-sm"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><label for="">Proposal</label></td>
-                                            <td></td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                        <i class="ph-minus ph-sm"></i>
-                                                    </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="proposal" value="0" min="0">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                        <i class="ph-plus ph-sm"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><label for="">Prasidang</label></td>
-                                            <td></td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                        <i class="ph-minus ph-sm"></i>
-                                                    </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="prasidang" value="0" min="0">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                        <i class="ph-plus ph-sm"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><label for="">Sidang</label></td>
-                                            <td></td>
-                                            <td class="text-end">
-                                                <div class="d-flex">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                        <i class="ph-minus ph-sm"></i>
-                                                    </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="sidang" value="0" min="0">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                        <i class="ph-plus ph-sm"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3" class="text-end"><button type="submit" class="btn btn-sm btn-primary">Submit</button></td>
-                                        </tr>
-                                    </table>
-                                </form> 
-                            </div>
-
-                            <div class="tab-pane fade show" id="ubah-regulasi">
-                                <form action="/krs/{{$krs->id}}/regulasi/edit" method="post">
-                                    <input type="hidden" name="regulasi" value="{{$krs->id}}">
-                                    @csrf
-                                    <table class="" cellpadding="4">
-                                        <tr>
-                                            <td><label for="">Seminar</label></td>
-                                            <td></td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                        <i class="ph-minus ph-sm"></i>
-                                                    </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="seminar" @if($regulasi != NULL) value="{{$regulasi->seminar}} @endif" min="0">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                        <i class="ph-plus ph-sm"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><label for="">Proposal</label></td>
-                                            <td></td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                        <i class="ph-minus ph-sm"></i>
-                                                    </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="proposal" @if($regulasi != NULL) value="{{$regulasi->proposal}} @endif" min="0">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                        <i class="ph-plus ph-sm"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><label for="">Prasidang</label></td>
-                                            <td></td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                        <i class="ph-minus ph-sm"></i>
-                                                    </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="prasidang" @if($regulasi != NULL) value="{{$regulasi->prasidang}} @endif" min="0">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                        <i class="ph-plus ph-sm"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><label for="">Sidang</label></td>
-                                            <td></td>
-                                            <td class="text-end">
-                                                <div class="d-flex">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                        <i class="ph-minus ph-sm"></i>
-                                                    </button>
-                                                    <input class="form-control form-control-sm form-control-number text-center" type="number" name="sidang" @if($regulasi != NULL)value="{{$regulasi->sidang}} @endif" min="0">
-                                                    <button type="button" class="btn btn-sm btn-light btn-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                        <i class="ph-plus ph-sm"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3" class="text-end"><button type="submit" class="btn btn-sm btn-primary">Edit</button></td>
-                                        </tr>
-                                    </table>
-                                </form> 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
                         <h5 class="mb-0">Data Kelompok</h5>
-                        {{-- <small>{{$kelompok->sortBy('id')}}</small> --}}
                         <div class="ms-auto">
                             @if ($krs->kategori->kategori->count() > 0)
                             <div class="d-flex">
@@ -271,7 +39,6 @@
                                 </div>
                                 <div></div>
                             </div>
-                                {{-- <a href="/krs/{{$krs->id}}/regulasi/show" class="text-primary fw-semibold"> Detail</a> --}}
                             @endif
                          </div>
                     </div>
@@ -294,80 +61,79 @@
                             $bimbingan = 0;
                         @endphp
                         @if ($krs->kategori->kategori->poin_regulasi != NULL)
-                        <table class="table datatable-regulasi" cellpadding="5">
-                            <thead>
-                                <tr>
-                                    <th><small> Nama Kelompok </small></th>
-                                    <th><small> Jlh Bimbingan </small></th>
-                                    <th><small> Pembimbing 1</small></th>
-                                    <th><small> Pembimbing 2 </small></th>
-                                    @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
-                                        <th>{{$kkkp->nama}}</th>
-                                    @endforeach
-                                </tr>
-                                <tr>
-                                    <th ></th>
-                                    <th ></th>
-                                    <th class="pembimbing-column">
-                                        <select name="" id="" class="form-control">
-                                            @foreach($dosen as $d)
-                                                <div class="list-pembimbing">
-                                                    {{-- <option value="asdasd">mantap</option> --}}
-                                                </div>
-                                            @endforeach
-                                        </select>
-                                    </th>
-                                    <th class="pembimbing-column"></th>
-                                    @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
-                                        <th class="regulasi-column">{{$kkkp->nama}}</th>
-                                    @endforeach
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($kelompok->sortBy('id') as $k) 
-                                    @php
-                                        $bimbingan = $k->bimbingan->where('is_done',true)->count();
-                                    @endphp
-                                    <tr class="mt-5">
-                                        <td>
-                                            {{$k->nama_kelompok}}
-                                        </td>
-                                        <td class="text-center">{{$bimbingan}}</td>
-                                        <td class="pembimbing-name" data-bs-popup="tooltip" title="{{$k->pembimbings != NULL ? $k->pembimbings->pembimbing_1_dosen->user->nama : '-'}}">{{$k->pembimbings != NULL ? $k->pembimbings->pembimbing_1_dosen->nama_singkat : '-'}}</td>
-                                        @php
-                                            $pembimbing2 = '-';
-                                            $pembimbing2_inisial = '-';
-                                            if ($k->pembimbings != NULL) {
-                                                if ($k->pembimbings->pembimbing_2_dosen != NULL) {
-                                                    $pembimbing2 =  $k->pembimbings->pembimbing_2_dosen->user->nama;
-                                                    $pembimbing2_inisial =  $k->pembimbings->pembimbing_2_dosen->nama_singkat;
-                                                }
-                                            } 
-                                        @endphp
-                                        <td class="pembimbing-name" data-bs-popup="tooltip" title="{{$pembimbing2}}">{{$pembimbing2_inisial}}</td>
+                        <div class="card-body table-responsive">
+                            <table class="table datatable-regulasi w-100 scrollable-table table-bordered"  style="min-width: 1200px;">
+                                <thead>
+                                    <tr>
+                                        <th><small> Nama Kelompok </small></th>
+                                        <th><small> Jlh Bimbingan </small></th>
+                                        @foreach ($krs->kategori_role_get_pembimbing as $rrg)
+                                            <th>{{$rrg->nama}}</th>
+                                        @endforeach
                                         @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
-                                        @if($bimbingan > 0)
-                                            @php
-                                                $bimbingan -= $kkkp->poin;
-                                            @endphp
-
-                                            @if($bimbingan >= 0 )
-                                                <td class="text-center bg-check-success checked">
-                                                    <span class="d-none">Success</span>
-                                                    {{$kkkp->poin}} <small class="text-muted"> / {{$kkkp->poin}} </small>
-                                                    <img class="img-success" src="{{asset('img/check.gif')}}" style="max-width: 35px;"  alt=""> 
-                                                </td>
-                                            @else 
-                                                <td class="text-center">  {{$bimbingan +  $kkkp->poin}} <small class="text-muted"> / {{$kkkp->poin}} </small></td>
-                                            @endif
-                                        @else
-                                            <td class="text-center"> 0 <small class="text-muted"> / {{$kkkp->poin}} </small></td>
-                                        @endif
+                                            <th>{{$kkkp->nama}}</th>
                                         @endforeach
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                    <tr>
+                                        <th ></th>
+                                        <th ></th>
+                                        @foreach ($krs->kategori_role_get_pembimbing as $rrg)
+                                            <th class="pembimbing-column">
+                                                <select name="" id="" class="form-control">
+                                                    @foreach($dosen as $d)
+                                                        <div class="list-pembimbing">
+                                                        </div>
+                                                    @endforeach
+                                                </select>
+                                            </th>
+                                        @endforeach
+                                        {{-- <th class="pembimbing-column"></th> --}}
+                                        @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
+                                            <th class="regulasi-column">{{$kkkp->nama}}</th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($kelompok->sortBy('id') as $k) 
+                                        @php
+                                            $bimbingan = $k->bimbingan->where('is_done',true)->count();
+                                        @endphp
+                                        <tr>
+                                            <td>
+                                                {{$k->nama_kelompok}}
+                                            </td>
+                                            <td class="text-center">{{$bimbingan}}</td>
+                                            @foreach ($krs->kategori_role_get_pembimbing as $rrg)
+                                                @if ($k->role_kelompok_all->where('role_group_id',$rrg->id)->count() > 0)   
+                                                    <td>{{$k->role_kelompok_all->where('role_group_id',$rrg->id)->first()->dosen->nama_singkat}}</td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif  
+                                            @endforeach
+                                            @foreach($krs->kategori->kategori->poin_regulasi as $kkkp)
+                                            @if($bimbingan > 0)
+                                                @php
+                                                    $bimbingan -= $kkkp->poin;
+                                                @endphp
+
+                                                @if($bimbingan >= 0 )
+                                                    <td class="text-center bg-check-success checked">
+                                                        <span class="d-none">Success</span>
+                                                        {{$kkkp->poin}} <small class="text-muted"> / {{$kkkp->poin}} </small>
+                                                        <img class="img-success" src="{{asset('img/check.gif')}}" style="max-width: 35px;"  alt=""> 
+                                                    </td>
+                                                @else 
+                                                    <td class="text-center">  {{$bimbingan +  $kkkp->poin}} <small class="text-muted"> / {{$kkkp->poin}} </small></td>
+                                                @endif
+                                            @else
+                                                <td class="text-center"> 0 <small class="text-muted"> / {{$kkkp->poin}} </small></td>
+                                            @endif
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         @else 
                             <i class="text-center text-muted">
                                 Regulasi untuk proyek ini belum ditentukan
@@ -377,11 +143,4 @@
                 </div>
             </div>
         </div>
-
-        {{-- <script>
-            let $element = $('#daftar-pembimbing');
-            let text = $element.text();
-            let newText = text.replace(new RegExp('""', ""), "");
-            console.log($element.text(newText));
-        </script> --}}
 @endsection

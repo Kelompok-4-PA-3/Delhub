@@ -16,7 +16,11 @@
     <script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2">{{$krs->kategori->nama_singkat}}</a>
+    <span class="breadcrumb-item active py-2">Hasil Penilaian</span>
+@endsection
 
 @section('content')
     <div class="row">
@@ -27,7 +31,7 @@
                 </div>
             </div>  
             <div class="card-body table-responsive">
-               <table class="table datatable-hasil-nilai w-100 scrollable-table table-bordered" style="">
+               <table class="table datatable-hasil-nilai w-100 scrollable-table table-bordered">
                     <thead>
                         <tr>
                             <th>Kelompok</th>
@@ -36,13 +40,7 @@
                             @foreach ($krs->poin_penilaian as $kpp)
                                 <th><a class="link" href="/krs/{{$krs->id}}/hasil_penilaian/penilaian/{{$kpp->id}}">{{$kpp->nama_poin}}</a><br><small class="fw-light">{{$kpp->bobot}} %</small></th>
                             @endforeach
-                            <th>Nilai akhir
-                                <div class="mt-1">
-                                    <form action="">
-                                        <button class="badge bg-success fw-light border-0">approve</button>
-                                    </form>
-                                </div>
-                            </th>
+                            <th>Nilai akhir</th>
                         </tr>
                         <tr>
                             <th>Kelompok</th>
@@ -51,45 +49,14 @@
                             @foreach ($krs->poin_penilaian as $kpp)
                                 <th>{{$kpp->nama_poin}}</th>
                             @endforeach
-                            <th>Nilai akhir
-                                <div class="mt-1">
-                                    <form action="">
-                                        <button class="badge bg-success fw-light border-0">approve</button>
-                                    </form>
-                                </div>
-                            </th>
+                            <th>Nilai akhir</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($krs->kelompok as $kk)
-                            <tr>
-                                <td rowspan="{{$kk->kelompok_mahasiswa->count() + 1}}"><small>{{$kk->nama_kelompok}}</small></td>
-                                @foreach ($kk->kelompok_mahasiswa as $kkm)
-                                @php
-                                    $total_nilai = 0;
-                                @endphp
-                                <tr>
-                                    <td class=""><small>{{$kkm->mahasiswa->user->nama}}</small></td>    
-                                    @foreach ($krs->poin_penilaian as $kpp)
-                                        @php
-                                            $total_nilai += $kpp->nilai_mahasiswa($kkm->mahasiswa->nim, $kk->id)->where('approved_status',true)->sum('nilai') * ($kpp->bobot / 100);
-                                        @endphp
-                                        <td>
-                                            {{number_format($kpp->nilai_mahasiswa($kkm->mahasiswa->nim, $kk->id)->where('approved_status',true)->sum('nilai'), 2, '.', '')}}
-                                        </td>
-                                    @endforeach
-                                    <td class=" bg-warning bg-opacity-10 text-center fw-semibold text-warning">
-                                        {{number_format($total_nilai, 2, '.', '')}}
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tr>
-                        @endforeach --}}
                         @foreach ($krs->kelompok_mahasiswa as $kk)
                             <tr>
                                 <td class="fw-semibold"><small>{{$kk->nama_kelompok}}</small></td>
                                 <td><small>{{$kk->nim}}</small></td>
-                                {{-- <td><small>{{$kk->kelompok_mahasiswa}}</small></td> --}}
                                 @foreach ($kk->kelompok_mahasiswa->where('nim',$kk->nim) as $kkm)
                                     @php
                                         $total_nilai = 0;
@@ -100,32 +67,14 @@
                                             $total_nilai += $kpp->nilai_mahasiswa($kkm->mahasiswa->nim, $kk->id)->where('approved_status',true)->sum('nilai') * ($kpp->bobot / 100);
                                         @endphp
                                         <td>
-                                           {{-- {{ $kpp->nilai_mahasiswa($kkm->mahasiswa->nim, $kk->id)->where('approved_status',true)->pluck('nilai') }} --}}
                                             {{number_format($kpp->nilai_mahasiswa($kkm->mahasiswa->nim, $kk->id)->where('approved_status',true)->sum('nilai'), 2, '.', '')}}
+                                            {{-- {{$kpp->nilai_mahasiswa($kkm->mahasiswa->nim, $kk->id)->where('approved_status',true)->pluck('id')}} --}}
                                         </td>
-                                    @endforeach
-                                    <td class=" bg-warning bg-opacity-10 text-center fw-semibold text-warning">
+                                    @endforeach 
+                                    <td>
                                         {{number_format($total_nilai, 2, '.', '')}}
                                     </td>
                                 @endforeach
-                                {{-- @foreach ($kk->kelompok_mahasiswa as $kkm)
-                                @php
-                                    $total_nilai = 0;
-                                @endphp
-                                    <td class=""><small>{{$kkm->mahasiswa->nim}}</small></td>    
-                                    <td class=""><small>{{$kkm->mahasiswa->user->nama}}</small></td>    
-                                    @foreach ($krs->poin_penilaian as $kpp)
-                                        @php
-                                            $total_nilai += $kpp->nilai_mahasiswa($kkm->mahasiswa->nim, $kk->id)->where('approved_status',true)->sum('nilai') * ($kpp->bobot / 100);
-                                        @endphp
-                                        <td>
-                                            {{number_format($kpp->nilai_mahasiswa($kkm->mahasiswa->nim, $kk->id)->where('approved_status',true)->sum('nilai'), 2, '.', '')}}
-                                        </td>
-                                    @endforeach
-                                    <td class=" bg-warning bg-opacity-10 text-center fw-semibold text-warning">
-                                        {{number_format($total_nilai, 2, '.', '')}}
-                                    </td>
-                                @endforeach --}}
                             </tr>
                         @endforeach
                     </tbody>

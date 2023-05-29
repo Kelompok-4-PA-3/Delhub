@@ -12,7 +12,9 @@
     <script src="{{ asset('/assets/js/vendor/forms/selects/select2.min.js') }}"></script>
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('mhsInterest'));
+@section('breadscrumb')
+    <span class="breadcrumb-item active py-2"><i class="ph-heart"></i> Kelola Antusias Mahasiswa</span>
+@endsection
 
 @section('content')
     <div class="card">
