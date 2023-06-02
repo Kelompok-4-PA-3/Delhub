@@ -72,7 +72,7 @@ class PoinPenilaianController extends Controller
 
         if($cek_role != NULL){  
             // return "samaa";
-            return back()->with('failed','Role tersebut telah terdaftar pada poin penilaian ini')->with("store", $penilaian->id);
+            return back()->with('error','Role tersebut telah terdaftar pada poin penilaian ini')->with("store", $penilaian->id);
         }
 
         // return $
@@ -105,7 +105,7 @@ class PoinPenilaianController extends Controller
             return back()->with('success','Verfikasi telah berhasil dilakukan');
         }
 
-        return back()->with('failed','Total bobot role tidak mencapai atau melebihi 100%');
+        return back()->with('error','Total bobot role tidak mencapai atau melebihi 100%');
     }
 
     public function delete_role(Request $request, Krs $kr, PoinPenilaian $penilaian, RoleGroupPenilaian $role_penilaian)
@@ -123,7 +123,7 @@ class PoinPenilaianController extends Controller
     public function verifikasi_poin_penilaian(Krs $kr){
         $poin_penilaian =PoinPenilaian::where('krs_id', $kr->id);
         if($poin_penilaian->sum('bobot') != 100){
-            return  back()->with('failed','Sepertinya jumlah bobot tidak mencapai 100% atau melebihinya, pastikan jumlah keseluruhan bobot mencapai tepat 100%');
+            return  back()->with('error','Sepertinya jumlah bobot tidak mencapai 100% atau melebihinya, pastikan jumlah keseluruhan bobot mencapai tepat 100%');
         }
 
         $poin_penilaian->where('is_verified',false)->update([

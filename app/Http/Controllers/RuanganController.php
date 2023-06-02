@@ -56,7 +56,7 @@ class RuanganController extends Controller
         $validasi = $request->validate($data);
         Ruangan::create($validasi);
 
-            return redirect('/ruangan')->with('sukses','Program Studi has been created successfully.');
+            return redirect('/ruangan')->with('success','Program Studi has been created successfully.');
 
     }
 
@@ -73,7 +73,7 @@ class RuanganController extends Controller
         $ruangans->nama = $validasi['nama'];
         $ruangans->save();
 
-        return redirect('/ruangan')->with('sukses','Program Studi has been created successfully.');
+        return redirect('/ruangan')->with('success','Program Studi has been created successfully.');
 
 
     }
@@ -83,6 +83,6 @@ class RuanganController extends Controller
         $ruangans = Ruangan::find($id);
         $ruangans->delete();
 
-        return back();
+        return back()->with('success','Ruangan telah berhasil dihapus');
     }
 }

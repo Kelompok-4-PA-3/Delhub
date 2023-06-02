@@ -106,17 +106,19 @@
                         <i class="ph-dots-three sidebar-resize-show"></i>
                     </li>
                         @foreach (Auth::user()->dosen->all_role_kelompok->take(3) as $role)
-                            <li class="nav-item" nav-item-main>
-                                <a href="/kelompok/{{$role->kelompok->id}}" class="nav-link">
-                                    <i class="ph-chalkboard-simple text-warning"></i>
-                                    <span>
-                                        <small class="text-indigo">{{$role->kelompok->nama_kelompok}}</small><br>
-                                        <div>
-                                            <small class="text-muted"> <i> {{$role->role_group->nama}}</i></small>
-                                        </div>
-                                    </span>
-                                </a>
-                            </li>
+                            @if (strtolower($role->role_group->nama) != 'koordinator')
+                                <li class="nav-item" nav-item-main>
+                                    <a href="/kelompok/{{$role->kelompok->id}}" class="nav-link">
+                                        <i class="ph-chalkboard-simple text-warning"></i>
+                                        <span>
+                                            <small class="text-indigo">{{$role->kelompok->nama_kelompok}}</small><br>
+                                            <div>
+                                                <small class="text-muted"> <i> {{$role->role_group->nama}}</i></small>
+                                            </div>
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
                         @endforeach 
                     <li class="nav-item-header">
                         <div class="fs-sm lh-sm opacity-50 sidebar-resize-hide ml-2"><i><a href="/dashboard" class="text-light ">Pekerjaan lainnya ...</a></i></div>

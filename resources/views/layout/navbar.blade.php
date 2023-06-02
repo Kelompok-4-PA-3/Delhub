@@ -13,8 +13,8 @@
 
         <div class="navbar-brand flex-1 flex-lg-0">
             <a href="index.html" class="d-inline-flex align-items-center">
-                <img src="{{asset('/img/logo.png')}}" alt="">
-                <h3 class="h-16px ms-3 text-white fw-light ">Del<span class="fw-bold">Hub</span></h3>
+                <img src="{{asset('/img/logo-light.png')}}" alt="" style="width: 50px; height: 40px;">
+                <h3 class="h-16px ms-2 text-white fw-light ">Del<span class="fw-bold">Hub</span></h3>
                 {{-- <h3 class="h-16px ms-3 text-white fw-light fw-bold">Del<span class=" bg-warning px-1 text-dark">Hub</span></h3> --}}
             </a>
         </div>
@@ -56,7 +56,7 @@
                             <span class="bg-warning bg-opacity-10 py-1 px-2 rounded-pill text-white"><small class="text-warning">{{$item}}</small></span>&nbsp;
                         @endforeach
                     </div>
-                    <a href="{{ route('profile.show') }}" class="dropdown-item">
+                    <a href="/users/{{Auth::user()->id}}/profile" class="dropdown-item">
                         <i class="ph-user-circle me-2"></i>
                         My profile
                     </a>
@@ -74,7 +74,7 @@
                         <span class="badge bg-primary rounded-pill ms-auto">26</span>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('profile.show') }}" class="dropdown-item">
                         <i class="ph-gear me-2"></i>
                         Account settings
                     </a>

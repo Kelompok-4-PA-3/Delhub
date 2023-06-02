@@ -67,7 +67,7 @@ class RequestController extends Controller
             Storage::delete($path);
             // return "File deleted successfully.";
         } else {
-            return back()->with('failed','File tidak ditemukan');
+            return back()->with('error','File tidak ditemukan');
         }
         $requests->file_bukti = NULL;
         $requests->save();

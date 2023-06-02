@@ -25,6 +25,11 @@ class RoleKelompok extends Model
         return $this->belongsTo(RoleGroupKelompok::class, 'role_group_id', 'id');
     }
 
+    // public function role_group()
+    // {
+    //     return $this->belongsTo(RoleGroupKelompok::class, 'role_group_id', 'id');
+    // }
+
     public function role_group_penilaian(){
         return $this->belongsTo(RoleKelompokPenilaian::class, 'role_group_id', 'id');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Models\Kelompok;
 use App\Models\KelompokMahasiswa;
 use App\Models\Mahasiswa;
@@ -25,6 +26,8 @@ use App\Models\PoinPenilaian;
 use App\Models\RoleKelompok;
 use App\Models\KategoriRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+
 
 class KelompokController extends Controller
 {
@@ -34,14 +37,31 @@ class KelompokController extends Controller
     public function people($id)
     {
         $kelompok = Kelompok::where('id',$id)->first();
+
+        if (Auth::user()->hasRole('dosen')) {
+            if (!Gate::check('dosen_role_allowed', $kelompok)) {
+                return back();
+            }
+        }
+
+        if (Auth::user()->hasRole('mahasiswa')) {
+            if (!Gate::check('mahasiswa_allowed', $kelompok)) {
+                return back();
+            }
+        }
+
         $mahasiswa = KrsUser::where('krs_id',$kelompok->krs_id)->get();
         $anggota = KelompokMahasiswa::where('kelompok_id',$kelompok->id)->get();
+        $anggota_kelompok = KelompokMahasiswa::join('kelompoks', 'kelompok_mahasiswas.kelompok_id','kelompoks.id')
+        ->join('krs','kelompoks.krs_id','krs.id')->where('kelompoks.krs_id',$kelompok->krs->id)->pluck('nim');
+        // return $anggota_kelompok;
         $role_kelompok = Reference::where('kategori', '=', 'role_kelompok')->get();
 
         return view('dashboard.kelompok.index',[
             'title' => $kelompok->nama_kelompok,
             'kelompok' => $kelompok,
             'anggota' => $anggota,
+            'anggota_kelompok' => $anggota_kelompok,
             'mahasiswa' => $mahasiswa,
             'role_kelompok' => $role_kelompok,
         ]);
@@ -80,7 +100,7 @@ class KelompokController extends Controller
                 $kelompok->create([
                     'nama_kelompok' => 'KELOMPOK-'.$i.'-'.$request->krs_name,
                     'krs_id' => $request->krs_id
-                ]);
+                ]); 
             }
             return redirect()->back()->with('success', 'Kelompok telah berhasil dibuat');
         }else{
@@ -101,9 +121,25 @@ class KelompokController extends Controller
      */
     public function show(Kelompok $kelompok)
     {   
-        // if (auth()->user()->cannot('kelola-bimbingan',$kelompok)) {
-        //     abort(403);
-        // }
+        // $role = RoleKelompok::where('kelompok_id', $kelompok->id)->where('nidn',Auth::user()->dosen->nidn);
+        // $role = RoleKelompok::where('kelompok_id', $kelompok->id);
+    //   $role->join('role_group_kelompoks', 'role_kelompoks.role_group_id', 'role_group_kelompoks.id')
+    //                 ->join('kategori_roles', 'role_group_kelompoks.kategori_id', 'kategori_roles.id')
+    //                 ->pluck('kategori_roles.nama');
+        // return Gate::check('is_koordinator', $kelompok->krs);
+        // return Auth::user()->dosen->role_kelompok->where('kelompok_id', $kelompok->id)->join('role_group_kelompoks', 'role_kelompoks.role_group_id', 'role_group_kelompoks.id')->select('role_group_kelompoks.*')->get();
+        if (Auth::user()->hasRole('dosen')) {
+            if (!Gate::check('dosen_role_allowed', $kelompok)) {
+                return back();
+            }
+        }
+
+        if (Auth::user()->hasRole('mahasiswa')) {
+            if (!Gate::check('mahasiswa_allowed', $kelompok)) {
+                return back();
+            }
+        }
+
         $ruangan = Ruangan::latest()->get();
         $dosen = Dosen::latest()->get();
         $reference = Reference::where('kategori','=','kelompok')->get();
@@ -211,6 +247,11 @@ class KelompokController extends Controller
 
 
     public function add_mahasiswa(Request $request){
+        if (Auth::user()->hasRole('dosen')) {
+            if (!Gate::check('is_koordinator', $kelompok)) {
+                return back();
+            }
+        }
         // return $request;
         $data = [
             'role' => 'required',
@@ -247,6 +288,21 @@ class KelompokController extends Controller
 
 
     public function add_topik(Request $request){
+
+        $kelompok = Kelompok::find($request->kelompok);
+
+        if (Auth::user()->hasRole('dosen')) {
+            if (!Gate::check('is_koordinator', $kelompok)) {
+                return back();
+            }
+        }
+        // return "ya";
+        if (Auth::user()->hasRole('mahasiswa')) {
+            if (!Gate::check('mahasiswa_allowed', $kelompok)) {
+                return back();
+            }
+        }
+
         $data = [
             'topik' => 'required',
             'kelompok' => 'required'
@@ -254,15 +310,22 @@ class KelompokController extends Controller
 
         $validasi = $request->validate($data);
 
-        $kelompok = Kelompok::find($request->kelompok);
         $kelompok->topik = $validasi['topik'];
         $kelompok->save();
 
         return back()->with('success', 'Topik telah berhasil dibuat');
     }
 
-    public function penilaian(Kelompok $kelompok, RoleKelompok $role){
-        $konfigurasi =  ConfigPenilaian::where('krs_id', $kelompok->krs->id)->first();
+    public function penilaian(Kelompok $kelompok, RoleKelompok $role){  
+        //  return $role->nidn.'-'.Auth::user()->dosen->nidn;
+        if (Auth::user()->hasRole('dosen')) {
+        if (!Gate::check('role_penilaian_allowed', $role)) {
+                return back();
+            }
+        }else{
+            return back();
+        }
+        // $konfigurasi =  ConfigPenilaian::where('krs_id', $kelompok->krs->id)->first();
         $poin_penilaian = PoinPenilaian::where('krs_id', $kelompok->krs->id)->get();
         // $role_dosen = $role;
         // return $role;
@@ -273,7 +336,7 @@ class KelompokController extends Controller
         return view('dashboard.penilaian.index',[
             'kelompok' => $kelompok,
             'poin_penilaian' => $poin_penilaian,
-            'konfigurasi' => $konfigurasi,
+            // 'konfigurasi' => $konfigurasi,
             'role_dosen' => $role,
         ]);
     }

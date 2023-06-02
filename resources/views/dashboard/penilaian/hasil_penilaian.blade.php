@@ -40,7 +40,7 @@
                             @foreach ($krs->poin_penilaian as $kpp)
                                 <th><a class="link" href="/krs/{{$krs->id}}/hasil_penilaian/penilaian/{{$kpp->id}}">{{$kpp->nama_poin}}</a><br><small class="fw-light">{{$kpp->bobot}} %</small></th>
                             @endforeach
-                            <th>Nilai akhir</th>
+                            <th >Nilai akhir</th>
                         </tr>
                         <tr>
                             <th>Kelompok</th>
@@ -49,7 +49,7 @@
                             @foreach ($krs->poin_penilaian as $kpp)
                                 <th>{{$kpp->nama_poin}}</th>
                             @endforeach
-                            <th>Nilai akhir</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>

@@ -19,8 +19,10 @@
 
 @section('breadscrumb')
     @role('dosen')
-	    <a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
-	    <a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+        @if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2) 
+            <a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+            <a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+        @endif
     @endrole
 	@role('mahasiswa')
 		<a href="/home" class="breadcrumb-item py-2"> Home</a>
@@ -35,13 +37,7 @@
         <div class="mb-2">
             <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
                 <li class="nav-item"><a href="#" class="nav-link active"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
                 <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
-                {{-- @if (Auth::user()->dosen() != NULL)
-                    @if (array_intersect(Auth::user()->dosen->role_kelompok($kelompok->id)->pluck('id')->toArray(), $kelompok->role_kelompok->pluck('id')->toArray())) --}}
-                
                 @role('dosen')
                     <li class="nav-item">
                         <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
@@ -58,10 +54,6 @@
                         </div>
                     </li>
                 @endrole
-                
-                    {{-- @endif
-                @endif --}}
-                {{-- {{Auth::user()->dosen->role_kelompok($kelompok->id)}} --}}
                 @role('dosen')
                     @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
                         <li class="nav-item">
@@ -83,14 +75,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            {{-- @can('kelola topik kelompok') --}}
-                                {{-- @if (app('is_kelompok_leader')->is_kelompok_leader($kelompok->id)) --}}
-                                    <a href="#edit-topik" class="nav-link" data-bs-toggle="tab">
-                                        <i class="ph-pencil me-2"></i>
-                                        Edit
-                                    </a>
-                                {{-- @endif --}}
-                            {{-- @endcan --}}
+                            @role('mahasiswa')
+                            @if (Gate::check('mahasiswa_allowed', $kelompok)) 
+                                <a href="#edit-topik" class="nav-link" data-bs-toggle="tab">
+                                    <i class="ph-pencil me-2"></i>
+                                    Edit
+                                </a>
+                            @endif
+                            @endrole
                         </li>
                     </ul>
 
@@ -98,7 +90,7 @@
                         <div class="tab-pane fade show active" id="topik-proyek">
                             <div class="px-2">
                                 <small class="text-muted ">Topik : </small>
-                            </div>
+                            </div>  
                             @if ($kelompok->topik == NULL)
                                 <small class="p-2">Kelompok ini belum memiliki topik</small>
                             @else
@@ -160,9 +152,8 @@
                                 </div> 
                                 <div class="py-1">
                                     <select name="role_group_id" class="form-control" required>
-                                        <option></option>
                                         <optgroup label="Daftar role">
-                                            <option selected>Pilih role </option>
+                                            <option value="" selected>Pilih role </option>
                                             @foreach($kelompok->krs->kategori_role_get_role as $kkk)
                                                 @if (!in_array($kkk->id, $kelompok->role_kelompok->pluck('role_group_id')->toArray()))
                                                     <option value="{{$kkk->id}}">{{Str::limit($kkk->nama,30)}}  <span class="text-primary">{{$kkk->is_main ? ' - wajib' : ''}}</span></option> 
@@ -179,13 +170,14 @@
                         
                         <div class="tab-pane fade show active" id="pembimbing_penguji">
                             @role('dosen')
-                            {{-- @if (Auth::user()->dosen->krs->count() > 0 || Auth::user()->dosen->krs2->count() > 0) --}}
+                            {{-- @if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2) --}}
+                            {{-- @if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2) --}}
                             @if ($kelompok->role_kelompok->count() > 0)
                                 @if(!$verified)
                                 <div>
                                     <div class="d-flex">
                                         <span class="text-primary text-warning p-1 px-3 rounded-pill fw-semibold"><i class="ph-warning-circle"></i> not verified</span>
-                                        @if (Auth::user()->dosen->krs->count() > 0 || Auth::user()->dosen->krs2->count() > 0) 
+                                        @if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2) 
                                             <div class="ms-auto">
                                                 <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
                                                     @csrf
@@ -198,7 +190,7 @@
                                 @else 
                                 <div class="d-flex">
                                     <span class="text-primary text-success p-1 px-3 rounded-pill fw-semibold mt-1"><i class="ph-checks"></i> verified</span>
-                                    @if (Auth::user()->dosen->krs->count() > 0 || Auth::user()->dosen->krs2->count() > 0)
+                                    @if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2)
                                         <div class="ms-auto">
                                             <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
                                                 @csrf
@@ -212,6 +204,7 @@
                                 </div>
                                 @endif
                             {{-- @endif --}}
+                            {{-- @endif --}}
                             @endif
                             @endrole
                             @if ($kelompok->role_kelompok->count() > 0)
@@ -219,9 +212,9 @@
                                 <div>
                                     <div class="d-flex px-2 mt-2">
                                         <small class="text-muted">{{$kr->role_group != NULL ? $kr->role_group->nama : ''}} </small>
-                                        @if(!$verified)
+                                        @if(!$verified && strtolower($kr->role_group->nama) != 'koordinator')
                                             <div class="ms-auto ">  
-                                                <small class="" data bs-popup="tooltip" title="hapus"> <a href="#" class="text-muted"data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kr->id }}"><i class="ph-trash"></i></a></small>
+                                                <small class="" data bs-popup="tooltip" title="hapus"> <a href="#" class="text-muted" data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $kr->id }}"><i class="ph-trash"></i></a></small>
                                             </div>
                                         @endif
                                     </div>
@@ -323,7 +316,7 @@
                     <div class="tab-content card-body">
                         <div class="tab-pane active fade show" id="list-bimbingan">
                             <div class="">
-                                <table class="table text-nowrap">   
+                                <table class="table text-nowrap w-100">   
                                     <tbody>
                                         @if($kelompok->bimbingan->count() > 0)
                                         @foreach($kelompok->bimbingan->sortByDesc('created_at') as $kb)
@@ -370,8 +363,7 @@
 
                                                             @role('dosen')
                                                             {{-- @can('update status bimbingan') --}}
-                                                                {{-- @if (app('is_pembimbing')->is_pembimbing($kelompok->id)) --}}
-                                                                {{-- @can('pembimbing-kelompok',$kelompok) --}}
+                                                                @if (Gate::check('is_pembimbing', $kelompok))
                                                                     @if ($kb->reference->value == 'waiting')
                                                                         @foreach($status_bimbingan as $sb)
                                                                         <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}" class="dropdown-item">
@@ -386,9 +378,9 @@
                                                                         </a>
                                                                         @endforeach
                                                                     @endif
-                                                                {{-- @endcan --}}
+                                                                @endif
                                                                 @endrole
-
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_detail_{{ $kr->id }}" class="dropdown-item text-secondary"><i class="ph-eye"></i>&nbsp;Lihat</a>
                                                                 @if ($kb->file_bukti == NULL)
                                                                     @role('mahasiswa')
                                                                         @if($kb->reference->value == 'approved' && !$kb->is_done)
@@ -428,6 +420,38 @@
                                                 @endif
                                             </td>
                                         </tr>
+
+                                         <!-- Lihat bimbingan Modal -->
+                                         <div id="modal_detail_{{ $kr->id }}" class="modal fade" tabindex="-1">
+                                            <div class="modal-dialog modal-xs">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Detail Bimbingan</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                       <div>
+                                                            <small class="fw-bold">Deskripsi : </small>
+                                                            <p>{{$kb->description}}</p>
+                                                       </div>
+                                                       <div>
+                                                            <small class="fw-bold">Waktu : </small>
+                                                            <p>{{$kb->waktu}}</p>
+                                                       </div>
+                                                       <div>
+                                                            <small class="fw-bold">Ruangan : </small>
+                                                            <p>{{$kb->ruangan->nama}}</p>
+                                                       </div>
+                                                    </div>
+
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /Lihat bimbingan Modal -->
 
                                        <!-- Sticky footer -->
                                         <div id="upload_bukti{{$kb->id}}" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
@@ -471,9 +495,11 @@
                                                             <span class="d-none d-md-inline-block ms-2">{{$kb->file_bukti}}</span>
                                                         </div>
                                                     </a>
+                                                    @role('mahasiswa')
                                                     <div class="ms-auto">
                                                         <small class="fw-light" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$kb->id}}_file"><a href="#" class="text-secondary">Hapus</a></small>
                                                     </div>
+                                                    @endrole
                                                 </div>
                                                     @role('dosen')
                                                     <form action="/bimbingan/approve/{{$kb->id}}" method="post" enctype="multipart/form-data">
@@ -566,6 +592,7 @@
                                 <div class="p-1">
                                     <label for="">Ruangan</label>
                                     <select class="form-control" name="ruangan_id" placeholder="waktu bimbingan" required>
+                                        <option value="">Pilih ruangan</option>
                                         @foreach($ruangan as $r)
                                             <option value="{{$r->id}}">{{$r->nama}}</option>
                                         @endforeach

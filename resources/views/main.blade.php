@@ -4,6 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="{{asset('/img/icon-link.png')}}">
     @yield('title')
 
     <!-- Global stylesheets -->
@@ -294,7 +295,7 @@
     </div>
     <!-- /demo config -->
 
-    @if (session()->has('success'))
+    {{-- @if (session()->has('success'))
         <div class="toast-container position-fixed top-0 end-0 p-3">
             <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header bg-light text-success">
@@ -324,7 +325,7 @@
                 </div>
             </div>
         </div>
-    @endif
+    @endif --}}
     
     @include('sweetalert::alert')
 

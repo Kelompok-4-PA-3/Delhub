@@ -66,6 +66,8 @@ Route::middleware([
     Route::get('/koordinator/proyeksaya/{id}', [MyProjectController::class, 'koordinator'])->name('koordinator_myproject_detail');
     Route::get('/koordinator/myproject', [MyProjectController::class, 'koordintor_job_list'])->name('koordinator_myproject');
 
+    Route::get('/users/{user}/profile', [UsersController::class, 'profile'])->name('koordinator_myproject');
+
     Route::group(['middleware' => 'role:admin'], function () {
          // admin 
          // prodi
@@ -123,7 +125,6 @@ Route::middleware([
         Route::post('/kelompok/dosen/penguji', [KelompokController::class, 'add_penguji']);
         Route::post('/kelompok/dosen/pembimbing/{id}/delete', [KelompokController::class, 'delete_pembimbing']);
         Route::post('/kelompok/dosen/penguji/{id}/delete', [KelompokController::class, 'delete_penguji']);
-        Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
         Route::post('/kelompok/people/add', [KelompokController::class, 'add_mahasiswa']);
         Route::post('/kelompok/people/delete', [KelompokController::class, 'delete_mahasiswa']);
 
@@ -194,6 +195,8 @@ Route::middleware([
         // request
         Route::resource('/request', \App\Http\Controllers\RequestController::class)->name('requests', 'request.index');
         Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
+        Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
+
     });
 
 
@@ -231,19 +234,7 @@ Route::middleware([
     Route::resource('/jadwal', \App\Http\Controllers\JadwalController::class)->name('jadwals', 'jadwal.index');
 
 
-
-
     // Data Master
-   
-
-
-    
-   
-
-
-
-
-    
     // test
     Route::get('/mahasiswas/adds', function () {
         $mahasiswa = Mahasiswa::join('users', 'users.id', '=', 'mahasiswas.user_id')->get();

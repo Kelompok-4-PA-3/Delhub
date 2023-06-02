@@ -15,8 +15,12 @@
 
 
 @section('breadscrumb')
-	<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
-	<a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+@role('dosen')
+@if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2) 
+    <a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+@endif
+@endrole
 	<a href="/kelompok/{{$kelompok->id}}" class="breadcrumb-item py-2"> {{$kelompok->nama_kelompok}}</a>
 	<span class="breadcrumb-item active py-2">{{$role_dosen->role_group->nama}}</span>
 @endsection
@@ -28,32 +32,31 @@
 
         <div class="mb-2">
             <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
-                <li class="nav-item"><a href="#" class="nav-link active"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
+                <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}" class="nav-link"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
                 <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
-                {{-- @if (Auth::user()->dosen() != NULL)
-                    @if (array_intersect(Auth::user()->dosen->role_kelompok($kelompok->id)->pluck('id')->toArray(), $kelompok->role_kelompok->pluck('id')->toArray())) --}}
-                <li class="nav-item">
-                    <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
-                    <div class="dropdown-menu">
-                        @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
-                            @if ($myrole->role_group != NULL)
-                                <a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}}</a>
-                            @endif
-                        @endforeach
-                        {{-- {{Auth::user()->dosen->all_role_kelompok}} --}}
-                    </div>
-                </li>
-                    {{-- @endif
-                @endif --}}
-                {{-- {{Auth::user()->dosen->role_kelompok($kelompok->id)}} --}}
-                @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
+                @role('dosen')
                     <li class="nav-item">
-                        <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
+                        <a href="" class="nav-link btn btn-primary dropdown-toggle active" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
+                        <div class="dropdown-menu">
+                            @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
+                            @if ($myrole->role_group != NULL)
+                                <div class="list-group">
+                                    <div class="d-flex">
+                                        <a @if($myrole->is_verified) href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" @endif  class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}} &nbsp; @if(!$myrole->is_verified) <i class="ph-warning-circle text-warning" style="cursor:pointer;" data-bs-popup="tooltip" title="Role anda belum diverfikasi"></i> @endif</a>
+                                    </div>
+                                </div>
+                            @endif
+                            @endforeach
+                        </div>
                     </li>
-                @endif  
+                @endrole
+                @role('dosen')
+                    @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
+                        <li class="nav-item">
+                            <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link active btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
+                        </li>
+                    @endif  
+                @endrole
             </ul>
         </div>
 

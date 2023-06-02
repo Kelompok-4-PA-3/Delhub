@@ -99,7 +99,7 @@ class MahasiswaController extends Controller
 
 
         if ($role_mahasiswa == NULL) {
-            return back()->with('failed', 'Tidak dapat menambahkan mahasiswa karena role mahasiswa tidak ditemukan');
+            return back()->with('error', 'Tidak dapat menambahkan mahasiswa karena role mahasiswa tidak ditemukan');
         }
 
         User::where('id',$request->user_id)->first()->assignRole($role_mahasiswa->id);
@@ -121,7 +121,7 @@ class MahasiswaController extends Controller
 
 
         if ($role_mahasiswa == NULL) {
-            return back()->with('failed', 'Tidak dapat menambahkan mahasiswa karena role mahasiswa tidak ditemukan');
+            return back()->with('error', 'Tidak dapat menambahkan mahasiswa karena role mahasiswa tidak ditemukan');
         }
 
         User::where('id',$request->user_id)->first()->removeRole('mahasiswa');

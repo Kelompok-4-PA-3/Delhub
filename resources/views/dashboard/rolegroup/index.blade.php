@@ -34,7 +34,7 @@
 
         <div class="card-body pb-0">
 
-            @if (session()->has('success'))
+            {{-- @if (session()->has('success'))
                 <div class="alert alert-success alert-icon-start alert-dismissible fade show">
                     <span class="alert-icon bg-success text-white">
                         <i class="ph-check-circle"></i>
@@ -50,7 +50,7 @@
                     <span class="fw-semibold">Gagal!</span> {{ session('failed') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            @endif
+            @endif --}}
             <table class="table datatable-users w-100">
                 <thead>
                     <tr>
@@ -71,15 +71,18 @@
                             <td>{{ $rg->nama }} <small class="{{$rg->is_main ? 'text-primary' : 'text-warning'}}">{{$rg->is_main ? '( wajib )' : '(opsional)'}}</small> </td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
-                                    <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
-                                        data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $rg->id }}">
-                                        <i class="ph-pen"></i>
-                                    </a>
+                                    @if (strtolower($rg->nama) != 'koordinator')
+                                        <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
+                                            data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $rg->id }}">
+                                            <i class="ph-pen"></i>
+                                        </a>
 
-                                    <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus"
-                                        data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $rg->id }}">
-                                        <i class="ph-trash"></i>
-                                    </a>
+                                        <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus"
+                                            data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $rg->id }}">
+                                            <i class="ph-trash"></i>
+                                        </a>
+                                    @endif
+
                                 </div>
                             </td>
                         </tr>

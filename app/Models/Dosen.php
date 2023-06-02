@@ -57,6 +57,11 @@ class Dosen extends Model
         return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn');
     }
 
+    public function role_kelompok_group(){
+        return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn')
+                    ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', 'role_group_kelompoks.id');
+    }
+
     public function all_role_kelompok(){
         return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn')
         ->join('kelompoks','role_kelompoks.kelompok_id', 'kelompoks.id')

@@ -17,8 +17,10 @@
 
 @section('breadscrumb')
 	@role('dosen')
-		<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
-		<a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+		@if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2) 
+			<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+			<a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+		@endif
 	@endrole
 	@role('mahasiswa')
 		<a href="/home" class="breadcrumb-item py-2"> Home</a>
@@ -51,9 +53,9 @@
         <div class="mb-2">
             <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
                 <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}" class="nav-link"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
+                {{-- <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
                 <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li> --}}
                 <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link active"> <i class="ph-users"></i> &nbsp; Orang</a></li>
                 {{-- @if (Auth::user()->dosen() != NULL)
                     @if (array_intersect(Auth::user()->dosen->role_kelompok($kelompok->id)->pluck('id')->toArray(), $kelompok->role_kelompok->pluck('id')->toArray())) --}}
@@ -98,7 +100,7 @@
 					</a>
 				</li>
 				@if(Auth::user()->dosen()->count() > 0)
-					@if($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nidn)
+					@if(Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2)
 						<li class="nav-item">
 							<a href="#tambah-anggota" class="nav-link" data-bs-toggle="tab">
 								<i class="ph-users-three me-2"></i>
@@ -120,47 +122,54 @@
 						</thead>
 						<tbody>
 							@foreach ($anggota as $a)
-								<tr>
-									<td>
-										{{-- <div class="container"><input type="checkbox" class="form-check-input"></div> --}}
-									</td>
-									<td>
-										<div class="d-flex">
-											<div class="px-2">
-												<img src="../../../assets/images/demo/users/face11.jpg" class="w-32px h-32px rounded-pill" alt="">
-											</div>
-										<div>
-											<a class="fw-semibold" href="">{{$a->mahasiswa->user->nama}}</a><br>
-											<small class="text-muted">{{$a->mahasiswa->nim}}</small>
+								
+							<tr>
+								<td>
+									{{-- <div class="container"><input type="checkbox" class="form-check-input"></div> --}}
+								</td>
+								<td>
+									<div class="d-flex">
+										<div class="px-2">
+											<img src="../../../assets/images/demo/users/face11.jpg" class="w-32px h-32px rounded-pill" alt="">
 										</div>
+									<div>
+										<a class="fw-semibold" href="">{{$a->mahasiswa->user->nama}}</a><br>
+										<small class="text-muted">{{$a->mahasiswa->nim}}</small>
+									</div>
+									</div>
+								</td>
+								<td class="text-center">	
+									<div class="d-inline-flex">
+										<div class="px-4">
+											<small class="text-muted">{{ucfirst($a->reference->value)}}</small>
 										</div>
-									</td>
-									<td class="text-center">	
-										<div class="d-inline-flex">
-											<div class="px-4">
-												<small class="text-muted">{{ucfirst($a->reference->value)}}</small>
-											</div>
-											@role('dosen')
-											<small>
-												<form action="/kelompok/people/delete" method="post">
-													@csrf
-													<input type="hidden" name="mahasiswa" value="{{$a->nim}}">
-													<input type="hidden" name="kelompok" value="{{$a->kelompok_id}}">
-													<button class="text-danger bg-transparent border-0" type="submit"><i class="ph-trash"></i></button>
-												</form>
-											</small>
-											@endrole
 
-										</div>
-									</td>
-							   	</tr>
+										@role('dosen')
+       										@if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2) 
+												@foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
+													<small>
+														<form action="/kelompok/people/delete" method="post">
+															@csrf
+															<input type="hidden" name="mahasiswa" value="{{$a->nim}}">
+															<input type="hidden" name="kelompok" value="{{$a->kelompok_id}}">
+															<button class="text-danger bg-transparent border-0" type="submit"><i class="ph-trash"></i></button>
+														</form>
+													</small>
+												@endforeach
+											@endif
+										@endrole
+
+									</div>
+								</td>
+							   </tr>
+
 							@endforeach
 						</tbody>
 					</table>
 				</div>
 			</div>
 			@if(Auth::user()->dosen()->count() > 0)
-			@if($kelompok->krs->dosen_mk == Auth::user()->dosen->nidn || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nidn)
+			@if(Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2)
 						<div class="tab-pane fade show" id="tambah-anggota">
 							<div class="card p-3">
 								<div class="p-3">
@@ -173,7 +182,10 @@
 												<option></option>
 												<optgroup label="Daftar mahasiswa">
 													@foreach($mahasiswa as $km)
-														@if(!in_array($km->mahasiswa->nim, $anggota->pluck('nim')->toArray()))
+													{{-- @if (!in_array($a->mahasiswa->nim, $anggota_kelompok->toArray()))
+
+													@endif --}}
+														@if(!in_array($km->mahasiswa->nim, $anggota_kelompok->toArray()))
 														<option value="{{$km->mahasiswa->nim}}">
 															<div>
 																{{$km->mahasiswa->user->nama}} - {{$km->mahasiswa->nim}} (<small>Design, Coding</small>)<br>

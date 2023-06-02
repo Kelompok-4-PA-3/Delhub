@@ -26,7 +26,7 @@
             <h5 class="mb-0">Kategori Role</h5>
             <div class="ms-auto d-flex">
                 <label class="form-check form-switch form-check-reverse">
-                    <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#tambah_role_group"><i class="ph-plus-circle"></i>&nbsp; TAMBAH ROLE GROUP</a>
+                    <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#tambah_role_group"><i class="ph-plus-circle"></i>&nbsp; TAMBAH KATEGORI GROUP</a>
                 </label>
             </div>
         </div>
@@ -72,15 +72,18 @@
                             <td>{{ $k->nama }}</td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
-                                    <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
-                                        data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $k->id }}">
-                                        <i class="ph-pen"></i>
-                                    </a>
 
-                                    <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus"
-                                        data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $k->id }}">
-                                        <i class="ph-trash"></i>
-                                    </a>
+                                    @if (strtolower($k->nama) != 'koordinator')
+                                        <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
+                                            data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $k->id }}">
+                                            <i class="ph-pen"></i>
+                                        </a>
+
+                                        <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus"
+                                            data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $k->id }}">
+                                            <i class="ph-trash"></i>
+                                        </a>
+                                    @endif
 
                                     <a href="#" class="text-body " data-bs-popup="tooltip" title="Detail"
                                         data-bs-toggle="modal" data-bs-target="#modal_detail{{ $k->id }}">
