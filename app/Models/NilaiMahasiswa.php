@@ -24,4 +24,12 @@ class NilaiMahasiswa extends Model
     public function poin_penilaian(){
         return $this->belongsTo(PoinPenilaian::class, 'poin_penilaian_id', 'id');
     }
+
+    public function detail_nilai_mahasiswa(){
+        return $this->hasMany(DetailNilaiMahasiswa::class, 'nilai_id', 'id');
+    }
+
+    public function role_group_penilaian(){
+        return $this->hasMany(RoleGroupPenilaian::class, 'poin_penilaian_id', 'id');
+    }
 }

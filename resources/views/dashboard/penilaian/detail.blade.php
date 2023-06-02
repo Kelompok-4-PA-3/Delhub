@@ -1,7 +1,7 @@
 @extends('main')
    
 @section('title')
-    <title>Manajemen Mahasiswa</title>
+    <title>Penilaian {{$penilaian->nama_poin}}</title>
 @endsection
 
 @push('datatable_js')
@@ -23,8 +23,12 @@
 
 
 @section('breadscrumb')
-	<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
-	<a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+    @role('dosen')
+    @if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2) 
+        <a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+        <a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2"> {{$kelompok->krs->kategori->nama_singkat}}</a>
+    @endif
+    @endrole
 	<a href="/kelompok/{{$kelompok->id}}" class="breadcrumb-item py-2"> {{$kelompok->nama_kelompok}}</a>
 	<a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}" class="breadcrumb-item py-2">{{$role_dosen->role_group->nama}}</a>
 	<span class="breadcrumb-item active py-2">{{$penilaian->nama_poin}}</span>
@@ -36,7 +40,6 @@
             background: white;
             box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
             padding: 12px;
-            /* border: 1px solid rgb(130, 130, 130); */
             border-radius: 3px;
         }
 
@@ -76,30 +79,31 @@
         <div class="mb-2">
             <div class="mb-2">
                 <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
-                    <li class="nav-item"><a href="#" class="nav-link active"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
+                    <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}" class="nav-link"> <i class="ph-squares-four"></i> &nbsp; Kelompok</a></li>
                     <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i> &nbsp; Orang</a></li>
-                    {{-- @if (Auth::user()->dosen() != NULL)
-                        @if (array_intersect(Auth::user()->dosen->role_kelompok($kelompok->id)->pluck('id')->toArray(), $kelompok->role_kelompok->pluck('id')->toArray())) --}}
-                    <li class="nav-item">
-                        <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
-                        <div class="dropdown-menu">
-                            @foreach (Auth::user()->dosen->role_kelompok($kelompok->id) as $myrole)
-                                <a href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}}</a>
-                            @endforeach
-                            {{-- {{Auth::user()->dosen->all_role_kelompok}} --}}
-                        </div>
-                    </li>
-                        {{-- @endif
-                    @endif --}}
-                    {{-- {{Auth::user()->dosen->role_kelompok($kelompok->id)}} --}}
-                    @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
+                    @role('dosen')
                         <li class="nav-item">
-                            <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
+                            <a href="" class="nav-link btn btn-primary dropdown-toggle active" data-bs-toggle="dropdown"><i class="ph-notebook"></i> &nbsp; Penilaian</a>
+                            <div class="dropdown-menu">
+                                @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
+                                @if ($myrole->role_group != NULL)
+                                    <div class="list-group">
+                                        <div class="d-flex">
+                                            <a @if($myrole->is_verified) href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" @endif  class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}} &nbsp; @if(!$myrole->is_verified) <i class="ph-warning-circle text-warning" style="cursor:pointer;" data-bs-popup="tooltip" title="Role anda belum diverfikasi"></i> @endif</a>
+                                        </div>
+                                    </div>
+                                @endif
+                                @endforeach
+                            </div>
                         </li>
-                    @endif  
+                    @endrole
+                    @role('dosen')
+                        @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
+                            <li class="nav-item">
+                                <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link active btn btn-primary"><i class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
+                            </li>
+                        @endif  
+                    @endrole
                 </ul>
             </div>
         </div>
@@ -129,8 +133,8 @@
                         @endif
                     </div>
                 </div>
-                <div class="card-body">
-                    <table class="table datatable-penilaian">
+                <div class="card-body table-responsive">
+                    <table class="table datatable-hasil-nilai w-100 scrollable-table table-bordered ">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -188,8 +192,7 @@
                                         @else 
                                             <small class="text-success"><i class="ph-checks"></i> approved</small>
                                             
-                                            <div class="btn-group">
-                                                {{-- <a href="#" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">Submenu on click</a> --}}
+                                            {{-- <div class="btn-group">
                                                 <small class="text-warning" data-bs-toggle="dropdown" data-bs-popup="tooltip" title="Apakah anda ingin membatalkan approve penilaian?"><i class="ph-warning-circle"></i></small>
         
                                                 <div class="dropdown-menu" class="w-100">
@@ -206,12 +209,12 @@
                                                         </div>
                                                     </form>
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                         @endif
                                     </div>
                                 </th>
-                                <th>Aksi</th>
+                                {{-- <th>Aksi</th> --}}
                             </tr>
                             <tr>
                                 <th></th>
@@ -220,8 +223,12 @@
                                 @foreach ($penilaian->komponen_penilaian as $item)
                                     <th>N{{$loop->iteration}}</th>
                                 @endforeach
-                                <th class="{{!$status_nilai ? 'bg-warning bg-opacity-10 text-warning' : ''}}"></th>
-                                <th></th>
+                                <th class="{{!$status_nilai ? 'bg-warning bg-opacity-10 text-warning' : ''}}">
+                                    <div>
+                                       <a href="" class="btn btn-sm btn-primary"><i class="ph-arrows-clockwise"></i> &nbsp;Calculate</a>
+                                    </div>
+                                </th>
+                                {{-- <th></th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -236,73 +243,27 @@
                                     @endphp
                                     @foreach ($penilaian->komponen_penilaian as $pkp)
                                         <td class="{{!$status_nilai ? 'add_nilai text-primary' : ''}}" data-name="komponen" data-pkp_id="{{$pkp->id}}" data-mahasiswa={{$kkm->mahasiswa->nim}}  data-type="number" data-max="100" style="cursor:pointer;">
-                                        {{-- {{$pkp->nilai_mahasiswa->where('kelompok_id',$kelompok->id  )}} --}}
-                                        
-                                        @php
-                                            $nilai_komponen_mahasiswa = $pkp->detail_nilai_mahasiswa()
-                                                    ->where('nilai_mahasiswas.kelompok_id',$kelompok->id)
-                                                    ->where('komponen_id', $pkp->id)
-                                                    ->where('nim', $kkm->mahasiswa->nim)
-                                                    ->where('role_dosen_kelompok_id', $role_dosen->id)
-                                        @endphp
-                                            
-                                        @if ( $nilai_komponen_mahasiswa->first() != NULL)
-                                                {{  $nilai_komponen_mahasiswa->first()->nilai / ($pkp->bobot / 100) }}
-                                                @php
-                                                    $nilai_akhir +=  $nilai_komponen_mahasiswa->first()->nilai;
-                                                @endphp
-                                                {{-- {{$role_dosen}} --}}
-                                        @endif
-                                        {{-- {{  $nilai_komponen_mahasiswa->nilai / ($pkp->bobot / 100)}} --}}
-
+                                            @php
+                                                $nilai_komponen_mahasiswa = $pkp->detail_nilai_mahasiswa()
+                                                        ->where('nilai_mahasiswas.kelompok_id',$kelompok->id)
+                                                        ->where('komponen_id', $pkp->id)
+                                                        ->where('nim', $kkm->mahasiswa->nim)
+                                                        ->where('role_dosen_kelompok_id', $role_dosen->id)
+                                            @endphp
+                                                
+                                            @if ( $nilai_komponen_mahasiswa->first() != NULL)
+                                                    {{  $nilai_komponen_mahasiswa->first()->nilai / ($pkp->bobot / 100) }}
+                                                    @php
+                                                        $nilai_akhir +=  $nilai_komponen_mahasiswa->first()->nilai;
+                                                    @endphp
+                                            @endif
                                         </td>
                                     @endforeach
                                 @endif
                                 <td class="{{!$status_nilai ? 'bg-warning bg-opacity-10 text-warning' : '' }} fw-semibold">
                                     {{$nilai_akhir}}
                                 </td>
-                                <td>
-                                    <button data-bs-toggle="offcanvas" data-bs-target="#tambah_penilaian{{$kkm->mahasiswa->nim}}" class="btn btn-sm btn-primary fw-semibold">Nilai</button>    
-                                </td>
                             </tr>
-
-                                <!-- Large panel -->
-                                <div id="tambah_penilaian{{$kkm->mahasiswa->nim}}" class="offcanvas offcanvas-end offcanvas-size-lg" tabindex="-1">
-                                    <div class="offcanvas-header">
-                                        <h5 class="offcanvas-title fw-semibold">Tambah Komponen Penilaian</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-                                    </div>
-                                    <div class="offcanvas-body p-2">
-                                        {{-- {{$role_dosen->id}} --}}
-                                        <form class="container" action="/kelompok/{{$kelompok->id}}/penilaian/role/{{$role_dosen->id}}/{{$penilaian->id}}/mahasiswa/{{$kkm->mahasiswa->nim}}" method="post">
-                                           @csrf
-                                           @foreach ($penilaian->komponen_penilaian as $pkp)
-                                                <div class="row">
-                                                    <div class="col-7">
-                                                        {!!$pkp->nama_komponen!!}
-                                                    </div>
-                                                    <div class="col-2">
-                                                        {{$pkp->bobot.'%'}}
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <input type="number" class="form-control" name="komponen{{$pkp->id}}" max="100" min="0" required>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                            <div class="border-top p-3">
-                                                <button type="submit" class="btn btn-primary w-100">Submit</button>
-                                            </div>
-                                        </form>
-                                        
-                                    </div>
-                                </div>
-                                <!-- /large panel -->
-                                {{-- <script>
-                                    CKEDITOR.replace('#tambah_penilaian{{$kkm->mahasiswa->nim}}', {
-                                        toolbar: 'Basic'
-                                    });
-                                </script> --}}
-
                          @endforeach
                         </tbody>
                     </table>

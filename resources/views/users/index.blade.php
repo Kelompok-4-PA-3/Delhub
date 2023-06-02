@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('title')
-    <title>Manajemen Permission</title>
+    <title>Manajemen Pengguna</title>
 @endsection
 
 @push('datatable_js')
@@ -18,7 +18,9 @@
 	<script src="{{asset('/assets/demo/pages/uploader_bootstrap.js')}}"></script>
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <span class="breadcrumb-item active py-2"><i class="ph-users"></i>&nbsp;Manajemen Pengguna</span>
+@endsection
 
 @section('content')
     <div class="card">

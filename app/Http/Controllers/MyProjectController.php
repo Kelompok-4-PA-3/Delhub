@@ -8,17 +8,29 @@ use App\Models\Kelompok;
 use App\Models\Mahasiswa;
 use App\Models\Pembimbing;
 use Auth;
+use Illuminate\Support\Facades\Gate;
+
 
 class MyProjectController extends Controller
 {
     public function koordinator($id){
+        
         $krs = Krs::where('id',$id)->first();
+
+        if(Auth::user()->hasRole('dosen') && $krs != NULL){
+            if (!Gate::check('krs_owner', $krs)) {
+                return back();
+            }
+        }else{
+            return back();
+        }
+
         $kelompok = Kelompok::where('krs_id','=', $krs->id)->get();
         $mahasiswa = Mahasiswa::latest()->get();
         // return $krs->count();
         if ($krs->count() > 0) {
             return view('dashboard.koordinator',[
-                'title' =>  $krs->kategori->nama_singkat,
+                'title' =>  $krs->kategori->nama_mk,
                 'krs' => $krs,
                 'kelompok' => $kelompok,
                 'mahasiswa' => $mahasiswa

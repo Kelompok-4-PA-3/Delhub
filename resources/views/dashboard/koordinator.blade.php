@@ -15,7 +15,7 @@
 
 @section('breadscrumb')
 	<a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
-	<span class="breadcrumb-item active py-2">{{$krs->kategori->nama_singkat}}</span>
+	<span class="breadcrumb-item active py-2">{{$krs->kategori->nama_mk}}</span>
 @endsection
 
 @section('content')
@@ -36,7 +36,7 @@
             <!-- Traffic sources -->
             <div class="card">
                 <div class="card-header d-flex align-items-center">
-                    <h5 class="mb-0">Daftar Kelompok</h5>
+                    <h5 class="mb-0">Daftar Kelompok </h5>
                     <div class="ms-auto">
                         <label class="form-check form-switch form-check-reverse">
                             <input type="checkbox" class="form-check-input" checked>
@@ -86,8 +86,8 @@
 
 @endsection
 
-@if(Auth::user()->dosen->count() > 0)
-@if($krs->dosen_mk == Auth::user()->dosen->nidn || $krs->dosen_mk_2 == Auth::user()->dosen->nidn)
+{{-- @if(Auth::user()->dosen->count() > 0)
+@if($krs->dosen_mk == Auth::user()->dosen->nidn || $krs->dosen_mk_2 == Auth::user()->dosen->nidn) --}}
 @section('right-sidebar')
  <!-- Right sidebar -->
 		<div class="sidebar sidebar-end sidebar-expand-lg sidebar-collapsed">
@@ -330,5 +330,5 @@
 		</div>
 		<!-- /right sidebar -->
 @endsection
-@endif
-@endif
+{{-- @endif
+@endif --}}

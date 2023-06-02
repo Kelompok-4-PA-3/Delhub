@@ -53,9 +53,9 @@ class PermissionController extends Controller
             // } else {
             //     throw $e;
             // }
-            return redirect()->back()->with('failed', "Permission telah terdaftar pada guard name yang sama");
+            return redirect()->back()->with('error', "Permission telah terdaftar pada guard name yang sama");
             // if ($e->errorInfo[1] == 1062) {
-            //     return back()->with('failed','Permission telah terdaftar pada guard name yang sama');
+            //     return back()->with('error','Permission telah terdaftar pada guard name yang sama');
             // } else {
             //     // Other query exception
             //     throw $e;

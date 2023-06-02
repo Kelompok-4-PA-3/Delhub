@@ -4,6 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="{{asset('/img/icon-link.png')}}">
     @yield('title')
 
     <!-- Global stylesheets -->
@@ -42,6 +43,13 @@
 
 <body>
 
+    <style>
+        .card{
+            box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+            border: 0;
+        }
+    </style>
+
     @include('layout.navbar')
 
     <!-- Page content -->
@@ -51,7 +59,7 @@
         @include('layout.sidebar')
 
         <!-- Main content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="background-color: #e9f3ff">
 
             <!-- Inner content -->
             <div class="content-inner">
@@ -287,7 +295,7 @@
     </div>
     <!-- /demo config -->
 
-    @if (session()->has('success'))
+    {{-- @if (session()->has('success'))
         <div class="toast-container position-fixed top-0 end-0 p-3">
             <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header bg-light text-success">
@@ -317,7 +325,9 @@
                 </div>
             </div>
         </div>
-    @endif
+    @endif --}}
+    
+    @include('sweetalert::alert')
 
     @stack('remove-scroll')
 

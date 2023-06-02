@@ -199,6 +199,7 @@ return [
         App\Providers\JetstreamServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         App\Providers\CheckRoleProvider::class,
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
 
     ],
 
@@ -216,6 +217,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Alert' => RealRashid\SweetAlert\SweetAlertServiceProvider::class,
     ])->toArray(),
 
 ];

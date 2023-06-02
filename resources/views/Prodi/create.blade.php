@@ -1,5 +1,9 @@
 @extends('main')
 
+@section('title')
+
+@endsection
+
 @push('select_js')
     <script src="{{asset('../../../assets/js/jquery/jquery.min.js')}}"></script>
 	<script src="{{asset('../../../assets/js/vendor/forms/selects/select2.min.js')}}"></script>
@@ -7,6 +11,12 @@
     <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
 @endpush
+
+@section('breadscrumb')
+    <a href="/prodi" class="breadcrumb-item active py-2"><i class="ph-circles-four"></i>&nbsp;Manajemen Program Studi</a>
+    <span class="breadcrumb-item active py-2">Tambah Program Studi</span>
+@endsection
+
 
 @section('content')
     <div class="card">

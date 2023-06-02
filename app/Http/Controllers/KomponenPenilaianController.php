@@ -33,7 +33,7 @@ class KomponenPenilaianController extends Controller
         $komponen = KomponenPenilaian::where('poin_penilaian_id', $poinPenilaian->id);
         // return $komponen->get();
         if($komponen->sum('bobot') != 100){
-            return  back()->with('failed','Sepertinya jumlah bobot tidak mencapai 100% atau melebihinya, pastikan jumlah keseluruhan bobot mencapai tepat 100%');
+            return  back()->with('error','Sepertinya jumlah bobot tidak mencapai 100% atau melebihinya, pastikan jumlah keseluruhan bobot mencapai tepat 100%');
         }
 
         $komponen->where('is_verified',false)->update([

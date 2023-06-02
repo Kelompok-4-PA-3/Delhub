@@ -49,6 +49,11 @@ class Kelompok extends Model
             ->select('role_kelompoks.*', 'role_group_kelompoks.nama');
     }
 
+    public function role_kelompok_all()
+    {
+        return $this->hasMany(RoleKelompok::class, 'kelompok_id', 'id');
+    }
+
     public function role_group()
     {
         return $this->hasManyThrough('App\Models\RoleGroupKelompok', 'App\Models\RoleKelompok', 'kelompok_id', 'id', 'id', 'role_group_id');

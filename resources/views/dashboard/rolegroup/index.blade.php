@@ -14,7 +14,12 @@
 
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2">{{$krs->kategori->nama_singkat}}</a>
+    <a href="/krs/{{$krs->id}}/kategori_role" class="breadcrumb-item py-2">Kategori Role</a>
+    <span class="breadcrumb-item active py-2"> {{$kategori->nama}}</span>
+@endsection
 
 @section('content')
     <div class="card">
@@ -29,7 +34,7 @@
 
         <div class="card-body pb-0">
 
-            @if (session()->has('success'))
+            {{-- @if (session()->has('success'))
                 <div class="alert alert-success alert-icon-start alert-dismissible fade show">
                     <span class="alert-icon bg-success text-white">
                         <i class="ph-check-circle"></i>
@@ -45,7 +50,7 @@
                     <span class="fw-semibold">Gagal!</span> {{ session('failed') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            @endif
+            @endif --}}
             <table class="table datatable-users w-100">
                 <thead>
                     <tr>
@@ -63,18 +68,21 @@
                     @foreach ($role_group as $rg)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $rg->nama }} <small class="text-primary">{{$rg->is_main ? '( Role utama )' : ''}}</small> </td>
+                            <td>{{ $rg->nama }} <small class="{{$rg->is_main ? 'text-primary' : 'text-warning'}}">{{$rg->is_main ? '( wajib )' : '(opsional)'}}</small> </td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
-                                    <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
-                                        data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $rg->id }}">
-                                        <i class="ph-pen"></i>
-                                    </a>
+                                    @if (strtolower($rg->nama) != 'koordinator')
+                                        <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"
+                                            data-bs-toggle="offcanvas" data-bs-target="#form-edit{{ $rg->id }}">
+                                            <i class="ph-pen"></i>
+                                        </a>
 
-                                    <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus"
-                                        data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $rg->id }}">
-                                        <i class="ph-trash"></i>
-                                    </a>
+                                        <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus"
+                                            data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $rg->id }}">
+                                            <i class="ph-trash"></i>
+                                        </a>
+                                    @endif
+
                                 </div>
                             </td>
                         </tr>
@@ -191,5 +199,8 @@
             </form>
 		</div>
 	</div>
+
+
+ 
    
 @endsection

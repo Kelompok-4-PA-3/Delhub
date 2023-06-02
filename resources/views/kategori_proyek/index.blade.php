@@ -12,12 +12,14 @@
     <script src="{{ asset('/assets/js/vendor/forms/selects/select2.min.js') }}"></script>
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <span class="breadcrumb-item active py-2"><i class="ph-squares-four"></i>&nbsp;Manajemen Kategori Proyek</span>
+@endsection
 
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <h5 class="mb-0">Tambah Kategori Proyek</h5>
+            <h5 class="mb-0">Kategori Proyek</h5>
             <div class="ms-auto">
                 <label class="form-check form-switch form-check-reverse">
                     <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#panel_footer"><i class="ph-plus-circle"></i>&nbsp; TAMBAH KATEGORI PROYEK</a>

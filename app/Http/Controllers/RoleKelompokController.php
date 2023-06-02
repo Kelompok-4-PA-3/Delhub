@@ -62,7 +62,7 @@ class RoleKelompokController extends Controller
 
         foreach ($all_role  as $ar) {
             if ($ar->role_kelompok->where('kelompok_id', $kelompok->id)->count() <= 0 && $ar->is_main) {
-                return back()->with('failed', 'Terdapat beberapa role wajib yang belum diassign');
+                return back()->with('error', 'Terdapat beberapa role wajib yang belum diassign');
             }
         }
         

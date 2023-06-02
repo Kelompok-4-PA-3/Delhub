@@ -52,13 +52,6 @@ class UsersController extends Controller
 
     public function user_upload(Request $request)
     {
-        // return $request->file('user-file');
-        // if($request->file('user-file')){
-        //     return "iya";
-        // }else{
-        //     return " tidak";
-        // }
-
         Excel::import(new UsersImport, request()->file('user-file'));
         return back()->with('success', 'Pengguna baru telah berhasil ditambahkan');
     }
@@ -153,5 +146,12 @@ class UsersController extends Controller
     {
         $user->delete();
         return redirect()->back()->with('success', 'Data pengguna telah berhasil dihapus');
+    }
+
+    public function profile(User $user){
+        return view('profile.index', [
+            'title' => 'My Profile',
+            'user' => $user
+        ]);
     }
 }

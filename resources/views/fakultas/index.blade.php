@@ -12,7 +12,10 @@
 	<script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
 @endpush
 
-@section('breadscrumb', Breadcrumbs::render('pengguna'))
+@section('breadscrumb')
+    <span class="breadcrumb-item active py-2"><i class="ph-circles-four"></i>&nbsp;Manajemen Fakultas</span>
+@endsection
+
 
 @section('content')
     <div class="card">
