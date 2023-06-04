@@ -14,65 +14,36 @@ class JadwalController extends Controller
      */
     public function index()
 {
-    // get all jadwals from the Jadwal table
-    $jadwals = Jadwal::all();
-    $kelompoks = Kelompok::all();
-    $ruangans = Ruangan::all();
-    return view('jadwal.index', compact('jadwals', 'kelompoks', 'ruangans'));
+    $jadwals = Jadwal::all(); // Ambil semua data jadwal dari model Jadwal
+
+    return view('jadwal.index', compact('jadwals'));
 }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        $jadwals = Jadwal::all();
-        $kelompoks = Kelompok::all();
-        $ruangans = Ruangan::all();
-        return view('jadwal.add', compact('jadwals', 'kelompoks', 'ruangans'));
-    }
+public function create()
+{
+    $jadwals = Jadwal::all();
+    return view('jadwal.create', compact('jadwals'));
+}
 
     /**
      * Store a newly created resource in storage.
      */
    public function store(Request $request)
 {
-    // $validatedData = $request->validate([
-    //     'kel' => 'required',
-    //     'tanggal' => 'required',
-    //     'waktu' =>'required',
-    //     'ruangan' => 'required',
-    // ]);
+    $validatedData = $request->validate([
+        'nama_jadwal' => 'required',
+        'url' => 'required|url',
+    ]);
 
-    // $jadwal = new Jadwal();
-    // $jadwal->kel = $validatedData['kel'];
-    // $jadwal->tanggal = $validatedData['tanggal'];
-    // $jadwal->waktu = $validatedData['waktu'];
-    // $jadwal->ruangan = $validatedData['ruangan'];
-    // $jadwal->save();
+    $jadwal = new Jadwal();
+    $jadwal->nama_jadwal = $request->input('nama_jadwal');
+    $jadwal->url = $request->input('url');
+    $jadwal->save();
 
-    // return redirect()->route('jadwal.index')
-    //     ->with('success', 'Jadwal created successfully.');
-
-    $data = [
-        'id_kel' => 'required',
-        'tanggal' => 'required',
-        'waktu' => 'required',
-        'ruangan_id' => 'required',
-    ];
-
-    $validasi = $request->validate($data);
-
-    // $jadwal = Jadwal::create([
-    //     'id_kel' => $validasi['id_kel'],
-    //     'tanggal' => $validasi['tanggal'],
-    //     'waktu' => $validasi['waktu'],
-    //     'ruangan_id' => $validasi['ruangan_id'],
-    // ]);
-
-    Jadwal::create($validasi);
-
-    return redirect('/jadwal')->back()->with('success', 'Request bimbingan telah berhasil dibuat');
+    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan.');
 }
 
 public function publish(Request $request)
@@ -110,23 +81,20 @@ public function edit(Jadwal $jadwal)
     return view('jadwal.edit', compact('jadwal'));
 }
 
-public function update(Request $request, Jadwal $jadwal)
+
+public function update(Request $request, $id)
 {
     $validatedData = $request->validate([
-        'kel' => 'required',
-        'tanggal' => 'required',
-        'waktu' =>'required',
-        'ruangan' => 'required',
+        'nama_jadwal' => 'required',
+        'url' => 'required|url',
     ]);
 
-    $jadwal->kel = $validatedData['kel'];
-    $jadwal->tanggal = $validatedData['tanggal'];
-    $jadwal->waktu = $validatedData['waktu'];
-    $jadwal->ruangan = $validatedData['ruangan'];
+    $jadwal = Jadwal::findOrFail($id);
+    $jadwal->nama_jadwal = $request->input('nama_jadwal');
+    $jadwal->url = $request->input('url');
     $jadwal->save();
 
-    return redirect()->route('jadwal.index')
-        ->with('success', 'Jadwal updated successfully.');
+    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui.');
 }
 
     /**
