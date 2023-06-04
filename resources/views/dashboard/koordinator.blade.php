@@ -184,12 +184,12 @@
 									Kategori Role 
 								</a>
 							</li>
-							<li class="nav-item">
+							{{-- <li class="nav-item">
 								<a href="/krs/{{$krs->id}}/role_group" class="nav-link">
 									<i class="ph-list-checks me-2"></i>
 									Role Group
 								</a>
-							</li>
+							</li> --}}
 							<li class="nav-item">
 								<a href="/krs/{{$krs->id}}/hasil_penilaian" class="nav-link">
 									<i class="ph-list-checks me-2"></i>
@@ -197,9 +197,9 @@
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="#" class="nav-link">
+								<a href="/krs/{{$krs->id}}/document" class="nav-link">
 									<i class="ph-circles-three-plus me-2"></i>
-									Create project
+									Template Document
 								</a>
 							</li>
 							<li class="nav-item">
@@ -208,6 +208,13 @@
 									Edit task list
 								</a>
 							</li>
+							<li class="nav-item">
+								<a href="/jadwal" class="nav-link">
+									<i class="ph-plus-circle me-2"></i>
+									Tambah Jadwal
+								</a>
+							</li>
+							
 							<li class="nav-item">
 								<a href="#" class="nav-link">
 									<i class="ph-user-plus me-2"></i>

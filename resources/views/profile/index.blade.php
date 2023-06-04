@@ -21,9 +21,9 @@
 
         <div class="profile-cover-text text-white">
             <h1 class="mb-0">{{$user->nama}}</h1>
-            <div class="d-flex">                     
+            <div class="d-flex">
                 @foreach($user->getRoleNames() as $role)
-                    <span class="d-block bg-indigo px-2 rounded-pill me-1 shadow">{{$role}}</span>
+                <span class="d-block bg-indigo px-2 rounded-pill me-1 shadow">{{$role}}</span>
                 @endforeach
             </div>
         </div>
@@ -53,7 +53,7 @@
                     </div>
                 </a>
             </li>
-            <li class="nav-item me-1">
+            {{-- <li class="nav-item me-1">
                 <a href="#schedule" class="navbar-nav-link navbar-nav-link-icon rounded" data-bs-toggle="tab">
                     <div class="d-flex align-items-center mx-lg-1">
                         <i class="ph-calendar"></i>
@@ -63,12 +63,12 @@
                         </span>
                     </div>
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item me-1">
-                <a href="#settings" class="navbar-nav-link navbar-nav-link-icon rounded" data-bs-toggle="tab">
+                <a href="#data-diri" class="navbar-nav-link navbar-nav-link-icon rounded" data-bs-toggle="tab">
                     <div class="d-flex align-items-center mx-lg-1">
-                        <i class="ph-gear"></i>
-                        <span class="d-none d-lg-inline-block ms-2">Settings</span>
+                        <i class="ph-user"></i>
+                        <span class="d-none d-lg-inline-block ms-2">Data diri</span>
                     </div>
                 </a>
             </li>
@@ -83,7 +83,7 @@
 
         <div class="navbar-collapse collapse" id="profile_nav">
             <ul class="navbar-nav ms-lg-auto mt-2 mt-lg-0">
-                <li class="nav-item ms-lg-1">
+                {{-- <li class="nav-item ms-lg-1">
                     <a href="#" class="navbar-nav-link rounded">
                         <i class="ph-note me-2"></i>
                         Notes
@@ -100,7 +100,7 @@
                         <i class="ph-image me-2"></i>
                         Photos
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item dropdown ms-lg-1">
                     <a href="#" class="navbar-nav-link rounded dropdown-toggle" data-bs-toggle="dropdown">
                         <i class="ph-gear"></i>
@@ -161,60 +161,62 @@
 
                     <div class="card-body">
                         @role('dosen')
-						@if (Auth::user()->dosen->all_role_kelompok->count() > 0 )
-							@foreach (Auth::user()->dosen->all_role_kelompok as $role)
-                                @if ($role->role_group->role_kategori->krs != NULL)
-                                    @if (strtolower($role->role_group->nama) != 'koordinator' && $role->role_group->role_kategori->krs->config->active)
-                                    <div class="p-1">
-                                        <div class="d-flex mb-2">
-                                            <a href="#" class="bg-indigo bg-opacity-10 text-indigo lh-1 rounded-pill p-2 me-3">
-                                                <i class="ph-chalkboard-teacher"></i>
-                                            </a>
-                                            <div>
-                                                <div class="fw-semibold">
-                                                    <a href="/kelompok/{{$role->kelompok->id}}">{{$role->kelompok->nama_kelompok}}</a>
-                                                </div>
-                                                <span class="text-muted">{{$role->role_group->nama}}</span>
-                                            </div>
-                                        </div>
-                                        <div class="w-75 mx-auto mb-3" id="new-visitors"></div>
+                        @if (Auth::user()->dosen->all_role_kelompok->count() > 0 )
+                        @foreach (Auth::user()->dosen->all_role_kelompok as $role)
+                        @if ($role->role_group->role_kategori->krs != NULL)
+                        @if (strtolower($role->role_group->nama) != 'koordinator' &&
+                        $role->role_group->role_kategori->krs->config->active)
+                        <div class="p-1">
+                            <div class="d-flex mb-2">
+                                <a href="#" class="bg-indigo bg-opacity-10 text-indigo lh-1 rounded-pill p-2 me-3">
+                                    <i class="ph-chalkboard-teacher"></i>
+                                </a>
+                                <div>
+                                    <div class="fw-semibold">
+                                        <a
+                                            href="/kelompok/{{$role->kelompok->id}}">{{$role->kelompok->nama_kelompok}}</a>
                                     </div>
-                                    @endif
-                                @endif
-							@endforeach 
+                                    <span class="text-muted">{{$role->role_group->nama}}</span>
+                                </div>
+                            </div>
+                            <div class="w-75 mx-auto mb-3" id="new-visitors"></div>
+                        </div>
+                        @endif
+                        @endif
+                        @endforeach
                         @else
                         <div class="mb-3">
                             <small class="text-muted">Anda tidak belum memiliki pekerjaan saat ini!</small>
                         </div>
-						@endif
-					@endrole
+                        @endif
+                        @endrole
 
-					@role('mahasiswa')
-                    @if (Auth::user()->mahasiswa->kelompok_mahasiswa->count() > 0)
+                        @role('mahasiswa')
+                        @if (Auth::user()->mahasiswa->kelompok_mahasiswa->count() > 0)
                         @foreach (Auth::user()->mahasiswa->kelompok_mahasiswa as $km)
-                            @if ($km->kelompok->krs->config->active)    
-                                <div class="p-1">
-                                    <div class="d-flex mb-2">
-                                        <a href="#" class="bg-indigo bg-opacity-10 text-indigo lh-1 rounded-pill p-2 me-3">
-                                            <i class="ph-users-three"></i>
-                                        </a>
-                                        <div>
-                                            <div class="fw-semibold">
-                                                <a href="/kelompok/{{$km->kelompok->id}}}"> {{$km->kelompok->nama_kelompok}}</a>
-                                            </div>
-                                            <span class="text-muted">{{$km->kelompok->krs->kategori->nama_mk}}</span>
-                                        </div>
+                        @if ($km->kelompok->krs->config->active)
+                        <div class="p-1">
+                            <div class="d-flex mb-2">
+                                <a href="#" class="bg-indigo bg-opacity-10 text-indigo lh-1 rounded-pill p-2 me-3">
+                                    <i class="ph-users-three"></i>
+                                </a>
+                                <div>
+                                    <div class="fw-semibold">
+                                        <a href="/kelompok/{{$km->kelompok->id}}}"> {{$km->kelompok->nama_kelompok}}</a>
                                     </div>
-                                    <div class="w-75 mx-auto mb-3" id="new-visitors"></div>	
+                                    <span class="text-muted">{{$km->kelompok->krs->kategori->nama_mk}}</span>
                                 </div>
-                            @endif
+                            </div>
+                            <div class="w-75 mx-auto mb-3" id="new-visitors"></div>
+                        </div>
+                        @endif
                         @endforeach
-                    @else
+                        @else
                         <div class="mb-3">
                             <small class="text-muted">Anda tidak belum memiliki pekerjaan saat ini!</small>
                         </div>
-                    @endif
-					@endrole
+                        @endif
+                        @endrole
                         {{-- <div class="chart-container">
                             <div class="chart has-fixed-height" id="tornado_negative_stack"></div>
                         </div> --}}
@@ -255,219 +257,70 @@
 
             </div>
 
-            <div class="tab-pane fade" id="settings">
+            <div class="tab-pane fade" id="data-diri">
 
                 <!-- Profile info -->
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Profile information</h5>
+                        <h5 class="mb-0">Informasi Data Diri</h5>
                     </div>
 
                     <div class="card-body">
-                        <form action="#">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Username</label>
-                                        <input type="text" value="Victoria" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Full name</label>
-                                        <input type="text" value="Smith" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                            <small class="fw-semibold text-muted">Nama</small>
+                            <p>{{$user->nama}}</p>
+                        </div>
+                        <div>
+                            <small class="fw-semibold text-muted">Username</small>
+                            <p>{{$user->username}}</p>
+                        </div>
+                        <div>
+                            <small class="fw-semibold text-muted">Email</small>
+                            <p>{{$user->email}}</p>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Address line 1</label>
-                                        <input type="text" value="Ring street 12" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Address line 2</label>
-                                        <input type="text" value="building D, flat #67" class="form-control">
-                                    </div>
-                                </div>
+                        @role('dosen')
+                        <div class="py-2">
+                            <span class="fw-bold mb-1">Data Status : </span>
+                            <br><br>
+                            <div>
+                                <small class="fw-semibold text-muted">Status</small>
+                                <p>Dosen</p>
                             </div>
-
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">City</label>
-                                        <input type="text" value="Munich" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">State/Province</label>
-                                        <input type="text" value="Bayern" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">ZIP code</label>
-                                        <input type="text" value="1031" class="form-control">
-                                    </div>
-                                </div>
+                            <div>
+                                <small class="fw-semibold text-muted">NIDN</small>
+                                <p>{{$user->dosen->nidn}}</p>
                             </div>
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="text" readonly="readonly" value="victoria@smith.com"
-                                            class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Your country</label>
-                                        <select class="form-select">
-                                            <option value="germany" selected>Germany</option>
-                                            <option value="france">France</option>
-                                            <option value="spain">Spain</option>
-                                            <option value="netherlands">Netherlands</option>
-                                            <option value="other">...</option>
-                                            <option value="uk">United Kingdom</option>
-                                        </select>
-                                    </div>
-                                </div>
+                            <div>
+                                <small class="fw-semibold text-muted">Program studi</small>
+                                <p>{{$user->dosen->prodi->nama}}</p>
                             </div>
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Phone #</label>
-                                        <input type="text" value="+99-99-9999-9999" class="form-control">
-                                        <div class="form-text text-muted">+99-99-9999-9999</div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Upload profile image</label>
-                                        <input type="file" class="form-control">
-                                        <div class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size
-                                            2Mb</div>
-                                    </div>
-                                </div>
+                        </div>
+                        @endrole
+                        @role('mahasiswa')
+                        <div class="py-2">
+                            <span class="fw-bold">Data Status : </span><br><br>
+                            <div>
+                                <small class="fw-semibold text-muted">Status</small>
+                                <p>Mahasiswa</p>
                             </div>
-
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            <div>
+                                <small class="fw-semibold text-muted">NIM</small>
+                                <p>{{$user->mahasiswa->nim}}</p>
                             </div>
-                        </form>
+                            <div>
+                                <small class="fw-semibold text-muted">Program studi</small>
+                                <p>{{$user->mahasiswa->prodi->nama}}</p>
+                            </div>
+                            <div>
+                                <small class="fw-semibold text-muted">Angkatan</small>
+                                <p>{{$user->mahasiswa->angkatan}}</p>
+                            </div>
+                        </div>
+                        @endrole
                     </div>
                 </div>
                 <!-- /profile info -->
-
-
-                <!-- Account settings -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Account settings</h5>
-                    </div>
-
-                    <div class="card-body">
-                        <form action="#">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Username</label>
-                                        <input type="text" value="Vicky" readonly class="form-control">
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Current password</label>
-                                        <input type="password" value="password" readonly class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">New password</label>
-                                        <input type="password" placeholder="Enter new password" class="form-control">
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Repeat password</label>
-                                        <input type="password" placeholder="Repeat new password" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Profile visibility</label>
-
-                                        <label class="form-check mb-2">
-                                            <input type="radio" name="visibility" class="form-check-input" checked>
-                                            <span class="form-check-label">Visible to everyone</span>
-                                        </label>
-
-                                        <label class="form-check mb-2">
-                                            <input type="radio" name="visibility" class="form-check-input">
-                                            <span class="form-check-label">Visible to friends only</span>
-                                        </label>
-
-                                        <label class="form-check mb-2">
-                                            <input type="radio" name="visibility" class="form-check-input">
-                                            <span class="form-check-label">Visible to my connections only</span>
-                                        </label>
-
-                                        <label class="form-check">
-                                            <input type="radio" name="visibility" class="form-check-input">
-                                            <span class="form-check-label">Visible to my colleagues only</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Notifications</label>
-
-                                        <label class="form-check mb-2">
-                                            <input type="checkbox" class="form-check-input" checked>
-                                            <span class="form-check-label">Password expiration notification</span>
-                                        </label>
-
-                                        <label class="form-check mb-2">
-                                            <input type="checkbox" class="form-check-input" checked>
-                                            <span class="form-check-label">New message notification</span>
-                                        </label>
-
-                                        <label class="form-check mb-2">
-                                            <input type="checkbox" class="form-check-input" checked>
-                                            <span class="form-check-label">New task notification</span>
-                                        </label>
-
-                                        <label class="form-check">
-                                            <input type="checkbox" class="form-check-input">
-                                            <span class="form-check-label">New contact request notification</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-primary">Save changes</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- /account settings -->
 
             </div>
         </div>
@@ -532,10 +385,10 @@
                 <!-- /navigation -->
 
 
- 
 
 
-             
+
+
 
             </div>
             <!-- /sidebar content -->

@@ -27,6 +27,7 @@ use App\Http\Controllers\KategoriRoleController;
 use App\Http\Controllers\RoleKelompokController;
 use App\Http\Controllers\RoleKelompokPenilaianController;
 use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\TemplateDocumentController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Mahasiswa;
 use App\Models\Dosen;
@@ -66,7 +67,7 @@ Route::middleware([
     Route::get('/koordinator/proyeksaya/{id}', [MyProjectController::class, 'koordinator'])->name('koordinator_myproject_detail');
     Route::get('/koordinator/myproject', [MyProjectController::class, 'koordintor_job_list'])->name('koordinator_myproject');
 
-    Route::get('/users/{user}/profile', [UsersController::class, 'profile'])->name('koordinator_myproject');
+    Route::get('/users/{user}/profile', [UsersController::class, 'profile'])->name('user_profile');
 
     Route::group(['middleware' => 'role:admin'], function () {
          // admin 
@@ -175,6 +176,13 @@ Route::middleware([
         Route::post('/krs/{kr}/kategori_role/store', [KategoriRoleController::class, 'store'])->name('kategori_role.store');
         Route::post('/krs/{kr}/kategori_role/{kategori}/edit', [KategoriRoleController::class, 'update'])->name('kategori_role.edit');
         Route::post('/krs/{kr}/kategori_role/{kategori}/delete', [KategoriRoleController::class, 'delete'])->name('kategori_role.delete');
+
+        //template document 
+        Route::get('/krs/{kr}/document', [TemplateDocumentController::class, 'index'])->name('template_document.index');
+        Route::post('/krs/{kr}/document', [TemplateDocumentController::class, 'store'])->name('template_document.add');
+        Route::post('/krs/{kr}/document/{document}/edit', [TemplateDocumentController::class, 'update'])->name('template_document.edit');
+        Route::post('/krs/{kr}/document/{document}/delete', [TemplateDocumentController::class, 'delete'])->name('template_document.delete');
+        Route::post('/krs/{kr}/document/publish', [TemplateDocumentController::class, 'publish'])->name('template_document.publish');
         
     });
 

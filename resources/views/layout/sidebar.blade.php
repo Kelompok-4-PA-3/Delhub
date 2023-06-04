@@ -159,7 +159,7 @@
                     </a>
                 </li>
                 <li class="nav-item d-down-item">
-                    <a href="/mhsInterest" class="nav-link">
+                    <a href="/interest" class="nav-link">
                         <i class="ph-heart"></i>
                         <span>
                             Kelola Antusias Mahasiswa

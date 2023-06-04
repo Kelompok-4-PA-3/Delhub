@@ -74,4 +74,8 @@ class Krs extends Model
         return $this->hasMany(PoinPenilaian::class, 'krs_id', 'id');
     }
 
+    public function template(){
+        return $this->hasMany(TemplateDocument::class, 'krs_id', 'id');
+    }
+
 }
