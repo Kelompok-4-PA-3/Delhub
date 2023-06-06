@@ -18,8 +18,16 @@ class MahasiswaResource extends JsonResource
             'krs_id' => $this->krs_id,
             'nim' => $this->nim,
             'angkatan' => $this->angkatan,
-            'prodi' => $this->prodi->nama,
-            'kelompok' => $this->kelompok_mahasiswa ? new KelompokResource($this->kelompok_mahasiswa->where('status', '1')->first()->kelompok) : null,
+            'prodi' => $this->whenLoaded('prodi', function () {
+                return $this->prodi->nama;
+            }),
+            'kelompok' => $this->whenLoaded('kelompok', function () {
+                return new KelompokResource($this->kelompok);
+            }),
+            'nama' => $this->whenLoaded('user', function () {
+                return $this->user->nama;
+            }),
+            'role' => $this->role ? $this->role : null,
         ];
     }
 }

@@ -38,7 +38,7 @@ Route::group([
     Route::get('/', [RequestController::class, 'index']);
     Route::post('/', [RequestController::class, 'store']);
     Route::get('/{id}', [RequestController::class, 'show']);
-    Route::put('/{id}', [RequestController::class, 'update']);
+    Route::post('/{id}', [RequestController::class, 'update']);
 });
 
 Route::group([
@@ -60,4 +60,5 @@ Route::group([
     'prefix' => 'krs'
 ], function () {
     Route::get('/', [KrsController::class, 'index']);
+    Route::get('/{id}/kelompoks', [KrsController::class, 'getKelompoks']);
 });

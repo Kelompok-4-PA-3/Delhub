@@ -16,8 +16,14 @@ class KrsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'mataKuliah' => $this->kategori->nama_singkat,
-            'dosen' => $this->dosen->user->nama,
+            'mataKuliah' => $this->whenLoaded('kategori', function () {
+                // return nama mata kuliah
+                return $this->kategori->nama_singkat;
+            }),
+            'dosen' => $this->whenLoaded('dosen', function () {
+                // return nama dosen
+                return $this->dosen->user->nama;
+            }),
         ];
     }
 }

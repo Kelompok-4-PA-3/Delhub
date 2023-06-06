@@ -40,7 +40,7 @@ class Krs extends Model
     public function kelompok(){
         return $this->hasMany(Kelompok::class, 'krs_id', 'id');
     }
-    
+
     public function kelompok_mahasiswa(){
         return $this->hasMany(Kelompok::class, 'krs_id', 'id')
                                     ->join('kelompok_mahasiswas', 'kelompoks.id', 'kelompok_mahasiswas.kelompok_id')
