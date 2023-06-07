@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/kelompok', [AuthController::class, 'get
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/store-token', [AuthController::class, 'storeToken'])->middleware('auth:sanctum');
 
 
 Route::group([

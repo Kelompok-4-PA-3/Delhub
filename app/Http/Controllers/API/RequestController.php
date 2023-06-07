@@ -31,7 +31,6 @@ class RequestController extends Controller
             $kelompok_id = $request->kelompok_id;
             if($kelompok_id != null){
                 $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference')->orderBy('created_at', 'desc')->get();
-                // dd($requests[0]->reference->value);
             } else{
 
                 $requests = DB::table('requests')
@@ -41,7 +40,7 @@ class RequestController extends Controller
                 ->join('kategori_roles', 'role_group_kelompoks.kategori_id', '=', 'kategori_roles.id')
                 ->where('kategori_roles.nama', 'pembimbing')
                 ->where('role_kelompoks.nidn', $dosen->nidn)
-                // ->whereDate('requests.waktu', Carbon::today())
+                ->whereDate('requests.waktu', Carbon::today())
                 ->select('requests.*')
                 ->get();
 
@@ -62,8 +61,14 @@ class RequestController extends Controller
 
         $kelompok = Kelompok::find($data['kelompok_id']);
         $pembimbings = $kelompok->pembimbings;
+        $tokens = $pembimbings->pluck('user.firebase_token')->toArray();
+
         foreach ($pembimbings as $pembimbing) {
             $pembimbing->user->notify(new RequestNotification($request, $kelompok));
+        }
+        // if tokens is empty, don't send push notification
+        if (!empty($tokens)){
+            sendPushNotification('Permintaan Bimbingan', 'Anda mendapatkan permintaan bimbingan baru dari ' . $kelompok->nama_kelompok, $tokens, $request);
         }
 
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil ditambahkan');
@@ -97,11 +102,18 @@ class RequestController extends Controller
             $kelompok = $bimbingan->kelompok;
             // get all mahasiswa in kelompok mahasiswa
             $mahasiswa = $kelompok->kelompok_mahasiswa;
+
             foreach ($mahasiswa as $mhs) {
                 $mhs->mahasiswa->user->notify(new UpdateRequestNotification(
                     $bimbingan,
                     $ref->value,
                 ));
+            }
+
+            $tokens = $mahasiswa->pluck('mahasiswa.user.firebase_token')->toArray();
+            // if tokens is empty, don't send push notification
+            if (!empty($tokens)){
+                sendPushNotification('Status Bimbingan', 'Status bimbingan kelompok anda di-' . $ref->value, $tokens, $bimbingan);
             }
         }
 

@@ -12,6 +12,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\MahasiswaResource;
+use App\Models\Request;
 
 class AuthController extends Controller
 {
@@ -51,6 +52,14 @@ class AuthController extends Controller
         ], 'Login berhasil');
     }
 
+    public function storeToken(Request $request){
+        $user = User::find(auth()->user()->id);
+        $user->firebase_token = $request->firebase_token;
+        $user->save();
+
+        return ResponseFormatter::success(null, 'Token berhasil disimpan');
+    }
+
     /**
      * Logout
      *
@@ -58,6 +67,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        $user = User::find(auth()->user()->id);
         auth()->user()->tokens()->delete();
 
         return ResponseFormatter::success(null, 'Token Revoked');
