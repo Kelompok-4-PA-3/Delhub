@@ -24,13 +24,13 @@ class RequestController extends Controller
     {
         if (auth()->user()->hasRole('mahasiswa')) {
             $kelompok_id = User::find(auth()->user()->id)->mahasiswa->kelompok_mahasiswa->where('status', '1')->first()->kelompok->id ?? null;
-            $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference', 'kelompok')->orderBy('created_at', 'desc')->get();
+            $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference', 'kelompok.pembimbings')->orderBy('created_at', 'desc')->get();
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
         } else if (auth()->user()->hasRole('dosen')) {
             $dosen = User::find(auth()->user()->id)->dosen;
             $kelompok_id = $request->kelompok_id;
             if($kelompok_id != null){
-                $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference')->orderBy('created_at', 'desc')->get();
+                $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference', 'kelompok.pembimbings')->orderBy('created_at', 'desc')->get();
             } else{
 
                 $requests = DB::table('requests')
@@ -45,7 +45,7 @@ class RequestController extends Controller
                 ->get();
 
                 // convert to eloquent model
-                $requests = Request::hydrate($requests->toArray())->load('ruangan', 'reference', 'kelompok')->sortByDesc('waktu');
+                $requests = Request::hydrate($requests->toArray())->load('ruangan', 'reference', 'kelompok.pembimbings')->sortByDesc('waktu');
             }
 
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
@@ -68,7 +68,7 @@ class RequestController extends Controller
         }
         // if tokens is empty, don't send push notification
         if (!empty($tokens)){
-            sendPushNotification('Permintaan Bimbingan', 'Anda mendapatkan permintaan bimbingan baru dari ' . $kelompok->nama_kelompok, $tokens, $request);
+            sendPushNotification('Permintaan Bimbingan', 'Anda mendapatkan permintaan bimbingan baru dari ' . $kelompok->nama_kelompok, $tokens, $request->load('ruangan', 'reference', 'kelompok.pembimbings'));
         }
 
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil ditambahkan');
@@ -76,13 +76,13 @@ class RequestController extends Controller
 
     public function show($id)
     {
-        $request = Request::find($id)->load('ruangan', 'reference', 'kelompok');
+        $request = Request::find($id)->load('ruangan', 'reference', 'kelompok.pembimbings');
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil diambil');
     }
 
     public function update(UpdateRequest $request, $id)
     {
-        $bimbingan = Request::find($id)->load('ruangan', 'reference', 'kelompok');
+        $bimbingan = Request::find($id)->load('ruangan', 'reference', 'kelompok.pembimbings');
         $ref = Reference::where('value', $request->status)->first();
         $bimbingan->status = $ref->id;
         if ($request->waktu != null) {
