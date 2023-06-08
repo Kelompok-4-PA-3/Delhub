@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DosenResource;
-use App\Http\Resources\KelompokResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Resources\MahasiswaResource;
-use App\Models\Request;
 
 class AuthController extends Controller
 {
@@ -68,6 +65,8 @@ class AuthController extends Controller
     public function logout()
     {
         $user = User::find(auth()->user()->id);
+        $user->firebase_token = null;
+        $user->save();
         auth()->user()->tokens()->delete();
 
         return ResponseFormatter::success(null, 'Token Revoked');
