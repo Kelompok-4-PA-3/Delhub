@@ -31,7 +31,7 @@ class AuthController extends Controller
         }
 
         // load mahasiswa, kelompok, and pembimbing
-        $user->load('mahasiswa.kelompoks', 'dosen');
+        $user->load('mahasiswa.kelompoks.pembimbings.user', 'mahasiswa.prodi', 'dosen');
 
         if (Hash::check($request->password, $user->password)) {
             if (!Auth::attempt($credentials)) {
