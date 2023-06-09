@@ -8,7 +8,9 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Mahasiswa;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -21,8 +23,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
-        $user = User::whereEmail($request->email)->first()->load('mahasiswa', 'dosen');
-
+        $user = User::whereEmail($request->email)->first()->load('mahasiswa.kelompoks', 'dosen');
         if (!$user) {
             return ResponseFormatter::error([
                 'message' => 'Email tidak terdaftar'
