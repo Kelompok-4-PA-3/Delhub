@@ -23,12 +23,15 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
-        $user = User::whereEmail($request->email)->first()->load('mahasiswa.kelompoks', 'dosen');
+        $user = User::whereEmail($request->email)->first();
         if (!$user) {
             return ResponseFormatter::error([
                 'message' => 'Email tidak terdaftar'
             ], 'Authentication Failed', 401);
         }
+
+        // load mahasiswa, kelompok, and pembimbing
+        $user->load('mahasiswa.kelompoks', 'dosen');
 
         if (Hash::check($request->password, $user->password)) {
             if (!Auth::attempt($credentials)) {

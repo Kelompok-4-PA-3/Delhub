@@ -21,8 +21,8 @@ class MahasiswaResource extends JsonResource
             'prodi' => $this->whenLoaded('prodi', function () {
                 return $this->prodi->nama;
             }),
-            'kelompok' => $this->whenLoaded('kelompok', function () {
-                return new KelompokResource($this->kelompok);
+            'kelompok' => $this->whenLoaded('kelompoks', function () {
+                return new KelompokResource($this->kelompoks->first());
             }),
             'nama' => $this->whenLoaded('user', function () {
                 return $this->user->nama;

@@ -23,7 +23,10 @@ class RequestController extends Controller
     public function index(HttpRequest $request)
     {
         if (auth()->user()->hasRole('mahasiswa')) {
-            $kelompok_id = User::find(auth()->user()->id)->mahasiswa->kelompok_mahasiswa->where('status', '1')->first()->kelompok->id ?? null;
+            $kelompok_id = User::find(auth()->user()->id)->mahasiswa->kelompoks;
+            if ($kelompok_id->count() == 0) {
+                return ResponseFormatter::error(null, 'Anda belum memiliki kelompok', 404);
+            }
             $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference', 'kelompok.pembimbings')->orderBy('created_at', 'desc')->get();
             return ResponseFormatter::success(new RequestCollection($requests), 'Data berhasil diambil');
         } else if (auth()->user()->hasRole('dosen')) {
