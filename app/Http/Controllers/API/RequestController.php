@@ -72,11 +72,11 @@ class RequestController extends Controller
         // foreach ($pembimbings as $pembimbing) {
         //     $pembimbing->user->notify(new RequestNotification($request, $kelompok));
         // }
-        // // if tokens is empty, don't send push notification
-        // $tokens = $pembimbings->pluck('user.firebase_token')->toArray();
-        // if (!empty($tokens)){
-        //     sendPushNotification('Permintaan Bimbingan', 'Anda mendapatkan permintaan bimbingan baru dari ' . $kelompok->nama_kelompok, $tokens, $request->load('ruangan', 'reference', 'kelompok.pembimbings'));
-        // }
+        // if tokens is empty, don't send push notification
+        $tokens = $pembimbings->pluck('user.firebase_token')->toArray();
+        if (!empty($tokens)){
+            sendPushNotification('Permintaan Bimbingan', 'Anda mendapatkan permintaan bimbingan baru dari ' . $kelompok->nama_kelompok, $tokens, $request->load('ruangan', 'reference', 'kelompok.pembimbings'));
+        }
 
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil ditambahkan');
     }
@@ -117,11 +117,11 @@ class RequestController extends Controller
             //     ));
             // }
 
-            // $tokens = $mahasiswa->pluck('mahasiswa.user.firebase_token')->toArray();
-            // // if tokens is empty, don't send push notification
-            // if (!empty($tokens)){
-            //     sendPushNotification('Status Bimbingan', 'Status bimbingan kelompok anda di-' . $ref->value, $tokens, $bimbingan);
-            // }
+            $tokens = $mahasiswa->pluck('mahasiswa.user.firebase_token')->toArray();
+            // if tokens is empty, don't send push notification
+            if (!empty($tokens)){
+                sendPushNotification('Status Bimbingan', 'Status bimbingan kelompok anda di-' . $ref->value, $tokens, $bimbingan);
+            }
         }
 
         return ResponseFormatter::success(new RequestResource($bimbingan), 'Data berhasil diubah');
