@@ -42,7 +42,7 @@ class Reminder extends Command
             ->get();
 
         // convert to eloquent model
-        $requests = \App\Models\Request::hydrate($requests->toArray())->load('ruangan', 'reference', 'kelompok');
+        $requests = \App\Models\Request::hydrate($requests->toArray())->load('ruangan', 'reference', 'kelompok.mahasiswas.user', 'kelompok.pembimbings.user')->sortByDesc('waktu');
 
         $tokens = [];
         foreach ($requests as $request) {
@@ -50,8 +50,8 @@ class Reminder extends Command
             $waktu->subMinutes(10);
             $now = Carbon::now();
             if ($now->diffInMinutes($waktu) == 0) {
-                sendPushNotification('Pengingat Bimbingan', 'Bimbingan akan dimulai dalam 10 menit lagi di ruangan ' . $request->ruangan->nama, $request->kelompok->mahasiswa->pluck('user.firebase_token')->toArray());
-                sendPushNotification('Pengingat Bimbingan', 'Bimbingan akan dimulai dalam 10 menit lagi di ruangan ' . $request->ruangan->nama, $request->kelompok->dosen->pluck('user.firebase_token')->toArray());
+                sendPushNotification('Pengingat Bimbingan', 'Bimbingan akan dimulai dalam 10 menit lagi di ruangan ' . $request->ruangan->nama, $request->kelompok->mahasiswas->pluck('user.firebase_token')->toArray());
+                sendPushNotification('Pengingat Bimbingan', 'Bimbingan akan dimulai dalam 10 menit lagi di ruangan ' . $request->ruangan->nama, $request->kelompok->pembimbings->pluck('user.firebase_token')->toArray());
             }
         }
 
