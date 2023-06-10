@@ -18,9 +18,13 @@ class Kelompok extends Model
     protected $dates = ['deleted_at'];
 
 
-    public function kelompok_mahasiswa()
-    {
-        return $this->hasMany(KelompokMahasiswa::class);
+    public function mahasiswas(){
+        // join table kelompok_mahasiswas
+        // get also role in kelompok_mahasiswas
+        // get mahasiswa where nim is mahasiswa nim
+        return $this->hasManyThrough(Mahasiswa::class, KelompokMahasiswa::class, 'kelompok_id', 'nim', 'id', 'nim')
+            ->join('references', 'kelompok_mahasiswas.role', '=', 'references.id')
+            ->select('mahasiswas.*', 'references.value as role');
     }
 
     public function bimbingan()

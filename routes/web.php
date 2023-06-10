@@ -289,4 +289,9 @@ Route::middleware([
         }
         return 'berhasil';
     });
+
+    
 });
+Route::get('/test', function() {
+    Artisan::call('storage:link');
+ });

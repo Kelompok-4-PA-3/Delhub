@@ -33,6 +33,7 @@ class User extends Authenticatable
         'email',
         'username',
         'password',
+        'firebase_token',
     ];
 
     protected $dates = ['deleted_at'];
@@ -79,4 +80,5 @@ class User extends Authenticatable
     // {
     //     return $this->roles->pluck('name');
     // }
+
 }

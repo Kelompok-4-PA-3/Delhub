@@ -17,11 +17,19 @@ class RequestResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'ruangan' => new RoomResource($this->ruangan),
-            'kelompok' => new KelompokResource($this->kelompok),
+            'ruangan' => $this->whenLoaded('ruangan', function () {
+                return new RoomResource($this->ruangan);
+            }),
+            'kelompok' => $this->whenLoaded('kelompok', function () {
+                return new KelompokResource($this->kelompok);
+            }),
             'description' => $this->description ?? '-',
-            'waktu' => Carbon::parse($this->waktu)->format('D, d M Y H:i'),
-            'status' => $this->reference->value,
+            'waktu' => $this->waktu,
+            'status' => $this->whenLoaded('reference', function () {
+                return $this->reference->value;
+            }),
+            'is_done' => boolval($this->is_done),
+            'file' => $this->file_bukti ? asset('uploads/bimbingan/' . $this->file_bukti) : null,
         ];
     }
 }

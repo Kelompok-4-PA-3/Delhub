@@ -2,11 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\KrsController;
-use App\Http\Controllers\API\LectureController;
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RoomController;
+use App\Http\Controllers\API\LectureController;
 use App\Http\Controllers\API\RequestController;
+use App\Http\Controllers\API\AssesmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::middleware('auth:sanctum')->get('/kelompok', [AuthController::class, 'get
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/store-token', [AuthController::class, 'storeToken'])->middleware('auth:sanctum');
 
 
 Route::group([
@@ -38,7 +40,7 @@ Route::group([
     Route::get('/', [RequestController::class, 'index']);
     Route::post('/', [RequestController::class, 'store']);
     Route::get('/{id}', [RequestController::class, 'show']);
-    Route::put('/{id}', [RequestController::class, 'update']);
+    Route::post('/{id}', [RequestController::class, 'update']);
 });
 
 Route::group([
@@ -60,4 +62,12 @@ Route::group([
     'prefix' => 'krs'
 ], function () {
     Route::get('/', [KrsController::class, 'index']);
+    Route::get('/{id}/kelompoks', [KrsController::class, 'getKelompoks']);
+});
+
+Route::group([
+    'middleware' => 'auth:sanctum',
+    'prefix' => 'assesment'
+], function () {
+    Route::get('/{id}', [AssesmentController::class, 'getAssesmentPointByGroupId']);
 });
