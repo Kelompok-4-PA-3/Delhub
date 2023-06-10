@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class KrsCollection extends ResourceCollection
+class AssesmentComponentCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -14,8 +14,8 @@ class KrsCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return $this->collection->transform(function ($krs) {
-            return new KrsResource($krs);
+        return $this->collection->map(function ($item) {
+            return new AssesmentComponentResource($item);
         })->toArray();
     }
 }

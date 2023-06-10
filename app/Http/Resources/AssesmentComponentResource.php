@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DosenResource extends JsonResource
+class AssesmentComponentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,9 @@ class DosenResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'nidn' => $this->nidn,
-            'name' => $this->whenLoaded('user', function () {
-                return $this->user->nama;
-            })
+            'id' => $this->id,
+            'nama' => $this->nama_komponen,
+            'bobot' => $this->bobot,
         ];
     }
 }

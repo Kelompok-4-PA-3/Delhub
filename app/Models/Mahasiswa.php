@@ -35,8 +35,17 @@ class Mahasiswa extends Model
         return $this->hasMany(KrsUser::class, 'user_id', 'user_id');
     }
 
-    public function kelompok_mahasiswa(){
+    public function kelompok_mahasiswas(){
         return $this->hasMany(KelompokMahasiswa::class, 'nim', 'nim');
+    }
+
+    public function kelompoks(){
+        // join table kelompok_mahasiswas
+        // get also role in kelompok_mahasiswas
+        // get kelompok where kelompok_id is kelompok id
+        return $this->hasManyThrough(Kelompok::class, KelompokMahasiswa::class, 'nim', 'id', 'nim', 'kelompok_id')
+            ->join('references', 'kelompok_mahasiswas.role', '=', 'references.id')
+            ->select('kelompoks.*', 'references.value as role');
     }
 
     public function getRouteKeyName()
@@ -47,10 +56,6 @@ class Mahasiswa extends Model
     public function jadwal(){
         return $this->belongsTo(Jadwal::class);
     }
-
-    // public function kelompokMahasiswa(){
-    //     return $this->hasMany(KelompokMahasiswa::class);
-    // }
 
     public function kelompokMahasiswaKrs(){
         return $this->hasMany(KelompokMahasiswa::class, 'nim', 'nim')
@@ -74,8 +79,8 @@ class Mahasiswa extends Model
                     ->first();
     }
 
-        
-    public function hasil_nilai_mahasiswa($role, $kelompok){    
+
+    public function hasil_nilai_mahasiswa($role, $kelompok){
         // $roleID = RoleKelompok::find($role);
         return $this->hasMany(NilaiMahasiswa::class, 'nim', 'nim')
                     ->join('role_kelompoks', function($group) use ($role) {
