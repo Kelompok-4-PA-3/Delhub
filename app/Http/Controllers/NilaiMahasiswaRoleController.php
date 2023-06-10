@@ -70,7 +70,7 @@ class NilaiMahasiswaRoleController extends Controller
             // }
 
             // return  $request->value;
-     
+
             $nilai = new NilaiMahasiswaRole;
 
             $old_nilai = NilaiMahasiswaRole::where('nim',$request->mahasiswa)
@@ -93,10 +93,10 @@ class NilaiMahasiswaRoleController extends Controller
             // $cek_detail_nilai = DetailNilaiMahasiswaRole::where('nilai_id', $nilai->id)->get();
             // return $nilai->nilai;
             // return "success";
-     
+
             // foreach($komponen as $pkp){
             // return "success";
-            
+
             // try {
             $old_komponen = DetailNilaiMahasiswaRole::where('nilai_role_id',$nilai->id)->where('komponen_role_penilaian_id',$request->pk)->first();
             // } catch (\Throwable $th) {
@@ -107,7 +107,7 @@ class NilaiMahasiswaRoleController extends Controller
             $detail_nilai = new DetailNilaiMahasiswaRole;
             // return "success";
 
-            if ($old_komponen != NULL) {    
+            if ($old_komponen != NULL) {
                  $detail_nilai = DetailNilaiMahasiswaRole::find($old_komponen->id);
             }
             // return $detail_nilai;
@@ -131,11 +131,11 @@ class NilaiMahasiswaRoleController extends Controller
                 return $th;
             }
 
-            
+
             $nilai->nilai = $total_nilai;
             $nilai->save();
             // }
-     
+
             // return back()->with('success','Nilai mahasiswa berhasil ditambahkan');
         }
     }

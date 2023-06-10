@@ -21,11 +21,11 @@ class NilaiMahasiswaController extends Controller
      */
     public function index(Kelompok $kelompok, RoleKelompok $role, PoinPenilaian $penilaian)
     {
-        // return Auth::user()->dosen->role_kelompok->pluck('role_group_id'); 
+        // return Auth::user()->dosen->role_kelompok->pluck('role_group_id');
         // return  $penilaian->role_group_penilaian->pluck('role_group_id');
         // .'--'.Auth::user()->dosen->nidn;
         // return "oke";
-        $user = Auth::user();   
+        $user = Auth::user();
         // return $user->dosen->role_kelompok->where('kelompok_id', $kelompok->id)->join('role_group_kelompoks', 'role_kelompoks.role_group_id', 'role_group_kelompoks.id')->select('role_group_kelompoks.*')->get();
         // return $user->dosen->role_kelompok_group->where('kelompok_id', $kelompok->id);
         // return $penilaian->role_group_penilaian;
@@ -77,14 +77,14 @@ class NilaiMahasiswaController extends Controller
                 'approved_status' => false
             ]);
 
-            return back()->with('success','Seluruh nilai telah berhasil diunapprove');   
+            return back()->with('success','Seluruh nilai telah berhasil diunapprove');
 
         }
         $nilai_mahasiswa_kelompok->update([
             'approved_status' => true
         ]);
 
-        return back()->with('success','Seluruh nilai telah berhasil diapprove');   
+        return back()->with('success','Seluruh nilai telah berhasil diapprove');
     }
 
     public function update_status_koordinator(Request $request, Kelompok $kelompok, PoinPenilaian $penilaian)
@@ -103,9 +103,9 @@ class NilaiMahasiswaController extends Controller
                 'approved_status' => false
             ]);
 
-            return back()->with('success','Seluruh nilai telah berhasil diunapprove');   
+            return back()->with('success','Seluruh nilai telah berhasil diunapprove');
 
-        return back()->with('success','Seluruh nilai telah berhasil diapprove');   
+        return back()->with('success','Seluruh nilai telah berhasil diapprove');
     }
 
     /**
@@ -126,11 +126,11 @@ class NilaiMahasiswaController extends Controller
                                        ->where('role_dosen_kelompok_id',$role->id)
                                        ->where('poin_penilaian_id',$penilaian->id)
                                        ->where('kelompok_id',$kelompok->id)
-                                       ->first();   
-                                       
+                                       ->first();
+
        if ($old_nilai != NULL){
             $nilai = NilaiMahasiswa::find($old_nilai->id);
-       }    
+       }
 
        $role_not_main =  $role->role_group->role_kategori->role_group->where('id','!=',$role->role_group->id)->where('is_main',0);
 
@@ -157,7 +157,7 @@ class NilaiMahasiswaController extends Controller
 
        $detail_nilai = new DetailNilaiMahasiswa;
 
-       if ($old_komponen != NULL) {    
+       if ($old_komponen != NULL) {
             $detail_nilai = DetailNilaiMahasiswa::find($old_komponen->id);
        }
 
