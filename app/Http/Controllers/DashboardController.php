@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\KrsUser;
 use App\Models\Kelompok;
 use App\Models\Mahasiswa;
+use App\Models\KategoriProyek;
 use Spatie\Permission\Models\Role;
 use Auth;
 use Illuminate\Http\Request;
@@ -14,16 +15,24 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class DashboardController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 // 
         // return Auth::user()->getRoleNames();
-        
+        $pekerjaan_kategori = NULL;
+        if ($request->kategori_proyek) {
+            $pekerjaan_kategori = KategoriProyek::where('id', $request->kategori_proyek)->first();
+        }
+
+        // return $pekerjaan_kategori;
         $role = auth()->user()->getRoleNames()->toArray();
         $krs = Krs::latest()->get();
-        
+        $kategori_proyek = KategoriProyek::all();
+
         return view('dashboard.index',[
             'title' => 'Dashboards',
+            'kategori_proyek' => $kategori_proyek,
             'krs' => $krs,
+            'pk' => $pekerjaan_kategori,
         ]);
     }
 

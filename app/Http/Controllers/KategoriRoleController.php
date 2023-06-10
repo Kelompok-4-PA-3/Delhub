@@ -40,6 +40,11 @@ class KategoriRoleController extends Controller
             'nama' => 'required'
         ];
 
+        $kategori_role_kelompok = KategoriRole::where('krs_id', $kr->id)->pluck('nama');
+        if (in_array($request->nama, $kategori_role_kelompok->toArray())) {
+            return back()->with('error', 'Nama role ini sudah digunakan ');
+        }
+
         if ($request->koordinator) {
 
                 if($kr->kelompok->count() < 1){
@@ -110,10 +115,20 @@ class KategoriRoleController extends Controller
      */
     public function update(Request $request, Krs $kr,  KategoriRole $kategori)
     {
-        // return $request;
+     
+
         $data = [
             'nama' => 'required'
         ];
+
+
+        $kategori_role_kelompok = KategoriRole::where('krs_id', $kr->id)->pluck('nama');
+        
+        if ($request->nama != $kategori->nama) {
+            if (in_array($request->nama, $kategori_role_kelompok->toArray())) {
+                return back()->with('error', 'Nama role ini sudah digunakan ');
+            }
+        }
 
         $validasi = $request->validate($data);
         $validasi['krs_id'] = $kr->id;

@@ -61,18 +61,18 @@ class RequestController extends Controller
     {
         // return $bimbingan;
         $requests = Bimbingan::find($bimbingan->id);
-        $path = 'public/bukti-bimbingan/'.$request->old_file;
+        // $path = 'public/bukti-bimbingan/'.$request->old_file;
         // return $path;
-        if (Storage::disk('public')->exists($path)) {
-            Storage::delete($path);
+        // if (Storage::disk('public')->exists($path)) {
+        //     Storage::delete($path);
             // return "File deleted successfully.";
-        } else {
-            return back()->with('error','File tidak ditemukan');
-        }
-        $requests->file_bukti = NULL;
+        // } else {
+        //     return back()->with('error','File tidak ditemukan');
+        // }
+        $requests->hasil = NULL;
         $requests->save();
 
-        return back();
+        return back()->with('success','Hasil bimbingan telah berhasil dihapus');
     }
 
     public function destroy($id)

@@ -80,6 +80,11 @@ class NilaiMahasiswaController extends Controller
             return back()->with('success','Seluruh nilai telah berhasil diunapprove');   
 
         }
+
+        if ($nilai_mahasiswa_kelompok->count() < 1) {
+            return back()->with('error','Anda belum menginput nilai');
+        }
+
         $nilai_mahasiswa_kelompok->update([
             'approved_status' => true
         ]);

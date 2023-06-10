@@ -24,7 +24,7 @@
             <!-- Traffic sources -->
             <div class="card">
                 <div class="card-header d-flex align-items-center">
-                    <h5 class="mb-0">My Courses </h5>
+                    <h5 class="mb-0">Proyek saya </h5>
                     <div class="ms-auto">
                         <label class="form-check form-switch form-check-reverse">
                             <i class="ph-circle-wavy-warning text-primary"></i>
@@ -98,7 +98,7 @@
         </div>
 
         <div class="col-xl-5">
-          <div class="card">
+          {{-- <div class="card">
             <div class="card-header d-flex align-items-center">
                 <h5 class="mb-0">Pengumuman</h5>
                 <div class="ms-auto">
@@ -109,7 +109,7 @@
                 </div>
             </div>
           </div>
-        </div>
+        </div> --}}
     </div>
 
     <div class="row">
@@ -152,7 +152,7 @@
                         @else 
                             <h3 class="text-secondary text-center">Anda belum memiliki proyek sebagai koordinator</h3>
                         @endif
-                        <div class="p-1">
+                        {{-- <div class="p-1">
                             <div class="d-flex mb-2">
                                 <a href="#" class="bg-success bg-opacity-10 text-success lh-1 rounded-pill p-2 me-3">
                                     <i class="ph-notepad"></i>
@@ -165,9 +165,9 @@
                                 </div>
                             </div>
                             <div class="w-75 mx-auto mb-3" id="new-visitors"></div>
-                        </div>
+                        </div> --}}
 
-                        <div class="p-1">
+                        {{-- <div class="p-1">
                             <div class="d-flex mb-2">
                                 <a href="#" class="bg-warning bg-opacity-10 text-warning lh-1 rounded-pill p-2 me-3">
                                     <i class="ph-projector-screen-chart"></i>
@@ -180,9 +180,9 @@
                                 </div>
                             </div>
                             <div class="w-75 mx-auto mb-3" id="new-sessions"></div>
-                        </div>
+                        </div> --}}
 
-                        <div class="p-1">
+                        {{-- <div class="p-1">
                             <div class="d-flex mb-2">
                                 <a href="#" class="bg-indigo bg-opacity-10 text-indigo lh-1 rounded-pill p-2 me-3">
                                     <i class="ph-users-three"></i>
@@ -195,10 +195,10 @@
                                 </div>
                             </div>
                             <div class="w-75 mx-auto mb-3" id="total-online"></div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
-
+            </div>
                 <div class="chart position-relative" id="traffic-sources"></div>
             </div>
             <!-- /traffic sources -->

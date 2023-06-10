@@ -147,17 +147,6 @@
                     <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">PENGGUNA</div>
                     <i class="ph-dots-three sidebar-resize-show"></i>
                 </li>
-
-               
-
-                <li class="nav-item d-down-item">
-                    <a href="/jadwal" class="nav-link">
-                        <i class="ph-heart"></i>
-                        <span>
-                            Jadwal
-                        </span>
-                    </a>
-                </li>
                 <li class="nav-item d-down-item">
                     <a href="/interest" class="nav-link">
                         <i class="ph-heart"></i>

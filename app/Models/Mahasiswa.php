@@ -23,6 +23,10 @@ class Mahasiswa extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function mhs_interest(){
+        return $this->hasMany(MhsInterest::class, 'nim', 'nim');
+    }
+
     public function prodi(){
         return $this->belongsTo(Prodi::class);
     }

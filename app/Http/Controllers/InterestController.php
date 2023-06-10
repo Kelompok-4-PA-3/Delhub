@@ -13,8 +13,8 @@ class InterestController extends Controller
     public function index()
     {
         // get all mhsInterests with interest and mahasiswa, user, prodi where mahasiswa have relation with user and prodi
-        $mhsinterests = Interest::with('interest', 'mahasiswa.user', 'mahasiswa.prodi')->get();
-        return view('interest.index', compact('mhsinterests'));
+        $interests = Interest::latest()->get();
+        return view('interest.index', compact('interests'));
     }
 
     /**
@@ -32,8 +32,8 @@ class InterestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nim' => 'required',
-            'interest_id' => 'required',
+            'nama' => 'required',
+            'keterangan' => 'required',
         ]);
 
         interest::create($request->all());
@@ -55,8 +55,7 @@ class InterestController extends Controller
      */
     public function edit(interest $interest)
     {
-        $interests = Interest::all();
-        return view('interest.edit', compact('interests', 'mahasiswa'));
+        return view('interest.edit', ['interest' => $interest]);
     }
 
     /**
@@ -65,11 +64,11 @@ class InterestController extends Controller
     public function update(Request $request, interest $interest)
     {
         $request->validate([
-            'nim' => 'required',
-            'interest' => 'required',
+            'nama' => 'required',
+            'keterangan' => 'required',
         ]);
 
-        $mhsInterest->update($request->all());
+        $interest->update($request->all());
 
         return redirect()->route('interest.index')
             ->with('success', 'interest updated successfully');
@@ -80,11 +79,8 @@ class InterestController extends Controller
      */
     public function destroy(interest $interest)
     {
-        $mhsInterest->delete();
+        $interest->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'interest deleted successfully',
-        ]);
+        return back()->with('success','Data antusias telah berhasil dihapus');
     }
 }

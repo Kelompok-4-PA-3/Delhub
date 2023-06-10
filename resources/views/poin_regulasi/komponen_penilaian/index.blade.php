@@ -172,6 +172,7 @@
                             </div>
                         <!-- /large panel -->
                         <!-- /sticky footer -->
+                        
 
                         <script>
                             // Initialize first editor instance with custom configuration options

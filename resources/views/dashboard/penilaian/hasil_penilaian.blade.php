@@ -1,7 +1,7 @@
 @extends('main')
    
 @section('title')
-    <title>Manajemen Mahasiswa</title>
+    <title>Hasil Nilai {{$krs->kategori->nama_mk}}</title>
 @endsection
 
 @push('datatable_js')
@@ -17,8 +17,10 @@
 @endpush
 
 @section('breadscrumb')
-    <a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
-    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2">{{$krs->kategori->nama_singkat}}</a>
+    @if (Auth::user()->dosen->nidn == $krs->dosen_mk || Auth::user()->dosen->nidn == $krs->dosen_mk_2)
+        <a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+        <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2">{{$krs->kategori->nama_singkat}}</a>
+    @endif
     <span class="breadcrumb-item active py-2">Hasil Penilaian</span>
 @endsection
 
@@ -28,6 +30,9 @@
             <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
                 <h5 class="py-sm-2 my-sm-1">Nilai Mahasiswa</h5><br>
                 <div class="mt-2 mt-sm-0 ms-sm-auto">
+                    @if ($pembimbing_kelompok != NULL)
+                        <a class="fw-semibold" href="/kelompok/{{$pembimbing_kelompok}}"><i class="ph-arrow-circle-left"></i> Kembali </a>
+                    @endif
                 </div>
             </div>  
             <div class="card-body table-responsive">
@@ -38,7 +43,16 @@
                             <th>NIM</th>
                             <th class="" style="width: 300px;">Mahasiswa</th>
                             @foreach ($krs->poin_penilaian as $kpp)
-                                <th><a class="link" href="/krs/{{$krs->id}}/hasil_penilaian/penilaian/{{$kpp->id}}">{{$kpp->nama_poin}}</a><br><small class="fw-light">{{$kpp->bobot}} %</small></th>
+                                <th>
+                                    @if ($pembimbing_kelompok != NULL)
+                                    <form action="/krs/{{$krs->id}}/hasil_penilaian/penilaian/{{$kpp->id}}" method="get">
+                                        <input type="hidden" name="kelompok" value="{{$pembimbing_kelompok}}">
+                                        <button class="text-primary bg-transparent border-0 fw-semibold p-0" class="link" href="/krs/{{$krs->id}}/hasil_penilaian/penilaian/{{$kpp->id}}">{{$kpp->nama_poin}}</button>
+                                    </form>
+                                    @else
+                                        <a class="link" href="/krs/{{$krs->id}}/hasil_penilaian/penilaian/{{$kpp->id}}">{{$kpp->nama_poin}}</a><br>
+                                    @endif
+                                    <small class="fw-light">{{$kpp->bobot}} %</small></th>
                             @endforeach
                             <th >Nilai akhir</th>
                         </tr>
@@ -53,7 +67,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($krs->kelompok_mahasiswa as $kk)
+                        @php
+                            $krs_hasil_penilaian = $krs->kelompok_mahasiswa->where('deleted_at',NULL);
+                            if ($pembimbing_kelompok != NULL) {
+                                $krs_hasil_penilaian = $krs->kelompok_mahasiswa->where('deleted_at',NULL)->where('kelompok_id',$pembimbing_kelompok);
+                            }
+                        @endphp
+                        @foreach ($krs_hasil_penilaian as $kk)
                             <tr>
                                 <td class="fw-semibold"><small>{{$kk->nama_kelompok}}</small></td>
                                 <td><small>{{$kk->nim}}</small></td>
