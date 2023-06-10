@@ -29,7 +29,9 @@ const DropzoneUploader = function() {
             url: "#",
             paramName: "file", // The name that will be used to transfer the file
             dictDefaultMessage: 'Drop files to upload <div>or CLICK</div>',
-            maxFilesize: 0.1 // MB
+            maxFilesize: 5.0, // MB
+            addRemoveLinks: true
+
         });
 
         // Single files

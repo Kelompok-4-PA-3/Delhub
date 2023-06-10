@@ -7,6 +7,7 @@ use App\Models\Krs;
 use App\Models\Kelompok;
 use App\Models\Pembimbing;
 use Illuminate\Http\Request;
+use Auth;
 
 class RegulasiController extends Controller
 {
@@ -15,6 +16,10 @@ class RegulasiController extends Controller
      */
     public function index($id)
     {   
+        // $role = ['dosen', 'admin'];
+        // return Auth::user()->getRoleNames()->toArray();
+        // return array_intersect(Auth::user()->getRoleNames()->toArray(), $role) != NULL ? 'valid' : 'invalid';
+
         $krs = Krs::where('id', $id)->first();
         $kelompok = Kelompok::where('krs_id', $id)->get();
         $regulasi = Regulasi::where('krs_id', '=', $id)->first();

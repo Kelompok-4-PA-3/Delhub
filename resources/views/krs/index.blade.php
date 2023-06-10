@@ -65,7 +65,7 @@
                     @foreach($krs as $k)
                     <tr>
                         <td>{{$loop->iteration}}</td>
-                        <td>{{$k->kategori->nama_mk}}</td>
+                        <td> <a href="/koordinator/proyeksaya/{{$k->id}}">{{$k->kategori->nama_mk}}</a></td>
                         <td>{{$k->dosen->user->nama}}</td>
                         <td>{{$k->dosen2->user->nama}}</td>
                         <td>{{$k->prodi->nama}}</td>

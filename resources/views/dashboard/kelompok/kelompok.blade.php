@@ -14,6 +14,8 @@
 <script src="{{asset('/assets/js/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('/assets/demo/pages/form_select2.js')}}"></script>
 <script src="{{asset('/assets/js/vendor/forms/selects/select2.min.js')}}"></script>
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+
 @endpush
 
 
@@ -21,6 +23,12 @@
 @role('dosen')
 @if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2)
 <a href="/koordinator/myproject" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+<a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2">
+    {{$kelompok->krs->kategori->nama_singkat}}</a>
+@endif
+@endrole
+@role('admin')
+@if (Auth::user()->dosen == NULL)
 <a href="/koordinator/proyeksaya/{{$kelompok->krs->id}}" class="breadcrumb-item py-2">
     {{$kelompok->krs->kategori->nama_singkat}}</a>
 @endif
@@ -39,6 +47,7 @@
         <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
             <li class="nav-item"><a href="#" class="nav-link active"> <i class="ph-squares-four"></i> &nbsp;
                     Kelompok</a></li>
+            <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/artefak" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
             <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i>
                     &nbsp; Orang</a></li>
             @role('dosen')
@@ -124,6 +133,17 @@
             </div>
         </div>
 
+        <div class="card">
+            <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
+                <h5 class="py-sm-2 my-sm-1">Mahasiswa</h5>
+            </div>
+            <div class="card-body">
+                @foreach ($kelompok->kelompok_mahasiswa as $km)
+                <p><span class="fw-semibold">{{$km->mahasiswa->nim}}</span> - {{$km->mahasiswa->user->nama}}</p>
+                @endforeach
+            </div>
+        </div>
+
         <div class="p-2 card">
             @php
             if($kelompok->role_kelompok->where('is_verified',false)->count() > 0 || $kelompok->role_kelompok->count() <=
@@ -205,10 +225,10 @@
                         </div>
                         @else
                         <div class="d-flex">
-                            <span class="text-primary text-success p-1 px-3 rounded-pill fw-semibold mt-1"><i
-                                    class="ph-checks"></i> verified</span>
                             @if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn ==
                             $kelompok->krs->dosen_mk_2)
+                            <span class="text-primary text-success p-1 px-3 rounded-pill fw-semibold mt-1"><i
+                                    class="ph-checks"></i> verified</span>
                             <div class="ms-auto">
                                 <form action="/kelompok/{{$kelompok->id}}/verfikasi/role" method="post">
                                     @csrf
@@ -234,10 +254,10 @@
                                 </small>
                                 @if(!$verified && strtolower($kr->role_group->nama) != 'koordinator')
                                 <div class="ms-auto ">
-                                    <small class="" data bs-popup="tooltip" title="hapus"> <a href="#"
-                                            class="text-muted" data-bs-toggle="modal"
-                                            data-bs-target="#modal_hapus{{ $kr->id }}"><i
-                                                class="ph-trash"></i></a></small>
+                                    <small class="" data bs-popup="tooltip" title="hapus">
+                                        <a href="#" class="text-muted" data-bs-toggle="modal"
+                                            data-bs-target="#modal_hapus{{ $kr->id }}"><i class="ph-trash"></i></a>
+                                    </small>
                                 </div>
                                 @endif
                             </div>
@@ -308,7 +328,7 @@
             <div class="mt-2 mt-sm-0 ms-sm-auto">
                 <div class="d-flex mt-3">
                     <small class="text-muted">Total : </small>
-                    <h1>{{$kelompok->bimbingan->where('is_done',true)->count()}}</h1> / <h6 class="text-muted">
+                    <h4>{{$kelompok->bimbingan->where('is_done',true)->count()}}</h4> / <h6 class="text-muted">
                         @if ($regulasi == NULL)
                         {{$kelompok->krs->kategori->kategori->poin_regulasi->sum('poin')}}
                         @else
@@ -342,11 +362,26 @@
             <div class="tab-content card-body">
                 <div class="tab-pane active fade show" id="list-bimbingan">
                     <div class="">
+                        <div class="d-flex mb-1">
+                            <div class="">
+                                <a href="" class="badge bg-primary fw-light" data-bs-toggle="modal"
+                                    data-bs-target="#modal_detail_rekap_bimbingan"><i class="ph-file-doc"></i>&nbsp;
+                                    Hasil bimbingan</a>
+                            </div>
+                            <div class="ms-auto">
+                                <select class="form-control form-control-sm" name="" id="filter-status-bimbingan">
+                                    <option value="waiting">Request</option>
+                                    <option value="done">Done</option>
+                                    <option value="all">Semua</option>
+                                </select>
+                            </div>
+                        </div>
                         <table class="table text-nowrap w-100">
                             <tbody>
                                 @if($kelompok->bimbingan->count() > 0)
                                 @foreach($kelompok->bimbingan->sortByDesc('created_at') as $kb)
-                                <tr>
+                                <tr class="bimbingan_list bimbingan{{ $kb->is_done ? 'done' : $kb->reference->value }} bimbingan{{ $kb->is_done ? 'done' : $kb->reference->value }}"
+                                    {{-- id="bimbingan{{ $kb->is_done ? 'done' : $kb->reference->value }}" --}}>
                                     <td class="text-center">
                                         <h6 class="mb-0">{{Carbon\Carbon::parse($kb->waktu)->format('d')}}</h6>
                                         <div class="fs-sm text-muted lh-1 text-uppercase">
@@ -355,22 +390,30 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div>
-                                                <small><a href="#" class="text-body fw-semibold letter-icon-title"
+                                                <small>
+                                                    <a href="#" class="text-body fw-semibold letter-icon-title"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#modal_detail_{{ $kr->id }}">{{Str::limit($kb->description,15)}}</a></small>
+                                                        data-bs-target="#modal_detail{{ $kb->id }}">
+                                                        {{Str::limit($kb->description,15)}}
+                                                    </a>
+                                                </small>
                                                 <div class="d-flex align-items-center text-muted fs-sm">
                                                     <span class="
                                                             @if($kb->reference->value == 'waiting')
                                                                 bg-info
-                                                            @elseif($kb->reference->value == 'approved')
+                                                            @elseif($kb->reference->value == 'approve')
                                                                 bg-success
-                                                            @elseif($kb->reference->value == 'rejected')
+                                                            @elseif($kb->reference->value == 'reject')
                                                                 bg-danger
                                                             @elseif($kb->reference->value == 'reschedule')
                                                                 bg-warning
                                                             @endif
                                                              rounded-pill p-1 me-2"></span>
-                                                    {{ $kb->is_done ? 'Done' : $kb->reference->value }}
+                                                    {{ $kb->is_done ? 'done' : $kb->reference->value }}
+                                                    @if ($kb->is_done)
+                                                    <a class="fs-sm ms-2" href="" data-bs-toggle="modal"
+                                                        data-bs-target="#modal_detail{{ $kb->id }}"> Detail</a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -381,14 +424,16 @@
                                             <a href="#" class="text-body" data-bs-toggle="dropdown">
                                                 <i class="ph-list">
                                                     @role('dosen')
-                                                    @if ($kb->file_bukti)
-                                                    <small><i style="font-size: 14px;" data-bs-popup="tooltip"
-                                                            title="Cek MOM yang telah diuppload"
-                                                            class="text-warning ph-warning-circle"></i></small>
+                                                    @if ($kb->hasil)
+                                                    <small>
+                                                        <i style="font-size: 14px;" data-bs-popup="tooltip"
+                                                            title="Cek hasil bimbingan yang telah diuppload"
+                                                            class="text-warning ph-warning-circle"></i>
+                                                    </small>
                                                     @endif
                                                     @endrole
                                                 </i>
-                                                {{-- $kb->file_bukti --}}
+                                                {{-- $kb->hasil --}}
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end">
 
@@ -399,9 +444,9 @@
                                                 @foreach($status_bimbingan as $sb)
                                                 <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}"
                                                     class="dropdown-item">
-                                                    @if($sb->value == 'approved')
+                                                    @if($sb->value == 'approve')
                                                     <i class="ph-checks text-success me-2"></i>
-                                                    @elseif($sb->value == 'rejected')
+                                                    @elseif($sb->value == 'reject')
                                                     <i class="ph-x text-danger me-2"></i>
                                                     @elseif($sb->value == 'reschedule')
                                                     <i class="ph-calendar-x text-info me-2"></i>
@@ -413,26 +458,26 @@
                                                 @endif
                                                 @endrole
                                                 <a href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#modal_detail_{{ $kr->id }}"
+                                                    data-bs-target="#modal_detail{{ $kb->id }}"
                                                     class="dropdown-item text-secondary"><i
                                                         class="ph-eye"></i>&nbsp;Lihat</a>
-                                                @if ($kb->file_bukti == NULL)
+                                                @if ($kb->hasil == NULL)
                                                 @role('mahasiswa')
-                                                @if($kb->reference->value == 'approved' && !$kb->is_done)
+                                                @if($kb->reference->value == 'approve' && !$kb->is_done)
                                                 <a href="#" class="dropdown-item" data-bs-toggle="offcanvas"
                                                     data-bs-target="#upload_bukti{{$kb->id}}">
                                                     <i class="ph-microsoft-excel-logo me-2"></i>
-                                                    upload MOM
+                                                    Hasil bimbingan
                                                 </a>
                                                 @endif
                                                 @endrole
                                                 @else
                                                 {{-- @role('dosen') --}}
-                                                @if($kb->reference->value == 'approved' && !$kb->is_done)
+                                                @if($kb->reference->value == 'approve' && !$kb->is_done)
                                                 <a href="#" class="dropdown-item" data-bs-toggle="offcanvas"
                                                     data-bs-target="#upload_bukti{{$kb->id}}">
                                                     <i class="ph-microsoft-excel-logo me-2"></i>
-                                                    Lihat MOM
+                                                    Lihat Hasil bimbingan
                                                 </a>
                                                 @endif
                                                 {{-- @endrole --}}
@@ -453,16 +498,16 @@
                                             </div>
                                         </div>
                                         @else
-                                        <div>
-                                            <i class="ph-circle-wavy-check text-success"></i>
+                                        <div class="d-flex">
+                                            <i class="ph-circle-wavy-check text-success"></i>&nbsp;
                                         </div>
                                         @endif
                                     </td>
                                 </tr>
 
                                 <!-- Lihat bimbingan Modal -->
-                                <div id="modal_detail_{{ $kr->id }}" class="modal fade" tabindex="-1">
-                                    <div class="modal-dialog modal-xs">
+                                <div id="modal_detail{{ $kb->id }}" class="modal fade" tabindex="-1">
+                                    <div class="modal-dialog modal-sm">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title">Detail Bimbingan</h5>
@@ -483,11 +528,105 @@
                                                     <small class="fw-bold">Ruangan : </small>
                                                     <p>{{$kb->ruangan->nama}}</p>
                                                 </div>
+                                                @if ($kb->is_done)
+                                                <div class=" bg-primary bg-opacity-10 rounded p-2 d-flex">
+                                                    <small>
+                                                        {!!$kb->hasil!!}
+                                                    </small>
+                                                </div>
+                                                @endif
                                             </div>
 
                                             <div class="modal-footer justify-content-between">
                                                 <button type="button" class="btn btn-light"
                                                     data-bs-dismiss="modal">Tutup</button>
+                                                <div class="ms-auto">
+                                                    @if (!$kb->is_done)
+                                                    <div class="dropdown">
+                                                        <a href="#" class="btn btn-sm btn-primary"
+                                                            data-bs-toggle="dropdown">
+                                                            <span>
+                                                                Pilih opsi
+                                                                @role('dosen')
+                                                                @if ($kb->hasil)
+                                                                <small><i style="font-size: 14px;"
+                                                                        data-bs-popup="tooltip"
+                                                                        title="Cek hasil bimbingan"
+                                                                        class="text-warning ph-warning-circle"></i></small>
+                                                                @endif
+                                                                @endrole
+                                                            </span>
+                                                            {{-- $kb->hasil --}}
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+
+                                                            @role('dosen')
+                                                            {{-- @can('update status bimbingan') --}}
+                                                            @if (Gate::check('is_pembimbing', $kelompok))
+                                                            @if ($kb->reference->value == 'waiting')
+                                                            @foreach($status_bimbingan as $sb)
+                                                            <a href="/bimbingan/status/{{$sb->id}}/{{$kb->id}}"
+                                                                class="dropdown-item">
+                                                                @if($sb->value == 'approve')
+                                                                <i class="ph-checks text-success me-2"></i>
+                                                                @elseif($sb->value == 'reject')
+                                                                <i class="ph-x text-danger me-2"></i>
+                                                                @elseif($sb->value == 'reschedule')
+                                                                <i class="ph-calendar-x text-info me-2"></i>
+                                                                @endif
+                                                                {{$sb->value}}
+                                                            </a>
+                                                            @endforeach
+                                                            @endif
+                                                            @endif
+                                                            @endrole
+                                                            <a href="#" data-bs-toggle="modal"
+                                                                data-bs-target="#modal_detail{{ $kb->id }}"
+                                                                class="dropdown-item text-secondary"><i
+                                                                    class="ph-eye"></i>&nbsp;Lihat</a>
+                                                            @if ($kb->hasil == NULL)
+                                                            @role('mahasiswa')
+                                                            @if($kb->reference->value == 'approve' && !$kb->is_done)
+                                                            <a href="#" class="dropdown-item" data-bs-toggle="offcanvas"
+                                                                data-bs-target="#upload_bukti{{$kb->id}}">
+                                                                <i class="ph-microsoft-excel-logo me-2"></i>
+                                                                Hasil bimbingan
+                                                            </a>
+                                                            @endif
+                                                            @endrole
+                                                            @else
+                                                            {{-- @role('dosen') --}}
+                                                            @if($kb->reference->value == 'approve' && !$kb->is_done)
+                                                            <a href="#" class="dropdown-item" data-bs-toggle="offcanvas"
+                                                                data-bs-target="#upload_bukti{{$kb->id}}">
+                                                                <i class="ph-microsoft-excel-logo me-2"></i>
+                                                                Lihat hasil bimbingan
+                                                            </a>
+                                                            @endif
+                                                            {{-- @endrole --}}
+                                                            @endif
+                                                            {{-- @endif --}}
+                                                            {{-- @endcan --}}
+                                                            @role('mahasiswa')
+                                                            @if($kb->reference->value == 'waiting')
+                                                            <a href="#" class="text-danger dropdown-item"
+                                                                data-bs-popup="tooltip" title="hapus"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_hapus{{$kb->id}}">
+                                                                <i class="ph-trash me-2"></i> Batal
+                                                            </a>
+                                                            @endif
+                                                            @endrole
+                                                            {{-- @endif --}}
+
+                                                        </div>
+                                                    </div>
+                                                    @else
+                                                    <div>
+                                                        <i class="ph-circle-wavy-check text-success"></i>
+                                                    </div>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -498,29 +637,26 @@
                                 <div id="upload_bukti{{$kb->id}}" class="offcanvas offcanvas-end offcanvas-size-lg"
                                     tabindex="-1">
                                     <div class="offcanvas-header border-bottom">
-                                        <h5 class="offcanvas-title fw-semibold">File Bukti</h5>
+                                        <h5 class="offcanvas-title fw-semibold">Hasil Bimbingan</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
                                     </div>
                                     <div class="offcanvas-body">
 
-                                        @if ($kb->file_bukti == NULL)
-                                        <div class="py-1">
-                                            <div class="mb-1">
-                                                <small class="text-danger"><i>Silahkan upload file MOM dan file - file
-                                                        pendukung sebagai bukti bahwa anda telah melakukan
-                                                        bimbingan</i></small>
-                                            </div>
-                                        </div>
-
+                                        @if ($kb->hasil == NULL)
                                         <form action="/bimbingan/upload/{{$kb->id}}" method="post"
                                             enctype="multipart/form-data">
                                             @csrf
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <p class="fw-semibold">Seret file pada area</p>
-                                                    <input type="file" class="form-control" name="file-bukti" required>
-                                                    {{-- <input id="file1" name="file1" type="file"> --}}
+                                            <div class="mt-2">
+                                                <label class="form-label">Hasil bimbingan</label>
+                                                <textarea class="form-control" id="ckeditor_classic_edit{{$kb->id}}"
+                                                    name="hasil"
+                                                    placeholder="Masukkan komponen penilaian anda disini..."
+                                                    required>{{old('komponen_penilaian',$kb->komponen_penilaian)}}</textarea>
+                                                @error('komponen_penilaian')
+                                                <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{
+                                                    $message }}
                                                 </div>
+                                                @enderror
                                             </div>
 
                                             <div class="border-top p-3">
@@ -530,19 +666,21 @@
                                         @else
 
                                         <div class="py-1">
-                                            <small>File bukti bimbingan</small>
+                                            <small>Hasil Bimbingan</small>
                                         </div>
 
-                                        <div class=" bg-primary bg-opacity-10 fw-semibold rounded p-2 d-flex">
-                                            <a href="{{asset('/storage/public/bukti-bimbingan/'.$kb->file_bukti)}}"
+                                        <div class=" bg-primary bg-opacity-10 rounded p-2 d-flex">
+                                            <small>
+                                                {!!$kb->hasil!!}
+                                            </small>
+                                            {{-- <a href="{{asset('/storage/public/bukti-bimbingan/'.$kb->hasil)}}"
                                                 download class="navbar-nav-link navbar-nav-link-icon text-primary"
                                                 target="_blank">
                                                 <div class="d-flex align-items-center mx-md-1">
                                                     <i class="ph-file"></i>
-                                                    <span
-                                                        class="d-none d-md-inline-block ms-2">{{$kb->file_bukti}}</span>
+                                                    <span class="d-none d-md-inline-block ms-2">{{$kb->hasil}}</span>
                                                 </div>
-                                            </a>
+                                            </a> --}}
                                             @role('mahasiswa')
                                             <div class="ms-auto">
                                                 <small class="fw-light" data-bs-toggle="modal"
@@ -552,11 +690,11 @@
                                             @endrole
                                         </div>
                                         @role('dosen')
-                                        <form action="/bimbingan/approve/{{$kb->id}}" method="post"
+                                        <form action="/bimbingan/approvee/{{$kb->id}}" method="post"
                                             enctype="multipart/form-data">
                                             @csrf
                                             <div class="border-top p-3">
-                                                <button type="submit" class="btn btn-success w-100">Approve</button>
+                                                <button type="submit" class="btn btn-success w-100">Approvee</button>
                                             </div>
                                         </form>
                                         @endrole
@@ -587,7 +725,7 @@
                                                     data-bs-dismiss="modal">Batal</button>
                                                 <form action="/request/{{$kb->id}}/delete-file" method="post">
                                                     @csrf
-                                                    <input type="hidden" name="old_file" value="{{$kb->file_bukti}}">
+                                                    <input type="hidden" name="old_file" value="{{$kb->hasil}}">
                                                     <button type="submit" class="btn btn-primary">Ya</button>
                                                 </form>
                                             </div>
@@ -624,6 +762,12 @@
                                     </div>
                                 </div>
                                 <!-- /Delete Modal -->
+
+                                <script>
+                                    CKEDITOR.replace('ckeditor_classic_edit{{$kb->id}}', {
+                                        toolbar: 'Basic'
+                                    });
+                                </script>
                                 @endforeach
                                 @else
                                 <p class="text-muted text-center">Belum ada bimbingan tersedia</p>
@@ -708,5 +852,56 @@
     @endif
 </div>
 </div>
+
+<!-- Large modal -->
+<div id="modal_detail_rekap_bimbingan" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rekap hasil bimbingan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>No</th>
+                        <th>Waktu bimbingan</th>
+                        <th>Topik bimbingan</th>
+                        <th>Hasil bimbingan</th>
+                    </tr>
+                    @foreach ($kelompok->bimbingan as $kb)
+                    <tr>
+                        <td>{{$loop->iteration}}</td>
+                        <td>{{$kb->waktu}}</td>
+                        <td>{{$kb->description}}</td>
+                        <td>{!!$kb->hasil!!}</td>
+                    </tr>
+                    @endforeach
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /large modal -->
+
+<script>
+    // $('.bimbingan_list').hide();
+    $('.bimbinganall').show();
+    $('#filter-status-bimbingan').change(function() {
+        var selectedValue = $(this).val();
+        console.log(selectedValue);
+        $('.bimbingan_list').hide();
+        if (selectedValue == 'all') {
+            $('.bimbingan_list').show();
+        } else {
+            $('.bimbingan' + selectedValue).show();
+        }
+    });
+</script>
 
 @endsection

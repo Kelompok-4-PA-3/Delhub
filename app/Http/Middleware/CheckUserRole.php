@@ -21,8 +21,17 @@ class CheckUserRole
     {   
         // return $role;
         $user  = Auth::User();
+        // dd($role);
+        // dd($user->getRoleNames()->toArray());
+        // $roles = ['admin','dosen','staf'];
+        // dd($roles); 
+        
 
-        if (array_intersect($role, $user->getRoleNames()->toArray())) {
+        // dd(array_intersect($roles, $role));
+
+
+        if (array_intersect($user->getRoleNames()->toArray(), $role) != NULL) {
+            // return array_intersect($role, $user->getRoleNames()->toArray());
             return $next($request);
         }
 

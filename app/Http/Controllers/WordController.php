@@ -3,47 +3,41 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Kelompok;
+use App\Models\KelompokMahasiswa;
 
 class WordController extends Controller
 {
 public function formFeedback (Request $request){
-    $kelompok = $request->kelompok;
-    $nama1 = $request->nama1;
-    $nama2 = $request->nama2;
-    $nama3 = $request->nama3;
-    $nim1 = $request->nim1;
-    $nim2 = $request->nim2;
-    $nim3 = $request->nim3;
-    $hari = $request->hari;
-    $tanggal = $request->tanggal;
-    $mulai = $request->mulai;
-    $selesai = $request->selesai;
-    $ketua = $request->ketua;
-    $penguji1 = $request->penguji1;
-    $penguji2 = $request->penguji2;
 
-    // Creating the new document...
-    $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template_form/form_feedback.docx');
+        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template_form/template-form-control.docx');
 
-    //edit string
-    $phpWord->setValues([
-        'kelompok' => $kelompok,
-        'nama1' => $nama1,
-        'nama2' => $nama2,
-        'nama3' => $nama3,
-        'nim1' => $nim1,
-        'nim2' => $nim2,
-        'nim3' => $nim3,
-        'hari' => $hari,
-        'tanggal' => $tanggal,
-        'mulai' => $mulai,
-        'selesai' => $selesai,
-        'ketua' => $ketua,
-        'penguji1' => $penguji1,
-        'penguji2' => $penguji2,
-    ]);
+        $phpWord->saveAs('template_dokumen/form_control_kelompok.docx');
+        
+    }
 
-    $phpWord->saveAs('template_dokumen/TA2-Feedback-1718-PSxx - solo.docx');
+    public function form_control_bimbingan(Request $request, Kelompok $kelompok){
+        // $rowIndex = 1;
+        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template_form/template-form-control.docx');
+        
+        $anggota_kelompok =  KelompokMahasiswa::where('kelompok_id', $kelompok->id)
+        ->join('mahasiswas', 'kelompok_mahasiswas.nim', 'mahasiswas.nim') 
+        ->join('users', 'mahasiswas.user_id', 'users.id')->select('mahasiswas.nim', 'users.nama')->get(); 
+        // return $anggota_kelompok;
+        $phpWord->cloneRow('nama', count($anggota_kelompok));
 
-}
+
+        foreach ($anggota_kelompok as $index => $row) {
+            $phpWord->setValue("nama#" . ($index + 1), $row['nama']);
+            $phpWord->setValue("nim#" . ($index + 1), $row['nim']);
+        }
+
+        $phpWord->setValues([
+            'judul' => $kelompok->topik,
+            'kelompok' => $kelompok->nama_kelompok,
+        ]);
+
+        $phpWord->saveAs('template_export/form_control_'.$kelompok->nama_kelompok.'.docx');
+
+    }
 }

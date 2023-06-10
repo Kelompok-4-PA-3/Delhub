@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\image_profile_temporary;
+use App\Models\Interest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -12,6 +14,7 @@ use Spatie\Permission\Models\Role;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UsersImport;
 use Hash;
+use Storage;
 
 class UsersController extends Controller
 {
@@ -112,6 +115,24 @@ class UsersController extends Controller
     // : RedirectResponse
     {
         // return $request;
+        $temporaryImage = image_profile_temporary::where('folder', $request->profile_photo_path)->first();
+        // return $temporaryImage;
+        $user = User::where('id', $user->id)->first();
+        if ($request->profile_photo_path) {
+            Storage::copy('images/tmp/'.$temporaryImage->folder.'/'.$temporaryImage->img, 'images/'. $temporaryImage->folder.'/'.$temporaryImage->img);
+            if ( $user->profile_photo_path != NULL) {
+                // return dirname('images/'.$user->profile_photo_path);
+                Storage::deleteDirectory(dirname('images/'.$user->profile_photo_path));
+            }
+            $user->profile_photo_path = $request->profile_photo_path.'/'.$temporaryImage->img;
+            $user->save();
+            Storage::deleteDirectory('images/tmp/'.$temporaryImage->folder);
+            $temporaryImage->delete();
+            return back()->with('success', 'Data penguna telah berhasil diubah');
+        }
+
+        // return "gagal";
+
         $data = [
             'nama' => 'required',
             'username' => 'required',
@@ -123,7 +144,7 @@ class UsersController extends Controller
 
         $validasi = $request->validate($data);
 
-        $user = User::where('id', $user->id)->first();
+       
         $user->nama = $validasi['nama'];
         $user->username = $validasi['username'];
         $user->email = $validasi['email'];
@@ -149,9 +170,13 @@ class UsersController extends Controller
     }
 
     public function profile(User $user){
+
+        $interest = Interest::latest()->get();
+
         return view('profile.index', [
             'title' => 'My Profile',
-            'user' => $user
+            'user' => $user,
+            'interest' => $interest
         ]);
     }
 }

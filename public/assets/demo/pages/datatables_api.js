@@ -280,8 +280,8 @@ const DatatableAPI = function() {
             const title = $(this).text();
             $(this).html('<select class="column-check form-control"><option value=""> <button class="btn bg-white shadow-sm"> Semua </button></option><option value="Success"> <button class="btn bg-check-success shadow-sm"> Terpenuhi </button></option></select>');
         });
-
-        $('.datatable-regulasi thead tr:eq(1) th:not(:first-child):not(.regulasi-column).pembimbing-column').each(function () {
+        // .pembimbing-column
+        $('.datatable-regulasi thead tr:eq(1) th:not(:first-child):not(.regulasi-column)').each(function () {
             const title = $(this).text();
             $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
         });

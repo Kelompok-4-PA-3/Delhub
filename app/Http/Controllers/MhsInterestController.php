@@ -34,6 +34,7 @@ class MhsInterestController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         $request->validate([
             'nim' => 'required',
             'interest_id' => 'required',
@@ -41,8 +42,8 @@ class MhsInterestController extends Controller
 
         MhsInterest::create($request->all());
 
-        return redirect()->route('mhsInterest.index')
-            ->with('success', 'MhsInterest created successfully.');
+        return back()
+            ->with('success', 'Antusias mahasiswa telah berhasil dibuat');
     }
 
     /**
@@ -68,6 +69,7 @@ class MhsInterestController extends Controller
      */
     public function update(Request $request, MhsInterest $mhsInterest)
     {
+        
         $request->validate([
             'nim' => 'required',
             'interest' => 'required',
@@ -86,9 +88,7 @@ class MhsInterestController extends Controller
     {
         $mhsInterest->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'MhsInterest deleted successfully',
-        ]);
+        return back()
+        ->with('success', 'Antusias mahasiswa telah berhasil dihapus');
     }
 }

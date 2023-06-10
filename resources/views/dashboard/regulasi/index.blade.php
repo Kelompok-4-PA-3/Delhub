@@ -65,6 +65,7 @@
                             <table class="table datatable-regulasi w-100 scrollable-table table-bordered"  style="min-width: 1200px;">
                                 <thead>
                                     <tr>
+                                        <th >No</th>
                                         <th><small> Nama Kelompok </small></th>
                                         <th><small> Jlh Bimbingan </small></th>
                                         @foreach ($krs->kategori_role_get_pembimbing as $rrg)
@@ -75,6 +76,7 @@
                                         @endforeach
                                     </tr>
                                     <tr>
+                                        <th ></th>
                                         <th ></th>
                                         <th ></th>
                                         @foreach ($krs->kategori_role_get_pembimbing as $rrg)
@@ -99,13 +101,14 @@
                                             $bimbingan = $k->bimbingan->where('is_done',true)->count();
                                         @endphp
                                         <tr>
+                                            <td>{{$loop->iteration}}</td>
                                             <td>
                                                 {{$k->nama_kelompok}}
                                             </td>
                                             <td class="text-center">{{$bimbingan}}</td>
                                             @foreach ($krs->kategori_role_get_pembimbing as $rrg)
                                                 @if ($k->role_kelompok_all->where('role_group_id',$rrg->id)->count() > 0)   
-                                                    <td>{{$k->role_kelompok_all->where('role_group_id',$rrg->id)->first()->dosen->nama_singkat}}</td>
+                                                    <td  data-bs-popup="tooltip" title="{{$k->role_kelompok_all->where('role_group_id',$rrg->id)->first()->dosen->user->nama}}">{{$k->role_kelompok_all->where('role_group_id',$rrg->id)->first()->dosen->nama_singkat}}</td>
                                                 @else
                                                     <td>-</td>
                                                 @endif  

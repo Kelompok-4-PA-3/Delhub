@@ -19,7 +19,7 @@
                 @endforeach
             </tr>
         
-            @foreach ($krs->kelompok_mahasiswa as $kk)
+            @foreach ($krs->kelompok_mahasiswa->where('deleted_at', NULL) as $kk)
                 <tr>
                     <td>{{$kk->nama_kelompok}}</td>
                     <td>{{$kk->nim}}</td>

@@ -31,21 +31,23 @@ class BimbinganController extends Controller
     public function upload_bukti(Request $request, $id)
     {
         $data = [
-            'file-bukti' => 'required'
+            'hasil' => 'required'
         ];
 
         $validasi = $request->validate($data);
         $bimbingan = Bimbingan::find($id);
 
-        if ($request->file('file-bukti')) {
+        // if ($request->file('file-bukti')) {
 
-            $filename = $request->file('file-bukti')->getClientOriginalName();
-            $path = $request->file('file-bukti')->storeAs('public/bukti-bimbingan/', $filename);
-            $bimbingan->file_bukti = $filename;
-            $bimbingan->save();
+        //     $filename = $request->file('file-bukti')->getClientOriginalName();
+        //     $path = $request->file('file-bukti')->storeAs('public/bukti-bimbingan/', $filename);
+        //     $bimbingan->file_bukti = $filename;
+        //     $bimbingan->save();
 
-            return redirect()->back()->with('success', 'Bukti bimbingan telah berhasil diupload');
-        }
+        //     return redirect()->back()->with('success', 'Bukti bimbingan telah berhasil diupload');
+        // }
+        $bimbingan->hasil = $validasi['hasil'];
+        $bimbingan->save();
 
         return back()->with('failed', 'Permintaan anda gagal di proses');
         // ->file('file-bukti');

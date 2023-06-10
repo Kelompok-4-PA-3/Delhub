@@ -22,7 +22,7 @@
             <h5 class="mb-0">Tambah Antusias</h5>
             <div class="ms-auto">
                 <label class="form-check form-switch form-check-reverse">
-                    <a class="btn btn-primary btn-sm fw-bold" href="{{ route('mhsInterest.create') }}">
+                    <a class="btn btn-primary btn-sm fw-bold" href="/interest/create">
                         <i class="ph-plus-circle"></i>&nbsp;
                         Tambah Antusias
                     </a>
@@ -53,33 +53,59 @@
                 <thead>
                     <th>No</th>
                     <th>Nama</th>
-                    <th>NIM</th>
-                    <th>Prodi</th>
-                    <th>Antusias</th>
+                    <th>Keterangan</th>
                     <th class="text-center">Ket</th>
                 </thead>
                 <tbody>
-                    @foreach ($mhsinterests as $item)
+                    @foreach ($interests as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->mahasiswa->user->nama }}</td>
-                            <td>{{ $item->nim }}</td>
-                            <td>{{ $item->mahasiswa->prodi->nama }}</td>
-                            <td>{{ $item->interest->nama }}</td>
+                            <td>{{ $item->nama }}</td>
+                            <td>{{ $item->keterangan }}</td>
                             <td class="text-center">
-                                <a href="{{ route('mhsInterest.edit', $item->id) }}" class="btn btn-sm btn-primary">
+                                <a href="/interest/{{$item->id}}/edit" class="btn btn-sm btn-primary">
                                     <i class="ph-pencil"></i>
                                 </a>
                                 <a href="javascript:;" class="btn btn-sm btn-danger"
-                                    onclick="handle_confirm('Are you sure you want to delete this coupon?', 'Yes, delete it', 'No, cancel', 'delete', '{{ route('mhsInterest.destroy', $item->id) }}')">
+                                data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $item->id }}">
                                     <i class="ph-trash"></i>
                                 </a>
                             </td>
                         </tr>
+
+                         <!-- Delete Modal -->
+                        <div id="modal_hapus{{ $item->id }}" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog modal-xs">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        Apakah anda yakin ingin menghapus data <span
+                                            class="fw-semibold">{{ $item->nama }}</span> ?
+                                    </div>
+
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                        <form action="/interest/{{ $item->id }}" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-primary">Ya</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Delete Modal -->
+
                     @endforeach
                 </tbody>
             </table>
             <br>
         </div>
     </div>
+
+      
 @endsection
