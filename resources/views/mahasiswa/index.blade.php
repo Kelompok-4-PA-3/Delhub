@@ -63,8 +63,8 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $m->nim }}</td>
-                            <td>{{ $m->user->nama }}</td>
-                            <td>{{ $m->prodi->nama }}</td>
+                            <td>{{ $m->user ? $m->user->nama : '' }}</td>
+                            <td>{{ $m->prodi ? $m->prodi->nama : '' }}</td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
                                     <a href="/mahasiswa/{{ $m->nim }}/edit" class="text-body" data-bs-popup="tooltip"
