@@ -76,7 +76,7 @@
                         <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i
                                 class="ph-notebook"></i> &nbsp; Penilaian</a>
                         <div class="dropdown-menu">
-                            {{-- @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id', $kelompok->id) as $myrole)
+                            @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id', $kelompok->id) as $myrole)
                                 @if ($myrole->role_group != null)
                                     <div class="list-group">
                                         <div class="d-flex">
@@ -91,7 +91,7 @@
                                         </div>
                                     </div>
                                 @endif
-                            @endforeach --}}
+                            @endforeach
                         </div>
                     </li>
                 @endrole
@@ -141,10 +141,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($anggota as $a)
+                            @foreach ($anggota as $a)
                                 <tr>
                                     <td>
-                                        <div class="container"><input type="checkbox" class="form-check-input"></div>
+                                        {{-- <div class="container"><input type="checkbox" class="form-check-input"></div> --}}
                                     </td>
                                     <td>
                                         <div class="d-flex">
@@ -183,10 +183,11 @@
                                                     @endforeach
                                                 @endif
                                             @endrole
+
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -205,7 +206,10 @@
                                             class="form-control select" required>
                                             <option></option>
                                             <optgroup label="Daftar mahasiswa">
-                                                {{-- @foreach ($mahasiswa as $km)
+                                                @foreach ($mahasiswa as $km)
+                                                    {{-- @if (!in_array($a->mahasiswa->nim, $anggota_kelompok->toArray()))
+
+									@endif --}}
                                                     @if (!in_array($km->mahasiswa->nim, $anggota_kelompok->toArray()))
                                                         <option value="{{ $km->mahasiswa->nim }}">
                                                             <div>
@@ -215,17 +219,17 @@
                                                             </div>
                                                         </option>
                                                     @endif
-                                                @endforeach --}}
+                                                @endforeach
                                             </optgroup>
                                         </select>
                                     </div>
                                     <div class="py-2">
                                         <select data-placeholder="Pilih Kategori" name="role" class="form-control select"
                                             required>
-                                            {{-- @foreach ($role_kelompok as $rk)
+                                            @foreach ($role_kelompok as $rk)
                                                 <option value="{{ $rk->id }}" selected>{{ ucfirst($rk->value) }}
                                                 </option>
-                                            @endforeach --}}
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div>
