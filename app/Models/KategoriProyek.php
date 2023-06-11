@@ -21,7 +21,8 @@ class KategoriProyek extends Model
     //     return $this->hasMany(Krs::class);
     // }
 
-    public function poin_regulasi(){
-       return $this->hasMany(PoinRegulasi::class, 'kategori_id', 'id');
+    public function poin_regulasi()
+    {
+        return $this->hasMany(PoinRegulasi::class, 'kategori_id', 'id');
     }
 }
