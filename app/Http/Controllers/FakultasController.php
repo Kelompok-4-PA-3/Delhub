@@ -9,6 +9,7 @@ use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
+use Illuminate\Validation\Rule;
 
 class FakultasController extends Controller
 {
@@ -46,35 +47,30 @@ class FakultasController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
-        // $validasi = $request->validate([
-        //     'fakultas_id' => 'required',
-        //     'nama' => 'required',
-        // ]);
 
-        $data = [
-            'nama' => 'required|unique:fakultas,nama,NULL,id,deleted_at,NULL'
-        ];
+        $data = $request->validate([
+            'nama' => [
+                'required',
+                Rule::unique('fakultas', 'nama')->whereNull('deleted_at')
+            ]
+        ]);
 
-        $validasi = $request->validate($data);
-        Fakultas::create($validasi);
+        Fakultas::create($data);
 
         return redirect('/fakultas')->with('sukses', 'fakultas has been created successfully.');
     }
 
     public function update(Request $request, $id)
-    // : RedirectResponse
     {
-        $data = [
-            'nama' => 'required'
-        ];
-        $fakultas = Fakultas::find($id);
-        if ($request->nama != $fakultas->nama) {
-            $data['nama'] = 'unique:fakultas,nama,' . $id . ',id,deleted_at,NULL';
-        }
+        $data = $request->validate([
+            'nama' => [
+                'required',
+                Rule::unique('fakultas', 'nama')->whereNull('deleted_at')->ignore($id)
+            ]
+        ]);
 
-        $validasi = $request->validate($data);
-        $fakultas->update($validasi);
+        $fakultas = Fakultas::find($id);
+        $fakultas->update($data);
 
         return redirect('/fakultas')->with('sukses', 'Fakultas has been created successfully.');
     }

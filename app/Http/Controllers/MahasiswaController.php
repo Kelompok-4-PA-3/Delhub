@@ -8,6 +8,7 @@ use App\Models\Prodi;
 use App\Models\Roles;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class MahasiswaController extends Controller
 {
@@ -43,7 +44,10 @@ class MahasiswaController extends Controller
         // return $request;
         $data = [
             'user_id' => 'required',
-            'nim' => 'required|unique:mahasiswas',
+            'nim' => [
+                'required',
+                Rule::unique('mahasiswas', 'nim')->whereNull('deleted_at')
+            ],
             'prodi_id' => 'required',
             'angkatan' => 'required'
         ];
@@ -82,32 +86,26 @@ class MahasiswaController extends Controller
      */
     public function update(Request $request, Mahasiswa $mahasiswa)
     {
-        $data = [
+        $data = $request->validate([
             'user_id' => 'required',
-            'nim' => 'required',
+            'nim' => [
+                'required',
+                Rule::unique('mahasiswas', 'nim')->whereNull('deleted_at')->ignore($mahasiswa->nim, 'nim')
+            ],
             'prodi_id' => 'required',
             'angkatan' => 'required'
-        ];
+        ]);
 
-        $mhs = Mahasiswa::where('nim', $mahasiswa->nim);
-
-        if ($request->nim != $mahasiswa->nim) {
-            $data['nim'] = 'required|unique:mahasiswas';
-        }
-
-        $role_mahasiswa = Roles::where('name','mahasiswa')->first();
+        $role_mahasiswa = Roles::where('name', 'mahasiswa')->first();
 
 
         if ($role_mahasiswa == NULL) {
             return back()->with('error', 'Tidak dapat menambahkan mahasiswa karena role mahasiswa tidak ditemukan');
         }
 
-        User::where('id',$request->user_id)->first()->assignRole($role_mahasiswa->id);
+        User::where('id', $request->user_id)->first()->assignRole($role_mahasiswa->id);
 
-
-        $validasi = $request->validate($data);
-
-        $mhs->update($validasi);
+        $mahasiswa->update($data);
 
         return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil diubah');
     }
@@ -117,16 +115,16 @@ class MahasiswaController extends Controller
      */
     public function destroy(Mahasiswa $mahasiswa)
     {
-        $role_mahasiswa = Roles::where('name','mahasiswa')->first();
+        $role_mahasiswa = Roles::where('name', 'mahasiswa')->first();
 
 
         if ($role_mahasiswa == NULL) {
             return back()->with('error', 'Tidak dapat menambahkan mahasiswa karena role mahasiswa tidak ditemukan');
         }
 
-        User::where('id',$mahasiswa->user_id)->first()->removeRole('mahasiswa');
+        User::where('id', $mahasiswa->user_id)->first()->removeRole('mahasiswa');
 
-        Mahasiswa::where('nim', $mahasiswa->nim)->delete();
+        $mahasiswa->delete();
 
         return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil dihapus');
     }

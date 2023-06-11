@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KategoriProyek;
 use Illuminate\Http\Request;
+use App\Models\KategoriProyek;
+use Illuminate\Validation\Rule;
 
 class KategoriProyekController extends Controller
 {
@@ -33,9 +34,14 @@ class KategoriProyekController extends Controller
      */
     public function store(Request $request)
     {
-        $data = ['nama' => 'required|unique:kategori_proyeks,nama,NULL,id,deleted_at,NULL'];
-        $validasi = $request->validate($data);
-        KategoriProyek::create($validasi);
+        $data = $request->validate([
+            'nama' => [
+                'required',
+                Rule::unique('kategori_proyeks', 'nama')->whereNull('deleted_at')
+            ]
+        ]);
+
+        KategoriProyek::create($data);
 
         return redirect()->back()->with('success', 'Kategori proyek telah berhasil ditambahkan');
     }
@@ -60,17 +66,20 @@ class KategoriProyekController extends Controller
      */
     public function update(Request $request, KategoriProyek $kategoriProyek)
     {
-        $data = ['nama_edit' => 'required'];
+        // $data = ['nama_edit' => 'required'];
 
 
-        if ($request->nama_edit != $kategoriProyek->nama) {
-            $data['nama_edit'] = 'unique:kategori_proyeks,nama,' . $kategoriProyek->id . ',id,deleted_at,NULL';
-        }
+        // if ($request->nama_edit != $kategoriProyek->nama) {
+        //     $data['nama_edit'] =
+        // }
+        $data = $request->validate([
+            'nama' => [
+                'required',
+                Rule::unique('kategori_proyeks', 'nama')->whereNull('deleted_at')->ignore($kategoriProyek->id)
+            ]
+        ]);
 
-        $validasi = $request->validate($data);
-        $kategori = KategoriProyek::find($kategoriProyek->id);
-        $kategori->nama = $validasi['nama_edit'];
-        $kategori->save();
+        $kategoriProyek->update($data);
 
         return redirect()->back()->with('success', 'Kategori proyek telah berhasil ditambahkan');
     }

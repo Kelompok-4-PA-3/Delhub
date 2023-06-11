@@ -83,55 +83,55 @@ Route::middleware([
     Route::post('/users/{user}/profile/image/temporary/delete', [ImageProfileTemporariesController::class, 'delete'])->name('user_profile-image-temporary.delete');
 
     Route::group(['middleware' => 'role:admin'], function () {
-         // admin 
-         // prodi
-         Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
-         // ruangan
-         Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
-         // fakultas
-         Route::resource('/fakultas', \App\Http\Controllers\FakultasController::class)->name('fakultas', 'fakultas.index');
-         // roles
-         Route::resource('/roles', RolesController::class)->name('roles', 'roles.index');
-         // permission
-         Route::resource('/permission', PermissionController::class)->name('permission', 'permission.index');
-         // kategori
-         Route::resource('/kategori', KategoriController::class)->name('kategori', 'kategori.index');
-         // krs
-         Route::resource('/krs', KrsController::class)->name('krs', 'krs.index');
-         // dosen
-         Route::resource('/dosen', DosenController::class)->name('dosen', 'dosen.index');
-         // mahasiswa
-         Route::resource('/mahasiswa', MahasiswaController::class)->name('mahasiswa', 'mahasiswa.index');
-         // users
-         Route::resource('/users', UsersController::class)->name('users', 'users.index');
-         // config
-         Route::resource('/config', \App\Http\Controllers\ConfigController::class)->name('configs', 'config.index');
-         Route::post('/config/update/status/{id}', [\App\Http\Controllers\ConfigController::class, 'update_status'])->name('configs', 'config.update_status');
-         // interst
-         Route::resource('/interest', InterestController::class)->name('interest', 'interest.index');
-         // kategori proyek 
-         Route::resource('/kategori_proyek', KategoriProyekController::class)->name('kategori_proyek', 'kategori_proyek.index');
+        // admin
+        // prodi
+        Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
+        // ruangan
+        Route::resource('/ruangan', \App\Http\Controllers\RuanganController::class)->name('ruangans', 'ruangan.index');
+        // fakultas
+        Route::resource('/fakultas', \App\Http\Controllers\FakultasController::class)->name('fakultas', 'fakultas.index');
+        // roles
+        Route::resource('/roles', RolesController::class)->name('roles', 'roles.index');
+        // permission
+        Route::resource('/permission', PermissionController::class)->name('permission', 'permission.index');
+        // kategori
+        Route::resource('/kategori', KategoriController::class)->name('kategori', 'kategori.index');
+        // krs
+        Route::resource('/krs', KrsController::class)->name('krs', 'krs.index');
+        // dosen
+        Route::resource('/dosen', DosenController::class)->name('dosen', 'dosen.index');
+        // mahasiswa
+        Route::resource('/mahasiswa', MahasiswaController::class)->name('mahasiswa', 'mahasiswa.index');
+        // users
+        Route::resource('/users', UsersController::class)->name('users', 'users.index');
+        // config
+        Route::resource('/config', \App\Http\Controllers\ConfigController::class)->name('configs', 'config.index');
+        Route::post('/config/update/status/{id}', [\App\Http\Controllers\ConfigController::class, 'update_status'])->name('configs', 'config.update_status');
+        // interst
+        Route::resource('/interest', InterestController::class)->name('interest', 'interest.index');
+        // kategori proyek
+        Route::resource('/kategori_proyek', KategoriProyekController::class)->name('kategori_proyek', 'kategori_proyek.index');
 
         // Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
         Route::post('/users/upload', [UsersController::class, 'user_upload']);
         Route::get('/data/user', [UsersController::class, 'getUser']);
         Route::post('/users/krs/add', [DashboardController::class, 'add_user']);
-        // endadmin 
+        // endadmin
     });
-       
-        
+
+
     // admin dan koordinator
     Route::group(['middleware' => 'role:admin,dosen'], function () {
 
-         // poin regulasi
-         Route::resource('/poin_regulasi', PoinRegulasiController::class)->name('poin_regulasi', 'poin_regulasi.index');
-         Route::get('/pembimbing/{nidn}/', [MyProjectController::class, 'pembimbing']);
-         Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
-         Route::get('/poin_regulasi/{poinRegulasi}/komponen_penilaian',[KomponenPenilaianController::class, 'index']);
-         Route::post('/poin_regulasi/{poinRegulasi}/komponen_penilaian',[KomponenPenilaianController::class, 'store']);
-         Route::post('/poin_regulasi/{poinRegulasi}/{komponenPenilaian}',[KomponenPenilaianController::class, 'update']);
-         Route::post('/poin_regulasi/{poinRegulasi}/{komponenPenilaian}/delete',[KomponenPenilaianController::class, 'delete']);
-         Route::post('/poin_regulasi/{poinRegulasi}/komponen_penilaian/verifikasi',[KomponenPenilaianController::class, 'verifikasi_komponen_penilaian']);
+        // poin regulasi
+        Route::resource('/poin_regulasi', PoinRegulasiController::class)->name('poin_regulasi', 'poin_regulasi.index');
+        Route::get('/pembimbing/{nidn}/', [MyProjectController::class, 'pembimbing']);
+        Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
+        Route::get('/poin_regulasi/{poinRegulasi}/komponen_penilaian', [KomponenPenilaianController::class, 'index']);
+        Route::post('/poin_regulasi/{poinRegulasi}/komponen_penilaian', [KomponenPenilaianController::class, 'store']);
+        Route::post('/poin_regulasi/{poinRegulasi}/{komponenPenilaian}', [KomponenPenilaianController::class, 'update']);
+        Route::post('/poin_regulasi/{poinRegulasi}/{komponenPenilaian}/delete', [KomponenPenilaianController::class, 'delete']);
+        Route::post('/poin_regulasi/{poinRegulasi}/komponen_penilaian/verifikasi', [KomponenPenilaianController::class, 'verifikasi_komponen_penilaian']);
 
         // Kelompok
         // Route::post('/kelompok/dosen/pembimbing', [KelompokController::class, 'add_pembimbing']);
@@ -147,7 +147,7 @@ Route::middleware([
         // Route::post('/krs/{kr}/hasil_penilaian', [PenilaianController::class, 'index'])->name('penilaian', 'penilaian.index');
         Route::get('/krs/{kr}/hasil_penilaian/penilaian/{penilaian}', [PenilaianController::class, 'detail_hasil_nilai'])->name('penilaian.detail', 'penilaian.detail');
         Route::get('/krs/{kr}/hasil_penilaian/penilaian/{penilaian}/export', [PenilaianController::class, 'export_excel_nilai'])->name('penilaian.export_nilai', 'penilaian.export_nilai');
-            
+
         // Reguasi
         Route::get('/krs/{id}/regulasi', [RegulasiController::class, 'index'])->name('regulasi', 'regulasi.index');
         Route::get('/krs/{id}/regulasi/add', [RegulasiController::class, 'create'])->name('regulasi-add', 'regulasi.add');
@@ -155,7 +155,7 @@ Route::middleware([
         Route::post('/krs/{id}/regulasi/edit', [RegulasiController::class, 'update'])->name('regulasi-update', 'regulasi.update');
         Route::get('/krs/{id}/regulasi/show', [RegulasiController::class, 'show'])->name('regulasi-show', 'regulasi.show');
         Route::post('/krs/{id}/config-penilaian', [KonfigurasiPenilaianController::class, 'store'])->name('config-penilaian', 'config-penilaian.show');
-            
+
         // Poin Penilaian
         Route::get('/krs/{kr}/poin_penilaian', [PoinPenilaianController::class, 'index'])->name('poin-penilaian', 'poin-penilaian.index');
         Route::post('/krs/{kr}/poin_penilaian/store', [PoinPenilaianController::class, 'store'])->name('poin-penilaian-store', 'poin-penilaian.store');
@@ -164,34 +164,34 @@ Route::middleware([
         Route::post('/krs/{kr}/poin_penilaian/delete/{penilaian}/role/{role_penilaian}', [PoinPenilaianController::class, 'delete_role'])->name('poin-penilaian-role.delete', 'poin-penilaian.role-delete');
         Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/edit', [PoinPenilaianController::class, 'update'])->name('poin-penilaian.edit');
         Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/delete', [PoinPenilaianController::class, 'delete'])->name('poin-penilaian.delete');
-        Route::post('/krs/{kr}/poin_penilaian/verifikasi',[PoinPenilaianController::class, 'verifikasi_poin_penilaian']);
-            
+        Route::post('/krs/{kr}/poin_penilaian/verifikasi', [PoinPenilaianController::class, 'verifikasi_poin_penilaian']);
+
         // Komponen Penilaian
         Route::get('/krs/{kr}/poin_penilaian/{poinPenilaian}/komponen', [KomponenPenilaianController::class, 'index'])->name('komponen_penilaian.index');
         Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/komponen/store', [KomponenPenilaianController::class, 'store'])->name('komponen_penilaian.store');
         Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/komponen/{komponenPenilaian}/edit', [KomponenPenilaianController::class, 'update'])->name('komponen_penilaian.edit');
         Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/komponen/{komponenPenilaian}/delete', [KomponenPenilaianController::class, 'delete'])->name('komponen_penilaian.delete');
         Route::post('/krs/{kr}/poin_penilaian/{poinPenilaian}/komponen/verifikasi', [KomponenPenilaianController::class, 'verifikasi_komponen_penilaian'])->name('komponen_penilaian.verifikasi');
-            
+
         // Role Group Kelompok
         Route::get('/krs/{kr}/role_group/{kategori}', [RoleGroupKelompokController::class, 'index'])->name('role_group.index');
         Route::post('/krs/{kr}/role_group/{kategori}/store/', [RoleGroupKelompokController::class, 'store'])->name('role_group.store');
         Route::post('/krs/{kr}/role_group/{kategori}/{roleGroupKelompok}/edit', [RoleGroupKelompokController::class, 'edit'])->name('role_group.edit');
         Route::post('/krs/{kr}/role_group/{kategori}/{roleGroupKelompok}/delete', [RoleGroupKelompokController::class, 'delete'])->name('role_group.delete');
-        Route::post('/krs/{kr}/role_group/{kategori}/verifikasi/{role}',[RoleGroupKelompokController::class, 'verifikasi_role_group'])->name('role_group.verification');
-        Route::get('/krs/{kr}/role_group/role/{role}/komponen/',[RoleKelompokPenilaianController::class, 'index'])->name('role_kelompok_penilaian.index');
-        Route::post('/krs/{kr}/role_group/role/{role}/komponen/store',[RoleKelompokPenilaianController::class, 'store'])->name('role_kelompok_penilaian.store');
-        Route::post('/krs/{kr}/role_group/role/{role}/komponen/{rolePenilaian}/edit',[RoleKelompokPenilaianController::class, 'update'])->name('role_kelompok_penilaian.update');
-        Route::post('/krs/{kr}/role_group/role/{role}/komponen/{rolePenilaian}/delete',[RoleKelompokPenilaianController::class, 'delete'])->name('role_kelompok_penilaian.delete');
-        Route::post('/krs/{kr}/role_group/role/{role}/komponen/verifikasi',[RoleKelompokPenilaianController::class, 'verifikasi_kompnen_penilaian'])->name('role_kelompok_penilaian.verification');
-    
+        Route::post('/krs/{kr}/role_group/{kategori}/verifikasi/{role}', [RoleGroupKelompokController::class, 'verifikasi_role_group'])->name('role_group.verification');
+        Route::get('/krs/{kr}/role_group/role/{role}/komponen/', [RoleKelompokPenilaianController::class, 'index'])->name('role_kelompok_penilaian.index');
+        Route::post('/krs/{kr}/role_group/role/{role}/komponen/store', [RoleKelompokPenilaianController::class, 'store'])->name('role_kelompok_penilaian.store');
+        Route::post('/krs/{kr}/role_group/role/{role}/komponen/{rolePenilaian}/edit', [RoleKelompokPenilaianController::class, 'update'])->name('role_kelompok_penilaian.update');
+        Route::post('/krs/{kr}/role_group/role/{role}/komponen/{rolePenilaian}/delete', [RoleKelompokPenilaianController::class, 'delete'])->name('role_kelompok_penilaian.delete');
+        Route::post('/krs/{kr}/role_group/role/{role}/komponen/verifikasi', [RoleKelompokPenilaianController::class, 'verifikasi_kompnen_penilaian'])->name('role_kelompok_penilaian.verification');
+
         // Kategori Role
         Route::get('/krs/{kr}/kategori_role', [KategoriRoleController::class, 'index'])->name('kategori_role.index');
         Route::post('/krs/{kr}/kategori_role/store', [KategoriRoleController::class, 'store'])->name('kategori_role.store');
         Route::post('/krs/{kr}/kategori_role/{kategori}/edit', [KategoriRoleController::class, 'update'])->name('kategori_role.edit');
         Route::post('/krs/{kr}/kategori_role/{kategori}/delete', [KategoriRoleController::class, 'delete'])->name('kategori_role.delete');
 
-        //template document 
+        //template document
         Route::get('/krs/{kr}/document', [TemplateDocumentController::class, 'index'])->name('template_document.index');
         Route::post('/krs/{kr}/document', [TemplateDocumentController::class, 'store'])->name('template_document.add');
         Route::post('/krs/{kr}/document/{document}/edit', [TemplateDocumentController::class, 'update'])->name('template_document.edit');
@@ -204,8 +204,8 @@ Route::middleware([
         Route::post('/krs/{kr}/submission/{submission}/edit', [SubmissionArtefakController::class, 'update'])->name('template_submission.update');
         Route::post('/krs/{kr}/submission/{submission}/delete', [SubmissionArtefakController::class, 'delete'])->name('template_submission.delete');
         // Route::get('/krs/{kr}/submission', [SubmissionArtefakController::class, 'index'])->name('template_submission.index');
-        
-        
+
+
     });
 
 
@@ -219,7 +219,6 @@ Route::middleware([
         Route::get('/kelompok/{id}/orang', [KelompokController::class, 'people']);
         Route::resource('/kelompok', KelompokController::class)->name('kelompok', 'kelompok.index');
         Route::resource('/home', DashboardController::class)->name('home', 'home.index');
-
     });
 
     Route::group(['middleware' => 'role:dosen,mahasiswa'], function () {
@@ -233,7 +232,6 @@ Route::middleware([
         Route::post('/kelompok/{kelompok}/artefak/{submission}/{artefak}/delete', [ArtefakKelompokController::class, 'delete']);
         Route::post('/artefak/file/temporary/store', [ArtefakTemporaryController::class, 'store'])->name('artefake-temporary.store');
         Route::post('/artefak/file/temporary/delete', [ArtefakTemporaryController::class, 'delete'])->name('artefake-temporary.delete');
-
     });
 
 
@@ -250,15 +248,15 @@ Route::middleware([
 
         Route::post('/kelompok/{kelompok}/role/add', [RoleKelompokController::class, 'store'])->name('kelompok_role.add');
         Route::post('/kelompok/{kelompok}/role/{roleKelompok}/delete', [RoleKelompokController::class, 'delete'])->name('kelompok_role.delete');
-        
-        
+
+
         Route::post('/bimbingan/approve/{id}', [BimbinganController::class, 'approve_bukti'])->name('bimbingan_approve', 'bimbingan.approve_bukti');
         Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan_status', 'bimbingan.update_status');
         Route::post('/jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
     });
-    
+
     // Route::group(['middleware' => 'role:koordinator'], function () {
-        Route::post('/kelompok/{kelompok}/verfikasi/role', [RoleKelompokController::class, 'verification'])->name('kelompok_role.verfication');
+    Route::post('/kelompok/{kelompok}/verfikasi/role', [RoleKelompokController::class, 'verification'])->name('kelompok_role.verfication');
     // });
 
 
@@ -289,9 +287,7 @@ Route::middleware([
         }
         return 'berhasil';
     });
-
-    
 });
-Route::get('/test', function() {
+Route::get('/test', function () {
     Artisan::call('storage:link');
- });
+});

@@ -8,6 +8,7 @@ use App\Models\Prodi;
 use App\Models\Roles;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class DosenController extends Controller
 {
@@ -45,8 +46,16 @@ class DosenController extends Controller
         // return $request;
         $data = [
             'user_id' => 'required',
-            'nama_singkat' => 'required|unique:dosens,nama_singkat,NULL,nidn,deleted_at,NULL|max:3|min:3',
-            'nidn' => 'required|numeric|unique:dosens,nidn,NULL,nidn,deleted_at,NULL',
+            'nama_singkat' => [
+                'required',
+                Rule::unique('dosens', 'nama_singkat')->whereNull('deleted_at'),
+                'max:3|min:3'
+            ],
+            'nidn' => [
+                'required',
+                Rule::unique('dosens', 'nidn')->whereNull('deleted_at'),
+                'numeric'
+            ],
             'prodi_id' => 'required',
         ];
 
@@ -93,26 +102,22 @@ class DosenController extends Controller
      */
     public function update(Request $request, Dosen $dosen)
     {
-        // return "ini update";
-        $data = [
+        $data = $request->validate([
             'user_id' => 'required',
-            'nama_singkat' => 'required',
-            'nidn' => 'required',
+            'nama_singkat' => [
+                'required',
+                Rule::unique('dosens', 'nama_singkat')->whereNull('deleted_at')->ignore($dosen->id),
+                'max:3|min:3'
+            ],
+            'nidn' => [
+                'required',
+                Rule::unique('dosens', 'nidn')->whereNull('deleted_at')->ignore($dosen->id),
+                'numeric'
+            ],
             'prodi_id' => 'required',
-        ];
+        ]);
 
-        if ($request->nama_singkat != $dosen->nama_singkat) {
-            $data['nama_singkat'] = 'required|unique:dosens,nama_singkat,' . $dosen->nidn . ',nidn,deleted_at,NULL|max:3|min:3';
-        }
-
-        $dsn = Dosen::where('nidn', $dosen->nidn);
-        // return $request->nidn ;
-        if ($request->nidn != $dosen->nidn) {
-            $data['nidn'] =  'required|numeric|unique:dosens,nidn,' . $dosen->nidn . ',nidn,deleted_at,NULL';
-        }
-
-        $validasi = $request->validate($data);
-        $dsn->update($validasi);
+        $dosen->update($data);
 
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil diubah');
     }

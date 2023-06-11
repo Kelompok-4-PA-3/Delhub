@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('kategori_proyeks', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->unique(); 
+            $table->string('nama');
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
