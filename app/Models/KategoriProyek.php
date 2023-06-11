@@ -23,6 +23,6 @@ class KategoriProyek extends Model
 
     public function poin_regulasi()
     {
-        return $this->hasMany(PoinRegulasi::class, 'kategori_id', 'id');
+        return $this->hasMany(PoinRegulasi::class, 'kategori_id', 'id')->withTrashed();
     }
 }
