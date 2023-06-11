@@ -4,7 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" type="image/x-icon" href="{{asset('/img/icon-link.png')}}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('/img/icon-link.png') }}">
     @yield('title')
 
     <!-- Global stylesheets -->
@@ -44,7 +44,7 @@
 <body>
 
     <style>
-        .card{
+        .card {
             box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
             border: 0;
         }
@@ -115,17 +115,17 @@
                 @php
                     $waiting = app('request_bimbingan')->bimbingan(Auth::user()->dosen->nidn)['waiting'];
                     $pembimbing = Auth::user()->dosen->pembimbing_penguji;
-                @endphp 
+                @endphp
 
                 @if ($pembimbing->count() > 0)
 
                         @foreach (app('request_bimbingan')->bimbingan(Auth::user()->dosen->nidn)['pembimbing'] as $dkb)
-                         
-                                @php 
+
+                                @php
                                     $status_id = DB::table('references')->where('kategori','status_bimbingan')->where('value','approved')->first()->id
                                 @endphp
 
-                                @if($dkb->status == $waiting)
+                                @if ($dkb->status == $waiting)
 
                                     <div class="d-flex align-items-start mb-3">
                                         <div class="flex-fill text-justify">
@@ -146,12 +146,12 @@
                                                 {{ \Carbon\Carbon::parse($dkb->created_at)->diffForHumans() }}</div>
                                         </div>
                                     </div>
-                                
+
                                 @endif
-                            
+
                         @endforeach
                 @endif
-                
+
             @endrole
             </div>
         </div>
@@ -310,7 +310,7 @@
             </div>
         </div>
     @endif
-    
+
     @if (session()->has('failed'))
         <div class="toast-container position-fixed top-0 end-0 p-3">
             <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
@@ -326,7 +326,7 @@
             </div>
         </div>
     @endif --}}
-    
+
     @include('sweetalert::alert')
 
     @stack('remove-scroll')
