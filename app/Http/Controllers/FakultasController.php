@@ -34,10 +34,8 @@ class FakultasController extends Controller
      */
     public function create(): View
     {
-        $prodis = prodi::all();
-        $fakultas = fakultas::all();
-        $statuses = status::all();
-        return view('fakultas.create', compact('fakultas', 'statuses'));
+        // $statuses = status::all();
+        return view('fakultas.create');
     }
 
     /**
@@ -55,12 +53,11 @@ class FakultasController extends Controller
         // ]);
 
         $data = [
-            'fakultas_id' => 'required',
-            'nama' => 'required'
+            'nama' => 'required|unique:fakultas'
         ];
 
         $validasi = $request->validate($data);
-        fakultas::create($validasi);
+        Fakultas::create($validasi);
 
             return redirect('/fakultas')->with('sukses','fakultas has been created successfully.');
 
@@ -70,12 +67,15 @@ class FakultasController extends Controller
     // : RedirectResponse
     {
         $data = [
-            'fakultas_id' => 'required',
             'nama' => 'required'
         ];
+        $fakultas = Fakultas::find($id);
+        if ($request->nama != $fakultas->nama) {
+            $data['nama'] = 'unique:fakultas';
+        }
 
         $validasi = $request->validate($data);
-        Prodi::find($id)->update($validasi);
+       $fakultas->update($validasi);
 
             return redirect('/fakultas')->with('sukses','Fakultas has been created successfully.');
 
@@ -84,7 +84,7 @@ class FakultasController extends Controller
 
     public function destroy($id)
     {
-        $prodis = fakultas::find($id);
+        $prodis = Fakultas::find($id);
         $prodis->delete();
 
         return back();

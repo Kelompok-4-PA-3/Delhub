@@ -62,6 +62,14 @@ class ConfigController extends Controller
 
         $validasi = $request->validate($data);
 
+        $configs = Configs::all();
+        
+        foreach ($configs as $c) {
+            if ($request->tahun_aktif.$request->semester == $c->tahun_aktif.$c->semester) {
+                return back()->with('error', 'Konfigurasi yang sama telah terdaftar');
+            }
+        }
+
         Configs::create([
             'tahun_aktif' => $validasi['tahun_aktif'],
             'semester' => $request['semester'],
@@ -97,6 +105,16 @@ class ConfigController extends Controller
         ];
 
         $validasi = $request->validate($data);
+
+        if ($request->tahun_aktif != $config->tahun_aktif || $request->semester != $config->semester) {
+            $configs = Configs::all();
+        
+            foreach ($configs as $c) {
+                if ($request->tahun_aktif.$request->semester == $c->tahun_aktif.$c->semester) {
+                    return back()->with('error', 'Konfigurasi yang sama telah terdaftar');
+                }
+            }
+        }
 
         Configs::find($config->id)->update($validasi);
 

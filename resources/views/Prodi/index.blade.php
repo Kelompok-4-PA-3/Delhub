@@ -45,14 +45,12 @@
                     <th>No</th>
                     <th>Program Studi</th>
                     <th>Fakultas</th>
-                    <th>Status</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 <tr>
                     <th></th>
                     <th>Program Studi</th>
                     <th>Fakultas</th>
-                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -62,7 +60,6 @@
                     <td>{{$loop->iteration}}</td>
                     <td>{{$p->nama}}</td>
                     <td>{{$p->fakultas->nama}}</td>
-                    <td>{{$p->status}}</td>
                     <td class="text-center">
                         <div class="d-inline-flex">
                             <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah" data-bs-toggle="modal" data-bs-target="#modal_ubah{{$p->id}}">
@@ -70,9 +67,6 @@
                             </a>
                             <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$p->id}}">
                                 <i class="ph-trash"></i>
-                            </a>
-                            <a href="#" class="text-body" data-bs-popup="tooltip" title="Lihat">
-                                <i class="ph-eye"></i>
                             </a>
                         </div>
                     </td>

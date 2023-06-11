@@ -26,43 +26,18 @@
         <div class="card-body pb-0">
             <div class="card">
                 <div class="card-body border-top">
-                    <form action="/prodi" method="post">
+                    <form action="/fakultas" method="post">
                         @csrf
                         <fieldset class="mb-3">
                             {{-- <legend class="fs-base fw-bold border-bottom pb-2 mb-3">Mandatory fields</legend> --}}
 
                             <div class="mb-3">
                                 <label class="form-label">Fakultas</label>
-                                <select class="form-select" name="fakultas_id">
-                                    @foreach ($fakultas as $f)
-                                        <option value="{{  $f->id }}">{{  $f->nama }}</option>
-                                    @endforeach
-                                </select>
-                                @error('fakultas')
+                                <input class="form-control" type="text" name="nama" value="{{old('nama')}}">
+                                @error('nama')
                                     <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
                                 @enderror
                             </div>
-
-                            <!-- <div class="mb-3">
-                                <label class="form-label">Status</label>
-                                <select class="form-select">
-                                    @foreach ($statuses as $s)
-                                        <option value="{{  $s->deskripsi }}">{{  $s->deskripsi }}</option>
-                                    @endforeach
-                                </select>
-                                @error('status')
-                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                                @enderror
-                            </div> -->
-
-                            <!-- <div class="mb-3">
-                                <label class="form-label">Status</label>
-                                <input name="status" type="text" class="form-control" value="{{old('status')}}" placeholder="Masukkan status" required>
-                                @error('status')
-                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
-                                @enderror
-                            </div> -->
-
                         </fieldset>
 
                         <div class="text-end">

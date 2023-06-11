@@ -82,9 +82,6 @@
                                         data-bs-toggle="modal" data-bs-target="#modal_hapus{{ $pr->id }}">
                                         <i class="ph-trash"></i>
                                     </a>
-                                    <a href="/poin_regulasi/{{$pr->id}}/komponen_penilaian" class="text-body" data-bs-popup="tooltip" title="Komponen penilaian">
-                                        <i  class="ph-notebook"></i>
-                                    </a>
                                 </div>
                             </td>
                         </tr>

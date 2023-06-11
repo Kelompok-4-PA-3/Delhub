@@ -126,7 +126,7 @@
                         Photos
                     </a>
                 </li> --}}
-                    <li class="nav-item dropdown ms-lg-1">
+                    {{-- <li class="nav-item dropdown ms-lg-1">
                         <a href="#" class="navbar-nav-link rounded dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="ph-gear"></i>
                             <span class="d-lg-none ms-2">More</span>
@@ -155,7 +155,7 @@
                                 Profile settings
                             </a>
                         </div>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </div>
@@ -177,10 +177,10 @@
                         <div class="card-header d-sm-flex">
                             <h5 class="mb-0">Aktifitas</h5>
                             <div class="mt-2 mt-sm-0 ms-auto">
-                                <span>
+                                {{-- <span>
                                     <i class="ph-clock-counter-clockwise me-1"></i>
                                     Updated 2 hours ago
-                                </span>
+                                </span> --}}
                             </div>
                         </div>
 

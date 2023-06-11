@@ -52,13 +52,11 @@
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Active</th>
                         <th class="text-center">Actions</th>
                     </tr>
                     <tr>
                         <th></th>
                         <th>Nama</th>
-                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -67,7 +65,6 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $r->nama }}</td>
-                            <td>{{ $r->active }}</td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
                                     <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah"

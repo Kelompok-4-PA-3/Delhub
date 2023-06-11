@@ -45,13 +45,11 @@
                 <tr>
                     <th>No</th>
                     <th>Fakultas</th>
-                    <th>Status</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 <tr>
                     <th></th>
                     <th>Fakultas</th>
-                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -60,7 +58,6 @@
                 <tr>
                     <td>{{$loop->iteration}}</td>
                     <td>{{$p->nama}}</td>
-                    <td>{{$p->status}}</td>
                     <td class="text-center">
                         <div class="d-inline-flex">
                             <a href="#" class="text-body" data-bs-popup="tooltip" title="Ubah" data-bs-toggle="modal" data-bs-target="#modal_ubah{{$p->id}}">

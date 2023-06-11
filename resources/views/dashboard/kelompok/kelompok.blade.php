@@ -840,7 +840,7 @@
                 }
                 @endphp
                 <p class="fs-sm text-muted">{{$d->deskripsi}}</p>
-                <a href="{{asset('/storage/public/file-template/'.$d->file_template)}}"
+                <a href="{{public_path('storage/public/file-template/'.$d->file_template)}}"
                     class="btn btn-sm bg-secondary bg-opacity-10 text-secondary rounded" download=""><i
                         class="ph-file-doc"></i>&nbsp; {{Str::limit($d->file_template, 15)}} <span
                         class="ms-3 fw-semibold"><i class="ph-download"></i> &nbsp;{{$size}}</span></a>
