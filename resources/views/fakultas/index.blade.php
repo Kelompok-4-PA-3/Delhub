@@ -66,9 +66,6 @@
                             <a href="#" class="text-body mx-2" data-bs-popup="tooltip" title="hapus" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$p->id}}">
                                 <i class="ph-trash"></i>
                             </a>
-                            <a href="#" class="text-body" data-bs-popup="tooltip" title="Lihat">
-                                <i class="ph-eye"></i>
-                            </a>
                         </div>
                     </td>
                 </tr>
