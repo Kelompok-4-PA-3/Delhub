@@ -72,7 +72,7 @@ class KrsController extends Controller
             return redirect('/krs')->with('error', 'Tidak dapat menemukan mahasiswa, silahan cek prodi dan angkatan yang dimaksud');
         }
 
-        $krs = Krs::create($validasi);
+         $krs = Krs::create($validasi);
 
         return redirect('/krs')->with('success', 'KRS baru telah berhasil dibuat');
     }
