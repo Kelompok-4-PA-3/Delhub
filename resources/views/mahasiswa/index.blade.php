@@ -90,7 +90,7 @@
 
                                     <div class="modal-body">
                                         Apakah anda yakin ingin menghapus data <span
-                                            class="fw-semibold">{{ $m->user->nama }}</span> ?
+                                            class="fw-semibold">{{ $m ? $m->user->nama : $m->nim }}</span>?
                                     </div>
 
                                     <div class="modal-footer justify-content-between">
