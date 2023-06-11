@@ -95,7 +95,7 @@ class BimbinganController extends Controller
         }
         $tokens = $pembimbings->pluck('user.firebase_token')->toArray();
         // if tokens is empty, don't send push notification
-        if (!empty($tokens)){
+        if (!empty($tokens)) {
             sendPushNotification('Permintaan Bimbingan', 'Anda mendapatkan permintaan bimbingan baru dari ' . $kelompok->nama_kelompok, $tokens, $bimbingan);
         }
         return redirect()->back()->with('success', 'Request bimbingan telah berhasil dibuat');
@@ -115,7 +115,7 @@ class BimbinganController extends Controller
         // send email to mahasiswa
         $kelompok = $bimbingan->kelompok;
         // get all mahasiswa in kelompok mahasiswa
-        $mahasiswa = $kelompok->kelompok_mahasiswa;
+        $mahasiswa = $kelompok->kelompok_mahasiswas;
         foreach ($mahasiswa as $mhs) {
             $mhs->mahasiswa->user->notify(new UpdateRequestNotification(
                 $bimbingan,
@@ -125,7 +125,7 @@ class BimbinganController extends Controller
 
         $tokens = $mahasiswa->pluck('mahasiswa.user.firebase_token')->toArray();
         // if tokens is empty, don't send push notification
-        if (!empty($tokens)){
+        if (!empty($tokens)) {
             sendPushNotification('Status Bimbingan', 'Status bimbingan kelompok anda di-' . $ref->value, $tokens, $bimbingan);
         }
         return redirect()->back()->with('success', 'Request bimbingan telah di' . $ref->value);

@@ -138,7 +138,7 @@
                 <h5 class="py-sm-2 my-sm-1">Mahasiswa</h5>
             </div>
             <div class="card-body">
-                @foreach ($kelompok->kelompok_mahasiswa as $km)
+                @foreach ($kelompok->kelompok_mahasiswas as $km)
                 <p><span class="fw-semibold">{{$km->mahasiswa->nim}}</span> - {{$km->mahasiswa->user->nama}}</p>
                 @endforeach
             </div>
