@@ -12,12 +12,12 @@ use Illuminate\Contracts\View\View;
 
 class FakultasController extends Controller
 {
-        /**
+    /**
      * index
      *
      * @return void
      */
-    public function index() : View
+    public function index(): View
     {
         //get prodis
         $prodis = prodi::latest()->paginate(5);
@@ -53,14 +53,13 @@ class FakultasController extends Controller
         // ]);
 
         $data = [
-            'nama' => 'required|unique:fakultas|deleted_at,NULL'
+            'nama' => 'required|unique:fakultas,nama,NULL,id,deleted_at,NULL'
         ];
 
         $validasi = $request->validate($data);
         Fakultas::create($validasi);
 
-            return redirect('/fakultas')->with('sukses','fakultas has been created successfully.');
-
+        return redirect('/fakultas')->with('sukses', 'fakultas has been created successfully.');
     }
 
     public function update(Request $request, $id)
@@ -71,15 +70,13 @@ class FakultasController extends Controller
         ];
         $fakultas = Fakultas::find($id);
         if ($request->nama != $fakultas->nama) {
-            $data['nama'] = 'unique:fakultas';
+            $data['nama'] = 'unique:fakultas,nama,' . $id . ',id,deleted_at,NULL';
         }
 
         $validasi = $request->validate($data);
-       $fakultas->update($validasi);
+        $fakultas->update($validasi);
 
-            return redirect('/fakultas')->with('sukses','Fakultas has been created successfully.');
-
-
+        return redirect('/fakultas')->with('sukses', 'Fakultas has been created successfully.');
     }
 
     public function destroy($id)

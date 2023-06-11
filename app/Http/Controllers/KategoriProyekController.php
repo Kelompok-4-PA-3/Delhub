@@ -14,7 +14,7 @@ class KategoriProyekController extends Controller
     {
         $kategori_proyek = KategoriProyek::latest()->get();
 
-        return view('kategori_proyek.index',[
+        return view('kategori_proyek.index', [
             'title' => 'Kategori Proyek',
             'kategori_proyek' => $kategori_proyek
         ]);
@@ -33,7 +33,7 @@ class KategoriProyekController extends Controller
      */
     public function store(Request $request)
     {
-        $data = ['nama' => 'required|unique:kategori_proyeks|deleted_at,NULL'];
+        $data = ['nama' => 'required|unique:kategori_proyeks,nama,NULL,id,deleted_at,NULL'];
         $validasi = $request->validate($data);
         KategoriProyek::create($validasi);
 
@@ -45,7 +45,6 @@ class KategoriProyekController extends Controller
      */
     public function show(KategoriProyek $kategoriProyek)
     {
-     
     }
 
     /**
@@ -62,10 +61,10 @@ class KategoriProyekController extends Controller
     public function update(Request $request, KategoriProyek $kategoriProyek)
     {
         $data = ['nama_edit' => 'required'];
-       
 
-        if($request->nama_edit != $kategoriProyek->nama){
-            $data['nama_edit'] = 'unique:kategori_proyeks,nama';
+
+        if ($request->nama_edit != $kategoriProyek->nama) {
+            $data['nama_edit'] = 'unique:kategori_proyeks,nama,' . $kategoriProyek->id . ',id,deleted_at,NULL';
         }
 
         $validasi = $request->validate($data);
@@ -80,9 +79,9 @@ class KategoriProyekController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(KategoriProyek $kategoriProyek)
-    {   
+    {
         // return $kategoriProyek;
-        $kproyek = KategoriProyek::where('id',$kategoriProyek->id)->first();
+        $kproyek = KategoriProyek::where('id', $kategoriProyek->id)->first();
         $kproyek->delete($kategoriProyek);
 
         return back()->with('success', 'kategori proyek telah berhasil di hapus');

@@ -45,19 +45,19 @@ class DosenController extends Controller
         // return $request;
         $data = [
             'user_id' => 'required',
-            'nama_singkat' => 'required|unique:dosens|max:3|min:3',
-            'nidn' => 'required|numeric|unique:dosens',
+            'nama_singkat' => 'required|unique:dosens,nama_singkat,NULL,nidn,deleted_at,NULL|max:3|min:3',
+            'nidn' => 'required|numeric|unique:dosens,nidn,NULL,nidn,deleted_at,NULL',
             'prodi_id' => 'required',
         ];
 
-        $role_dosen = Roles::where('name','dosen')->first();
+        $role_dosen = Roles::where('name', 'dosen')->first();
 
 
         if ($role_dosen == NULL) {
             return back()->with('failed', 'Tidak dapat menambahkan dosen karena role dosen tidak ditemukan');
         }
 
-        User::where('id',$request->user_id)->first()->assignRole($role_dosen->id);
+        User::where('id', $request->user_id)->first()->assignRole($role_dosen->id);
 
         $validasi = $request->validate($data);
         Dosen::create($validasi);
@@ -102,13 +102,13 @@ class DosenController extends Controller
         ];
 
         if ($request->nama_singkat != $dosen->nama_singkat) {
-            $data['nama_singkat'] = 'required|unique:dosens|max:3|min:3';
+            $data['nama_singkat'] = 'required|unique:dosens,nama_singkat,' . $dosen->nidn . ',nidn,deleted_at,NULL|max:3|min:3';
         }
 
         $dsn = Dosen::where('nidn', $dosen->nidn);
         // return $request->nidn ;
         if ($request->nidn != $dosen->nidn) {
-            $data['nidn'] =  'required|numeric|unique:dosens';
+            $data['nidn'] =  'required|numeric|unique:dosens,nidn,' . $dosen->nidn . ',nidn,deleted_at,NULL';
         }
 
         $validasi = $request->validate($data);
@@ -121,12 +121,12 @@ class DosenController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Dosen $dosen)
-    {   
-        $role_dosen = Roles::where('name','dosen')->first();
+    {
+        $role_dosen = Roles::where('name', 'dosen')->first();
         if ($role_dosen == NULL) {
             return back()->with('failed', 'Tidak dapat menambahkan dosen karena role dosen tidak ditemukan');
         }
-        User::where('id',$dosen->user_id)->first()->removeRole('dosen');
+        User::where('id', $dosen->user_id)->first()->removeRole('dosen');
         Dosen::where('nidn', $dosen->nidn)->delete();
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil dihapus');
     }
