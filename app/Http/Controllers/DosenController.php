@@ -45,7 +45,7 @@ class DosenController extends Controller
         // return $request;
         $data = [
             'user_id' => 'required',
-            'nama_singkat' => 'required|unique:dosens|max:3|min:3',
+            'nama_singkat' => 'required|unique:dosens|max:3|min:3|deleted_at,NULL',
             'nidn' => 'required|numeric|unique:dosens',
             'prodi_id' => 'required',
         ];
