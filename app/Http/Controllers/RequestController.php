@@ -65,14 +65,14 @@ class RequestController extends Controller
         // return $path;
         // if (Storage::disk('public')->exists($path)) {
         //     Storage::delete($path);
-            // return "File deleted successfully.";
+        // return "File deleted successfully.";
         // } else {
         //     return back()->with('error','File tidak ditemukan');
         // }
         $requests->hasil = NULL;
         $requests->save();
 
-        return back()->with('success','Hasil bimbingan telah berhasil dihapus');
+        return back()->with('success', 'Hasil bimbingan telah berhasil dihapus');
     }
 
     public function destroy($id)

@@ -33,19 +33,19 @@ class RequestController extends Controller
         } else if (auth()->user()->hasRole('dosen')) {
             $dosen = User::find(auth()->user()->id)->dosen;
             $kelompok_id = $request->kelompok_id;
-            if($kelompok_id != null){
+            if ($kelompok_id != null) {
                 $requests = Request::where('kelompok_id', $kelompok_id)->with('ruangan', 'reference', 'kelompok.pembimbings.user')->orderBy('created_at', 'desc')->get();
-            } else{
+            } else {
 
                 $requests = DB::table('requests')
-                ->join('kelompoks', 'requests.kelompok_id', '=', 'kelompoks.id')
-                ->join('role_kelompoks', 'kelompoks.id', '=', 'role_kelompoks.kelompok_id')
-                ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', '=', 'role_group_kelompoks.id')
-                ->join('kategori_roles', 'role_group_kelompoks.kategori_id', '=', 'kategori_roles.id')
-                ->where('kategori_roles.nama', 'pembimbing')
-                ->where('role_kelompoks.nidn', $dosen->nidn)
-                ->select('requests.*')
-                ->get();
+                    ->join('kelompoks', 'requests.kelompok_id', '=', 'kelompoks.id')
+                    ->join('role_kelompoks', 'kelompoks.id', '=', 'role_kelompoks.kelompok_id')
+                    ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', '=', 'role_group_kelompoks.id')
+                    ->join('kategori_roles', 'role_group_kelompoks.kategori_id', '=', 'kategori_roles.id')
+                    ->where('kategori_roles.nama', 'pembimbing')
+                    ->where('role_kelompoks.nidn', $dosen->nidn)
+                    ->select('requests.*')
+                    ->get();
 
                 // convert to eloquent model
                 $requests = Request::hydrate($requests->toArray())->load('ruangan', 'reference', 'kelompok.pembimbings.user')->sortByDesc('waktu');
@@ -74,7 +74,7 @@ class RequestController extends Controller
         // }
         // if tokens is empty, don't send push notification
         $tokens = $pembimbings->pluck('user.firebase_token')->toArray();
-        if (!empty($tokens)){
+        if (!empty($tokens)) {
             sendPushNotification('Permintaan Bimbingan', 'Anda mendapatkan permintaan bimbingan baru dari ' . $kelompok->nama_kelompok, $tokens, $request->load('ruangan', 'reference', 'kelompok.pembimbings'));
         }
 
@@ -108,7 +108,7 @@ class RequestController extends Controller
             // send email to mahasiswa
             $kelompok = $bimbingan->kelompok;
             // get all mahasiswa in kelompok mahasiswa
-            $mahasiswa = $kelompok->mahasiswas->load('user');
+
 
             // foreach ($mahasiswa as $mhs) {
             //     $mhs->mahasiswa->user->notify(new UpdateRequestNotification(
@@ -117,10 +117,10 @@ class RequestController extends Controller
             //     ));
             // }
 
+            $mahasiswa = $kelompok->mahasiswas->load('user');
             $tokens = $mahasiswa->pluck('user.firebase_token')->toArray();
-            // dd($tokens);
             // if tokens is empty, don't send push notification
-            if (!empty($tokens)){
+            if (!empty($tokens)) {
                 sendPushNotification('Status Bimbingan', 'Status bimbingan kelompok anda di-' . $ref->value, $tokens, $bimbingan);
             }
         }
