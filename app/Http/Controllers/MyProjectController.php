@@ -17,13 +17,18 @@ class MyProjectController extends Controller
         
         $krs = Krs::where('id',$id)->first();
 
-        if(Auth::user()->hasRole('dosen') && $krs != NULL){
-            if (!Gate::check('krs_owner', $krs)) {
+        if (Auth::user()->hasRole('admin')) {
+          
+        }else{
+            if(Auth::user()->hasRole('dosen') && $krs != NULL){
+                if (!Gate::check('krs_owner', $krs)) {
+                    return back();
+                }
+            }else{
                 return back();
             }
-        }else{
-            return back();
         }
+        
 
         $kelompok = Kelompok::where('krs_id','=', $krs->id)->get();
         $mahasiswa = Mahasiswa::latest()->get();

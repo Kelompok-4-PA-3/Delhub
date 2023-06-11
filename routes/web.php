@@ -28,6 +28,11 @@ use App\Http\Controllers\RoleKelompokController;
 use App\Http\Controllers\RoleKelompokPenilaianController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\TemplateDocumentController;
+use App\Http\Controllers\WordController;
+use App\Http\Controllers\ImageProfileTemporariesController;
+use App\Http\Controllers\SubmissionArtefakController;
+use App\Http\Controllers\ArtefakKelompokController;
+use App\Http\Controllers\ArtefakTemporaryController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Mahasiswa;
 use App\Models\Dosen;
@@ -50,7 +55,7 @@ use \App\Http\Controllers\RequestController;
 
 Route::get('/', function () {
     return view('auth.login');
-});
+})->middleware('auth');
 
 
 // Route::resource('/prodi', \App\Http\Controllers\ProdiController::class);
@@ -68,6 +73,14 @@ Route::middleware([
     Route::get('/koordinator/myproject', [MyProjectController::class, 'koordintor_job_list'])->name('koordinator_myproject');
 
     Route::get('/users/{user}/profile', [UsersController::class, 'profile'])->name('user_profile');
+    Route::post('/users/{user}/profile/image', [UsersController::class, 'update'])->name('user_profile-image.store');
+    // Route::post('/users/{user}/profile/image/edit', [UsersController::class, 'image_edit'])->name('user_profile-image.edit');
+    // Route::post('/users/{user}/profile/image/delete', [UsersController::class, 'image_delete'])->name('user_profile-image.delete');
+
+    //temporary image profile
+    Route::post('/users/{user}/profile/image/temporary/store', [ImageProfileTemporariesController::class, 'store'])->name('user_profile-image-temporary.store');
+    Route::post('/users/{user}/profile/image/temporary/edit', [ImageProfileTemporariesController::class, 'update'])->name('user_profile-image-temporary.edit');
+    Route::post('/users/{user}/profile/image/temporary/delete', [ImageProfileTemporariesController::class, 'delete'])->name('user_profile-image-temporary.delete');
 
     Route::group(['middleware' => 'role:admin'], function () {
          // admin 
@@ -103,13 +116,12 @@ Route::middleware([
         Route::post('/users/upload', [UsersController::class, 'user_upload']);
         Route::get('/data/user', [UsersController::class, 'getUser']);
         Route::post('/users/krs/add', [DashboardController::class, 'add_user']);
-        Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
         // endadmin 
     });
        
         
     // admin dan koordinator
-    Route::group(['middleware' => 'role:admin, dosen'], function () {
+    Route::group(['middleware' => 'role:admin,dosen'], function () {
 
          // poin regulasi
          Route::resource('/poin_regulasi', PoinRegulasiController::class)->name('poin_regulasi', 'poin_regulasi.index');
@@ -122,15 +134,23 @@ Route::middleware([
          Route::post('/poin_regulasi/{poinRegulasi}/komponen_penilaian/verifikasi',[KomponenPenilaianController::class, 'verifikasi_komponen_penilaian']);
 
         // Kelompok
-        Route::post('/kelompok/dosen/pembimbing', [KelompokController::class, 'add_pembimbing']);
-        Route::post('/kelompok/dosen/penguji', [KelompokController::class, 'add_penguji']);
-        Route::post('/kelompok/dosen/pembimbing/{id}/delete', [KelompokController::class, 'delete_pembimbing']);
-        Route::post('/kelompok/dosen/penguji/{id}/delete', [KelompokController::class, 'delete_penguji']);
-        Route::post('/kelompok/people/add', [KelompokController::class, 'add_mahasiswa']);
-        Route::post('/kelompok/people/delete', [KelompokController::class, 'delete_mahasiswa']);
+        // Route::post('/kelompok/dosen/pembimbing', [KelompokController::class, 'add_pembimbing']);
+        // Route::post('/kelompok/dosen/penguji', [KelompokController::class, 'add_penguji']);
+        // Route::post('/kelompok/dosen/pembimbing/{id}/delete', [KelompokController::class, 'delete_pembimbing']);
+        // Route::post('/kelompok/dosen/penguji/{id}/delete', [KelompokController::class, 'delete_penguji']);
+        Route::post('/kelompok/{kelompok}/people/add', [KelompokController::class, 'add_mahasiswa']);
+        Route::post('/kelompok/{kelompok}/people/delete', [KelompokController::class, 'delete_mahasiswa']);
+
+        Route::get('/kelompok/{kelompok}/artefak', [KelompokController::class, 'artefak']);
+        Route::post('/kelompok/{kelompok}/artefak/{submission}', [ArtefakKelompokController::class, 'store']);
+        Route::post('/kelompok/{kelompok}/artefak/{submission}/{artefak}/delete', [ArtefakKelompokController::class, 'delete']);
+        Route::post('/artefak/file/temporary/store', [ArtefakTemporaryController::class, 'store'])->name('artefake-temporary.store');
+        Route::post('/artefak/file/temporary/delete', [ArtefakTemporaryController::class, 'delete'])->name('artefake-temporary.delete');
+
 
         // Hasil penilaian
         Route::get('/krs/{kr}/hasil_penilaian', [PenilaianController::class, 'index'])->name('penilaian', 'penilaian.index');
+        // Route::post('/krs/{kr}/hasil_penilaian', [PenilaianController::class, 'index'])->name('penilaian', 'penilaian.index');
         Route::get('/krs/{kr}/hasil_penilaian/penilaian/{penilaian}', [PenilaianController::class, 'detail_hasil_nilai'])->name('penilaian.detail', 'penilaian.detail');
         Route::get('/krs/{kr}/hasil_penilaian/penilaian/{penilaian}/export', [PenilaianController::class, 'export_excel_nilai'])->name('penilaian.export_nilai', 'penilaian.export_nilai');
             
@@ -183,12 +203,21 @@ Route::middleware([
         Route::post('/krs/{kr}/document/{document}/edit', [TemplateDocumentController::class, 'update'])->name('template_document.edit');
         Route::post('/krs/{kr}/document/{document}/delete', [TemplateDocumentController::class, 'delete'])->name('template_document.delete');
         Route::post('/krs/{kr}/document/publish', [TemplateDocumentController::class, 'publish'])->name('template_document.publish');
+
+        // submission proyek
+        Route::get('/krs/{kr}/submission', [SubmissionArtefakController::class, 'index'])->name('template_submission.index');
+        Route::post('/krs/{kr}/submission/store', [SubmissionArtefakController::class, 'store'])->name('template_submission.store');
+        Route::post('/krs/{kr}/submission/{submission}/edit', [SubmissionArtefakController::class, 'update'])->name('template_submission.update');
+        Route::post('/krs/{kr}/submission/{submission}/delete', [SubmissionArtefakController::class, 'delete'])->name('template_submission.delete');
+        // Route::get('/krs/{kr}/submission', [SubmissionArtefakController::class, 'index'])->name('template_submission.index');
+        
         
     });
 
 
     Route::group(['middleware' => 'role:mahasiswa'], function () {
         Route::post('/bimbingan/upload/{id}', [BimbinganController::class, 'upload_bukti'])->name('bimbingan_upload', 'bimbingan.upload_bukti');
+        Route::resource('/mhsInterest', MhsInterestController::class)->name('mhsInterest', 'mhsInterest.index');
     });
 
     Route::group(['middleware' => 'role:admin,dosen,mahasiswa'], function () {
@@ -236,6 +265,7 @@ Route::middleware([
 
 
     Route::post('/request/{bimbingan}/delete-file', [RequestController::class, 'update'])->name('requests.file-delete', 'request.index');
+    // Route::post('/kelompok/{kelompok}/document/form-control', [WordController::class, 'form_control_bimbingan'])->name('word-export.form_control');
 
     // Route::resource('/prodi', \App\Http\Controllers\ProdiController::class)->name('prodis', 'Prodi.index');
 
@@ -259,4 +289,9 @@ Route::middleware([
         }
         return 'berhasil';
     });
+
+    
 });
+Route::get('/test', function() {
+    Artisan::call('storage:link');
+ });

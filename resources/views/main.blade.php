@@ -330,5 +330,6 @@
     @include('sweetalert::alert')
 
     @stack('remove-scroll')
+    {{-- @stack('file-pond') --}}
 
 </body>

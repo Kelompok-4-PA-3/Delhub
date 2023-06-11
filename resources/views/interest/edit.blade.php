@@ -15,21 +15,17 @@
         <div class="card-body pb-0">
             <div class="card">
                 <div class="card-body border-top">
-                    <form action="{{ route('mhsInterest.update', $mhsinterest->id) }}" method="post">
+                    <form action="/interest/{{$interest->id}}" method="post">
                         @csrf
                         @method('PUT')
                         <fieldset class="mb-3">
                             <div class="mb-3">
-                                <label class="form-label">Mahasiswa</label>
-                                <select name="nim" class="form-select @error('nim') is-invalid @enderror">
-                                    <option value="">Pilih Mahasiswa</option>
-                                    @foreach ($mahasiswas as $item)
-                                        <option value="{{ $item->nim }}"
-                                            {{ $item->nim == $mhsinterest->nim ? 'selected' : '' }}>
-                                            {{ $item->nama . ' - ' . $item->nim }}</option>
-                                    @endforeach
-                                </select>
-                                @error('nim')
+                                <label class="form-label">Nama</label>
+                                <input name="nama" type="text"
+                                    class="form-control @error('nama') is-invalid @enderror"
+                                    value="{{old('nama',$interest->nama)}}"
+                                    placeholder="Masukkan nama disini" />
+                                @error('nama')
                                     <div class="text-danger text-sm p-1">
                                         <i class="ph-warning-circle"></i>{{ $message }}
                                     </div>
@@ -37,18 +33,13 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Antusias</label>
-                                <select name="interest" class="form-select @error('interest') is-invalid @enderror">
-                                    <option value="">Pilih Antusias</option>
-                                    @foreach ($interests as $item)
-                                        <option value="{{ $item->id }}"
-                                            {{ $item->id == $mhsinterest->interest_id ? 'selected' : '' }}>
-                                            {{ $item->nama }}</option>
-                                    @endforeach
-                                </select>
-                                @error('interest')
-                                    <div class="text-danger text-sm p-1">
-                                        <i class="ph-warning-circle"></i>{{ $message }}
+                                <label class="form-label">Keterangan</label>
+                                <input name="keterangan" type="text"
+                                    class="form-control @error('keterangan') is-invalid @enderror"
+                                    value="{{old('keterangan',$interest->keterangan)}}"
+                                    placeholder="Masukkan keterangan disini" />
+                                @error('keterangan')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
                                     </div>
                                 @enderror
                             </div>

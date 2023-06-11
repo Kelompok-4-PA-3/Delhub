@@ -12,10 +12,12 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="{{asset('/img/icon-link.png')}}">
+    <link rel="stylesheet" href="../../css/app.css">
+    <link rel="stylesheet" href="resources/css/app.css">
 
-
+    <script src="{{asset('/assets/js/app.js')}}"></script>
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 </head>
 
 <body>

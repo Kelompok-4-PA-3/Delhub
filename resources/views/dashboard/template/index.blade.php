@@ -80,9 +80,11 @@
                         </td>
                         <td>
                             @if ($d->is_verified)
-                                <span class="px-2 py-1 rounded bg-success bg-opacity-10 text-success fs-sm"><i class="ph-checks"></i> Diterbitkan</span>
+                            <span class="px-2 py-1 rounded bg-success bg-opacity-10 text-success fs-sm"><i
+                                    class="ph-checks"></i> Diterbitkan</span>
                             @else
-                                <span class="px-2 py-1 rounded bg-warning bg-opacity-10 text-warning fs-sm"><i class="ph-warning"></i> Belum diterbitkan</span>
+                            <span class="px-2 py-1 rounded bg-warning bg-opacity-10 text-warning fs-sm"><i
+                                    class="ph-warning"></i> Belum diterbitkan</span>
                             @endif
                         </td>
                         <td class="text-center">
@@ -191,14 +193,18 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="d-flex mt-2"> 
+            @if ($document->count() > 0)
+            <div class="d-flex mt-2">
                 <div class="ms-auto">
                     <form action="/krs/{{$krs->id}}/document/publish" enctype="multipart/form-data" method="post">
                         @csrf
-                        <button class="btn btn-sm btn-success fw-semibold" type="submit"><i class="ph-upload"></i>&nbsp; Terbitkan template dokumen</button>
+                        <button class="btn btn-sm btn-success fw-semibold" type="submit"><i class="ph-upload"></i>&nbsp;
+                            Terbitkan template dokumen</button>
                     </form>
-                </div> 
+                </div>
             </div>
+            @endif
+
             <br>
         </div>
         <!-- /individual column searching (text inputs) -->

@@ -1,9 +1,16 @@
 @extends('main')
 
+@section('title')
+    <title>My profile</title>
+@endsection
+
 @push('select_js')
 <script src="{{asset('../../../assets/js/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('../../../assets/js/vendor/forms/selects/select2.min.js')}}"></script>
 <script src="{{asset('../../../assets/demo/pages/form_layouts.js')}}"></script>
+<link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+<link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet" />
 @endpush
 
 @section('content')
@@ -13,9 +20,16 @@
     <div
         class="d-flex align-items-center text-center text-lg-start flex-column flex-lg-row position-absolute start-0 end-0 bottom-0 mx-3 mb-3">
         <div class="me-lg-3 mb-2 mb-lg-0">
+            {{-- <a href="#">
+                <img src="{{asset('/storage/images/'.Auth::user()->profile_photo_path)}}"
+                    class="img-thumbnail rounded-circle shadow" width="100" height="100" alt="">
+            </a> --}}
+            {{-- <div class="profile-cover-img" style="background-image: url(../../../img/profile_bg.jpg)"></div> --}}
             <a href="#">
-                <img src="../../../assets/images/demo/users/face11.jpg" class="img-thumbnail rounded-circle shadow"
-                    width="100" height="100" alt="">
+                <div class="img-thumbnail rounded-circle shadow"
+                    style=" width: 80px; height: 80px; background-image: url(../../../storage/images/{{Auth::user()->profile_photo_path}}); background-size: cover; background-position: center; background-repeat: no-repeat;">
+                    {{-- /storage/images/'.Auth::user()->profile_photo_path --}}
+                </div>
             </a>
         </div>
 
@@ -30,7 +44,8 @@
 
         <div class="ms-lg-auto mt-2 mt-lg-0">
             <div class="d-inline-flex">
-                <a href="#" class="btn btn-light border-transparent shadow">
+                <a href="#" class="btn btn-light border-transparent shadow" data-bs-toggle="modal"
+                    data-bs-target="#modal_profile_photo">
                     <i class="ph-image me-2"></i>
                     Cover image
                 </a>
@@ -72,7 +87,16 @@
                     </div>
                 </a>
             </li>
-
+            @role('mahasiswa')
+            <li class="nav-item me-1">
+                <a href="#antusias" class="navbar-nav-link navbar-nav-link-icon rounded" data-bs-toggle="tab">
+                    <div class="d-flex align-items-center mx-lg-1">
+                        <i class="ph-heart"></i>
+                        <span class="d-none d-lg-inline-block ms-2">Antusias</span>
+                    </div>
+                </a>
+            </li>
+            @endrole
             <li class="nav-item d-lg-none ms-auto">
                 <a href="#profile_nav" class="navbar-nav-link navbar-nav-link-icon collapsed rounded"
                     data-bs-toggle="collapse">
@@ -323,10 +347,71 @@
                 <!-- /profile info -->
 
             </div>
+            @role('mahasiswa')
+            <div class="tab-pane fade" id="antusias">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Antusias</h5>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="">
+                                <a class="btn btn-primary" href="#" data-bs-toggle="offcanvas"
+                                    data-bs-target="#tambah_antusias"> + Tambah antusias</a>
+                            </div>
+                        </div>
+                        <div class="d-flex mt-4" style="width: max-content; flex-wrap: wrap; max-width: 800px;">
+                            @foreach ($user->mahasiswa->mhs_interest as $item)
+                            <div class="bg bg-primary bg-opacity-10 text-primary p-2 px-3 me-2 mb-2 rounded-pill"
+                                style="width: max-content">
+                                <div class="d-flex">
+                                    <span>{{$item->interest->nama}}</span>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal_hapus{{$item->id}}"
+                                        class="ms-3"><i class="ph-trash"></i></a>
+                                </div>
+                            </div>
+
+                            <!-- Delete Modal -->
+                            <div id="modal_hapus{{ $item->id }}" class="modal fade" tabindex="-1">
+                                <div class="modal-dialog modal-xs">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"><i class="ph-warning text-warning"></i> Konfirmasi
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{
+                                                $item->interest->nama
+                                                }}</span> ?
+                                        </div>
+
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-light"
+                                                data-bs-dismiss="modal">Batal</button>
+                                            <form action="/mhsInterest/{{ $item->id }}" method="post">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn btn-primary">Ya</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Delete Modal -->
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endrole
         </div>
         <!-- /left content -->
 
 
+        {{--
         <!-- Right sidebar component -->
         <div
             class="sidebar sidebar-component sidebar-expand-lg bg-transparent shadow-none order-1 order-lg-2 ms-lg-3 mb-3">
@@ -384,17 +469,11 @@
                 </div>
                 <!-- /navigation -->
 
-
-
-
-
-
-
             </div>
             <!-- /sidebar content -->
 
         </div>
-        <!-- /right sidebar component -->
+        <!-- /right sidebar component --> --}}
 
     </div>
     <!-- /inner container -->
@@ -405,4 +484,105 @@
 <div class="card">
 
 </div>
+
+<!-- Profil photo modal -->
+<div id="modal_profile_photo" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="ph-warning-circle text-info"></i> Update Gambar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <form action="/users/{{Auth::user()->id}}/profile/image" method="post" class="{{Auth::user()->id}}"
+                    id="form-image" enctype="multipart/form-data">
+                    @csrf
+                    {{-- /users/{{Auth::user()->id}}/profile/image --}}
+
+                    <input type="file" name="profile_photo_path">
+            </div>
+
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                <button class="btn btn-primary" type="submit">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Profil photo modal -->
+@role('mahasiswa')
+
+<!-- Sticky footer -->
+<div id="tambah_antusias" class="offcanvas offcanvas-end  " tabindex="-1">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title fw-semibold">Tambah Role</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body">
+        <form action="/mhsInterest" method="post">
+            @csrf
+            <input type="hidden" name="nim" value="{{Auth::user()->mahasiswa->nim}}">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">Antusias</label>
+                        <select name="interest_id" id="" class="form-select" required>
+                            <option value="">Pilih Antusias</option>
+                            @foreach ($interest as $i)
+                            <option value="{{$i->id}}" @if(old('interest_id')==$i->id) selected @endif>{{$i->nama}}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('name')
+                        <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="border-top p-3">
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
+    </div>
+    </form>
+</div>
+<!-- /sticky footer -->
+@endrole
+<script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+
+<script>
+    var user_id = document.getElementById('form-image').className;
+    FilePond.registerPlugin(FilePondPluginImagePreview);
+    FilePond.registerPlugin(FilePondPluginFileValidateType);
+
+    // Get a reference to the file input element
+    const inputElement = document.querySelector('input[type="file"]');
+    // console.log(inputElement+'saya');
+
+    // Create a FilePond instance
+    const pond = FilePond.create(inputElement);
+
+    FilePond.setOptions({
+        acceptedFileTypes: ['image/jpeg', 'image/png', 'image/jpg'], 
+    server:{
+        url: 'http://localhost:8000/users/'+user_id+'/profile/image/temporary',
+        process: '/store',
+        revert: {
+            url: '/delete',
+            method: 'POST', 
+        },
+        headers: {
+            'X-CSRF-TOKEN' : '{{ csrf_token() }}'
+        }
+    }});
+
+</script>
 @endsection
+{{--
+@push('file-pond')
+@endpush --}}

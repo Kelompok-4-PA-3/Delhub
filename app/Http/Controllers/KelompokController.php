@@ -25,6 +25,7 @@ use App\Models\DetailNilaiMahasiswa;
 use App\Models\PoinPenilaian;
 use App\Models\RoleKelompok;
 use App\Models\KategoriRole;
+use App\Models\SubmissionArtefak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -174,94 +175,89 @@ class KelompokController extends Controller
         // return $kelompok;
     }
 
-    public function add_pembimbing(Request $request){
-        // return $request;
-        $data = [
-            'kelompok_id' => 'required',
-            'pembimbing_1' => 'required',
-            'pembimbing_2' => 'nullable',
-        ];
+    // public function add_pembimbing(Request $request){
+    //     $data = [
+    //         'kelompok_id' => 'required',
+    //         'pembimbing_1' => 'required',
+    //         'pembimbing_2' => 'nullable',
+    //     ];
 
   
 
-        $validasi = $request->validate($data);
-        $data_pembimbing = Pembimbing::where('kelompok_id',$request->kelompok_id)->first();
-        $dosen1 = Dosen::where('nidn',$validasi['pembimbing_1'])->join('users','dosens.user_id','users.id')->first();
-        $dosen2 = Dosen::where('nidn',$validasi['pembimbing_2'])->join('users','dosens.user_id','users.id')->first();
-        $kelompok = Kelompok::find($request->kelompok_id);
+    //     $validasi = $request->validate($data);
+    //     $data_pembimbing = Pembimbing::where('kelompok_id',$request->kelompok_id)->first();
+    //     $dosen1 = Dosen::where('nidn',$validasi['pembimbing_1'])->join('users','dosens.user_id','users.id')->first();
+    //     $dosen2 = Dosen::where('nidn',$validasi['pembimbing_2'])->join('users','dosens.user_id','users.id')->first();
+    //     $kelompok = Kelompok::find($request->kelompok_id);
 
-        $pembimbing = new Pembimbing();
+    //     $pembimbing = new Pembimbing();
 
-        if ($data_pembimbing != NULL) {
-            $pembimbing = $data_pembimbing;
-        }
-        $pembimbing->kelompok_id = $validasi['kelompok_id'];
-        $pembimbing->pembimbing_1 = $validasi['pembimbing_1'];
-        if($validasi['pembimbing_2'] != NULL){
-            $user2 = User::find($dosen2->user_id);
-            $user2->assignRole($role);
-            $pembimbing->pembimbing_2 = $validasi['pembimbing_2'];
-        }
-        $pembimbing->save();
-        return back()->with('success','Pembimbing telah berhasil ditambahkan ke kelompok ini');
-    }
+    //     if ($data_pembimbing != NULL) {
+    //         $pembimbing = $data_pembimbing;
+    //     }
+    //     $pembimbing->kelompok_id = $validasi['kelompok_id'];
+    //     $pembimbing->pembimbing_1 = $validasi['pembimbing_1'];
+    //     if($validasi['pembimbing_2'] != NULL){
+    //         $user2 = User::find($dosen2->user_id);
+    //         $user2->assignRole($role);
+    //         $pembimbing->pembimbing_2 = $validasi['pembimbing_2'];
+    //     }
+    //     $pembimbing->save();
+    //     return back()->with('success','Pembimbing telah berhasil ditambahkan ke kelompok ini');
+    // }
 
-    public function delete_pembimbing($id){
-        // return $id;
-        Pembimbing::find($id)->delete();
+    // public function delete_pembimbing($id){
+    //     // return $id;
+    //     Pembimbing::find($id)->delete();
 
-        return back()->with('success','Pembimbing telah berhasil dihapus');
-    }
+    //     return back()->with('success','Pembimbing telah berhasil dihapus');
+    // }
 
-    public function add_penguji(Request $request){
-        // return $request;
-        $data = [
-            'kelompok_id' => 'required',
-            'penguji_1' => 'required',
-            'penguji_2' => 'nullable',
-        ];
+    // public function add_penguji(Request $request){
+    //     // return $request;
+    //     $data = [
+    //         'kelompok_id' => 'required',
+    //         'penguji_1' => 'required',
+    //         'penguji_2' => 'nullable',
+    //     ];
 
-        $validasi = $request->validate($data);
-        $data_penguji = Penguji::where('kelompok_id',$request->kelompok_id)->first();
-        $penguji = new Penguji();
+    //     $validasi = $request->validate($data);
+    //     $data_penguji = Penguji::where('kelompok_id',$request->kelompok_id)->first();
+    //     $penguji = new Penguji();
 
-        if ($data_penguji != NULL) {
-            $penguji = $data_penguji;
-            // return 'ya';
-        }
+    //     if ($data_penguji != NULL) {
+    //         $penguji = $data_penguji;
+    //         // return 'ya';
+    //     }
 
-        $penguji->kelompok_id = $validasi['kelompok_id'];
-        $penguji->penguji_1 = $validasi['penguji_1'];
-        $penguji->penguji_2 = $validasi['penguji_2'];
-        $penguji->save();
+    //     $penguji->kelompok_id = $validasi['kelompok_id'];
+    //     $penguji->penguji_1 = $validasi['penguji_1'];
+    //     $penguji->penguji_2 = $validasi['penguji_2'];
+    //     $penguji->save();
 
-        return back()->with('success','Penguji telah berhasil ditambahkan ke kelompok ini')->with('penguji','active');
-    }
+    //     return back()->with('success','Penguji telah berhasil ditambahkan ke kelompok ini')->with('penguji','active');
+    // }
 
-    public function delete_penguji($id){
-        // return $id;
-        Penguji::find($id)->delete();
+    // public function delete_penguji($id){
+    //     // return $id;
+    //     Penguji::find($id)->delete();
 
-        return back()->with('success','Penguji telah berhasil dihapus');
-    }
+    //     return back()->with('success','Penguji telah berhasil dihapus');
+    // }
 
 
-    public function add_mahasiswa(Request $request){
+    public function add_mahasiswa(Kelompok $kelompok, Request $request){
         if (Auth::user()->hasRole('dosen')) {
             if (!Gate::check('is_koordinator', $kelompok)) {
                 return back();
             }
         }
-        // return $request;
         $data = [
             'role' => 'required',
             'kelompok' => 'required',
             'mahasiswa' => 'required',
         ];
-
-
         $validasi = $request->validate($data);
-
         foreach($request->mahasiswa as $m){
             KelompokMahasiswa::create([
                 'kelompok_id' => $validasi['kelompok'],
@@ -272,8 +268,13 @@ class KelompokController extends Controller
         return back()->with('success','Mahasiswa telah berhasil ditambahkan ke kelompok ini');
     }
 
-    public function delete_mahasiswa(Request $request){
-        // return $request;
+
+    public function delete_mahasiswa(Kelompok $kelompok, Request $request){
+        if (Auth::user()->hasRole('dosen')) {
+            if (!Gate::check('is_koordinator', $kelompok)) {
+                return back();
+            }
+        }
         $data = [
             'mahasiswa' => 'required',
             'kelompok' => 'required',
@@ -394,9 +395,26 @@ class KelompokController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Kelompok $kelompok)
+    public function artefak(Kelompok $kelompok)
     {
-        //
+        if (Auth::user()->hasRole('dosen')) {
+            if (!Gate::check('dosen_role_allowed', $kelompok)) {
+                return back();
+            }
+        }
+
+        if (Auth::user()->hasRole('mahasiswa')) {
+            if (!Gate::check('mahasiswa_allowed', $kelompok)) {
+                return back();
+            }
+        }
+
+        $submission = SubmissionArtefak::where('krs_id', $kelompok->krs->id)->latest()->get();
+
+        return view('dashboard.kelompok.artefak',[
+            'kelompok' => $kelompok,
+            'submission' => $submission,
+        ]);
     }
 
     /**
