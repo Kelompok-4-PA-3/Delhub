@@ -35,7 +35,7 @@
     <script src="{{ asset('assets/demo/pages/dashboard.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"
         integrity="sha256-t0FDfwj/WoMHIBbmFfuOtZv1wtA977QCfsFR3p1K4No=" crossorigin="anonymous"></script>
-    <script src="{{ asset('js/method.js') }}"></script>
+    {{-- <script src="{{ asset('js/method.js') }}"></script> --}}
     <!-- Theme JS files -->
 
 

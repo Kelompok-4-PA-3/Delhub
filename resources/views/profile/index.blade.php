@@ -21,14 +21,15 @@
             class="d-flex align-items-center text-center text-lg-start flex-column flex-lg-row position-absolute start-0 end-0 bottom-0 mx-3 mb-3">
             <div class="me-lg-3 mb-2 mb-lg-0">
                 {{-- <a href="#">
-                <img src="{{asset('/storage/images/'.Auth::user()->profile_photo_path)}}"
+                <img src="{{asset('/storage/'.Auth::user()->profile_photo_path)}}"
                     class="img-thumbnail rounded-circle shadow" width="100" height="100" alt="">
             </a> --}}
                 {{-- <div class="profile-cover-img" style="background-image: url(../../../img/profile_bg.jpg)"></div> --}}
                 <a href="#">
                     <div class="img-thumbnail rounded-circle shadow"
-                        style=" width: 80px; height: 80px; background-image: url(../../../storage/images/{{ Auth::user()->profile_photo_path }}); background-size: cover; background-position: center; background-repeat: no-repeat;">
-                        {{-- /storage/images/'.Auth::user()->profile_photo_path --}}
+                        style=" width: 80px; height: 80px; background-image: url({{ asset('storage/' . Auth::user()->profile_photo_path) }});
+                        background-size: cover; background-position: center; background-repeat: no-repeat;">
+                        {{-- /storage/'.Auth::user()->profile_photo_path --}}
                     </div>
                 </a>
             </div>
@@ -575,7 +576,8 @@
         FilePond.setOptions({
             acceptedFileTypes: ['image/jpeg', 'image/png', 'image/jpg'],
             server: {
-                url: 'http://localhost:8000/users/' + user_id + '/profile/image/temporary',
+                // get url, this will be used later on in our PHP script
+                url: '{{ URL::to('/') }}/users/' + user_id + '/profile/image/temporary',
                 process: '/store',
                 revert: {
                     url: '/delete',
