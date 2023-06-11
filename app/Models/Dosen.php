@@ -17,7 +17,7 @@ class Dosen extends Model
 
     protected $primarykey = ['nidn'];
 
-    protected $fillable = ['nidn', 'user_id', 'prodi_id'];
+    protected $fillable = ['nidn', 'user_id', 'prodi_id', 'nama_singkat'];
 
     protected $dates = ['deleted_at'];
 

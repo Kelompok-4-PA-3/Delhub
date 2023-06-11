@@ -123,6 +123,6 @@ class KrsController extends Controller
     public function destroy(krs $kr)
     {
         Krs::find($kr->id)->delete();
-        return redirect('/krs')->with('success', 'KRS tekah berhasil dihapus');
+        return redirect('/krs')->with('success', 'KRS telah berhasil dihapus');
     }
 }

@@ -101,7 +101,7 @@ class DosenController extends Controller
             'prodi_id' => 'required',
         ];
 
-        if ($reques->nama_singkat != $dosen->nama_singkat) {
+        if ($request->nama_singkat != $dosen->nama_singkat) {
             $data['nama_singkat'] = 'required|unique:dosens|max:3|min:3';
         }
 
@@ -126,7 +126,7 @@ class DosenController extends Controller
         if ($role_dosen == NULL) {
             return back()->with('failed', 'Tidak dapat menambahkan dosen karena role dosen tidak ditemukan');
         }
-        User::where('id',$request->user_id)->first()->removeRole('dosen');
+        User::where('id',$dosen->user_id)->first()->removeRole('dosen');
         Dosen::where('nidn', $dosen->nidn)->delete();
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil dihapus');
     }

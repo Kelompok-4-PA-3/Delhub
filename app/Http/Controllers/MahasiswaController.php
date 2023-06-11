@@ -124,7 +124,7 @@ class MahasiswaController extends Controller
             return back()->with('error', 'Tidak dapat menambahkan mahasiswa karena role mahasiswa tidak ditemukan');
         }
 
-        User::where('id',$request->user_id)->first()->removeRole('mahasiswa');
+        User::where('id',$mahasiswa->user_id)->first()->removeRole('mahasiswa');
 
         Mahasiswa::where('nim', $mahasiswa->nim)->delete();
 

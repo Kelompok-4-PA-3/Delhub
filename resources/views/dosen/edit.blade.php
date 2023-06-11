@@ -46,6 +46,14 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label">Nama singkat</label>
+                                <input name="nama_singkat" type="text" class="form-control" value="{{old('nama_singkat',$dosen->nama_singkat)}}" placeholder="Masukkan nama_singkat disini" required>
+                                @error('nama_singkat')
+                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
                                 <label class="form-label">NIDN</label>
                                 <input name="nidn" type="number" class="form-control" value="{{old('nidn',$dosen->nidn)}}" placeholder="Masukkan nidn disini" required>
                                 @error('nidn')

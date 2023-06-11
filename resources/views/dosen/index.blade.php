@@ -45,6 +45,7 @@
                     <th>No</th>
                     <th>NIDN</th>
                     <th>Nama</th>
+                    <th>Nama singkat</th>
                     <th>Proram Studi</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -52,6 +53,7 @@
                     <th></th>
                     <th>NIDN</th>
                     <th>Nama</th>
+                    <th>Nama singkat</th>
                     <th>Proram Studi</th>
                     <th></th>
                 </tr>
@@ -64,6 +66,7 @@
                     @if ($d->user != NULL)
                         <td>{{$d->user->nama}}</td>
                     @endif
+                    <td>{{$d->nama_singkat}}</td>
                     {{-- <td>{{$d->user->nama}}</td> --}}
                     <td>{{$d->prodi->nama}}</td>
                     <td class="text-center">
@@ -88,7 +91,7 @@
                             </div>
 
                             <div class="modal-body">
-                               {{-- Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{$d->user->nama}}</span> ? --}}
+                               Apakah anda yakin ingin menghapus data <span class="fw-semibold">{{$d->user->nama}}</span> ?
                             </div>
 
                             <div class="modal-footer justify-content-between">
