@@ -117,7 +117,7 @@ class BimbinganController extends Controller
 
         $mahasiswa = $kelompok->mahasiswas->load('user');
         foreach ($mahasiswa as $mhs) {
-            $mhs->mahasiswa->user->notify(new UpdateRequestNotification(
+            $mhs->user->notify(new UpdateRequestNotification(
                 $bimbingan,
                 $ref->value,
             ));
