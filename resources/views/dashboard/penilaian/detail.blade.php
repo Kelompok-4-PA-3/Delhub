@@ -94,7 +94,7 @@
 
         <div class="mb-2">
             <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
-                <li class="nav-item"><a href="#" class="nav-link active"> <i class="ph-squares-four"></i> &nbsp;
+                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-squares-four"></i> &nbsp;
                         Kelompok</a></li>
                 <li class="nav-item"><a href="/kelompok/{{ $kelompok->id }}/artefak" class="nav-link"> <i
                             class="ph-folders"></i> &nbsp; Artefak</a></li>
@@ -127,7 +127,7 @@
                 @endrole
                 @role('dosen')
                     @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
-                        <li class="nav-item">
+                        <li class="nav-item active">
                             <a href="/kelompok/{{ $kelompok->id }}/penilaian/koordinator" class="nav-link btn btn-primary"><i
                                     class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
                         </li>

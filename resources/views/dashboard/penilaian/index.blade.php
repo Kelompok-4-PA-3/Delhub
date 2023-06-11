@@ -34,7 +34,7 @@
 
         <div class="mb-2">
             <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
-                <li class="nav-item"><a href="#" class="nav-link active"> <i class="ph-squares-four"></i> &nbsp;
+                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-squares-four"></i> &nbsp;
                         Kelompok</a></li>
                 <li class="nav-item"><a href="/kelompok/{{ $kelompok->id }}/artefak" class="nav-link"> <i
                             class="ph-folders"></i> &nbsp; Artefak</a></li>
@@ -43,7 +43,7 @@
                         &nbsp; Orang</a></li>
                 @role('dosen')
                     <li class="nav-item">
-                        <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i
+                        <a href="" class="nav-link active btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i
                                 class="ph-notebook"></i> &nbsp; Penilaian</a>
                         <div class="dropdown-menu">
                             @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id', $kelompok->id) as $myrole)

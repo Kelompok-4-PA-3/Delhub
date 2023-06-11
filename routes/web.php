@@ -55,7 +55,7 @@ use \App\Http\Controllers\RequestController;
 
 Route::get('/', function () {
     return view('auth.login');
-})->middleware('auth');
+})->middleware('guest');
 
 
 // Route::resource('/prodi', \App\Http\Controllers\ProdiController::class);
@@ -140,12 +140,6 @@ Route::middleware([
         // Route::post('/kelompok/dosen/penguji/{id}/delete', [KelompokController::class, 'delete_penguji']);
         Route::post('/kelompok/{kelompok}/people/add', [KelompokController::class, 'add_mahasiswa']);
         Route::post('/kelompok/{kelompok}/people/delete', [KelompokController::class, 'delete_mahasiswa']);
-
-        Route::get('/kelompok/{kelompok}/artefak', [KelompokController::class, 'artefak']);
-        Route::post('/kelompok/{kelompok}/artefak/{submission}', [ArtefakKelompokController::class, 'store']);
-        Route::post('/kelompok/{kelompok}/artefak/{submission}/{artefak}/delete', [ArtefakKelompokController::class, 'delete']);
-        Route::post('/artefak/file/temporary/store', [ArtefakTemporaryController::class, 'store'])->name('artefake-temporary.store');
-        Route::post('/artefak/file/temporary/delete', [ArtefakTemporaryController::class, 'delete'])->name('artefake-temporary.delete');
 
 
         // Hasil penilaian
@@ -233,6 +227,12 @@ Route::middleware([
         Route::resource('/request', \App\Http\Controllers\RequestController::class)->name('requests', 'request.index');
         Route::resource('/bimbingan', BimbinganController::class)->name('bimbingan', 'bimbingan.index');
         Route::post('/kelompok/topik', [KelompokController::class, 'add_topik']);
+
+        Route::get('/kelompok/{kelompok}/artefak', [KelompokController::class, 'artefak']);
+        Route::post('/kelompok/{kelompok}/artefak/{submission}', [ArtefakKelompokController::class, 'store']);
+        Route::post('/kelompok/{kelompok}/artefak/{submission}/{artefak}/delete', [ArtefakKelompokController::class, 'delete']);
+        Route::post('/artefak/file/temporary/store', [ArtefakTemporaryController::class, 'store'])->name('artefake-temporary.store');
+        Route::post('/artefak/file/temporary/delete', [ArtefakTemporaryController::class, 'delete'])->name('artefake-temporary.delete');
 
     });
 
