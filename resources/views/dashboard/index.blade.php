@@ -48,8 +48,8 @@
                                 @foreach (Auth::user()->dosen->all_role_kelompok as $role)
                                     @if ($role->role_group->role_kategori->krs != null)
                                         @if (strtolower($role->role_group->nama) != 'koordinator' && $role->role_group->role_kategori->krs->config->active)
-                                            <div class="p-1 dosen_job_list pekerjaan{{ $role->kelompok->krs->kategori->kategori->id }}"
-                                                id="">
+                                            <div
+                                                class="p-1 dosen_job_list pekerjaan{{ $role->kelompok->krs->kategori ? $role->kelompok->krs->kategori->kategori->id : '' }}">
                                                 <div class="d-flex mb-2">
                                                     <a href="#"
                                                         class="bg-indigo bg-opacity-10 text-indigo lh-1 rounded-pill p-2 me-3">

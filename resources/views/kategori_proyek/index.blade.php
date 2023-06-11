@@ -22,7 +22,8 @@
             <h5 class="mb-0">Kategori Proyek</h5>
             <div class="ms-auto">
                 <label class="form-check form-switch form-check-reverse">
-                    <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#panel_footer"><i class="ph-plus-circle"></i>&nbsp; TAMBAH KATEGORI PROYEK</a>
+                    <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#panel_footer"><i
+                            class="ph-plus-circle"></i>&nbsp; TAMBAH KATEGORI PROYEK</a>
                 </label>
             </div>
         </div>
@@ -128,11 +129,12 @@
                                                     value="{{ old('nama_edit', $kp->nama) }}" class="form-control" required
                                                     placeholder="Masukkan name disini">
                                                 @error('nama_edit')
-                                                    <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}</div>
+                                                    <div class="text-danger text-sm p-1"><i
+                                                            class="ph-warning-circle"></i>{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            </div>
-                                     </div>
+                                        </div>
+                                    </div>
                                     <div class="border-top p-3">
                                         <button type="submit" class="btn btn-primary w-100">Submit</button>
                                     </div>
@@ -140,7 +142,6 @@
                             </div>
                         </div>
                         <!-- /sticky footer -->
-
                     @endforeach
                 </tbody>
             </table>
@@ -165,7 +166,8 @@
                     <div class="mb-3">
                         <div>
                             <label class="form-label">Nama</label>
-                            <input type="text" name="nama" value="{{ old('nama') }}" class="form-control" required placeholder="Masukkan nama disini">
+                            <input type="text" name="nama" value="{{ old('nama') }}" class="form-control"
+                                required placeholder="Masukkan nama disini">
                             @error('nama')
                                 <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{ $message }}
                                 </div>
@@ -179,5 +181,4 @@
             </form>
         </div>
     </div>
-
 @endsection

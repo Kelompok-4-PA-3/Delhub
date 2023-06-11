@@ -8,6 +8,7 @@ use App\Models\Prodi;
 use App\Models\Roles;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class DosenController extends Controller
 {
@@ -45,19 +46,27 @@ class DosenController extends Controller
         // return $request;
         $data = [
             'user_id' => 'required',
-            'nama_singkat' => 'required|unique:dosens|max:3|min:3|deleted_at,NULL',
-            'nidn' => 'required|numeric|unique:dosens',
+            'nama_singkat' => [
+                'required',
+                Rule::unique('dosens', 'nama_singkat')->whereNull('deleted_at'),
+                'max:3|min:3'
+            ],
+            'nidn' => [
+                'required',
+                Rule::unique('dosens', 'nidn')->whereNull('deleted_at'),
+                'numeric'
+            ],
             'prodi_id' => 'required',
         ];
 
-        $role_dosen = Roles::where('name','dosen')->first();
+        $role_dosen = Roles::where('name', 'dosen')->first();
 
 
         if ($role_dosen == NULL) {
             return back()->with('failed', 'Tidak dapat menambahkan dosen karena role dosen tidak ditemukan');
         }
 
-        User::where('id',$request->user_id)->first()->assignRole($role_dosen->id);
+        User::where('id', $request->user_id)->first()->assignRole($role_dosen->id);
 
         $validasi = $request->validate($data);
         Dosen::create($validasi);
@@ -93,26 +102,23 @@ class DosenController extends Controller
      */
     public function update(Request $request, Dosen $dosen)
     {
-        // return "ini update";
-        $data = [
+        $data = $request->validate([
             'user_id' => 'required',
-            'nama_singkat' => 'required',
-            'nidn' => 'required',
+            'nama_singkat' => [
+                'required',
+                Rule::unique('dosens', 'nama_singkat')->ignore($dosen->id),
+                'max:3|min:3'
+            ],
+            'nidn' => [
+                'required',
+                Rule::unique('dosens', 'nidn')->ignore($dosen->id),
+                'numeric'
+            ],
             'prodi_id' => 'required',
-        ];
-
-        if ($request->nama_singkat != $dosen->nama_singkat) {
-            $data['nama_singkat'] = 'required|unique:dosens|max:3|min:3';
-        }
+        ]);
 
         $dsn = Dosen::where('nidn', $dosen->nidn);
-        // return $request->nidn ;
-        if ($request->nidn != $dosen->nidn) {
-            $data['nidn'] =  'required|numeric|unique:dosens';
-        }
-
-        $validasi = $request->validate($data);
-        $dsn->update($validasi);
+        $dsn->update($data);
 
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil diubah');
     }
@@ -121,13 +127,14 @@ class DosenController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Dosen $dosen)
-    {   
-        $role_dosen = Roles::where('name','dosen')->first();
+    {
+        $role_dosen = Roles::where('name', 'dosen')->first();
         if ($role_dosen == NULL) {
             return back()->with('failed', 'Tidak dapat menambahkan dosen karena role dosen tidak ditemukan');
         }
-        User::where('id',$dosen->user_id)->first()->removeRole('dosen');
-        Dosen::where('nidn', $dosen->nidn)->delete();
+        User::where('id', $dosen->user_id)->first()->removeRole('dosen');
+        $dsn = Dosen::where('nidn', $dosen->nidn);
+        $dsn->delete();
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil dihapus');
     }
 }

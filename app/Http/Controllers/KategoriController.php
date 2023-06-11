@@ -15,7 +15,7 @@ class KategoriController extends Controller
     {
         $kategori = Kategori::latest()->get();
         $kategori_proyek = KategoriProyek::latest()->get();
-        return view('kategori.index',[
+        return view('kategori.index', [
             'title' => 'Manajemen Kategori Mata Kuliah',
             'kategori' => $kategori,
             'kategori_proyek' => $kategori_proyek

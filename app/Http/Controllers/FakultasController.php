@@ -9,15 +9,16 @@ use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
+use Illuminate\Validation\Rule;
 
 class FakultasController extends Controller
 {
-        /**
+    /**
      * index
      *
      * @return void
      */
-    public function index() : View
+    public function index(): View
     {
         //get prodis
         $prodis = prodi::latest()->paginate(5);
@@ -46,40 +47,32 @@ class FakultasController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
-        // $validasi = $request->validate([
-        //     'fakultas_id' => 'required',
-        //     'nama' => 'required',
-        // ]);
 
-        $data = [
-            'nama' => 'required|unique:fakultas|deleted_at,NULL'
-        ];
+        $data = $request->validate([
+            'nama' => [
+                'required',
+                Rule::unique('fakultas', 'nama')->whereNull('deleted_at')
+            ]
+        ]);
 
-        $validasi = $request->validate($data);
-        Fakultas::create($validasi);
+        Fakultas::create($data);
 
-            return redirect('/fakultas')->with('sukses','fakultas has been created successfully.');
-
+        return redirect('/fakultas')->with('sukses', 'fakultas has been created successfully.');
     }
 
     public function update(Request $request, $id)
-    // : RedirectResponse
     {
-        $data = [
-            'nama' => 'required'
-        ];
+        $data = $request->validate([
+            'nama' => [
+                'required',
+                Rule::unique('fakultas', 'nama')->whereNull('deleted_at')->ignore($id)
+            ]
+        ]);
+
         $fakultas = Fakultas::find($id);
-        if ($request->nama != $fakultas->nama) {
-            $data['nama'] = 'unique:fakultas';
-        }
+        $fakultas->update($data);
 
-        $validasi = $request->validate($data);
-       $fakultas->update($validasi);
-
-            return redirect('/fakultas')->with('sukses','Fakultas has been created successfully.');
-
-
+        return redirect('/fakultas')->with('sukses', 'Fakultas has been created successfully.');
     }
 
     public function destroy($id)

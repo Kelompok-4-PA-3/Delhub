@@ -15,8 +15,9 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request){
-// 
+    public function index(Request $request)
+    {
+        //
         // return Auth::user()->getRoleNames();
         $pekerjaan_kategori = NULL;
         if ($request->kategori_proyek) {
@@ -28,7 +29,7 @@ class DashboardController extends Controller
         $krs = Krs::latest()->get();
         $kategori_proyek = KategoriProyek::all();
 
-        return view('dashboard.index',[
+        return view('dashboard.index', [
             'title' => 'Dashboards',
             'kategori_proyek' => $kategori_proyek,
             'krs' => $krs,
@@ -36,36 +37,37 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function show($id){
-       $krs = Krs::where('id', $id)->first();
-       $mahasiswa = Mahasiswa::latest()->get();
-       $kelompok = Kelompok::where('krs_id',$id)->orderBy('created_at')->get();
+    public function show($id)
+    {
+        $krs = Krs::where('id', $id)->first();
+        $mahasiswa = Mahasiswa::latest()->get();
+        $kelompok = Kelompok::where('krs_id', $id)->orderBy('created_at')->get();
 
-       return view('dashboard.detail',[
-        'title' => $krs->kategori->nama_mk,
-        'krs' => $krs,
-        'kelompok' => $kelompok,
-        'mahasiswa' => $mahasiswa
-       ]);
+        return view('dashboard.detail', [
+            'title' => $krs->kategori->nama_mk,
+            'krs' => $krs,
+            'kelompok' => $kelompok,
+            'mahasiswa' => $mahasiswa
+        ]);
 
-       return view('dashboard.detail');
+        return view('dashboard.detail');
     }
 
-    public function add_user(Request $request){
+    public function add_user(Request $request)
+    {
 
         $data = [
             'mahasiswa' => 'required'
         ];
 
         $validasi = $request->validate($data);
-        foreach($request->mahasiswa as $m){
+        foreach ($request->mahasiswa as $m) {
             KrsUser::create([
                 'user_id' => $m,
                 'krs_id' => $request->krs_id,
             ]);
         }
 
-        return back()->with('success','Mahasiswa berhasil ditambahkan ke proyek ini');
+        return back()->with('success', 'Mahasiswa berhasil ditambahkan ke proyek ini');
     }
-
 }
