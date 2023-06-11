@@ -152,7 +152,7 @@
                                     <td>
                                         <div class="d-flex">
                                             <div class="px-2">
-                                                <img src="../../../assets/images/demo/users/face11.jpg"
+                                                <img src="{{asset('/storage/images/'.$a->mahasiswa->user->profile_photo_path)}}""
                                                     class="w-32px h-32px rounded-pill" alt="">
                                             </div>
                                             <div>

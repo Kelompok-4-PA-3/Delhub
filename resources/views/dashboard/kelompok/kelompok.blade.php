@@ -72,7 +72,7 @@
                 </div>
             </li>
             @endrole
-            @role('dosen')
+            {{-- @role('dosen')
             @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 ==
             Auth::user()->dosen->nim)
             <li class="nav-item">
@@ -80,7 +80,7 @@
                         class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
             </li>
             @endif
-            @endrole
+            @endrole --}}
         </ul>
     </div>
 
@@ -364,8 +364,8 @@
                     <div class="">
                         <div class="d-flex mb-1">
                             <div class="">
-                                <a href="" class="badge bg-primary fw-light" data-bs-toggle="modal"
-                                    data-bs-target="#modal_detail_rekap_bimbingan"><i class="ph-file-doc"></i>&nbsp;
+                                <a href="" class="btn btn-sm btn-primary fw-light" data-bs-toggle="modal"
+                                    data-bs-target="#modal_detail_rekap_bimbingan">&nbsp;
                                     Hasil bimbingan</a>
                             </div>
                             <div class="ms-auto">
