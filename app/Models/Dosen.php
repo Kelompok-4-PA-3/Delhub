@@ -17,23 +17,27 @@ class Dosen extends Model
 
     protected $primarykey = ['nidn'];
 
-    protected $fillable = ['nidn','user_id','prodi_id'];
+    protected $fillable = ['nidn', 'user_id', 'prodi_id'];
 
     protected $dates = ['deleted_at'];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function prodi(){
+    public function prodi()
+    {
         return $this->belongsTo(Prodi::class);
     }
 
-    public function krs(){
+    public function krs()
+    {
         return $this->hasMany(Krs::class, 'dosen_mk', 'nidn');
     }
 
-    public function krs2(){
+    public function krs2()
+    {
         return $this->hasMany(Krs::class, 'dosen_mk_2', 'nidn');
     }
 
@@ -41,32 +45,38 @@ class Dosen extends Model
     //     return $this->hasMany(Krs::class, 'dosen_mk', 'nidn');
     // }
 
-    public function kelompok(){
-        return $this->hasMany(Kelompok::class ,'pembimbing', 'nidn');
+    public function kelompok()
+    {
+        return $this->hasMany(Kelompok::class, 'pembimbing', 'nidn');
     }
 
-    public function pembimbing_1(){
+    public function pembimbing_1()
+    {
         return $this->hasMany(Pembimbing::class, 'pembimbing_1', 'nidn');
-    }   
+    }
 
-    public function pembimbing_2(){
+    public function pembimbing_2()
+    {
         return $this->hasMany(Pembimbing::class, 'pembimbing_2', 'nidn');
     }
 
-    public function role_kelompok(){
+    public function role_kelompok()
+    {
         return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn');
     }
 
-    public function role_kelompok_group(){
+    public function role_kelompok_group()
+    {
         return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn')
-                    ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', 'role_group_kelompoks.id');
+            ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', 'role_group_kelompoks.id');
     }
 
-    public function all_role_kelompok(){
+    public function all_role_kelompok()
+    {
         return $this->hasMany(RoleKelompok::class, 'nidn', 'nidn')
-        ->join('kelompoks','role_kelompoks.kelompok_id', 'kelompoks.id')
-        ->join('krs','kelompoks.krs_id', 'krs.id')
-        ->where('krs.deleted_at',NULL);
+            ->join('kelompoks', 'role_kelompoks.kelompok_id', 'kelompoks.id')
+            ->join('krs', 'kelompoks.krs_id', 'krs.id')
+            ->where('krs.deleted_at', NULL);
     }
 
     public function getRouteKeyName()

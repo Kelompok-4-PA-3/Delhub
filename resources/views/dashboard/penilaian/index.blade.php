@@ -222,7 +222,7 @@
                         </div>
                         <!-- /Delete Modal -->
 
-                        @foreach ($kelompok->kelompok_mahasiswa as $kkm)
+                        @foreach ($kelompok->kelompok_mahasiswas as $kkm)
                             @php
                                 ${'total_nilai' . $kkm->nim} = 0;
                             @endphp

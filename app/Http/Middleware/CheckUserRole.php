@@ -3,10 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Auth;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
+
 // use Illuminate\Support\Facades\Gate;
 
 class CheckUserRole
@@ -18,22 +17,24 @@ class CheckUserRole
      */
     public function handle(Request $request, Closure $next, ...$role)
     // : Response
-    {   
+    {
         // return $role;
         $user  = Auth::User();
         // dd($role);
         // dd($user->getRoleNames()->toArray());
         // $roles = ['admin','dosen','staf'];
-        // dd($roles); 
-        
+        // dd($roles);
+
 
         // dd(array_intersect($roles, $role));
-
-
-        if (array_intersect($user->getRoleNames()->toArray(), $role) != NULL) {
-            // return array_intersect($role, $user->getRoleNames()->toArray());
+        // check if a user has a role
+        if ($user->hasRole($role)) {
             return $next($request);
         }
+        // if (array_intersect($user->getRoleNames()->toArray(), $role) != NULL) {
+        //     // return array_intersect($role, $user->getRoleNames()->toArray());
+        //     return $next($request);
+        // }
 
         return back();
     }

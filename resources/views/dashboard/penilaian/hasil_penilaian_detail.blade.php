@@ -134,7 +134,6 @@
                             <tr>
                                 <td class="fw-semibold"><small>{{ $kk->nama_kelompok }}</small></td>
                                 <td><small>{{ $kk->nim }}</small></td>
-                                {{-- <td><small>{{$kk->kelompok_mahasiswa}}</small></td> --}}
                                 @foreach ($kk->kelompok_mahasiswas->where('nim', $kk->nim) as $kkm)
                                     @php
                                         $total_nilai = 0;

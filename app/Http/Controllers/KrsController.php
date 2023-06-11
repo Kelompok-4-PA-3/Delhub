@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\krs;
+use App\Models\Krs;
 use App\Models\Dosen;
 use App\Models\Prodi;
 use App\Models\Kategori;
@@ -19,7 +19,7 @@ class KrsController extends Controller
     public function index()
     {
         $kr = Krs::latest()->get();
-        return view('krs.index',[
+        return view('krs.index', [
             'title' => 'Manajemen KRS',
             'krs' => $kr
         ]);
@@ -29,12 +29,12 @@ class KrsController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {   
+    {
         $dosen = Dosen::latest()->get();
         $prodi = Prodi::latest()->get();
         $kategori = Kategori::latest()->get();
         $config = Configs::latest()->get();
-        return view('krs.add',[
+        return view('krs.add', [
             'prodi' => $prodi,
             'dosen' => $dosen,
             'kategori' => $kategori,
@@ -58,9 +58,9 @@ class KrsController extends Controller
         ];
         $validasi = $request->validate($data);
         $krs = Krs::create($validasi);
-        $mahasiswa = Mahasiswa::where('prodi_id', $validasi['prodi_id'])->where('angkatan',$validasi['angkatan'])->get();
+        $mahasiswa = Mahasiswa::where('prodi_id', $validasi['prodi_id'])->where('angkatan', $validasi['angkatan'])->get();
 
-        if($mahasiswa->count() > 0){
+        if ($mahasiswa->count() > 0) {
             $krs_mahasiswa = new KrsUser();
             foreach ($mahasiswa as $m) {
                 $krs_mahasiswa->create([
@@ -85,12 +85,12 @@ class KrsController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(krs $kr)
-    {    
+    {
         $dosen = Dosen::latest()->get();
         $prodi = Prodi::latest()->get();
         $kategori = Kategori::latest()->get();
         $config = Configs::latest()->get();
-        return view('krs.edit',[
+        return view('krs.edit', [
             'krs' => $kr,
             'prodi' => $prodi,
             'dosen' => $dosen,

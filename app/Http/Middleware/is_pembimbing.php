@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Gate;
 use Route;
 
-class is_pembimbing
+class Is_pembimbing
 {
     /**
      * Handle an incoming request.
@@ -18,7 +18,7 @@ class is_pembimbing
     public function handle(Request $request, Closure $next): Response
     {
         $kelompok = Route::current()->parameter('kelompok');
-        if (Gate::denies('pembimbing-kelompok' ,$kelompok)) {
+        if (Gate::denies('pembimbing-kelompok', $kelompok)) {
             abort(403, 'Unauthorized action.');
         }
         return $next($request);
