@@ -690,11 +690,11 @@
                                             @endrole
                                         </div>
                                         @role('dosen')
-                                        <form action="/bimbingan/approvee/{{$kb->id}}" method="post"
+                                        <form action="/bimbingan/approve/{{$kb->id}}" method="post"
                                             enctype="multipart/form-data">
                                             @csrf
                                             <div class="border-top p-3">
-                                                <button type="submit" class="btn btn-success w-100">Approvee</button>
+                                                <button type="submit" class="btn btn-success w-100">Approve</button>
                                             </div>
                                         </form>
                                         @endrole
