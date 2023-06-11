@@ -33,7 +33,7 @@ class KategoriProyekController extends Controller
      */
     public function store(Request $request)
     {
-        $data = ['nama' => 'required|unique:kategori_proyeks'];
+        $data = ['nama' => 'required|unique:kategori_proyeks|deleted_at,NULL'];
         $validasi = $request->validate($data);
         KategoriProyek::create($validasi);
 

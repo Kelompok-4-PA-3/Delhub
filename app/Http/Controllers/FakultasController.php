@@ -53,7 +53,7 @@ class FakultasController extends Controller
         // ]);
 
         $data = [
-            'nama' => 'required|unique:fakultas'
+            'nama' => 'required|unique:fakultas|deleted_at,NULL'
         ];
 
         $validasi = $request->validate($data);
