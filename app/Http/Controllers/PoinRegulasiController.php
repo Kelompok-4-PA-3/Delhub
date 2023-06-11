@@ -12,10 +12,10 @@ class PoinRegulasiController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         $poin_regulasi = PoinRegulasi::latest()->get();
         $kategori_proyek = KategoriProyek::latest()->get();
-        return view('poin_regulasi.index',[
+        return view('poin_regulasi.index', [
             'title' => 'Poin Regulasi',
             'poin_regulasi' => $poin_regulasi,
             'kategori_proyek' => $kategori_proyek
@@ -35,18 +35,18 @@ class PoinRegulasiController extends Controller
      */
     public function store(Request $request)
     {
-    //    return $request;
-       $data = [
-        'nama' => 'required',
-        'poin' => 'required',
-        'kategori_id' => 'required',
-       ];
+        //    return $request;
+        $data = [
+            'nama' => 'required',
+            'poin' => 'required',
+            'kategori_id' => 'required',
+        ];
 
-       $validasi = $request->validate($data);
+        $validasi = $request->validate($data);
 
-       PoinRegulasi::create($validasi);
+        PoinRegulasi::create($validasi);
 
-       return back()->with('success','Data poin regulasi berhasil ditambahkan');
+        return back()->with('success', 'Data poin regulasi berhasil ditambahkan');
     }
 
     /**
@@ -83,8 +83,8 @@ class PoinRegulasiController extends Controller
         $poin_regulasi->poin = $validasi['poin'];
         $poin_regulasi->kategori_id = $validasi['kategori_id'];
         $poin_regulasi->save();
- 
-        return back()->with('success','Data poin regulasi berhasil diubah');
+
+        return back()->with('success', 'Data poin regulasi berhasil diubah');
     }
 
     /**
