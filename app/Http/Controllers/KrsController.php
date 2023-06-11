@@ -57,9 +57,9 @@ class KrsController extends Controller
             'angkatan' => 'required',
         ];
         $validasi = $request->validate($data);
-        $krs = Krs::create($validasi);
+       
         $mahasiswa = Mahasiswa::where('prodi_id', $validasi['prodi_id'])->where('angkatan', $validasi['angkatan'])->get();
-
+        // return $mahasiswa;
         if ($mahasiswa->count() > 0) {
             $krs_mahasiswa = new KrsUser();
             foreach ($mahasiswa as $m) {
@@ -68,7 +68,11 @@ class KrsController extends Controller
                     'krs_id' => $krs->id
                 ]);
             }
+        }else {
+            return redirect('/krs')->with('error', 'Tidak dapat menemukan mahasiswa, silahan cek prodi dan angkatan yang dimaksud');
         }
+
+        $krs = Krs::create($validasi);
 
         return redirect('/krs')->with('success', 'KRS baru telah berhasil dibuat');
     }
