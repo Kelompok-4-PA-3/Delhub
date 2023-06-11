@@ -46,7 +46,7 @@ class MahasiswaController extends Controller
             'user_id' => 'required',
             'nim' => [
                 'required',
-                Rule::unique('mahasiswas', 'nim')->whereNull('deleted_at')
+                Rule::unique('mahasiswas', 'nim')
             ],
             'prodi_id' => 'required',
             'angkatan' => 'required'
@@ -90,7 +90,7 @@ class MahasiswaController extends Controller
             'user_id' => 'required',
             'nim' => [
                 'required',
-                Rule::unique('mahasiswas', 'nim')->whereNull('deleted_at')->ignore($mahasiswa->nim, 'nim')
+                Rule::unique('mahasiswas', 'nim')->ignore($mahasiswa->nim, 'nim')
             ],
             'prodi_id' => 'required',
             'angkatan' => 'required'
@@ -105,7 +105,8 @@ class MahasiswaController extends Controller
 
         User::where('id', $request->user_id)->first()->assignRole($role_mahasiswa->id);
 
-        $mahasiswa->update($data);
+        $mhs = Mahasiswa::where('nim', $mahasiswa->nim);
+        $mhs->update($data);
 
         return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil diubah');
     }
@@ -117,14 +118,14 @@ class MahasiswaController extends Controller
     {
         $role_mahasiswa = Roles::where('name', 'mahasiswa')->first();
 
-
         if ($role_mahasiswa == NULL) {
             return back()->with('error', 'Tidak dapat menambahkan mahasiswa karena role mahasiswa tidak ditemukan');
         }
 
         User::where('id', $mahasiswa->user_id)->first()->removeRole('mahasiswa');
+        $mhs = Mahasiswa::where('nim', $mahasiswa->nim);
 
-        $mahasiswa->delete();
+        $mhs->delete();
 
         return redirect('/mahasiswa')->with('success', 'Data mahasiswa telah berhasil dihapus');
     }

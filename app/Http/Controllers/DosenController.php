@@ -106,18 +106,19 @@ class DosenController extends Controller
             'user_id' => 'required',
             'nama_singkat' => [
                 'required',
-                Rule::unique('dosens', 'nama_singkat')->whereNull('deleted_at')->ignore($dosen->id),
+                Rule::unique('dosens', 'nama_singkat')->ignore($dosen->id),
                 'max:3|min:3'
             ],
             'nidn' => [
                 'required',
-                Rule::unique('dosens', 'nidn')->whereNull('deleted_at')->ignore($dosen->id),
+                Rule::unique('dosens', 'nidn')->ignore($dosen->id),
                 'numeric'
             ],
             'prodi_id' => 'required',
         ]);
 
-        $dosen->update($data);
+        $dsn = Dosen::where('nidn', $dosen->nidn);
+        $dsn->update($data);
 
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil diubah');
     }
@@ -132,7 +133,8 @@ class DosenController extends Controller
             return back()->with('failed', 'Tidak dapat menambahkan dosen karena role dosen tidak ditemukan');
         }
         User::where('id', $dosen->user_id)->first()->removeRole('dosen');
-        Dosen::where('nidn', $dosen->nidn)->delete();
+        $dsn = Dosen::where('nidn', $dosen->nidn);
+        $dsn->delete();
         return redirect('/dosen')->with('success', 'Data dosen telah berhasil dihapus');
     }
 }
