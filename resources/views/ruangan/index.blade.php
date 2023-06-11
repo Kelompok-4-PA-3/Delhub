@@ -105,7 +105,7 @@
 
                                     <div class="modal-footer justify-content-between">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
                                     </div>
                                 </div>
                             </div>
@@ -158,9 +158,8 @@
                                             </div>
                                             <div>
                                                 <label class="form-label">Nama</label>
-                                                <input type="text" name="nama"
-                                                    value="{{ old('nama', $r->nama) }}" class="form-control" required
-                                                    placeholder="Masukkan nama disini">
+                                                <input type="text" name="nama" value="{{ old('nama', $r->nama) }}"
+                                                    class="form-control" required placeholder="Masukkan nama disini">
                                                 @error('nama')
                                                     <div class="text-danger text-sm p-1"><i
                                                             class="ph-warning-circle"></i>{{ $message }}</div>

@@ -60,9 +60,12 @@
                 <li class="nav-item"><a href="/kelompok/{{ $kelompok->id }}" class="nav-link"> <i
                             class="ph-squares-four"></i>
                         &nbsp; Kelompok</a></li>
-                {{-- <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
-			<li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a></li>
-			<li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li> --}}
+                <li class="nav-item"><a href="/kelompok/{{ $kelompok->id }}/artefak" class="nav-link"> <i
+                            class="ph-folders"></i> &nbsp; Artefak</a></li>
+                {{-- <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Manajemen</a>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-folders"></i> &nbsp; Tugas</a></li>
+                --}}
                 <li class="nav-item"><a href="/kelompok/{{ $kelompok->id }}/orang" class="nav-link active"> <i
                             class="ph-users"></i> &nbsp; Orang</a></li>
                 {{-- @if (Auth::user()->dosen() != null)
@@ -224,8 +227,8 @@
                                         </select>
                                     </div>
                                     <div class="py-2">
-                                        <select data-placeholder="Pilih Kategori" name="role" class="form-control select"
-                                            required>
+                                        <select data-placeholder="Pilih Kategori" name="role"
+                                            class="form-control select" required>
                                             @foreach ($role_kelompok as $rk)
                                                 <option value="{{ $rk->id }}" selected>{{ ucfirst($rk->value) }}
                                                 </option>
