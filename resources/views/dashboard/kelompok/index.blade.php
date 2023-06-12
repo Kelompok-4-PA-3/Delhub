@@ -217,8 +217,12 @@
                                                         <option value="{{ $km->mahasiswa->nim }}">
                                                             <div>
                                                                 {{ $km->mahasiswa->user->nama }} -
-                                                                {{ $km->mahasiswa->nim }} (<small>Design,
-                                                                    Coding</small>)<br>
+                                                                {{ $km->mahasiswa->nim }} 
+                                                                (<small>
+                                                                @foreach ($km->mahasiswa->mhs_interest as $kmm)
+                                                                   {{ $kmm->interest->nama}}, &nbsp;
+                                                                @endforeach    
+                                                                </small>)<br>
                                                             </div>
                                                         </option>
                                                     @endif

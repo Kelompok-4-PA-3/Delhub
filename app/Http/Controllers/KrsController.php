@@ -57,6 +57,7 @@ class KrsController extends Controller
             'angkatan' => 'required',
         ];
         $validasi = $request->validate($data);
+        $krs = Krs::create($validasi);
        
         $mahasiswa = Mahasiswa::where('prodi_id', $validasi['prodi_id'])->where('angkatan', $validasi['angkatan'])->get();
         // return $mahasiswa;
@@ -72,7 +73,6 @@ class KrsController extends Controller
             return redirect('/krs')->with('error', 'Tidak dapat menemukan mahasiswa, silahan cek prodi dan angkatan yang dimaksud');
         }
 
-         $krs = Krs::create($validasi);
 
         return redirect('/krs')->with('success', 'KRS baru telah berhasil dibuat');
     }

@@ -125,10 +125,10 @@
                                             </div>
                                             <div>
                                                 <label class="form-label">Nama</label>
-                                                <input type="text" name="nama_edit"
-                                                    value="{{ old('nama_edit', $kp->nama) }}" class="form-control" required
+                                                <input type="text" name="nama"
+                                                    value="{{ old('nama', $kp->nama) }}" class="form-control" required
                                                     placeholder="Masukkan name disini">
-                                                @error('nama_edit')
+                                                @error('nama')
                                                     <div class="text-danger text-sm p-1"><i
                                                             class="ph-warning-circle"></i>{{ $message }}</div>
                                                 @enderror

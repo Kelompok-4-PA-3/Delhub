@@ -40,10 +40,10 @@
                 <div class="card-header d-flex align-items-center">
                     <h5 class="mb-0">Daftar Kelompok </h5>
                     <div class="ms-auto">
-                        <label class="form-check form-switch form-check-reverse">
+                        {{-- <label class="form-check form-switch form-check-reverse">
                             <input type="checkbox" class="form-check-input" checked>
                             <span class="form-check-label">Live update</span>
-                        </label>
+                        </label> --}}
                     </div>
                 </div>
 
@@ -209,12 +209,12 @@
                                 Submission Artefak
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="/jadwal" class="nav-link">
                                 <i class="ph-calendar me-2"></i>
                                 Tambah Jadwal
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
             </div>
