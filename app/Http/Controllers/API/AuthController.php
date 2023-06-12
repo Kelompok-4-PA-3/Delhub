@@ -53,7 +53,8 @@ class AuthController extends Controller
         ], 'Login berhasil');
     }
 
-    public function storeToken(Request $request){
+    public function storeToken(Request $request)
+    {
         $user = User::find(auth()->user()->id);
         $user->firebase_token = $request->firebase_token;
         $user->save();
