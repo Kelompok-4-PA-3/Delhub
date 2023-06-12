@@ -105,8 +105,6 @@ class TemplateDocumentController extends Controller
             $path = 'public/file-template/' . $request->old_file;
             if (Storage::disk('public')->exists($path)) {
                 Storage::delete($path);
-            } else {
-                return back()->with('error', 'File tidak ditemukan');
             }
 
             $filename = $request->file('file_template')->getClientOriginalName();
@@ -130,8 +128,6 @@ class TemplateDocumentController extends Controller
         $path = 'public/file-template/' . $document->file_template;
         if (Storage::disk('public')->exists($path)) {
             Storage::delete($path);
-        } else {
-            return back()->with('error', 'File tidak ditemukan');
         }
 
         $template->delete();
