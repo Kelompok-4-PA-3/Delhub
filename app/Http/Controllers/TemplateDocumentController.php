@@ -16,11 +16,10 @@ class TemplateDocumentController extends Controller
     {
         $document = TemplateDocument::where('krs_id', $kr->id)->get();
         // return $kr;
-        return view('dashboard.template.index',[
+        return view('dashboard.template.index', [
             'krs' => $kr,
             'document' => $document
         ]);
-        
     }
 
     /**
@@ -56,7 +55,7 @@ class TemplateDocumentController extends Controller
             'file_template' => $file,
         ]);
 
-        return back()->with('success', 'Template document telah berhasil ditambahkan'); 
+        return back()->with('success', 'Template document telah berhasil ditambahkan');
     }
 
     /**
@@ -77,7 +76,7 @@ class TemplateDocumentController extends Controller
         //     'file_template' => 'nullable',
         // ];
 
-        
+
         // $file = '';
         // if ($request->file('file_template')) {
         //     $data['file_template'] = 'required';
@@ -103,11 +102,11 @@ class TemplateDocumentController extends Controller
         $template = TemplateDocument::find($document->id);
 
         if ($request->file('file_template')) {
-            $path = 'public/file-template/'.$request->old_file;
+            $path = 'public/file-template/' . $request->old_file;
             if (Storage::disk('public')->exists($path)) {
                 Storage::delete($path);
             } else {
-                return back()->with('error','File tidak ditemukan');
+                return back()->with('error', 'File tidak ditemukan');
             }
 
             $filename = $request->file('file_template')->getClientOriginalName();
@@ -119,7 +118,7 @@ class TemplateDocumentController extends Controller
         $template->deskripsi = $validasi['deskripsi'];
         $template->save();
 
-        return back()->with('success', 'Template document telah berhasil diedit'); 
+        return back()->with('success', 'Template document telah berhasil diedit');
     }
 
     /**
@@ -128,11 +127,11 @@ class TemplateDocumentController extends Controller
     public function delete(Krs $kr, TemplateDocument $document)
     {
         $template = TemplateDocument::find($document->id);
-        $path = 'public/file-template/'.$document->file_template;
+        $path = 'public/file-template/' . $document->file_template;
         if (Storage::disk('public')->exists($path)) {
             Storage::delete($path);
         } else {
-            return back()->with('error','File tidak ditemukan');
+            return back()->with('error', 'File tidak ditemukan');
         }
 
         $template->delete();
@@ -142,7 +141,7 @@ class TemplateDocumentController extends Controller
     public function publish(Krs $kr)
     {
         $template = TemplateDocument::where('krs_id', $kr->id)->get();
-        foreach($template as $t){
+        foreach ($template as $t) {
             $t->is_verified = true;
             $t->save();
         }
