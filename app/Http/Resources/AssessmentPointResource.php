@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AssesmentPointResource extends JsonResource
+class AssessmentPointResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,10 @@ class AssesmentPointResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'nama' => $this->nama_poin,
-            'bobot' => $this->bobot,
-            'komponen_penilaian' => $this->whenLoaded('komponen_penilaian', function () {
-                return new AssesmentComponentCollection($this->komponen_penilaian);
+            'name' => $this->nama_poin,
+            'weight' => $this->bobot,
+            'components' => $this->whenLoaded('komponen_penilaian', function () {
+                return new AssessmentComponentCollection($this->komponen_penilaian);
             }),
         ];
     }

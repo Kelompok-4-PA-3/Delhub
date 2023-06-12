@@ -6,7 +6,7 @@ use App\Http\Controllers\API\KrsController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RoomController;
 use App\Http\Controllers\API\RequestController;
-use App\Http\Controllers\API\AssesmentController;
+use App\Http\Controllers\API\AssessmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +59,7 @@ Route::group([
 
 Route::group([
     'middleware' => 'auth:sanctum',
-    'prefix' => 'assesment'
+    'prefix' => 'assessment'
 ], function () {
-    Route::get('/{id}', [AssesmentController::class, 'getAssesmentPointByGroupId']);
+    Route::get('/{id}', [AssessmentController::class, 'getAssessmentPointByGroupId']);
 });
