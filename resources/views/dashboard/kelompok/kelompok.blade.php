@@ -43,49 +43,46 @@
     {{-- @dd($kelompok) --}}
     <div class="row">
 
-        <div class="mb-2">
-            <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
-                <li class="nav-item"><a href="#" class="nav-link active"> <i class="ph-squares-four"></i> &nbsp;
-                        Kelompok</a></li>
-                <li class="nav-item"><a href="/kelompok/{{ $kelompok->id }}/artefak" class="nav-link"> <i
-                            class="ph-folders"></i> &nbsp; Artefak</a></li>
-                <li class="nav-item"><a href="/kelompok/{{ $kelompok->id }}/orang" class="nav-link"> <i
-                            class="ph-users"></i>
-                        &nbsp; Orang</a></li>
-                @role('dosen')
-                    <li class="nav-item">
-                        <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i
-                                class="ph-notebook"></i> &nbsp; Penilaian</a>
-                        <div class="dropdown-menu">
-                            @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id', $kelompok->id) as $myrole)
-                                @if ($myrole->role_group != null)
-                                    <div class="list-group">
-                                        <div class="d-flex">
-                                            <a @if ($myrole->is_verified) href="/kelompok/{{ $kelompok->id }}/penilaian/role/{{ $myrole->id }}" @endif
-                                                class="dropdown-item"><i class="ph-notebook"></i>
-                                                &nbsp;{{ $myrole->role_group->nama }}
-                                                &nbsp; @if (!$myrole->is_verified)
-                                                    <i class="ph-warning-circle text-warning" style="cursor:pointer;"
-                                                        data-bs-popup="tooltip" title="Role anda belum diverfikasi"></i>
-                                                @endif
-                                            </a>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
+    <div class="mb-2">
+        <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
+            <li class="nav-item"><a href="#" class="nav-link active"> <i class="ph-squares-four"></i> &nbsp;
+                    Kelompok</a></li>
+            <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/artefak" class="nav-link"> <i class="ph-folders"></i> &nbsp; Artefak</a></li>
+            <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}/orang" class="nav-link"> <i class="ph-users"></i>
+                    &nbsp; Orang</a></li>
+            @role('dosen')
+            <li class="nav-item">
+                <a href="" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><i
+                        class="ph-notebook"></i> &nbsp; Penilaian</a>
+                <div class="dropdown-menu">
+                    @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id',$kelompok->id) as $myrole)
+                    @if ($myrole->role_group != NULL)
+                    <div class="list-group">
+                        <div class="d-flex">
+                            <a @if($myrole->is_verified)
+                                href="/kelompok/{{$kelompok->id}}/penilaian/role/{{$myrole->id}}" @endif
+                                class="dropdown-item"><i class="ph-notebook"></i> &nbsp;{{$myrole->role_group->nama}}
+                                &nbsp; @if(!$myrole->is_verified) <i class="ph-warning-circle text-warning"
+                                    style="cursor:pointer;" data-bs-popup="tooltip"
+                                    title="Role anda belum diverfikasi"></i> @endif</a>
                         </div>
-                    </li>
-                @endrole
-                @role('dosen')
-                    @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 == Auth::user()->dosen->nim)
-                        <li class="nav-item">
-                            <a href="/kelompok/{{ $kelompok->id }}/penilaian/koordinator" class="nav-link btn btn-primary"><i
-                                    class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
-                        </li>
+                    </div>
                     @endif
-                @endrole
-            </ul>
-        </div>
+                    @endforeach
+                </div>
+            </li>
+            @endrole
+            @role('dosen')
+            @if ($kelompok->krs->dosen_mk == Auth::user()->dosen->nim || $kelompok->krs->dosen_mk_2 ==
+            Auth::user()->dosen->nim)
+            <li class="nav-item">
+                <a href="/kelompok/{{$kelompok->id}}/penilaian/koordinator" class="nav-link btn btn-primary"><i
+                        class="ph-notebook"></i> &nbsp; Hasil Penilaian</a>
+            </li>
+            @endif
+            @endrole
+        </ul>
+    </div>
 
         <div class="col-xl-7">
             <div class="p-2 card">
@@ -373,53 +370,49 @@
                     </ul>
                     <!-- /tabs -->
 
-                    <!-- Tabs content -->
-                    <div class="tab-content card-body">
-                        <div class="tab-pane active fade show" id="list-bimbingan">
+            <!-- Tabs content -->
+            <div class="tab-content card-body">
+                <div class="tab-pane active fade show" id="list-bimbingan">
+                    <div class="">
+                        <div class="d-flex mb-1">
                             <div class="">
-                                <div class="d-flex mb-1">
-                                    <div class="">
-                                        <a href="" class="badge bg-primary fw-light" data-bs-toggle="modal"
-                                            data-bs-target="#modal_detail_rekap_bimbingan"><i
-                                                class="ph-file-doc"></i>&nbsp;
-                                            Hasil bimbingan</a>
-                                    </div>
-                                    <div class="ms-auto">
-                                        <select class="form-control form-control-sm" name=""
-                                            id="filter-status-bimbingan">
-                                            <option value="waiting">Request</option>
-                                            <option value="done">Done</option>
-                                            <option value="all">Semua</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <table class="table text-nowrap w-100">
-                                    <tbody>
-                                        @if ($kelompok->bimbingan->count() > 0)
-                                            @foreach ($kelompok->bimbingan->sortByDesc('created_at') as $kb)
-                                                <tr class="bimbingan_list bimbingan{{ $kb->is_done ? 'done' : $kb->reference->value }} bimbingan{{ $kb->is_done ? 'done' : $kb->reference->value }}"
-                                                    {{-- id="bimbingan{{ $kb->is_done ? 'done' : $kb->reference->value }}" --}}>
-                                                    <td class="text-center">
-                                                        <h6 class="mb-0">
-                                                            {{ Carbon\Carbon::parse($kb->waktu)->format('d') }}</h6>
-                                                        <div class="fs-sm text-muted lh-1 text-uppercase">
-                                                            {{ Carbon\Carbon::parse($kb->waktu)->format('M') }}</div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div>
-                                                                <small>
-                                                                    <a href="#"
-                                                                        class="text-body fw-semibold letter-icon-title"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#modal_detail{{ $kb->id }}">
-                                                                        {{ Str::limit($kb->description, 15) }}
-                                                                    </a>
-                                                                </small>
-                                                                <div class="d-flex align-items-center text-muted fs-sm">
-                                                                    <span
-                                                                        class="
-                                                            @if ($kb->reference->value == 'waiting') bg-info
+                                <a href="" class="badge bg-primary fw-light" data-bs-toggle="modal"
+                                    data-bs-target="#modal_detail_rekap_bimbingan"><i class="ph-file-doc"></i>&nbsp;
+                                    Hasil bimbingan</a>
+                            </div>
+                            <div class="ms-auto">
+                                <select class="form-control form-control-sm" name="" id="filter-status-bimbingan">
+                                    <option value="waiting">Request</option>
+                                    <option value="done">Done</option>
+                                    <option value="all">Semua</option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="table text-nowrap w-100">
+                            <tbody>
+                                @if($kelompok->bimbingan->count() > 0)
+                                @foreach($kelompok->bimbingan->sortByDesc('created_at') as $kb)
+                                <tr class="bimbingan_list bimbingan{{ $kb->is_done ? 'done' : $kb->reference->value }} bimbingan{{ $kb->is_done ? 'done' : $kb->reference->value }}"
+                                    {{-- id="bimbingan{{ $kb->is_done ? 'done' : $kb->reference->value }}" --}}>
+                                    <td class="text-center">
+                                        <h6 class="mb-0">{{Carbon\Carbon::parse($kb->waktu)->format('d')}}</h6>
+                                        <div class="fs-sm text-muted lh-1 text-uppercase">
+                                            {{Carbon\Carbon::parse($kb->waktu)->format('M')}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <small>
+                                                    <a href="#" class="text-body fw-semibold letter-icon-title"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#modal_detail{{ $kb->id }}">
+                                                        {{Str::limit($kb->description,15)}}
+                                                    </a>
+                                                </small>
+                                                <div class="d-flex align-items-center text-muted fs-sm">
+                                                    <span class="
+                                                            @if($kb->reference->value == 'waiting')
+                                                                bg-info
                                                             @elseif($kb->reference->value == 'approve')
                                                                 bg-success
                                                             @elseif($kb->reference->value == 'reject')

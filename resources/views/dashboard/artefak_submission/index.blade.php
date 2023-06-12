@@ -13,8 +13,12 @@
 @endpush
 
 @section('breadscrumb')
-<span class="breadcrumb-item active py-2"><i class="ph-user-list"></i>&nbsp;Manajemen Artefak Submission</span>
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2"><i class="ph-house me-2"></i> Koordinator</a>
+    <a href="/koordinator/proyeksaya/{{$krs->id}}" class="breadcrumb-item py-2">{{$krs->kategori->nama_singkat}}</a>
+    <span class="breadcrumb-item active py-2"> Manajemen Artefak Submission</span>
 @endsection
+
+
 
 @section('content')
 <div class="card">

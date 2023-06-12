@@ -68,7 +68,7 @@ class KategoriProyekController extends Controller
     {
         // $data = ['nama_edit' => 'required'];
 
-
+        // return $request;
         // if ($request->nama_edit != $kategoriProyek->nama) {
         //     $data['nama_edit'] =
         // }
