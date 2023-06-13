@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class AssesmentPointCollection extends ResourceCollection
+class AssessmentPointCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -15,7 +15,7 @@ class AssesmentPointCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return $this->collection->map(function ($item) {
-            return new AssesmentPointResource($item);
+            return new AssessmentPointResource($item);
         })->toArray();
     }
 }

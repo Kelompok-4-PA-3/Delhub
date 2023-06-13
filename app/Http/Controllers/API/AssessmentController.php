@@ -6,13 +6,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AssesmentPointCollection;
+use App\Http\Resources\AssessmentPointCollection;
 use App\Models\PoinPenilaian;
 use Illuminate\Support\Facades\DB;
 
-class AssesmentController extends Controller
+class AssessmentController extends Controller
 {
-    public function getAssesmentPointByGroupId($id){
+    public function getAssessmentPointByGroupId($id){
 
         $dosen = User::find(auth()->user()->id)->dosen;
         // check if dosen role to the group
@@ -27,16 +27,16 @@ class AssesmentController extends Controller
 
 
             // get point_penilaians by role id dosen in table role_group_penilaians
-            $assesmentPoints = DB::table('role_group_penilaians')
+            $assessmentPoints = DB::table('role_group_penilaians')
                 ->join('poin_penilaians', 'role_group_penilaians.poin_penilaian_id', '=', 'poin_penilaians.id')
                 ->where('role_group_penilaians.role_group_id', $check->role_group_id)
                 ->select('poin_penilaians.*')
                 ->get();
 
                 // convert to eloquent
-            $assesmentPoints = PoinPenilaian::hydrate($assesmentPoints->toArray())->load('komponen_penilaian');
+            $assessmentPoints = PoinPenilaian::hydrate($assessmentPoints->toArray())->load('komponen_penilaian');
         return ResponseFormatter::success(
-            new AssesmentPointCollection($assesmentPoints),
+            new AssessmentPointCollection($assessmentPoints),
             'Data berhasil diambil'
         );
     }

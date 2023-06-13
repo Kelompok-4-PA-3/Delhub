@@ -14,24 +14,23 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // check role is dosen or mahasiswa
-        $role = $this->roles->first()->name;
-        if ($role == 'dosen') {
+
+        if ($this->hasRole('dosen')) {
             return [
                 'id' => $this->id,
                 'name' => $this->nama,
                 'email' => $this->email,
-                'role' => $role,
+                'role' => 'dosen',
                 'dosen' => $this->whenLoaded('dosen', function () {
                     return new DosenResource($this->dosen);
                 }),
             ];
-        } else if ($role == 'mahasiswa') {
+        } else if ($this->hasRole('mahasiswa')) {
             return [
                 'id' => $this->id,
                 'name' => $this->nama,
                 'email' => $this->email,
-                'role' => $role,
+                'role' => 'mahasiswa',
                 'mahasiswa' => $this->whenLoaded('mahasiswa', function () {
                     return new MahasiswaResource($this->mahasiswa);
                 }),
