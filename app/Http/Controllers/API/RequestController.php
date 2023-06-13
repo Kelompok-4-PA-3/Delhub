@@ -95,7 +95,7 @@ class RequestController extends Controller
         if ($request->waktu != null) {
             $bimbingan->waktu = $request->waktu;
         }
-        if ($request->hasil != null) {
+        if ($request->result != null) {
             $bimbingan->hasil = $request->result;
         }
         if ($request->hasFile('file')) {
