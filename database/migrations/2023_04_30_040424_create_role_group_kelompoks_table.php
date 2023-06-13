@@ -12,6 +12,8 @@ return new class extends Migration
         Schema::create('role_group_kelompoks', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->unsignedBigInteger('kategori_id');
+            $table->foreign('kategori_id')->references('id')->on('kategori_roles')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('is_verified')->default(false);
             $table->boolean('is_main')->default(false);
             $table->boolean('active')->default(true);
