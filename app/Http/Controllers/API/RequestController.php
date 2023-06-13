@@ -95,11 +95,14 @@ class RequestController extends Controller
         if ($request->waktu != null) {
             $bimbingan->waktu = $request->waktu;
         }
+        if ($request->hasil != null) {
+            $bimbingan->hasil = $request->result;
+        }
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/bimbingan'), $filename);
-            $bimbingan->file_bukti = $filename;
+            $bimbingan->file = $filename;
             $bimbingan->is_done = 1;
         }
         $bimbingan->save();
