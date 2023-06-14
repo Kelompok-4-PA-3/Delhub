@@ -44,7 +44,9 @@ class RequestController extends Controller
                     ->join('kategori_roles', 'role_group_kelompoks.kategori_id', '=', 'kategori_roles.id')
                     ->where('kategori_roles.nama', 'pembimbing')
                     ->where('role_kelompoks.nidn', $dosen->nidn)
+                    ->where('deleted_at', null)
                     ->select('requests.*')
+                    ->orderBy('requests.waktu', 'desc')
                     ->get();
 
                 // convert to eloquent model
