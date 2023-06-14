@@ -37,6 +37,12 @@ class Reminder extends Command
             ->where('kategori_roles.nama', 'pembimbing')
             ->whereDate('requests.waktu', Carbon::today())
             ->where('requests.status', 5)
+            ->where('requests.deleted_at', null)
+            ->where('requests.is_done', false)
+            ->where('kelompoks.deleted_at', null)
+            ->where('role_kelompoks.deleted_at', null)
+            ->where('role_group_kelompoks.deleted_at', null)
+            ->where('kategori_roles.deleted_at', null)
             ->select('requests.*')
             ->get();
 

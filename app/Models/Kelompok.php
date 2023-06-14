@@ -77,7 +77,17 @@ class Kelompok extends Model
             ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', 'role_group_kelompoks.id')
             ->join('kategori_roles', 'role_group_kelompoks.kategori_id', 'kategori_roles.id')
             ->where('kategori_roles.nama', 'pembimbing');
-        // return $this->hasManyThrough('App\Models\Dosen', 'App\Models\RoleKelompok', 'kelompok_id', 'nidn', 'id', 'nidn');
+
+    }
+
+    public function pengujis(){
+        // get penguji where kategori is penguji
+        // kategori have relation with role_group_kelompok
+        // role_group_kelompok have relation with role_kelompok
+        return $this->hasManyThrough('App\Models\Dosen', 'App\Models\RoleKelompok', 'kelompok_id', 'nidn', 'id', 'nidn')
+            ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', 'role_group_kelompoks.id')
+            ->join('kategori_roles', 'role_group_kelompoks.kategori_id', 'kategori_roles.id')
+            ->where('kategori_roles.nama', 'penguji');
     }
 
     public function nilai_mahasiswa()

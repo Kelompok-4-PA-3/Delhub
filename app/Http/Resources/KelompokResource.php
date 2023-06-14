@@ -28,7 +28,11 @@ class KelompokResource extends JsonResource
             }),
             'pembimbing' => $this->whenLoaded('pembimbings', function () {
                 // get the first pembimbing
-                return new DosenResource($this->pembimbings->first());
+                return new DosenCollection($this->pembimbings);
+            }),
+            'pengujis' => $this->whenLoaded('pengujis', function () {
+                // get the first pembimbing
+                return new DosenCollection($this->pengujis);
             }),
             'mahasiswa' => $this->whenLoaded('mahasiswas', function () {
                 return new MahasiswaCollection($this->mahasiswas);
@@ -36,7 +40,6 @@ class KelompokResource extends JsonResource
             'requests' => $this->whenLoaded('bimbingan', function () {
                 return new RequestCollection($this->bimbingan);
             }),
-
         ];
     }
 }
