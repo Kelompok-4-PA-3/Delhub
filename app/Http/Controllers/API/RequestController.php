@@ -89,7 +89,11 @@ class RequestController extends Controller
 
     public function update(UpdateRequest $request, $id)
     {
-        $bimbingan = Request::find($id)->load('ruangan', 'reference', 'kelompok.pembimbings.user');
+        $bimbingan = Request::find($id);
+        if (!$bimbingan) {
+            return ResponseFormatter::error(null, 'Data tidak ditemukan', 404);
+        }
+        $bimbingan->load('ruangan', 'reference', 'kelompok.pembimbings.user');
         $ref = Reference::where('value', $request->status)->first();
         $bimbingan->status = $ref->id;
         if ($request->waktu != null) {
