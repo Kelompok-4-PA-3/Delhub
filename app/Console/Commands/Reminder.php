@@ -52,10 +52,9 @@ class Reminder extends Command
         $tokens = [];
         foreach ($requests as $request) {
             $waktu = Carbon::parse($request->waktu);
-            $waktu->subMinutes(10);
             $now = Carbon::now();
-            // remind all mahasiswa and dosen that have request bimbingan 10 minutes or less before the request time
-            if ($waktu->lessThanOrEqualTo($now)) {
+            // remind all mahasiswa and dosen that have request bimbingan <= 10 minutes before the request time
+            if ($waktu->diffInMinutes($now) <= 10) {
                 sendPushNotification('Pengingat Bimbingan', 'Bimbingan akan dimulai dalam 10 menit lagi di ruangan ' . $request->ruangan->nama, $request->kelompok->mahasiswas->pluck('user.firebase_token')->toArray(), $request);
                 sendPushNotification('Pengingat Bimbingan', 'Bimbingan akan dimulai dalam 10 menit lagi di ruangan ' . $request->ruangan->nama, $request->kelompok->pembimbings->pluck('user.firebase_token')->toArray(), $request);
             }
