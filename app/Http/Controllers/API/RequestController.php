@@ -44,7 +44,7 @@ class RequestController extends Controller
                     ->join('kategori_roles', 'role_group_kelompoks.kategori_id', '=', 'kategori_roles.id')
                     ->where('kategori_roles.nama', 'pembimbing')
                     ->where('role_kelompoks.nidn', $dosen->nidn)
-                    ->where('deleted_at', null)
+                    ->where('requests.deleted_at', null)
                     ->select('requests.*')
                     ->orderBy('requests.waktu', 'desc')
                     ->get();
@@ -85,7 +85,11 @@ class RequestController extends Controller
 
     public function show($id)
     {
-        $request = Request::find($id)->load('ruangan', 'reference', 'kelompok.pembimbings.user');
+        $request = Request::find($id);
+        if (!$request) {
+            return ResponseFormatter::error(null, 'Data tidak ditemukan', 404);
+        }
+        $request->load('ruangan', 'reference', 'kelompok.pembimbings.user');
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil diambil');
     }
 
