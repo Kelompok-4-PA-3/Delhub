@@ -96,17 +96,9 @@ class AssessmentController extends Controller
             ->first();
 
         // check if role_dosen_kelompok_id is penguji or pembimbing
-        $roleDosenKelompok =  RoleKelompok::find($roleDosenKelompok->id)->load('role_group');
+        $roleDosenKelompok = RoleKelompok::find($roleDosenKelompok->id)->load('role_group');
         $assessmentStudents = json_decode($request->assessmentStudents);
         foreach($assessmentStudents as $assessment){
-            $check = DB::table('nilai_mahasiswas')
-                ->join('detail_nilai_mahasiswas', 'nilai_mahasiswas.id', '=', 'detail_nilai_mahasiswas.nilai_id')
-                ->where('nilai_mahasiswas.kelompok_id', $assessment->kelompok->id)
-                ->where('nilai_mahasiswas.poin_penilaian_id', $id)
-                ->where('nilai_mahasiswas.role_dosen_kelompok_id', $roleDosenKelompok->id)
-                ->select('nilai_mahasiswas.*')
-                ->first();
-
             $role_not_main =  $roleDosenKelompok->role_group->role_kategori->role_group->where('id','!=',$roleDosenKelompok->role_group->id)->where('is_main',0);
             if ($role_not_main->count() > 0) {
                 $bobot_not_main = 0;
@@ -119,6 +111,17 @@ class AssessmentController extends Controller
 
             // if not exist, start create
             $finalValue = 0;
+
+            $check = DB::table('nilai_mahasiswas')
+                ->join('detail_nilai_mahasiswas', 'nilai_mahasiswas.id', '=', 'detail_nilai_mahasiswas.nilai_id')
+                ->where('nilai_mahasiswas.kelompok_id', $assessment->kelompok->id)
+                ->where('nilai_mahasiswas.poin_penilaian_id', $assessment->assessmentPoint->id)
+                ->where('nilai_mahasiswas.role_dosen_kelompok_id', $roleDosenKelompok->id)
+                ->where('nilai_mahasiswas.nim', $assessment->mahasiswa->nim)
+                ->where('nilai_mahasiswas.deleted_at', null)
+                ->select('nilai_mahasiswas.*')
+                ->first();
+
             if(!$check){
                 $nilaiMahasiswa = NilaiMahasiswa::create([
                     'poin_penilaian_id' => $assessment->assessmentPoint->id,
@@ -144,11 +147,11 @@ class AssessmentController extends Controller
                 $nilaiMahasiswa->save();
             } else {
                 // if exist, start update
-                $nilaiMahasiswa = NilaiMahasiswa::find($check->nilai_id);
+                $nilaiMahasiswa = NilaiMahasiswa::find($check->id);
                 $nilaiMahasiswa->nilai = 0;
                 $nilaiMahasiswa->save();
 
-                foreach($request->assessmentStudents->detailAssessmentStudent as $detailAssessmentStudent){
+                foreach($assessment->detailAssessmentStudent as $detailAssessmentStudent){
                     $detailNilaiMahasiswa = DetailNilaiMahasiswa::find($detailAssessmentStudent->id);
                     $detailNilaiMahasiswa->nilai = $detailAssessmentStudent->score;
                     $detailNilaiMahasiswa->save();
