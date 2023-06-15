@@ -14,7 +14,6 @@ use App\Http\Resources\RequestResource;
 use App\Http\Resources\RequestCollection;
 use App\Notifications\RequestNotification;
 use App\Notifications\UpdateRequestNotification;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request as HttpRequest;
 
@@ -70,9 +69,9 @@ class RequestController extends Controller
         $request = Request::create($data);
         $pembimbings = $kelompok->pembimbings;
 
-        // foreach ($pembimbings as $pembimbing) {
-        //     $pembimbing->user->notify(new RequestNotification($request, $kelompok));
-        // }
+        foreach ($pembimbings as $pembimbing) {
+            $pembimbing->user->notify(new RequestNotification($request, $kelompok));
+        }
         // if tokens is empty, don't send push notification
         $tokens = $pembimbings->pluck('user.firebase_token')->toArray();
         if (!empty($tokens)) {
@@ -122,12 +121,12 @@ class RequestController extends Controller
             // get all mahasiswa in kelompok mahasiswa
 
 
-            // foreach ($mahasiswa as $mhs) {
-            //     $mhs->user->notify(new UpdateRequestNotification(
-            //         $bimbingan,
-            //         $ref->value,
-            //     ));
-            // }
+            foreach ($mahasiswa as $mhs) {
+                $mhs->user->notify(new UpdateRequestNotification(
+                    $bimbingan,
+                    $ref->value,
+                ));
+            }
 
             $mahasiswa = $kelompok->mahasiswas->load('user');
             $tokens = $mahasiswa->pluck('user.firebase_token')->toArray();
