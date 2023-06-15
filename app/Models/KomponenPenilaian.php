@@ -27,7 +27,7 @@ class KomponenPenilaian extends Model
                     // ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', 'role_group_kelompoks.id')
                     ->select('nilai_mahasiswas.*', 'detail_nilai_mahasiswas.*','role_kelompoks.*');
     }
-    
+
     // public function detail_nilai_mahasiswa(){
     //     return $this->hasMany(DetailNilaiMahasiswa::class, 'komponen_id','id')
     //                 ->join('nilai_mahasiswas', 'detail_nilai_mahasiswas.nilai_id', 'nilai_mahasiswas.id')

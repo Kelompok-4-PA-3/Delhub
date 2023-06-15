@@ -44,7 +44,7 @@ class KrsController extends Controller
             ->join('role_kelompoks', 'kelompoks.id', '=', 'role_kelompoks.kelompok_id')
             ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', '=', 'role_group_kelompoks.id')
             ->join('kategori_roles', 'role_group_kelompoks.kategori_id', '=', 'kategori_roles.id')
-            ->whereIn('kategori_roles.nama', ['pembimbing', 'penguji'])
+            ->whereIn('kategori_roles.nama', ['Pembimbing', 'Penguji'])
             ->where('role_kelompoks.nidn', $dosen->nidn)
             ->where('kelompoks.krs_id', $id)
             ->where('kelompoks.deleted_at', null)

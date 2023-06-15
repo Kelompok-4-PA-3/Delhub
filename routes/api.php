@@ -62,4 +62,6 @@ Route::group([
     'prefix' => 'assessment'
 ], function () {
     Route::get('/{id}', [AssessmentController::class, 'getAssessmentPointByGroupId']);
+    Route::get('/{id}/students', [AssessmentController::class, 'getAssessmentStudents']);
+    Route::post('/{id}', [AssessmentController::class, 'store']);
 });
