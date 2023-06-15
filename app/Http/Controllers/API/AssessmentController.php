@@ -104,7 +104,7 @@ class AssessmentController extends Controller
                 ->where('nilai_mahasiswas.kelompok_id', $assessment->kelompok->id)
                 ->where('nilai_mahasiswas.poin_penilaian_id', $id)
                 ->where('nilai_mahasiswas.role_dosen_kelompok_id', $roleDosenKelompok->id)
-                ->select('detail_nilai_mahasiswas.*')
+                ->select('nilai_mahasiswas.*')
                 ->first();
 
             $role_not_main =  $roleDosenKelompok->role_group->role_kategori->role_group->where('id','!=',$roleDosenKelompok->role_group->id)->where('is_main',0);
