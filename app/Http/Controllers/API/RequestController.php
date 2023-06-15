@@ -119,8 +119,7 @@ class RequestController extends Controller
             // send email to mahasiswa
             $kelompok = $bimbingan->kelompok;
             // get all mahasiswa in kelompok mahasiswa
-
-
+            $mahasiswa = $kelompok->mahasiswas->load('user');
             foreach ($mahasiswa as $mhs) {
                 $mhs->user->notify(new UpdateRequestNotification(
                     $bimbingan,
