@@ -23,7 +23,6 @@ class RegulasiController extends Controller
         $krs = Krs::where('id', $id)->first();
         $kelompok = Kelompok::where('krs_id', $id)->get();
         $regulasi = Regulasi::where('krs_id', '=', $id)->first();
-        $dosen = Kelompok::where('krs_id', $id)->join('pembimbings','kelompoks.id','=','pembimbings.kelompok_id')->get();
         // return $dosen-;
         // return  $kelompok->sortBy('id');
         return view('dashboard.regulasi.index', [
@@ -31,7 +30,6 @@ class RegulasiController extends Controller
             'krs' => $krs,
             'kelompok' => $kelompok,
             'regulasi' => $regulasi,
-            'dosen' => $dosen,
         ]);
     }
 

@@ -34,11 +34,14 @@ class KrsController extends Controller
         $prodi = Prodi::latest()->get();
         $kategori = Kategori::latest()->get();
         $config = Configs::latest()->get();
+        $krs = Krs::join('kate');
+
         return view('krs.add', [
             'prodi' => $prodi,
             'dosen' => $dosen,
             'kategori' => $kategori,
-            'config' => $config
+            'config' => $config,
+            'krs' => $krs
         ]);
     }
 

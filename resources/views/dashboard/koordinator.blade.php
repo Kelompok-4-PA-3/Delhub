@@ -209,6 +209,12 @@
                                 Submission Artefak
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="/krs/{{ $krs->id }}/rekapitulasi" class="nav-link">
+                                <i class="ph-note me-2"></i>
+                                Rekapitulasi Proyek
+                            </a>
+                        </li>
                         {{-- <li class="nav-item">
                             <a href="/jadwal" class="nav-link">
                                 <i class="ph-calendar me-2"></i>

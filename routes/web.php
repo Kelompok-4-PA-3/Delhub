@@ -33,6 +33,8 @@ use App\Http\Controllers\ImageProfileTemporariesController;
 use App\Http\Controllers\SubmissionArtefakController;
 use App\Http\Controllers\ArtefakKelompokController;
 use App\Http\Controllers\ArtefakTemporaryController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\RekapitulasiController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Mahasiswa;
 use App\Models\Dosen;
@@ -205,6 +207,10 @@ Route::middleware([
         Route::post('/krs/{kr}/submission/{submission}/delete', [SubmissionArtefakController::class, 'delete'])->name('template_submission.delete');
         // Route::get('/krs/{kr}/submission', [SubmissionArtefakController::class, 'index'])->name('template_submission.index');
 
+        Route::resource('/kelompok/{kelompok}/feedback', FeedbackController::class)->name('feedback', 'feedback.index');
+        Route::post('/kelompok/{kelompok}/feedback/{feedback}/status', [FeedbackController::class, 'update_status'])->name('feedback', 'feedback.store');
+        Route::post('/kelompok/{kelompok}/feedback/{feedback}/delete', [FeedbackController::class, 'delete'])->name('feedback.delete', 'feedback.delete');
+
 
     });
 
@@ -253,6 +259,8 @@ Route::middleware([
         Route::post('/bimbingan/approve/{id}', [BimbinganController::class, 'approve_bukti'])->name('bimbingan_approve', 'bimbingan.approve_bukti');
         Route::get('/bimbingan/status/{status}/{id}', [BimbinganController::class, 'update_status'])->name('bimbingan_status', 'bimbingan.update_status');
         Route::post('/jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
+        
+        Route::post('/kelompok/{kelompok}/approved_topik', [KelompokController::class, 'approve_topik'])->name('approved_topik');
     });
 
     // Route::group(['middleware' => 'role:koordinator'], function () {
@@ -269,6 +277,9 @@ Route::middleware([
 
     Route::resource('/jadwal', \App\Http\Controllers\JadwalController::class)->name('jadwals', 'jadwal.index');
 
+    Route::get('/krs/{krs}/rekapitulasi', RekapitulasiController::class);
+
+
 
     // Data Master
     // test
@@ -282,12 +293,11 @@ Route::middleware([
 
     Route::get('/dosens/adds', function () {
         $dosen = Dosen::join('users', 'users.id', '=', 'dosens.user_id')->get();
-        foreach ($dosen as $d) {
+    foreach ($dosen as $d) {
             $d->user->assignRole('dosen');
         }
         return 'berhasil';
     });
-});
-Route::get('/test', function () {
-    Artisan::call('storage:link');
+
+    
 });

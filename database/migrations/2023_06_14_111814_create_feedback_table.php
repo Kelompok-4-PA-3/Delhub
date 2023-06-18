@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('role_kelompoks', function (Blueprint $table) {
+        Schema::create('feedback', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('role_group_id');
-            $table->foreign('role_group_id')->references('id')->on('role_group_kelompoks')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('kelompok_id');
             $table->foreign('kelompok_id')->references('id')->on('kelompoks')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('nidn');
-            $table->foreign('nidn')->references('nidn')->on('dosens')->onUpdate('cascade')->onDelete('cascade');
-            $table->boolean('is_verified')->default(0);
+            $table->text('feedback');
+            $table->boolean('status');
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('role_kelompoks');
+        Schema::dropIfExists('feedback');
     }
 };

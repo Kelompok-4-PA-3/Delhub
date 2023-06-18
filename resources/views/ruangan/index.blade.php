@@ -253,45 +253,4 @@
     </div>
     <!-- /sticky footer -->
 
-    {{-- <select id="mySelect">
-        <option value="option1">Option 1</option>
-        <option value="option2">Option 2</option>
-        <option value="option3">Option 3</option>
-      </select> --}}
-
-    <script>
-        var selectElem = document.getElementById("guard_name_select");
-        var selectPermission = document.getElementById("permission_select");
-        var options = selectPermission.options;
-
-        // var selectElem_edit = document.getElementById("guard_name_select_edit");
-        // var selectPermission_edit = document.getElementById("permission_select_edit");
-        // var options_edit = selectPermission_edit.options;
-
-        selectElem.onchange = function() {
-            var selectedValue = selectElem.options[selectElem.selectedIndex].value;
-            for (let i = 0; i < options.length; i++) {
-                if (options[i].className == selectedValue) {
-                    options[i].removeAttribute('disabled');
-                } else {
-                    options[i].setAttribute('disabled', '');
-                    options[i].selected = false;
-                }
-            }
-            console.log(selectedValue);
-        }
-
-        // selectElem_edit.onchange = function() {
-        // var selectedValue = selectElem_edit.options[selectElem_edit.selectedIndex].value;
-        //   for (let i = 0; i < options_edit.length; i++) {
-        //         if(options_edit[i].className == selectedValue){
-        //            options_edit[i].removeAttribute('disabled');
-        //         }else{
-        //             options_edit[i].setAttribute('disabled','');
-        //             options_edit[i].selected = false;
-        //         }
-        //   }
-        //   console.log(selectedValue);
-        // }
-    </script>
 @endsection

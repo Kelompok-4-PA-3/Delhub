@@ -84,4 +84,9 @@ class Kelompok extends Model
     {
         return $this->hasMany(NilaiMahasiswa::class, 'kelompok_id', 'id');
     }
+
+    public function feedback()
+    {
+        return $this->hasMany(Feedback::class, 'kelompok_id', 'id');
+    }
 }

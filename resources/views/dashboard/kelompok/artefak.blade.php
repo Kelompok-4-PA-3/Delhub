@@ -69,7 +69,7 @@
 
     <div class="mb-2">
         <ul class="nav nav-tabs nav-tabs-highlight nav-justified wmin-lg-100 me-lg-3 mb-3 mb-lg-0">
-            <li class="nav-item"><a href="#" class="nav-link"> <i class="ph-squares-four"></i> &nbsp;
+            <li class="nav-item"><a href="/kelompok/{{$kelompok->id}}" class="nav-link"> <i class="ph-squares-four"></i> &nbsp;
                     Kelompok</a></li>
             <li class="nav-item"><a href="/kelompok/{{ $kelompok->id }}/artefak" class="nav-link active"> <i
                         class="ph-folders"></i> &nbsp; Artefak</a></li>
@@ -220,16 +220,16 @@
                                                         @if ($ontime)
                                                             Tepat waktu
                                                         @else
+
                                                             Terlambat
                                                             @php
-                                                                $terlambat = Carbon\Carbon::parse($artefak->created_at)->diff(Carbon\Carbon::parse($s->deadline));
+                                                            $terlambat =
+                                                            Carbon\Carbon::parse($artefak->created_at)->diff(Carbon\Carbon::parse($s->deadline));
                                                             @endphp
-                                                            (<small class="fw-light">
-                                                                {{ $terlambat->days . ' Hari ' }}
+                                                            <small>({{ $terlambat->days . ' Hari ' }}
                                                                 {{ $terlambat->h . ' jam ' }}
                                                                 {{ $terlambat->i . ' menit ' }}
-                                                                {{ $terlambat->s . ' detik ' }}
-                                                            </small>)
+                                                                {{ $terlambat->s . ' detik ' }})</small>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -316,6 +316,7 @@
 
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script src="https://unpkg.com/filepond-plugin-file-rename/dist/filepond-plugin-file-rename.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
     <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
 
 
@@ -323,12 +324,14 @@
         var submission_id = document.getElementById('form-file').className;
         FilePond.registerPlugin(FilePondPluginImagePreview);
         FilePond.registerPlugin(FilePondPluginFileRename);
+        FilePond.registerPlugin(FilePondPluginFileValidateType);
         // Get a reference to the file input element
         const inputElements = document.querySelectorAll('.input_file');
         inputElements.forEach((inputElement) => {
             const pond = FilePond.create(inputElement);
 
             FilePond.setOptions({
+                acceptedFileTypes: ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
                 server: {
                     url: '{{ URL::to('/') }}/artefak/file/temporary',
                     process: '/store',

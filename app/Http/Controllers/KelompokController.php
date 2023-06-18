@@ -25,6 +25,7 @@ use App\Models\DetailNilaiMahasiswa;
 use App\Models\PoinPenilaian;
 use App\Models\RoleKelompok;
 use App\Models\KategoriRole;
+use App\Models\Feedback;
 use App\Models\SubmissionArtefak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -143,20 +144,11 @@ class KelompokController extends Controller
         $ruangan = Ruangan::latest()->get();
         $dosen = Dosen::latest()->get();
         $reference = Reference::where('kategori', '=', 'kelompok')->get();
-        // $pembimbing_penguji = PembimbingPenguji::where('kelompok_id','=',$kelompok->id)->get();
-        $pembimbing = PembimbingPenguji::where('kelompok_id', '=', $kelompok->id)->get();
         $role_dosen = Reference::where('kategori', '=', 'role_dosen')->get();
-        $pembimbing = PembimbingPenguji::where('kelompok_id', '=', $kelompok->id)
-            ->leftjoin('references', function ($ref) {
-                $ref->on('pembimbing_pengujis.reference_id', '=', 'references.id')
-                    ->where('value', '=', 'pembimbing');
-            })->leftjoin('dosens', function ($dosen) {
-                $dosen->on('pembimbing_pengujis.dosen_id', '=', 'dosens.nidn')
-                    ->leftJoin('users', 'dosens.user_id', '=', 'users.id');
-            })->get(['pembimbing_pengujis.id', 'users.nama']);
         $status_bimbingan = Reference::where('kategori', '=', 'status_bimbingan')->get();
         $regulasi = Regulasi::where('krs_id', '=', $kelompok->krs_id)->first();
         $mahasiswa = KrsUser::where('krs_id', $kelompok->krs_id)->get();
+        $feedback = Feedback::where('kelompok_id', $kelompok->id)->get();
         // return "selesai";
 
         return view('dashboard.kelompok.kelompok', [
@@ -165,11 +157,11 @@ class KelompokController extends Controller
             'reference' => $reference,
             'dosen' => $dosen,
             'ruangan' => $ruangan,
-            'pembimbing' => $pembimbing,
             'role_dosen' => $role_dosen,
             'status_bimbingan' => $status_bimbingan,
             'regulasi' => $regulasi,
-            'mahasiswa' => $mahasiswa
+            'mahasiswa' => $mahasiswa,
+            'feedback' => $feedback
         ]);
         // return $kelompok;
     }
@@ -317,6 +309,31 @@ class KelompokController extends Controller
         $kelompok->save();
 
         return back()->with('success', 'Topik telah berhasil dibuat');
+    }
+
+    public function approve_topik(Request $request){
+        $kelompok = Kelompok::find($request->kelompok);
+
+        if (Auth::user()->hasRole('dosen')) {
+            if (!Gate::check('is_koordinator', $kelompok)) {
+                return back();
+            }
+        }
+
+        if (Auth::user()->hasRole('dosen')) {
+            if (!Gate::check('is_pembimbing', $kelompok)) {
+                return back();
+            }
+        }
+
+        $kelompok = Kelompok::find($request->kelompok);
+
+        $kelompok->topik_approved = true;
+        $kelompok->save();
+
+        return back()->with('success', 'Topik telah berhasil diapprove');
+
+
     }
 
     public function penilaian(Kelompok $kelompok, RoleKelompok $role)

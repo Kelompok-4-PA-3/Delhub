@@ -58,14 +58,20 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('is_pembimbing', function ($user, Kelompok $kelompok) {
-            $role = RoleKelompok::where('kelompok_id', $kelompok->id)->where('nidn', Auth::user()->dosen->nidn)
+
+            if ($user->hasRole('admin')) {
+                return true;
+            }else{
+                $role = RoleKelompok::where('kelompok_id', $kelompok->id)->where('nidn', Auth::user()->dosen->nidn)
                 ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', 'role_group_kelompoks.id')
                 ->join('kategori_roles', 'role_group_kelompoks.kategori_id', 'kategori_roles.id')
                 ->pluck('kategori_roles.nama');
 
-            if (in_array('pembimbing', array_map('strtolower', $role->toArray()))) {
-                return true;
+                if (in_array('pembimbing', array_map('strtolower', $role->toArray()))) {
+                    return true;
+                }
             }
+         
             return false;
         });
 

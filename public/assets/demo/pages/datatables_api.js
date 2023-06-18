@@ -180,6 +180,68 @@ const DatatableAPI = function() {
                     });
             }
         });
+        $('.datatable-feedback thead tr:eq(1) th').not(':last-child').each(function () {
+            const title = $(this).text();
+            $(this).html('<input type="text" class="form-control column-search" placeholder="Search ' + title + '" />');
+        });
+
+
+        $('.datatable-feedback').DataTable({
+            orderCellsTop: true,
+            editable: true,
+            paging: true,
+            scrollY: true,
+            scrollX: true,
+            // columnDefs: [
+            //     { targets: 1, width: '100px' }
+            // ],
+            buttons: {
+                dom: {
+                    button: {
+                        className: 'btn btn-light'
+                    }
+                },
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export to Excel <i class="ph-file-xls ms-2"></i>',
+                        autoFilter: true,
+                        sheetName: 'Sheet 1',
+                        exportOptions: {
+                            columns: 'th:not(:last-child)'
+                         }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="ph-printer me-2"></i> Print table',
+                        className: 'btn btn-light',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="ph-list"></i>',
+                        className: 'btn btn-light btn-icon dropdown-toggle'
+                    }
+                ]
+            },
+            initComplete: function () {
+                this.api()
+                    .columns()
+                    .every(function (index) {
+                        const that = this;
+     
+                        $('.column-search').on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that.column($(this).parent().index() + ':visible').search(this.value).draw();
+                            }
+                        });
+
+                      
+                    });
+            }
+        });
 
         $('.datatable-hasil-nilai thead tr:eq(1) th').not(':last-child').each(function () {
             const title = $(this).text();

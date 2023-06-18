@@ -123,6 +123,48 @@
                                     <div class="text-danger text-sm p-1"><i class="ph-warning-circle"></i>{{$message}}</div>
                                 @enderror
                             </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Salin KRS</label>
+                                <select data-placeholder="Pilih krs" id="krs_copy_select" class="form-control select" name="krs_copy" required>
+                                    <optgroup label="Daftar Angkatan">
+                                        <option></option>
+                                        @foreach ($krs->where('kate') as $k)
+                                            <option @if(old('krs_copy') == $k->id) selected @endif value="{{$k->id}}">{{$k->kategori->nama_mk}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                </select>
+                            </div>
+{{-- 
+                            <div class="" id="form-copy container">
+                               <div>
+                                    <h5 class="fw-light"><i class="ph-copy text-success"></i> Pilih fitur yang ingin di copy</h5>
+                               </div>
+                               <div class="row border border-1 p-2 rounded">
+                                    <div class="col-md-6">
+                                        <div class="form-check form-check-inline form-switch">
+                                            <input id="kategori_role" name="kategori_role" type="checkbox" class="form-check-input" value="true">
+                                            <label for="kategori_role" class="form-check-label">Jumlah Kelompok</label>
+                                        </div>
+                                        <div class="form-check form-check-inline form-switch">
+                                            <input id="kategori_role" name="kategori_role" type="checkbox" class="form-check-input" value="true">
+                                            <label for="kategori_role" class="form-check-label">Kategori Role</label>
+                                        </div>
+                                        <div class="form-check form-check-inline form-switch">
+                                            <input id="kategori_role" name="kategori_role" type="checkbox" class="form-check-input" value="true">
+                                            <label for="kategori_role" class="form-check-label">Poin Penilaian</label>
+                                        </div>
+                                        <div class="form-check form-check-inline form-switch">
+                                            <input id="kategori_role" name="kategori_role" type="checkbox" class="form-check-input" value="true">
+                                            <label for="kategori_role" class="form-check-label">Kategori Role</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+
+                                    </div>
+                               </div>
+                            </div> --}}
+
                         </fieldset>
 
                         <div class="text-end">
@@ -135,4 +177,34 @@
 
         <div class="chart position-relative" id="traffic-sources"></div>
     </div>
+
+
+    <script>
+        // var copy_krs_field = document.getElementById('form-copy').style.display = "none";
+        // var select = document.getElementById('krs_copy_select');
+    
+        // select.addEventListener('change', function() {
+        //     console.log('success');
+        //     var selectedOption = select.options[select.selectedIndex];
+    
+        //     if (selectedOption.value != '') {
+        //         document.getElementById('form-copy').style.display = 'block';
+        //     } else {
+        //         document.getElementById('form-copy').style.display = 'none';
+        //     }
+        // });
+        // $('#form-copy').hide();
+
+    //     $(document).ready(function() {
+    //     $('#krs_copy_select').change(function() {
+    //         if ($(this).val() !== '') {
+    //             $('#form-copy').show();
+    //         } else {
+    //             $('#form-copy').hide();
+    //         }
+    //     });
+    // });
+    </script>
+
+
 @endsection

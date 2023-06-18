@@ -90,4 +90,9 @@ class Krs extends Model
     {
         return $this->hasMany(TemplateDocument::class, 'krs_id', 'id');
     }
+
+    public function submission()
+    {
+        return $this->hasMany(SubmissionArtefak::class, 'krs_id', 'id');
+    }
 }

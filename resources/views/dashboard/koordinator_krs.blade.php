@@ -162,50 +162,6 @@
                             @else
                                 <h3 class="text-secondary text-center">Anda belum memiliki proyek sebagai koordinator</h3>
                             @endif
-                            {{-- <div class="p-1">
-                            <div class="d-flex mb-2">
-                                <a href="#" class="bg-success bg-opacity-10 text-success lh-1 rounded-pill p-2 me-3">
-                                    <i class="ph-notepad"></i>
-                                </a>
-                                <div>
-                                    <div class="fw-semibold">
-                                        <a href="">PA3-D4TRPL-2020</a>
-                                    </div>
-                                    <span class="text-muted">Koordinator</span>
-                                </div>
-                            </div>
-                            <div class="w-75 mx-auto mb-3" id="new-visitors"></div>
-                        </div> --}}
-
-                            {{-- <div class="p-1">
-                            <div class="d-flex mb-2">
-                                <a href="#" class="bg-warning bg-opacity-10 text-warning lh-1 rounded-pill p-2 me-3">
-                                    <i class="ph-projector-screen-chart"></i>
-                                </a>
-                                <div>
-                                    <div class="fw-semibold">
-                                        <a href="">TA-II-D4-TRPL-20</a>
-                                    </div>
-                                    <span class="text-muted">Penguji - Kelompok 4</span>
-                                </div>
-                            </div>
-                            <div class="w-75 mx-auto mb-3" id="new-sessions"></div>
-                        </div> --}}
-
-                            {{-- <div class="p-1">
-                            <div class="d-flex mb-2">
-                                <a href="#" class="bg-indigo bg-opacity-10 text-indigo lh-1 rounded-pill p-2 me-3">
-                                    <i class="ph-users-three"></i>
-                                </a>
-                                <div>
-                                    <div class="fw-semibold">
-                                        <a href="">KP-D4TRPL-2022</a>
-                                    </div>
-                                    <span class="text-muted">Pembimbing - Rosa Kopeng</span>
-                                </div>
-                            </div>
-                            <div class="w-75 mx-auto mb-3" id="total-online"></div>
-                        </div> --}}
                         </div>
                     </div>
                 </div>
