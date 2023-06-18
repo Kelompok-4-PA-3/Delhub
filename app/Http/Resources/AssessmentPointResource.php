@@ -17,7 +17,7 @@ class AssessmentPointResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->nama_poin,
-            'weight' => $this->bobot,
+            'weight' => intval($this->bobot),
             'components' => $this->whenLoaded('komponen_penilaian', function () {
                 return new AssessmentComponentCollection($this->komponen_penilaian);
             }),

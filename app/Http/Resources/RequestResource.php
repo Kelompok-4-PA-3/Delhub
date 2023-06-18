@@ -28,8 +28,9 @@ class RequestResource extends JsonResource
             'status' => $this->whenLoaded('reference', function () {
                 return $this->reference->value;
             }),
+            'result' => $this->hasil ?? '-',
             'is_done' => boolval($this->is_done),
-            'file' => $this->file_bukti ? asset('uploads/bimbingan/' . $this->file_bukti) : null,
+            'file' => $this->file ? url(asset('uploads/bimbingan/' . $this->file)) : null,
         ];
     }
 }

@@ -17,7 +17,7 @@ class AssessmentComponentResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->nama_komponen,
-            'weight' => $this->bobot,
+            'weight' => intval($this->bobot),
         ];
     }
 }

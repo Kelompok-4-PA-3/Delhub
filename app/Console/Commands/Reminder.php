@@ -28,8 +28,7 @@ class Reminder extends Command
     public function handle()
     {
         // get all request bimbingan today with status approved
-        // remind all mahasiswa and dosen that have request bimbingan 10 minutes before the request time
-
+        // remind all mahasiswa and dosen that have request bimbingan 10 minutes or less before the request time
         $requests = DB::table('requests')
             ->join('kelompoks', 'requests.kelompok_id', '=', 'kelompoks.id')
             ->join('role_kelompoks', 'kelompoks.id', '=', 'role_kelompoks.kelompok_id')
@@ -38,6 +37,12 @@ class Reminder extends Command
             ->where('kategori_roles.nama', 'pembimbing')
             ->whereDate('requests.waktu', Carbon::today())
             ->where('requests.status', 5)
+            ->where('requests.deleted_at', null)
+            ->where('requests.is_done', false)
+            ->where('kelompoks.deleted_at', null)
+            ->where('role_kelompoks.deleted_at', null)
+            ->where('role_group_kelompoks.deleted_at', null)
+            ->where('kategori_roles.deleted_at', null)
             ->select('requests.*')
             ->get();
 
@@ -47,18 +52,16 @@ class Reminder extends Command
         $tokens = [];
         foreach ($requests as $request) {
             $waktu = Carbon::parse($request->waktu);
-            $waktu->subMinutes(10);
             $now = Carbon::now();
-            if ($now->diffInMinutes($waktu) == 0) {
-                sendPushNotification('Pengingat Bimbingan', 'Bimbingan akan dimulai dalam 10 menit lagi di ruangan ' . $request->ruangan->nama, $request->kelompok->mahasiswas->pluck('user.firebase_token')->toArray());
-                sendPushNotification('Pengingat Bimbingan', 'Bimbingan akan dimulai dalam 10 menit lagi di ruangan ' . $request->ruangan->nama, $request->kelompok->pembimbings->pluck('user.firebase_token')->toArray());
+            // remind all mahasiswa and dosen that have request bimbingan <= 10 minutes before the request time
+            if ($waktu->diffInMinutes($now) <= 10) {
+                sendPushNotification('Pengingat Bimbingan', 'Bimbingan akan dimulai dalam 10 menit lagi di ruangan ' . $request->ruangan->nama, $request->kelompok->mahasiswas->pluck('user.firebase_token')->toArray(), $request);
+                sendPushNotification('Pengingat Bimbingan', 'Bimbingan akan dimulai dalam 10 menit lagi di ruangan ' . $request->ruangan->nama, $request->kelompok->pembimbings->pluck('user.firebase_token')->toArray(), $request);
             }
         }
 
         // $tokens = array_merge(...$tokens);
 
         $this->info('Sending notification to ' . count($tokens) . ' devices');
-
-
     }
 }

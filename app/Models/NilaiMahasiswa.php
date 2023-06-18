@@ -20,7 +20,7 @@ class NilaiMahasiswa extends Model
     public function role_kelompok(){
         return $this->belongsTo(RoleKelompok::class, 'role_dosen_kelompok_id', 'id');
     }
-    
+
     public function poin_penilaian(){
         return $this->belongsTo(PoinPenilaian::class, 'poin_penilaian_id', 'id');
     }
@@ -31,5 +31,13 @@ class NilaiMahasiswa extends Model
 
     public function role_group_penilaian(){
         return $this->hasMany(RoleGroupPenilaian::class, 'poin_penilaian_id', 'id');
+    }
+
+    public function kelompok(){
+        return $this->belongsTo(Kelompok::class);
+    }
+
+    public function mahasiswa(){
+        return $this->belongsTo(Mahasiswa::class, 'nim', 'nim');
     }
 }

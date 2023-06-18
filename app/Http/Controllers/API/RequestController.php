@@ -14,7 +14,6 @@ use App\Http\Resources\RequestResource;
 use App\Http\Resources\RequestCollection;
 use App\Notifications\RequestNotification;
 use App\Notifications\UpdateRequestNotification;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request as HttpRequest;
 
@@ -42,9 +41,10 @@ class RequestController extends Controller
                     ->join('role_kelompoks', 'kelompoks.id', '=', 'role_kelompoks.kelompok_id')
                     ->join('role_group_kelompoks', 'role_kelompoks.role_group_id', '=', 'role_group_kelompoks.id')
                     ->join('kategori_roles', 'role_group_kelompoks.kategori_id', '=', 'kategori_roles.id')
-                    ->where('kategori_roles.nama', 'pembimbing')
                     ->where('role_kelompoks.nidn', $dosen->nidn)
+                    ->where('requests.deleted_at', null)
                     ->select('requests.*')
+                    ->orderBy('requests.waktu', 'desc')
                     ->get();
 
                 // convert to eloquent model
@@ -69,9 +69,9 @@ class RequestController extends Controller
         $request = Request::create($data);
         $pembimbings = $kelompok->pembimbings;
 
-        // foreach ($pembimbings as $pembimbing) {
-        //     $pembimbing->user->notify(new RequestNotification($request, $kelompok));
-        // }
+        foreach ($pembimbings as $pembimbing) {
+            $pembimbing->user->notify(new RequestNotification($request, $kelompok));
+        }
         // if tokens is empty, don't send push notification
         $tokens = $pembimbings->pluck('user.firebase_token')->toArray();
         if (!empty($tokens)) {
@@ -83,23 +83,34 @@ class RequestController extends Controller
 
     public function show($id)
     {
-        $request = Request::find($id)->load('ruangan', 'reference', 'kelompok.pembimbings.user');
+        $request = Request::find($id);
+        if (!$request) {
+            return ResponseFormatter::error(null, 'Data tidak ditemukan', 404);
+        }
+        $request->load('ruangan', 'reference', 'kelompok.pembimbings.user');
         return ResponseFormatter::success(new RequestResource($request), 'Data berhasil diambil');
     }
 
     public function update(UpdateRequest $request, $id)
     {
-        $bimbingan = Request::find($id)->load('ruangan', 'reference', 'kelompok.pembimbings.user');
+        $bimbingan = Request::find($id);
+        if (!$bimbingan) {
+            return ResponseFormatter::error(null, 'Data tidak ditemukan', 404);
+        }
+        $bimbingan->load('ruangan', 'reference', 'kelompok.pembimbings.user');
         $ref = Reference::where('value', $request->status)->first();
         $bimbingan->status = $ref->id;
         if ($request->waktu != null) {
             $bimbingan->waktu = $request->waktu;
         }
+        if ($request->result != null) {
+            $bimbingan->hasil = $request->result;
+        }
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/bimbingan'), $filename);
-            $bimbingan->file_bukti = $filename;
+            $bimbingan->file = $filename;
             $bimbingan->is_done = 1;
         }
         $bimbingan->save();
@@ -108,14 +119,13 @@ class RequestController extends Controller
             // send email to mahasiswa
             $kelompok = $bimbingan->kelompok;
             // get all mahasiswa in kelompok mahasiswa
-
-
-            // foreach ($mahasiswa as $mhs) {
-            //     $mhs->user->notify(new UpdateRequestNotification(
-            //         $bimbingan,
-            //         $ref->value,
-            //     ));
-            // }
+            $mahasiswa = $kelompok->mahasiswas->load('user');
+            foreach ($mahasiswa as $mhs) {
+                $mhs->user->notify(new UpdateRequestNotification(
+                    $bimbingan,
+                    $ref->value,
+                ));
+            }
 
             $mahasiswa = $kelompok->mahasiswas->load('user');
             $tokens = $mahasiswa->pluck('user.firebase_token')->toArray();
