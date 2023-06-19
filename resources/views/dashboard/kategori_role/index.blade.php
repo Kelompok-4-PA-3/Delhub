@@ -385,10 +385,10 @@
                                          <input id="poin_penilaian" name="poin_penilaian" type="checkbox" class="form-check-input" value="true">
                                          <label for="poin_penilaian" class="form-check-label">Poin penilaian</label>
                                      </div>
-                                     <div class="form-check form-check-inline form-switch mb-2">
+                                     {{-- <div class="form-check form-check-inline form-switch mb-2">
                                          <input id="assign_dosen" name="assign_dosen" type="checkbox" class="form-check-input" value="true">
                                          <label for="assign_dosen" class="form-check-label">Assign dosen ke penilaian</label>
-                                     </div>
+                                     </div> --}}
                                  </div>
                                  <div class="col-md">
                                      <div class="form-check form-check-inline form-switch mb-2">

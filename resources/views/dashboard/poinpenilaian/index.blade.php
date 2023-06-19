@@ -20,10 +20,6 @@
     <span class="breadcrumb-item active py-2"> Poin Penilaian </span>
 @endsection     
 
-@section('main0nava')
-
-@endsection
-
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center">
