@@ -78,10 +78,9 @@ class KategoriRoleController extends Controller
 
         // return $request;
         if ($request->krs_copy) {
-            // return "Test";
 
             $krs_copy = Krs::find($request->krs_copy);
-            // return $krs_copy->kategori_role;
+
             foreach ($krs_copy->kategori_role->where('nama','!=','koordinator') as $kkl) {
 
                 if(!$this->kategori_role_check_same_name($kr, $kkl->nama)){
@@ -95,9 +94,6 @@ class KategoriRoleController extends Controller
 
                 if($request->role){
                     foreach ($kkl->role_group->where('nama','!=','koordinator') as $kklr) {
-                        // if(!$this->role_check_same_name($kategori_role->role_group, $kklr->nama)){
-                        //     return back()->with('error', 'Role sudah digunakan ');
-                        // }
 
                         $role_group_copy = new RoleGroupKelompok;
                         $role_group_copy->nama = $kklr->nama;
@@ -108,9 +104,9 @@ class KategoriRoleController extends Controller
                         $role_group_copy->save();
                     }
 
+
                 }
 
-            // return "test";
 
 
             }
@@ -129,19 +125,32 @@ class KategoriRoleController extends Controller
                     $poin_penilaian_new->krs_id = $kr->id;
                     $poin_penilaian_new->save();       
 
+                    // if ($request->assign_dosen) {
+                    //     return $pp->role_group_penilaian;
+                    //     foreach ($pp->role_group_penilaian as $prgp) {
+                    //         return $prgp->role_group;
+                    //         $role_group_copy = RoleGroupKelompok::where('');
+                    //         $role_group_kelompok_current = RoleGroupPenilaian::where('nama', $krgp->nama->role_group_nama)
+                    //                                                         ->join('role_group_kelompoks', 'role_group_penilaians.role_group_id', 'role_group_kelompoks.id')
+                    //                                                         ->where('role_group_kelompoks.krs_id',$kr->id)->pluck('role_group_kelompoks.nama');
+                            
+                    //     }
+                    // }
+
                     if ($request->komponen_penilaian) {
                         foreach ($pp->komponen_penilaian as $ppk) { 
-                            // if(!$this->komponen_penilaian_check_same_name($pp, $ppk->nama)){
-                            //     return back()->with('error', 'Komponen penilaian sudah digunakan ');
-                            // }
+                            $komponen_penilaian_new = new KomponenPenilaian();
+                            $komponen_penilaian_new->poin_penilaian_id = $poin_penilaian_new->id;
+                            $komponen_penilaian_new->nama_komponen = $ppk->nama_komponen;
+                            $komponen_penilaian_new->bobot = $ppk->bobot;
+                            $komponen_penilaian_new->save();
 
-                            KomponenPenilaian::create([
-                                'poin_penilaian_id' => $poin_penilaian_new->id,
-                                'nama_komponen' => $ppk->nama_komponen,
-                                'bobot' => $ppk->bobot
-                            ]);  
                         }
+
+                           
                     }
+
+
                 }
             }
 

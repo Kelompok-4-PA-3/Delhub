@@ -18,6 +18,7 @@ class PoinPenilaianController extends Controller
         $role_krs = RoleGroupKelompok::join('kategori_roles','role_group_kelompoks.kategori_id','kategori_roles.id')
                                         ->where('kategori_roles.krs_id',$kr->id)
                                         ->select('role_group_kelompoks.*')->get();
+        $krs_all = Krs::latest()->get();
         // return $role_krs;
 
         return view('dashboard.poinpenilaian.index',[
@@ -25,6 +26,7 @@ class PoinPenilaianController extends Controller
             'poin_penilaian' => $poin_penilaian,
             'krs' => $kr,
             'role_krs' => $role_krs,
+            'krs_all' => $krs_all,
         ]);
     }
 
@@ -37,6 +39,40 @@ class PoinPenilaianController extends Controller
 
     public function store(Request $request, Krs $kr)
     {   
+        // return $request;
+
+        if ($request->krs_copy) {
+            $krs_copy = Krs::find($request->krs_copy);
+            foreach ($krs_copy->poin_penilaian as $pp) {
+
+                $poin_penilaian_new = new PoinPenilaian();
+                $poin_penilaian_new->nama_poin = $pp->nama_poin;
+                $poin_penilaian_new->bobot = $pp->bobot;
+                $poin_penilaian_new->krs_id = $kr->id;
+                $poin_penilaian_new->save();       
+
+                if ($request->komponen_penilaian) {
+                    foreach ($pp->komponen_penilaian as $ppk) { 
+                        $komponen_penilaian_new = new KomponenPenilaian();
+                        $komponen_penilaian_new->poin_penilaian_id = $poin_penilaian_new->id;
+                        $komponen_penilaian_new->nama_komponen = $ppk->nama_komponen;
+                        $komponen_penilaian_new->bobot = $ppk->bobot;
+                        $komponen_penilaian_new->save();
+
+                    }
+
+                       
+                }
+
+
+            }
+
+            return back()->with('success', 'Data berhasil dicopy');
+
+        }
+
+
+
         // return $request;
         $data = [
             'nama_poin' => 'required',

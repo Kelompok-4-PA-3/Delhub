@@ -29,9 +29,44 @@
         <div class="card-header d-flex align-items-center">
             <h5 class="mb-0">Poin Penilaian {{$title}}</h5>
             <div class="ms-auto d-flex">
-                <label class="form-check form-switch form-check-reverse">
+                {{-- <label class="form-check form-switch form-check-reverse">
                     <a class="btn btn-primary btn-sm fw-bold" data-bs-toggle="offcanvas" data-bs-target="#tambah_komponen_penilaian"><i class="ph-plus-circle"></i>&nbsp; TAMBAH POIN PENILAIAN</a>
-                </label>
+                </label> --}}
+
+                <div class="fab-menu fab-menu-top" data-fab-toggle="hover">
+                    <button type="button" class="btn btn-sm btn-primary">
+                        <div class="d-flex">
+                            <div class="fw-semibold">
+                                <i class="ph-plus-circle"></i>&nbsp; TAMBAH POIN PENILAIAN
+                            </div>
+                        </div>
+                    </button>
+
+                    <ul class="fab-menu-inner bg-secondary">
+                        <li>
+                            <div class="d-flex">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#tambah_salin_data"
+                                class="btn btn-secondary btn-icon rounded-pill border-2">
+                                    <div class="fs-sm">
+                                        <i class="ph-copy"></i>
+                                        Tambah salin data
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex mb-1">
+                                <a href="krs" data-bs-toggle="offcanvas" data-bs-target="#tambah_komponen_penilaian"
+                                    class="btn btn-secondary btn-icon rounded-pill border-2">
+                                    <div class="fs-sm">
+                                        <i class="ph-plus-circle"></i>
+                                        Tambah manual
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -530,4 +565,54 @@
         </div>
         <!-- /large panel -->
         <!-- /sticky footer -->
+
+
+         <!-- detail Modal -->
+    <div id="tambah_salin_data" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Salin Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/krs/{{$krs->id}}/poin_penilaian/store" method="POST">
+                        @csrf 
+                        <div class="" id="form-copy container">
+                            <div>
+                                 <h5 class="fw-light"><i class="ph-copy text-success"></i> Pilih fitur yang ingin di copy</h5>
+                            </div>
+                            <div class="row p-2 rounded">
+                                <div class="mb-3">
+                                    <label class="form-label">Salin KRS</label>
+                                    <select data-placeholder="Pilih krs" id="krs_copy_select" class="form-control select" name="krs_copy" required>
+                                        <optgroup label="Daftar Angkatan">
+                                            @foreach ($krs_all as $k)
+                                                <option @if(old('krs_copy') == $k->id) selected @endif value="{{$k->id}}">{{$k->kategori->nama_mk}}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                 <div class="col-md">
+                                     <div class="form-check form-check-inline form-switch mb-2">
+                                         <input id="poin_penilaian" name="poin_penilaian" type="checkbox" class="form-check-input" value="true" disabled checked>
+                                         <label for="poin_penilaian" class="form-check-label">Poin penilaian</label>
+                                     </div>
+                                 </div>
+                                 <div class="col-md">
+                                     <div class="form-check form-check-inline form-switch mb-2">
+                                         <input id="komponen_penilaian" name="komponen_penilaian" type="checkbox" class="form-check-input" value="true">
+                                         <label for="komponen_penilaian" class="form-check-label">Komponen penilaian</label>
+                                     </div>
+                                 </div>
+                            </div>
+                         </div> 
+                        <br>
+                        <button class="btn btn-primary w-100" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- detail Modal -->
 @endsection
