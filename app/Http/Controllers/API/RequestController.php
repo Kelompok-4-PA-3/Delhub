@@ -100,6 +100,9 @@ class RequestController extends Controller
         $bimbingan->load('ruangan', 'reference', 'kelompok.pembimbings.user');
         $ref = Reference::where('value', $request->status)->first();
         $bimbingan->status = $ref->id;
+        if ($request->ruangan_id != null) {
+            $bimbingan->ruangan_id = $request->ruangan_id;
+        }
         if ($request->waktu != null) {
             $bimbingan->waktu = $request->waktu;
         }

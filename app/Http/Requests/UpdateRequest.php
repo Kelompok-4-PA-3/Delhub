@@ -23,8 +23,8 @@ class UpdateRequest extends FormRequest
     {
         return [
             // status is required unless waktu is not null or file is not null
-            'status' => 'required_without_all:waktu,file',
-            'waktu' => 'nullable|date_format:Y-m-d H:i',
+            'status' => 'required',
+            'waktu' => 'required_without_all:result,file',
             'result' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,jpg,jpeg,png|max:2048'
         ];
