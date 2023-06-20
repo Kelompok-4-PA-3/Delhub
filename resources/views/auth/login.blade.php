@@ -3,8 +3,11 @@
         {{-- <x-slot name="logo">
             <x-authentication-card-logo />
         </x-slot> --}}
-        <div class="w-full">
+        <div class="w-full" style="margin-bottom: 10px;">
             <img class="mx-auto block w-20" src="{{asset('/img/logo.png')}}" alt="">
+            <div class="text-center">
+                <small class="text-muted fw-semibold">Fakultas Vokasi Institut Teknologi Del</small>
+            </div>
         </div>
 
         <x-validation-errors class="mb-4" />

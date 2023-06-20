@@ -160,7 +160,7 @@
 
 
     <!-- Demo config -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="demo_config">
+    {{-- <div class="offcanvas offcanvas-end" tabindex="-1" id="demo_config">
         <div class="position-absolute top-50 end-100 visible">
             <button type="button" class="btn btn-primary btn-icon translate-middle-y rounded-end-0"
                 data-bs-toggle="offcanvas" data-bs-target="#demo_config">
@@ -292,7 +292,7 @@
                 Purchase Limitless
             </a>
         </div>
-    </div>
+    </div> --}}
     <!-- /demo config -->
 
     {{-- @if (session()->has('success'))

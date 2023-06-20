@@ -170,7 +170,7 @@
 
                                             @role('dosen')
                                                 @if (Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk || Auth::user()->dosen->nidn == $kelompok->krs->dosen_mk_2)
-                                                    @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id', $kelompok->id) as $myrole)
+                                                    {{-- @foreach (Auth::user()->dosen->role_kelompok->where('kelompok_id', $kelompok->id) as $myrole) --}}
                                                         <small>
                                                             <form action="/kelompok/{{ $kelompok->id }}/people/delete"
                                                                 method="post">
@@ -183,7 +183,7 @@
                                                                     type="submit"><i class="ph-trash"></i></button>
                                                             </form>
                                                         </small>
-                                                    @endforeach
+                                                    {{-- @endforeach --}}
                                                 @endif
                                             @endrole
 

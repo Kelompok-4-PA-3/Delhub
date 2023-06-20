@@ -119,7 +119,7 @@
                             <div class="px-2">
                                 <small class="text-muted ">Topik : </small>
                             </div>
-                            @if (!$kelompok->topik_approved && $kelompok->topik_approved != NULL)
+                            @if (!$kelompok->topik_approved && $kelompok->topik != NULL)
                             @role('dosen')
                             @if (Gate::check('is_pembimbing', $kelompok) || Gate::check('is_koordinator', $kelompok))
                             <div class="ms-auto">

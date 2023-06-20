@@ -14,7 +14,10 @@
         <div class="navbar-brand flex-1 flex-lg-0">
             <a href="/home" class="d-inline-flex align-items-center">
                 <img src="{{asset('/img/logo-light.png')}}" alt="" style="width: 50px; height: 40px;">
+               <div>
                 <h3 class="h-16px ms-2 text-white fw-light ">Del<span class="fw-bold">Hub</span></h3>
+                <small class="ms-2 text-white"><i>Fakulatas Vokasi Institut Teknologi Del</i></small>
+               </div>
                 {{-- <h3 class="h-16px ms-3 text-white fw-light fw-bold">Del<span class=" bg-warning px-1 text-dark">Hub</span></h3> --}}
             </a>
         </div>

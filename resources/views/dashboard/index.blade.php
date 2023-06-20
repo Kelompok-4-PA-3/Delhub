@@ -45,7 +45,7 @@
                         @role('dosen')
                             @if (Auth::user()->dosen->all_role_kelompok->count() > 0)
                                 <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide p-1">PEKERJAAN SAYA</div>
-                                @foreach (Auth::user()->dosen->all_role_kelompok as $role)
+                                @foreach (Auth::user()->dosen->all_role_kelompok->where('deleted_at',NULL) as $role)
                                     @if ($role->role_group->role_kategori->krs != null)
                                         @if (strtolower($role->role_group->nama) != 'koordinator' && $role->role_group->role_kategori->krs->config->active)
                                             <div
