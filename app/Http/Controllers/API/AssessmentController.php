@@ -141,16 +141,9 @@ class AssessmentController extends Controller
                     $detailNilaiMahasiswa->save();
                     $finalValue += $detailAssessmentStudent->score;
                 }
-
-                // update nilai mahasiswa
-                $nilaiMahasiswa->nilai = $finalValue;
-                $nilaiMahasiswa->save();
             } else {
                 // if exist, start update
                 $nilaiMahasiswa = NilaiMahasiswa::find($check->id);
-                $nilaiMahasiswa->nilai = 0;
-                $nilaiMahasiswa->save();
-
                 foreach($assessment->detailAssessmentStudent as $detailAssessmentStudent){
                     $detailNilaiMahasiswa = DetailNilaiMahasiswa::find($detailAssessmentStudent->id);
                     $detailNilaiMahasiswa->nilai = $detailAssessmentStudent->score;
