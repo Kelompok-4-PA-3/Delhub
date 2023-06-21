@@ -23,9 +23,9 @@ class CreateRequest extends FormRequest
     {
         return [
             'kelompok_id' => 'required',
-            'description' => 'required',
-            'waktu' => 'required',
-            'ruangan_id' => 'required',
+            'description' => 'required|string|min:10|max:255',
+            'waktu' => 'required|after:now',
+            'ruangan_id' => 'required|exists:ruangans,id',
             'status' => 'nullable',
         ];
     }

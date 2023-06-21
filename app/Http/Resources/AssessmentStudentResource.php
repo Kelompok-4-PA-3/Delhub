@@ -19,9 +19,6 @@ class AssessmentStudentResource extends JsonResource
             'mahasiswa' => $this->whenLoaded('mahasiswa', function () {
                 return new MahasiswaResource($this->mahasiswa);
             }),
-            'assessmentStudent' => $this->whenLoaded('detail_nilai_mahasiswa', function () {
-                return new AssessmentStudentResource($this->nilai_mahasiswa);
-            }),
             'detailAssessmentStudent' => $this->whenLoaded('detail_nilai_mahasiswa', function () {
                 return new DetailAssessmentStudentCollection($this->detail_nilai_mahasiswa);
             }),
