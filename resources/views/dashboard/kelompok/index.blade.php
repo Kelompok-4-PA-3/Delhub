@@ -152,7 +152,7 @@
                                     <td>
                                         <div class="d-flex">
                                             <div class="px-2">
-                                                <img src="{{ asset('/storage/images/' . $a->mahasiswa->user->profile_photo_path) }}""
+                                                <img src="@if($a->mahasiswa->user->profile_photo_path == NULL || $a->mahasiswa->user->profile_photo_path == '') {{asset('/img/profile_default/user-profile.jpg')}} @else {{asset('storage/images/'.$a->mahasiswa->user->profile_photo_path)}} @endif"
                                                     class="w-32px h-32px rounded-pill" alt="">
                                             </div>
                                             <div>

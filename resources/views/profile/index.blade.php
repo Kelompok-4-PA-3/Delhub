@@ -27,7 +27,7 @@
                 {{-- <div class="profile-cover-img" style="background-image: url(../../../img/profile_bg.jpg)"></div> --}}
                 <a href="#">
                     <div class="img-thumbnail rounded-circle shadow"
-                        style=" width: 80px; height: 80px; background-image: url({{ asset('storage/' . Auth::user()->profile_photo_path) }});
+                        style=" width: 80px; height: 80px; background-image: url( @if(Auth::user()->profile_photo_path == NULL || Auth::user()->profile_photo_path == '') {{asset('/img/profile_default/user-profile.jpg')}} @else {{asset('storage/images/'.Auth::user()->profile_photo_path)}} @endif);
                         background-size: cover; background-position: center; background-repeat: no-repeat;">
                         {{-- /storage/'.Auth::user()->profile_photo_path --}}
                     </div>

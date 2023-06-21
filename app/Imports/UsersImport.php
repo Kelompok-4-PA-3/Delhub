@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -16,7 +17,7 @@ class UsersImport implements ToModel,  WithHeadingRow
      */
     public function model(array $row)
     {
-        // return $row;
+        // return $row->get();
         return new User([
            'nama' => $row['nama'],
            'username' => $row['username'], 

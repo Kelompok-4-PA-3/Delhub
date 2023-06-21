@@ -273,7 +273,7 @@
                                                 <td>
                                                     <div class="d-flex mb-3">
                                                         <a href="#" class="me-3">
-                                                            <img src="../../../assets/images/demo/users/face1.jpg"
+                                                            <img src="@if( $k->mahasiswa->user->profile_photo_path == NULL ||  $k->mahasiswa->user->profile_photo_path == '') {{asset('/img/profile_default/user-profile.jpg')}} @else {{asset('/storage/images/'. $k->mahasiswa->user->profile_photo_path)}} @endif"
                                                                 width="36" height="36" class="rounded-pill"
                                                                 alt="">
                                                         </a>

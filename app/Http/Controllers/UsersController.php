@@ -16,6 +16,7 @@ use App\Imports\UsersImport;
 use Hash;
 use Storage;
 
+
 class UsersController extends Controller
 {
     public function getUser()
@@ -55,6 +56,7 @@ class UsersController extends Controller
 
     public function user_upload(Request $request)
     {
+        // return $request;
         Excel::import(new UsersImport, request()->file('user-file'));
         return back()->with('success', 'Pengguna baru telah berhasil ditambahkan');
     }

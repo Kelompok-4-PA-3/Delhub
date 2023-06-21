@@ -47,7 +47,7 @@
                 >
                 <a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
                     <div class="status-indicator-container">
-                        <img src="{{asset('/storage/images/'.Auth::user()->profile_photo_path)}}" class="w-32px h-32px rounded-pill"
+                        <img src="@if(Auth::user()->profile_photo_path == NULL || Auth::user()->profile_photo_path == '') {{asset('/img/profile_default/user-profile.jpg')}} @else {{asset('/storage/images/'.Auth::user()->profile_photo_path)}} @endif" class="w-32px h-32px rounded-pill"
                             alt="">
                         <span class="status-indicator bg-success"></span>
                     </div>

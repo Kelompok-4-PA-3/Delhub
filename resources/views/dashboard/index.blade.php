@@ -45,7 +45,7 @@
                         @role('dosen')
                             @if (Auth::user()->dosen->all_role_kelompok->count() > 0)
                                 <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide p-1">PEKERJAAN SAYA</div>
-                                @foreach (Auth::user()->dosen->all_role_kelompok->where('deleted_at',NULL) as $role)
+                                @foreach (Auth::user()->dosen->all_role_kelompok as $role)
                                     @if ($role->role_group->role_kategori->krs != null)
                                         @if (strtolower($role->role_group->nama) != 'koordinator' && $role->role_group->role_kategori->krs->config->active)
                                             <div
@@ -80,7 +80,7 @@
                             @if (Auth::user()->mahasiswa->kelompok_mahasiswas->count() > 0)
                                 @foreach (Auth::user()->mahasiswa->kelompok_mahasiswas as $km)
                                     @if ($km->kelompok->krs->config->active)
-                                        <div class="p-1">
+                                        <div class="p-1 mahasiswa_job_list pekerjaan{{ $km->kelompok->krs->kategori ? $km->kelompok->krs->kategori->kategori->id : '' }}">
                                             <div class="d-flex mb-2">
                                                 <a href="#"
                                                     class="bg-indigo bg-opacity-10 text-indigo lh-1 rounded-pill p-2 me-3">
@@ -172,10 +172,13 @@
             var selectedValue = $(this).val();
             console.log(selectedValue);
             $('.dosen_job_list').hide();
+            $('.mahasiswa_job_list').hide();
             if (selectedValue == '') {
                 $('.dosen_job_list').show();
+                $('.mahasiswa_job_list').show();
             } else {
                 $('.pekerjaan' + selectedValue).show();
+                $('.pekerjaan_mahasiswa' + selectedValue).show();
             }
         });
     </script>
